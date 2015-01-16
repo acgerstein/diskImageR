@@ -22,17 +22,16 @@
 #' @export
 
 plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE){
-	fileName <- projectName
-	dir.create(paste("figures/", fileName,  sep=""), showWarnings = TRUE)
-	t <- paste("figures/", fileName, projectName, "_raw.pdf", sep="")
+	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
+	t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- paste("figures/", fileName, projectName, "_raw_2_sL=", standardLoc, ".pdf", sep="")
+			t <- file.path("figures", projectName, paste(projectName, "_raw_2.pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- paste("figures/", fileName, projectName, "_raw_", k, "sL=", standardLoc,".pdf", sep="")
+					t <- file.path("figures", projectName, paste(projectName, "_raw_", k, ".pdf", sep=""))
 					}
 				}
 			}

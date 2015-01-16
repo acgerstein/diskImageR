@@ -34,7 +34,6 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	if(!(hasArg(clearHalo))){
 		stop("Need to specify a picture with a clear halo.")
 	}
-	cat("\nDoing all the things: ")
 	data <- eval(parse(text=projectName))
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
@@ -43,7 +42,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
 	
-	filename <- file.path(getwd(), "parameter_files", projectName, projectName, "_df.csv")
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 
 	if (!file.exists(newdir)){		
 		dir.create(newdir, showWarnings = FALSE)
@@ -110,25 +109,20 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 			
 		if (!nameVector){
 			lines <- seq(1, length(data))
-			cat("\n\tAssigning line names based on photo number")
 			df <- data.frame(name = names(data), lines, df)	
 		}
 	}
 	if (!is.logical(nameVector)){
-		cat("\n\tAssigning line names based on user-input")
 		lines <- nameVector
 		names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
 		df <- data.frame(names=names, lines=lines, df)	
 		}
 
 	if (typeVector){	
-			cat(paste("\n\tAssigning photo type based on the element in the ", typePlace, " position"))
 			type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
-			cat(paste("\n\tThere were ", length(unique(type)), " unique types found in dataset:", paste(unique(type), collapse=", ")))
 			df <- data.frame(df, type, param)
 		}
 	else {
-			cat("\n\tNo type assigned")
 			df$type <- 1
 			df <- data.frame(df, param)
 		}
@@ -146,10 +140,9 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	write.csv(df, file=filename, row.names=FALSE)	
 	
 	dfName <- paste(projectName, ".df", sep="")
-	cat("\n")
-	cat(paste("\n\t", dfName, " has been written to the global environment", sep=""))
-	cat(paste("\n\tSaving file: ", filename,  sep=""))
-	cat(paste("\n\t", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
+	cat(paste("\n", dfName, " has been written to the global environment", sep=""))
+	cat(paste("\nSaving file: ", filename,  sep=""))
+	cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 	assign(dfName, df, envir=globalenv())
 	}
 
@@ -175,7 +168,6 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 		yySlope <- yy[1:(xxmid+10)]
 	}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
-	cat(".")
 	return(slope)
 }
 

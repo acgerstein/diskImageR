@@ -32,7 +32,7 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
 	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
-	newdir3 <- file.path(getwd(), "parameter_files", projectName,)	
+	newdir3 <- file.path(getwd(), "parameter_files", projectName)	
 
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
@@ -45,5 +45,5 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 	assign(agName, ag, envir=globalenv())
 	}
 
-.cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
-.se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
+cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
+se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
