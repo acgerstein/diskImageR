@@ -136,12 +136,12 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	names(df)[3] <- typeName
 
 	df <- df[order(df$lines),] 
-	df$fracAUC80[df$fracAUC80 >1] <- 1
-	df$fracAUC50[df$fracAUC50 >1] <- 1
-	df$fracAUC20[df$fracAUC20 >1] <- 1	
-	df$fracAUC80[df$ZOI80 == 1] <- 1
-	df$fracAUC50[df$ZOI50 == 1] <- 1
-	df$fracAUC20[df$ZOI20 == 1] <- 1
+	df$fAUC80[df$fAUC80 >1] <- 1
+	df$fAUC50[df$fAUC50 >1] <- 1
+	df$fAUC20[df$fAUC20 >1] <- 1	
+	df$fAUC80[df$ZOI80 == 1] <- 1
+	df$fAUC50[df$ZOI50 == 1] <- 1
+	df$fAUC20[df$ZOI20 == 1] <- 1
 	
 	write.csv(df, file=filename, row.names=FALSE)	
 	
