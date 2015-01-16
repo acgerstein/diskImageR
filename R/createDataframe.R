@@ -219,7 +219,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	id50 <- order(xx50)
 	id20 <- order(xx20)		
 
-	maxAUC <- sum(diff(xx[id])*rollmean(yy[id], 2))	
+	maxAUC <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))	
 	maxAUC80 <- exp(x80)*max(yy80)
 	maxAUC50 <- exp(x50)*max(yy50)	
 	maxAUC20 <- exp(x20)*max(yy20)	

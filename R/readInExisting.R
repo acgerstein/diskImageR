@@ -8,8 +8,8 @@
 
 readInExisting <- function(projectName, newList = list(), numDig = 30) {
 	curDir <- getwd()
-	projectFolder <- tk_choose.dir(caption = "Select main project folder") 
-	directoryPath <- tk_choose.dir(default = "", caption = "Select directory with ImageJ output")
+	projectFolder <- tcltk::tk_choose.dir(caption = "Select main project folder") 
+	directoryPath <- tcltk::tk_choose.dir(default = "", caption = "Select directory with ImageJ output")
 	setwd(directoryPath)
 	getData <- function(i, newList, names) {
 		if (i > length(dir())){

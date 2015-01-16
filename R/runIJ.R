@@ -18,8 +18,8 @@
 
 runIJ <-
 function(projectName, imageJLoc="default", diskDiam = 6){
-	projectDir <- tk_choose.dir(caption = "Select main project directory") 
-	inputDir <- tk_choose.dir(caption = "Select location of photographs")
+	projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
+	inputDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")

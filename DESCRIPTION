@@ -10,3 +10,4 @@ Imports: diversitree,
     zoo,
     tcltk,
     Hmisc
+Suggests: testthat
