@@ -48,10 +48,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	data <- eval(parse(text=projectName))
 	standardLoc <- 2.5
 	if (is.logical(plotNameVector)){
-		if (pNameVector){label <- names(data)}		
+		if (plotNameVector){label <- names(data)}		
 		else {label <- rep("", length(data))}
 		}
-	else {label <- nameVector}	
+	else {label <- plotNameVector}	
 
 	if (!is.logical(standardLoc)){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		
