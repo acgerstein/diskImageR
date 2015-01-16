@@ -33,6 +33,6 @@ Each photograph in the directory specified by \code{pictureDir} is input into Im
 Aleeza C. Gerstein
 }
 \seealso{
-\code{\link{runIJ}} to run the imageJ analysis using the tcltk interface (i.e., pop-up boxes) to supply the project and picture directories.
+\code{\link{runIJ}} to run the imageJ analysis using the tcltk interface (i.e., pop-up boxes) to supply the project and picture directories. Test
 }
 

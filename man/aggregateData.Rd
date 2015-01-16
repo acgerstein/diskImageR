@@ -9,7 +9,7 @@ aggregateData(projectName, replicate = c("lines", "type"), varFunc = "se")
 \arguments{
 \item{projectName}{the short name in use for the project.}
 
-\item{replicate}{which columns indicate the factors to use}
+\item{replicate}{a character vector indicating which the column names that contain which factors to use. Defaults to c("lines", "type"). Note that if the typeVector name was changed in \code{createDataframe} this should be reflected here.}
 
 \item{varFunc}{what type of variation measurment to perform. Currently supports \code{varFunc} = "se" to calculate the standard error, \code{varFun} = "cv" to calculate the coefficient of variation or any built-in R function (e.g., sd).}
 }

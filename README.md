@@ -1,2 +1,2 @@
 # diskImageR
-diskImageR package
+diskImageR package to analyze diffusion disk assays

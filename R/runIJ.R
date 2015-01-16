@@ -20,23 +20,20 @@ runIJ <-
 function(projectName, imageJLoc="default", diskDiam = 6){
 	projectDir <- tk_choose.dir(caption = "Select main project directory") 
 	inputDir <- tk_choose.dir(caption = "Select location of photographs")
-#fill this in!
-	# script <- .libPaths()/diskImageR/scr/
-	script <- file.path(.libPaths(), "diskImageR/IJ_diskImageR.txt")
-	# script <- tk_choose.files(caption = "Select the imageJ disk assay script")
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	fileDir <- paste(Sys.Date(), projectName, sep="_")
-	outputDir <- paste(projectDir, "/imageJ-out/", fileDir, "/", sep="")
-	inputDir2 <- paste(inputDir, "/", sep="")
+	outputDir <- file.path(projectDir, "imageJ-out", fileDir)
+	inputDir2 <- file.path(inputDir)
 	IJarguments <- paste(inputDir2, outputDir, diskDiam, sep="*")
 
 	if(length(dir(outputDir)) > 0){
 		stop("Output files already exist in specified directory. Please delete existing files or change project name before continuing.")
 	}
 	
-	dir.create(paste(projectDir, "/imageJ-out/", sep=""), showWarnings=FALSE)
-	dir.create(paste(outputDir, sep=""), showWarnings= FALSE)
-	dir.create(paste(projectDir, "/figures/", sep=""), showWarnings= FALSE)
-	dir.create(paste(projectDir, "/parameter_files/", sep=""), showWarnings=FALSE)
+	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
+	dir.create(file.path(outputDir), showWarnings= FALSE)
+	dir.create(file.path(projectDir, "figures", sep=""), showWarnings= FALSE)
+	dir.create(file.path(projectDir, "parameter_files", sep=""), showWarnings=FALSE)
 			
 	if (imageJLoc=="default" | imageJLoc=="loc2" ){
 		if (imageJLoc=="loc2"){
@@ -70,8 +67,8 @@ function(workingDir, folderLoc, experAbbr){
 		}
 	temp <- data.frame(names = names(tList), len)
 	redo <- subset(temp, len==1, names)	
-	newdir1 <- paste(workingDir, "/figures/", sep="")
-	newdir2 <- paste(workingDir, "/parameter_files/", sep="")		
+	newdir1 <- file.path(workingDir, "figures", sep="")
+	newdir2 <- file.path(workingDir, "parameter_files", sep="")		
 	if (!file.exists(newdir1)){
 		dir.create(newdir1, showWarnings = FALSE)
 		cat(paste("new directory: ", newdir1), sep="")

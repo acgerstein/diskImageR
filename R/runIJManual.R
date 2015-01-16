@@ -15,24 +15,24 @@
 
 #' @export
 
-#' @seealso \code{\link{runIJ}} to run the imageJ analysis using the tcltk interface (i.e., pop-up boxes) to supply the project and picture directories.
+#' @seealso \code{\link{runIJ}} to run the imageJ analysis using the tcltk interface (i.e., pop-up boxes) to supply the project and picture directories. Test
 
 #'@author Aleeza C. Gerstein
 
 runIJManual <-
 function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6){
 	fileDir <- paste(Sys.Date(), projectName, sep="_")
-	outputDir <- paste(projectDir, "imageJ-out/", fileDir, "/", sep="")
-	script <- file.path(.libPaths(), "diskImageR/IJ_diskImageR.txt")
+	outputDir <- file.path(projectDir, "imageJ-out", fileDir, )
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	IJarguments <- paste(pictureDir, outputDir, discDiam, sep="*")
 	
 	if(length(dir(outputDir)) > 0){
 		stop("Output files already exist in specified directory. Please delete existing files or change project name before continuing.")
 	}
 	
-	dir.create(paste(projectDir, "/imageJ-out/", sep=""), showWarnings=FALSE)
-	dir.create(paste(outputDir, sep=""), showWarnings= FALSE)
-	dir.create(paste(projectDir, "/Figures/", sep=""), showWarnings= FALSE)
+	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
+	dir.create(outputDir, showWarnings= FALSE)
+	dir.create(file.path(projectDir, "Figures"), showWarnings= FALSE)
 		
 	if (imageJLoc=="default" | imageJLoc=="loc2" ){
 		if (imageJLoc=="loc2"){
