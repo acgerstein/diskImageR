@@ -25,7 +25,6 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	inputDir2 <- file.path(inputDir, "")
 	IJarguments <- paste(inputDir2, outputDir, diskDiam, sep="*")
-	print(IJarguments)
 	if(length(dir(outputDir)) > 0){
 		stop("Output files already exist in specified directory. Please delete existing files or change project name before continuing.")
 	}

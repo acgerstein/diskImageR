@@ -50,11 +50,11 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 		}
 	if (!file.exists(newdir2)){		
 		dir.create(newdir2, showWarnings = FALSE)
-		cat(paste("\n\tCreating new directory: ", newdir2), sep="")
+		cat(paste("\nCreating new directory: ", newdir2), sep="")
 		}
 	if (!file.exists(newdir3)){		
 		dir.create(newdir3, showWarnings = FALSE)
-		cat(paste("\n\tCreating new directory: ", newdir3), sep="")
+		cat(paste("\nCreating new directory: ", newdir3), sep="")
 		}
 	df <- data.frame(row.names = seq(1, length(data)))
 

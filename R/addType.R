@@ -17,6 +17,7 @@ addType <- function(projectName, typePlace=3, typeName="type2"){
 	type2 <- unlist(lapply(df$name, function(x) strsplit(as.character(x), "_")[[1]][3]) )
 	place <- which.max(names(df) == "ZOI80")
 	dfnew <- cbind(df[,1:place-1], type2, df[,place:length(df)])
+	if(typeName != "type2") names(dfnew)[place] <- typeName
 
 	filename <- file.path(getwd(), "parameter_files", projectName, "_df.csv", sep="")	
 	dfName <- paste(projectName, ".df", sep="")
