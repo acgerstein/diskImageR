@@ -23,7 +23,7 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
-	inputDir2 <- file.path(inputDir)
+	inputDir2 <- file.path(inputDir, "")
 	IJarguments <- paste(inputDir2, outputDir, diskDiam, sep="*")
 	print(IJarguments)
 	if(length(dir(outputDir)) > 0){
@@ -32,7 +32,7 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(file.path(outputDir), showWarnings= FALSE)
-	dir.create(file.path(projectDir, "figures", sep=""), showWarnings= FALSE)
+	dir.create(file.path(projectDir, "figures"), showWarnings= FALSE)
 	dir.create(file.path(projectDir, "parameter_files", sep=""), showWarnings=FALSE)
 			
 	if (imageJLoc=="default" | imageJLoc=="loc2" ){
@@ -67,8 +67,8 @@ function(workingDir, folderLoc, experAbbr){
 		}
 	temp <- data.frame(names = names(tList), len)
 	redo <- subset(temp, len==1, names)	
-	newdir1 <- file.path(workingDir, "figures", sep="")
-	newdir2 <- file.path(workingDir, "parameter_files", sep="")		
+	newdir1 <- file.path(workingDir, "figures", "")
+	newdir2 <- file.path(workingDir, "parameter_files", "")		
 	if (!file.exists(newdir1)){
 		dir.create(newdir1, showWarnings = FALSE)
 		cat(paste("new directory: ", newdir1), sep="")
