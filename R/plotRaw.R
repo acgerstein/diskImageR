@@ -22,7 +22,7 @@
 #' @export
 
 plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE){
-	fileName <- paste(Sys.Date(), "_", projectName,"/", sep="")
+	fileName <- projectName
 	dir.create(paste("figures/", fileName,  sep=""), showWarnings = TRUE)
 	t <- paste("figures/", fileName, projectName, "_raw.pdf", sep="")
 	if (!overwrite){

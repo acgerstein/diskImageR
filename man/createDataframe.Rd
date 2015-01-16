@@ -21,7 +21,7 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 
 \item{typeVector}{a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{runIJ}} for more details) while \code{typeVector} = "FALSE" will not add a type column.}
 
-\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. For more details see \code{\link{runIJ}}}
+\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{runIJ}}}
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type".}
 }

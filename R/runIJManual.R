@@ -21,7 +21,7 @@
 
 runIJManual <-
 function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6){
-	fileDir <- paste(Sys.Date(), projectName, sep="_")
+	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, )
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	IJarguments <- paste(pictureDir, outputDir, discDiam, sep="*")
@@ -45,7 +45,6 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6)
 
 	system(call)
 
-	fileDir <- paste(Sys.Date(), projectName, sep="_")
 	cat(paste("\nOutput of imageJ analyses saved in directory: ", fileDir, "\n", sep=""))
 	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)

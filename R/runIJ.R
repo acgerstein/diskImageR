@@ -21,7 +21,7 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	projectDir <- tk_choose.dir(caption = "Select main project directory") 
 	inputDir <- tk_choose.dir(caption = "Select location of photographs")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
-	fileDir <- paste(Sys.Date(), projectName, sep="_")
+	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir)
 	inputDir2 <- file.path(inputDir)
 	IJarguments <- paste(inputDir2, outputDir, diskDiam, sep="*")

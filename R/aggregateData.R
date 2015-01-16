@@ -30,9 +30,9 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 	ag[,c(6:8, 10:12, 16)] <- round(ag[,c(6:8, 10:12, 16)], digits=2)	
 	ag[,c(13:15)] <- round(ag[,c(13:15)], digits=4)	
 	
-	filename <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/",projectName, "_ag.csv", sep="")
-	newdir2 <- paste(getwd(), "/parameter_files/", sep="")		
-	newdir3 <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/", sep="")	
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
+	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
+	newdir3 <- file.path(getwd(), "parameter_files", projectName,)	
 
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)

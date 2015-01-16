@@ -5,7 +5,7 @@
 #' @inheritParams maxLik
 #' @param nameVector either a logial value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign th photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.
 #' @param typeVector a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{runIJ}} for more details) while \code{typeVector} = "FALSE" will not add a type column.
-#' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. For more details see \code{\link{runIJ}}
+#' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{runIJ}}
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
 
 #' @details A dataframe with 11 columns:
@@ -39,11 +39,11 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
 	standardLoc <- 2.5
-	newdir <- paste(getwd(), "/parameter_files/", sep="")
-	newdir2 <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/", sep="")
-	newdir3 <- paste(getwd(), "/figures/", Sys.Date(), "_", projectName, "/", sep="")
+	newdir <- file.path(getwd(), "parameter_files")
+	newdir2 <- file.path(getwd(), "parameter_files", projectName)
+	newdir3 <- file.path(getwd(), "figures", projectName)
 	
-	filename <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/",  projectName, "_df.csv", sep="")
+	filename <- file.path(getwd(), "parameter_files", projectName, projectName, "_df.csv")
 
 	if (!file.exists(newdir)){		
 		dir.create(newdir, showWarnings = FALSE)

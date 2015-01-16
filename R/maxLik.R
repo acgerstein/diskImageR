@@ -41,9 +41,9 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	if(ZOI %nin% c(80, 50, 20, "all")){
 		stop("Current suppported ZOI values = 80, 50, 20")
 		}
-	fileFolder <- paste(Sys.Date(), projectName, sep="_")
-	dir.create(paste(getwd(), "/figures/", sep=""), showWarnings= FALSE)
-	dir.create(paste(getwd(), "/figures/", fileFolder, sep=""), showWarnings= FALSE)
+	fileFolder <- projectName
+	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
+	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 	
 	data <- eval(parse(text=projectName))
 	standardLoc <- 2.5
@@ -276,18 +276,18 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 
 	data <- eval(parse(text=projectName))
 
-	fileFolder <- paste(Sys.Date(), projectName, sep="_")
-	dir.create(paste(getwd(), "/figures/", sep=""), showWarnings= FALSE)
-	dir.create(paste(getwd(), "/figures/", fileFolder, sep=""), showWarnings= FALSE)
-	t <- paste("figures/", Sys.Date(), "_", projectName , "/", projectName, "_AUC.pdf", sep="")
+	fileFolder <- projectName
+	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
+	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
+	t <- file.path("figures", projectName , paste(projectName, "_AUC.pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- paste("figures/", Sys.Date(), "_", projectName , "/", projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep="")
+			t <- file.path("figures", projectName , paste(projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- paste("figures/", Sys.Date(), "_", projectName , "/", projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep="")
+					t <- file.path("figures", projectName, paste(projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))
 					}
 				}
 			}
