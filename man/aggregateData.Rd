@@ -4,7 +4,8 @@
 \alias{aggregateData}
 \title{Averages photographs of the same type}
 \usage{
-aggregateData(projectName, replicate = c("lines", "type"), varFunc = "se")
+aggregateData(projectName, replicate = c("lines", "type"), varFunc = "se",
+  overwrite = TRUE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -12,12 +13,14 @@ aggregateData(projectName, replicate = c("lines", "type"), varFunc = "se")
 \item{replicate}{a character vector indicating which the column names that contain which factors to use. Defaults to c("lines", "type"). Note that if the typeVector name was changed in \code{createDataframe} this should be reflected here.}
 
 \item{varFunc}{what type of variation measurment to perform. Currently supports \code{varFunc} = "se" to calculate the standard error, \code{varFun} = "cv" to calculate the coefficient of variation or any built-in R function (e.g., sd).}
+
+\item{overwrite}{a logical value indicating whether to overwrite existing aggregate dataframe for the same project name. This allows you to save different dataframes averaging across factors or using different variance measures}
 }
 \value{
 A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory.
 }
 \description{
-Addin description here
+Uses a user-supplied variane measure (currently supported: standard error, coefficient of variation, built-in R functions (e.g., sd) to calculate variance among photographs of the same type
 }
 \author{
 Aleeza C. Gerstein

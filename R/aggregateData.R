@@ -1,11 +1,11 @@
 #' Averages photographs of the same type
 
-#' @description Addin description here
+#' @description Uses a user-supplied variane measure (currently supported: standard error, coefficient of variation, built-in R functions (e.g., sd) to calculate variance among photographs of the same type
 
 #' @inheritParams maxLik
 #' @param replicate a character vector indicating which the column names that contain which factors to use. Defaults to c("lines", "type"). Note that if the typeVector name was changed in \code{createDataframe} this should be reflected here.
 #' @param varFunc what type of variation measurment to perform. Currently supports \code{varFunc} = "se" to calculate the standard error, \code{varFun} = "cv" to calculate the coefficient of variation or any built-in R function (e.g., sd). 
-#' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name
+#' @param overwrite a logical value indicating whether to overwrite existing aggregate dataframe for the same project name. This allows you to save different dataframes averaging across factors or using different variance measures
 
 #' @return A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory. 
 
