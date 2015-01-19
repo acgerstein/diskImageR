@@ -12,15 +12,15 @@
 
 saveMLParam <- function(projectName){
 	fileFolder <- paste(Sys.Date(), projectName, sep="_")
-	newdir <- paste(getwd(), "/parameter_files/", sep="")
-	newdir2 <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/", sep="")
+	newdir <- file.path(getwd(), "parameter_files")
+	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	if (!file.exists(newdir)){		
 		dir.create(newdir, showWarnings = FALSE)
-		cat(paste("\n\tCreating new directory: ", newdir), sep="")
+		cat(paste("\nCreating new directory: ", newdir), sep="")
 		}
 	if (!file.exists(newdir2)){		
 		dir.create(newdir2, showWarnings = FALSE)
-		cat(paste("\n\tCreating new directory: ", newdir2), sep="")
+		cat(paste("\nCreating new directory: ", newdir2), sep="")
 		}
 
 	ML.df <- .MLparam(projectName)
@@ -29,8 +29,8 @@ saveMLParam <- function(projectName){
 	MLdf <- paste(projectName, "_ML.df", sep="")
 	ML2df <- paste(projectName, "_ML2.df", sep="")
 
-	filename1 <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/",  projectName, "_ML.csv", sep="")
-	filename2 <- paste(getwd(), "/parameter_files/", Sys.Date(), "_", projectName, "/",  projectName, "_ML2.csv", sep="")
+	filename1 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML.csv", sep=""))	
+	filename2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2.csv", sep=""))	
 
 	cat("\n")
 	cat(paste("\n", MLdf, " has been written to the global environment", sep=""))
@@ -38,7 +38,7 @@ saveMLParam <- function(projectName){
 	cat(paste("\n", ML2df, " has been written to the global environment", sep=""))
 	assign(ML2df, ML2.df, envir=globalenv())
 
-	cat(paste("\nSaving files: ", MLdf, ", ", ML2df, sep=""))
+	cat(paste("\nSaving files: ", filename1, "\nand ", filename2, sep=""))
 
 	write.csv(ML.df, file=filename1, row.names=FALSE)	
 	write.csv(ML2.df, file=filename2, row.names=FALSE)	
