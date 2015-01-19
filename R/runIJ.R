@@ -1,6 +1,6 @@
 #' Run the imageJ analysis using the tcltk interface
 
-#' @description This function is used to run the imageJ analysis component of diskImageR using tcltk interface (i.e., pop-up boxes) to identify the project directory (the directory where all subsequent analyses will be saved) as well as the location of the directory containing the photos to be analyzed.
+#' @description Used to run the imageJ analysis component of diskImageR using tcltk interface (i.e., pop-up boxes) to identify the project directory (the directory where all subsequent analyses will be saved) as well as the location of the directory containing the photos to be analyzed.
 
 #' @param projectName the short name you want use for the project.
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
