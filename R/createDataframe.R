@@ -224,9 +224,9 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	maxAUC50 <- exp(x50)*max(yy50)	
 	maxAUC20 <- exp(x20)*max(yy20)	
 		
-	AUC80 <- sum(diff(exp(xx80[id80]))*rollmean(yy80[id80], 2))		
-	AUC50 <- sum(diff(exp(xx50[id50]))*rollmean(yy50[id50], 2))		
-	AUC20 <- sum(diff(exp(xx20[id20]))*rollmean(yy20[id20], 2))		
+	AUC80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))		
+	AUC50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))		
+	AUC20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))		
 	
 	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , AUC80 = round(AUC80, digits=0), AUC50= round(AUC50, digits=0), AUC20= round(AUC20, digits=0), maxAUC = round(maxAUC, digits=0), maxAUC80 = round(maxAUC80, digits=0), maxAUC50 = round(maxAUC50, digits=0), maxAUC20 = round(maxAUC20, digits=0))	
 	 

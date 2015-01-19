@@ -5,6 +5,7 @@
 #' @inheritParams maxLik
 #' @param replicate a character vector indicating which the column names that contain which factors to use. Defaults to c("lines", "type"). Note that if the typeVector name was changed in \code{createDataframe} this should be reflected here.
 #' @param varFunc what type of variation measurment to perform. Currently supports \code{varFunc} = "se" to calculate the standard error, \code{varFun} = "cv" to calculate the coefficient of variation or any built-in R function (e.g., sd). 
+#' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name
 
 #' @return A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory. 
 
@@ -13,38 +14,54 @@
 #' @author Aleeza C. Gerstein
 
 
-aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc = "se"){
+aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc = "se", overwrite = TRUE){
 	dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
 	
 	if (varFunc == "se") var <- se
 	if (varFunc == "cv") var <- cv
 	if (!varFunc %in% c("se", "cv"))  var <- eval(parse(text=varFunc))
 	
-	temp <- aggregate(c(dataframe[4:10]), dataframe[replicate], mean, na.rm=TRUE)
-	t <- apply(dataframe[,4:10], 2, function(x) aggregate(x, dataframe[replicate], var))
+	temp <- aggregate(dataframe[c("ZOI80", "ZOI50", "ZOI20", "fAUC80", "fAUC50", "fAUC20", "slope")], dataframe[replicate], mean, na.rm=TRUE)
+	t <- apply(dataframe[,c("ZOI80", "ZOI50", "ZOI20", "fAUC80", "fAUC50", "fAUC20", "slope")], 2, function(x) aggregate(x, dataframe[replicate], var))
 	 var <- data.frame(t[[1]]$x, t[[2]]$x, t[[3]]$x, t[[4]]$x, t[[5]]$x, t[[6]]$x, t[[7]]$x)
 	names(var) <- paste(varFunc, names(t), sep=".")
 	ag <- cbind(temp, var)
 	
-	ag[,c(3:5, 9)] <- round(ag[,c(3:5, 9)])
-	ag[,c(6:8, 10:12, 16)] <- round(ag[,c(6:8, 10:12, 16)], digits=2)	
-	ag[,c(13:15)] <- round(ag[,c(13:15)], digits=4)	
+	ag[,names(ag) %in% c("ZOI80", "ZOI50", "ZOI20", "slope")] <- round(ag[,names(ag) %in% c("ZOI80", "ZOI50", "ZOI20", "slope")])
+	ag[,	names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))] <- round(ag[,names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))], digits=2)	
+	ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))] <- round(ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))], digits=4)	
 	
-	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
 	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
 	newdir3 <- file.path(getwd(), "parameter_files", projectName)	
-	
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
+	agName <- paste(projectName, ".ag", sep="")
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
+
+	if (!overwrite){
+		if (file.exists(filename)){
+			filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_2.csv", sep=""))
+			agName <- paste(projectName, "_2.ag", sep="")
+			if (file.exists(filename)){
+				k <- 2
+				while(file.exists(filename)){
+					k <- k+1
+					filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_", k, ".csv", sep=""))
+					agName <- paste(projectName, "_", k, ".ag", sep="")	
+					}
+				}
+			}
+		}
+
 	
 	write.csv(ag, file=filename, row.names=FALSE)	
-	agName <- paste(projectName, ".ag", sep="")
+
 	cat(paste("\n", agName, " has been written to the global environment", sep=""))
 	cat(paste("\n\nSaving file: ", filename, sep=""))
-	cat(paste("\n",  projectName, "_ag.csv can be opened in MS Excel (save as .xls file if desired)",  sep=""))
+	cat(paste("\n",  agName, " can be opened in MS Excel (save as .xls file if desired)",  sep=""))
 	
 	 assign(agName, ag, envir=globalenv())
 	}
 	
-	cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
-	se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
+cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
+se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
