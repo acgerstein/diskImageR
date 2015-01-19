@@ -1,2 +1,2 @@
 # diskImageR
-diskImageR package to analyze diffusion disk assays
+diskImageR: a package to analyze diffusion disk assays for resistance parameters

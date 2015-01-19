@@ -8,6 +8,5 @@ License: GPL-3
 LazyData: true
 Imports: diversitree,
     zoo,
-    tcltk,
-    Hmisc
-Suggests: testthat
+    tcltk
+

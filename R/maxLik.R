@@ -35,10 +35,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
-	if(AUC %nin% c(80, 50, 20)){
+	if(!AUC %in% c(80, 50, 20)){
 		stop("Current suppported AUC values = 80, 50, 20")
 		}
-	if(ZOI %nin% c(80, 50, 20, "all")){
+	if(!ZOI %in% c(80, 50, 20, "all")){
 		stop("Current suppported ZOI values = 80, 50, 20")
 		}
 	fileFolder <- projectName
@@ -74,7 +74,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		MLt2 <- paste(projectName, ".ML2", sep="") 
 		ML <- eval(parse(text=MLt))
 		ML2 <- eval(parse(text=MLt2))
-		cat(paste("\n Using existing ML results ", MLt, " & ", MLt2, sep=""))		
+		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		
 		}
 
 	if(plotAUC){
@@ -124,10 +124,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	par.tryD<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		
 
 	mlpoint<-c()
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower)
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower)
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower)
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower)
+	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=20000))
+	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
@@ -173,14 +173,14 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
 	
 	mlpoint<-c()
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower)
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower)
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower)
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower)
-	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower)
-	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower)
-	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower)	
-	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower)	
+	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=20000))	
+	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))	
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint

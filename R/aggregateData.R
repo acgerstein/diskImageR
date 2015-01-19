@@ -16,16 +16,16 @@
 aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc = "se"){
 	dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
 	
-	if (varFunc == "se") var <- .se
-
-	if (varFunc == "cv") var <- .cv
-	else var <- eval(parse(text=varFunc))
+	if (varFunc == "se") var <- se
+	if (varFunc == "cv") var <- cv
+	if (!varFunc %in% c("se", "cv"))  var <- eval(parse(text=varFunc))
+	
 	temp <- aggregate(c(dataframe[4:10]), dataframe[replicate], mean, na.rm=TRUE)
 	t <- apply(dataframe[,4:10], 2, function(x) aggregate(x, dataframe[replicate], var))
-	var <- data.frame(t[[1]]$x, t[[2]]$x, t[[3]]$x, t[[4]]$x, t[[5]]$x, t[[6]]$x, t[[7]]$x)
+	 var <- data.frame(t[[1]]$x, t[[2]]$x, t[[3]]$x, t[[4]]$x, t[[5]]$x, t[[6]]$x, t[[7]]$x)
 	names(var) <- paste(varFunc, names(t), sep=".")
 	ag <- cbind(temp, var)
-
+	
 	ag[,c(3:5, 9)] <- round(ag[,c(3:5, 9)])
 	ag[,c(6:8, 10:12, 16)] <- round(ag[,c(6:8, 10:12, 16)], digits=2)	
 	ag[,c(13:15)] <- round(ag[,c(13:15)], digits=4)	
@@ -33,17 +33,18 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
 	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
 	newdir3 <- file.path(getwd(), "parameter_files", projectName)	
-
+	
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
-
+	
 	write.csv(ag, file=filename, row.names=FALSE)	
 	agName <- paste(projectName, ".ag", sep="")
 	cat(paste("\n", agName, " has been written to the global environment", sep=""))
 	cat(paste("\n\nSaving file: ", filename, sep=""))
 	cat(paste("\n",  projectName, "_ag.csv can be opened in MS Excel (save as .xls file if desired)",  sep=""))
-	assign(agName, ag, envir=globalenv())
+	
+	 assign(agName, ag, envir=globalenv())
 	}
-
-cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
-se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
+	
+	cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
+	se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
