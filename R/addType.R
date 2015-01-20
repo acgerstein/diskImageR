@@ -19,7 +19,7 @@ addType <- function(projectName, typePlace=3, typeName="type2"){
 	dfnew <- cbind(df[,1:place-1], type2, df[,place:length(df)])
 	if(typeName != "type2") names(dfnew)[place] <- typeName
 
-	filename <- file.path(getwd(), "parameter_files", projectName, "_df.csv", sep="")	
+	filename <- file.path(getwd(), "parameter_files", paste(projectName, "_df.csv", sep="")	)
 	dfName <- paste(projectName, ".df", sep="")
 	cat(paste(dfName, " has been written to the global environment", sep=""))
 	cat(paste("\nSaving file: ", filename,  sep=""))

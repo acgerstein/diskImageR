@@ -2,22 +2,27 @@
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+	html_document:
+		toc: true
+		theme: united
+	pdf_document:
+		toc: true
+		highlight: zenburn
 vignette: >
   %\VignetteIndexEntry{Quantitative Disk Assay}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-# Introduction to diskImageR
 
-### January 19, 2015
----
+## Introduction to diskImageR
 
-diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
+diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
+
 
 <center>
-<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
+<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" />         <img src="../inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -43,7 +48,7 @@ This step can be completed using one of two functions.
 runIJ("projectName")
 ```
 
-```{r}
+```r
 #If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
 #alternate function to supply the desired main project directory and photograph directory locations.
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
@@ -58,6 +63,7 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use
+1
 ```{r}
 plotRaw("vignette", savePDF=FALSE)
 ```
@@ -83,7 +89,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r}
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE, height=4)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -93,12 +99,19 @@ saveMLParam("vignette")
 ```
 This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
-## Output and save the results 
-The last required step is to save a dataframe with the resistance parameter estimates. 
+## Save the results 
+The last required step is to create and save a dataframe (both in the global environment and in the *parameter_files* directory) with the resistance parameter estimates. 
 
 ```{r}
-createDataframe("vignette", clearHalo = 1)
+createDataframe("vignette", clearHalo = 1, typeName="temp")
 vignette.df
 ```
+### [OPTIONAL] Add additional factor columns
+If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
+
+```{r}
+addType("vignette", typeName="rep")
+```
+
 
 

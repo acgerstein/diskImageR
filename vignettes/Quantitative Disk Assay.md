@@ -2,26 +2,27 @@
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "2015-01-20"
-output: rmarkdown::html_vignette
 output:
 	html_document:
-		fig_width: 2
-		fig_height: 2
+		toc: true
+		theme: united
+	pdf_document:
+		toc: true
+		highlight: zenburn
 vignette: >
   %\VignetteIndexEntry{Quantitative Disk Assay}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-# Introduction to diskImageR
 
-### January 19, 2015
----
+## Introduction to diskImageR
 
-diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
+diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
+
 
 <center>
-<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
+<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" />         <img src="../inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -62,6 +63,7 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use
+1
 
 ```r
 plotRaw("vignette", savePDF=FALSE)
@@ -91,7 +93,7 @@ From these functions we substract off the plate background intensity from all va
 
 
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE, height=4)
 ```
 
 ```
@@ -106,14 +108,14 @@ It is possible to save the maximum likelihood results using
 ```
 saveMLParam("vignette")
 ```
-This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models
+This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
-## Output and save the results 
-The last step is to save a dataframe with the resistance parameter estimates. 
+## Save the results 
+The last required step is to create and save a dataframe (both in the global environment and in the *parameter_files* directory) with the resistance parameter estimates. 
 
 
 ```r
-createDataframe("vignette", clearHalo = 1)
+createDataframe("vignette", clearHalo = 1, typeName="temp")
 ```
 
 ```
@@ -128,7 +130,23 @@ vignette.df
 ```
 
 ```
-##      name lines type ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
+##      name lines temp ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
 ## 1 p1_30_a    p1   30    11    14    17   0.37   0.26   0.29 133.2
 ## 2 p2_30_a    p2   30     0    13    17   1.00   0.94   0.63  75.6
 ```
+### [OPTIONAL] Add additional factor columns
+If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
+
+
+```r
+addType("vignette", typeName="rep")
+```
+
+```
+## vignette.df has been written to the global environment
+## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette/_df.csv/
+## vignette_df.csv can be opened in MS Excel.
+```
+
+
+
