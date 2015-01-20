@@ -9,4 +9,5 @@ LazyData: true
 Imports: diversitree,
     zoo,
     tcltk
-
+Suggests: knitr
+VignetteBuilder: knitr
