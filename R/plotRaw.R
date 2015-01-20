@@ -55,7 +55,9 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 		yplots<- ceiling(length(data)/xplots)}
 	else {yplots<- 6}
 	numpages <- ceiling(length(data)/(xplots*yplots))
-	pdf(t, width=width, height=height)
+	if(savePDF){
+		pdf(t, width=width, height=height)
+		}
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (i in 1:length(data)){
 		discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)
@@ -93,11 +95,13 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 	}
 	mtext("Distance from center of disk (mm)", side= 1, outer=TRUE, line=2)
 	mtext("Pixel intensity", side=2, outer=TRUE, line=2)
-	dev.off()
-	cat(paste("\tFigure saved: ", t, sep=""))
-	if(popUp){
-	tt <- paste("open ",t)
-	system(tt)
+	if(savePDF){
+		dev.off()
+		cat(paste("\tFigure saved: ", t, sep=""))
+		if(popUp){
+		tt <- paste("open ",t)
+		system(tt)
+	}
 	}
 	}
 
