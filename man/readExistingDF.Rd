@@ -7,18 +7,15 @@
 readExistingDF(projectName)
 }
 \arguments{
-\item{projectName}{the short name you want use for the project. Note, this can be different than the previous file name used for this project.}
+\item{\code{projectName}}{is the short name you want use for the project. Note, this can be different than the previous \code{projectName} used.}
 }
 \value{
-\code{projectName} is saved to the global directory and can be used for \code{aggregateData}
+\code{projectName} is saved to the global directory and can be used for \code{aggregateData}.
 }
 \description{
-Open an existing dataframe previously created with either \code{createDataframe} or \code{aggregateData} using tcltk interface.
+Open an existing dataframe previously created with either \code{\link{createDataframe}} or \code{\link{aggregateData}} using tcltk interface.
 }
 \author{
 Aleeza C. Gerstein
-}
-\seealso{
-\code{\link{runIJManual}} to run the imageJ analysis by manually supplying the project folder and photo location paths
 }
 
