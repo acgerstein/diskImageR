@@ -27,11 +27,15 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	IJarguments <- paste(inputDir2, outputDir, diskDiam, sep="*")
 	
 	if(length(dir(outputDir)) > 0){
-		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n)", sep=""))
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))
 		if(cont=="n"){
 			stop("Please delete existing files or change project name before continuing.")
+			}
+		if(cont=="y"){
+			unlink(outputDir, recursive = TRUE)
 		}
 	}
+
 	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(file.path(outputDir), showWarnings= FALSE)

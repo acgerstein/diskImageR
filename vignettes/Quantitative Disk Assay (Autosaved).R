@@ -1,7 +1,7 @@
 ---
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
-date: "2015-01-20"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 output:
 	html_document:
@@ -22,7 +22,7 @@ Disk diffusion assays
 diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
 
 <center>
-<img src="../inst/pictures/A02_30_L_b.JPG"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
+<img src="../inst/pictures/FH1_30_P_a.PDF"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -48,20 +48,10 @@ This step can be completed using one of two functions.
 runIJ("projectName")
 ```
 
-
-```r
+```{r}
 #If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
 #alternate function to supply the desired main project directory and photograph directory locations.
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-```
-
-```
-## 
-## Output of imageJ analyses saved in directory: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/imageJ-out/vignette/
-## 
-## Elements in dataframe vignette: 
-## [1] "FH1_30_P_a" "FH1_37_P_a"
-## 
 ```
 
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
@@ -77,24 +67,12 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 
 ## [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use
-
-```r
-plotRaw("vignette", savePDF=FALSE, height=4)
+```{r}
+plotRaw("vignette", savePDF=FALSE, height=3)
 ```
-
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ##Run the maximum likelihood analysis
-
-```r
+```{r}
 maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all")
 ```
-
-```
-## ..
-## vignette.ML has been written to the global environment
-## vignette.ML2 has been written to the global environment
-```
-
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
  
