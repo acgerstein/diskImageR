@@ -36,6 +36,7 @@ Finally, photographs should be cropped carefully around the disk.
 
 ## Run the imageJ macro on the set of photographs
 The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
+
 <b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
 
 From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder "imageJ-out" on your computer, with one file for each photograph.
@@ -45,10 +46,14 @@ This step can be completed using one of two functions.
 #This function allows you to run the imageJ macro through a user-interface with pop-up boxes to select 
 #where you want the main project directory to be and where to find the location of the photograph directory.
 runIJ("projectName")
-#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
-#alternate function to supply the desired main project directory and photograph directory locations.)
-runIJManual("projectName", "~/Documents/Reseach/diskAssays/", "~/Documents/Research/diskAssays/photographs/expt1/")
 ```
+
+```{r}
+#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
+#alternate function to supply the desired main project directory and photograph directory locations.
+runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
+```
+
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
 ```r
 ?runIJ
@@ -60,19 +65,15 @@ If you want to access the output of these functions in a later R session you can
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
 
-## Plot the imageJ output
-To plot the output from all photographs use
-```r
-plotRaw("projectName")
+## [optional] Plot the imageJ output
+To plot pixel intensity from the average from all photographs use
+```{r}
+plotRaw("vignette", savePDF=FALSE)
 ```
 
-
-```{r }
-set.seed(1234)
-library(ggplot2)
-library(lattice)
-```
- 
+##Run the maximum likelihood analysis
+``{r}
+maxLik("vignette", clearHalo=1)
  
 ## Basic console output
 To insert an R code chunk, you can type it manually or just press `Chunks - Insert chunks` or use the shortcut key. This will produce the following code chunk:

@@ -46,11 +46,13 @@ This step can be completed using one of two functions.
 #where you want the main project directory to be and where to find the location of the photograph directory.
 runIJ("projectName")
 ```
+
 ```{r}
 #If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
 #alternate function to supply the desired main project directory and photograph directory locations.)
-runIJManual("vig", projectDir= " ", pictureDir = "../inst/pictures/, imageJLoc = "loc2")
+runIJManual("vig", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
 ```
+
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
 ```r
 ?runIJ

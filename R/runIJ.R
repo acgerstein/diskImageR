@@ -45,7 +45,7 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 		
 	system(call)
 
-	cat(paste("\nOutput saved in directory: ", fileDir, "\n", sep=""))
+	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))
 	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	cat("\a")
@@ -74,7 +74,7 @@ function(workingDir, folderLoc, experAbbr){
 		}
 	if (!file.exists(newdir2)){		
 		dir.create(newdir2, showWarnings = FALSE)
-		cat(paste("new directory: ", newdir3), sep="")
+		cat(paste("new directory: ", newdir2), sep="")
 		}
 	tList
 	}

@@ -16,12 +16,13 @@
 #' @param showNum a logical value indicating whether to annotate each graph with the picture number (determined alphabetically from the picture names)
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name
+#' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 
 #' @return A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 
 #' @export
 
-plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE){
+plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE, savePDF= TRUE){
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))
 	if (!overwrite){

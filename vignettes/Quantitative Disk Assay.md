@@ -1,7 +1,7 @@
 ---
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
-date: "2015-01-19"
+date: "2015-01-20"
 output: rmarkdown::html_vignette
 output:
 	html_document:
@@ -18,7 +18,8 @@ vignette: >
 ### January 19, 2015
 
 
-diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. 
+Disk diffusion assays
+diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
 
 <center>
 <img src="../inst/pictures/A01_30_L_b.JPG"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
@@ -35,6 +36,7 @@ Finally, photographs should be cropped carefully around the disk.
 
 ## Run the imageJ macro on the set of photographs
 The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
+
 <b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
 
 From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder "imageJ-out" on your computer, with one file for each photograph.
@@ -44,10 +46,24 @@ This step can be completed using one of two functions.
 #This function allows you to run the imageJ macro through a user-interface with pop-up boxes to select 
 #where you want the main project directory to be and where to find the location of the photograph directory.
 runIJ("projectName")
-#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
-#alternate function to supply the desired main project directory and photograph directory locations.)
-runIJManual("projectName", "~/Documents/Reseach/diskAssays/", "~/Documents/Research/diskAssays/photographs/expt1/")
 ```
+
+
+```r
+#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
+#alternate function to supply the desired main project directory and photograph directory locations.
+runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
+```
+
+```
+## 
+## Output of imageJ analyses saved in directory: vignette
+## 
+## Elements in dataframe vignette: 
+## [1] "A01_30_L_b"
+## 
+```
+
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
 ```r
 ?runIJ
@@ -59,20 +75,19 @@ If you want to access the output of these functions in a later R session you can
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
 
-## Plot the imageJ output
-To plot the output from all photographs use
-```r
-plotRaw("projectName")
-```
-
-
+## [optional] Plot the imageJ output
+To plot pixel intensity from the average from all photographs use
 
 ```r
-set.seed(1234)
-library(ggplot2)
-library(lattice)
+plotRaw("vignette", popUp = FALSE, savePDF=FALSE)
 ```
- 
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+#<img src="/Figures/vignette/vignette_raw.pdf"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
+
+##Run the maximum likelihood analysis
+``{r}
+maxLik("vignette", clearHalo=1)
  
 ## Basic console output
 To insert an R code chunk, you can type it manually or just press `Chunks - Insert chunks` or use the shortcut key. This will produce the following code chunk:
@@ -93,16 +108,16 @@ The following R code chunk labelled `basicconsole` is as follows:
     
     ```
     ##     x     y
-    ## 1   1 -0.21
-    ## 2   2  2.28
-    ## 3   3  4.08
-    ## 4   4  1.65
-    ## 5   5  5.43
-    ## 6   6  6.51
-    ## 7   7  6.43
-    ## 8   8  7.45
-    ## 9   9  8.44
-    ## 10 10  9.11
+    ## 1   1  0.78
+    ## 2   2  2.04
+    ## 3   3  1.28
+    ## 4   4  3.54
+    ## 5   5  6.15
+    ## 6   6  5.18
+    ## 7   7  5.97
+    ## 8   8  9.17
+    ## 9   9  9.90
+    ## 10 10 11.37
     ```
     
 The code chunk input and output is then displayed as follows:
@@ -117,16 +132,16 @@ df
 
 ```
 ##     x     y
-## 1   1  0.52
-## 2   2  1.00
-## 3   3  2.22
-## 4   4  4.06
-## 5   5  5.96
-## 6   6  5.89
-## 7   7  6.49
-## 8   8  7.09
-## 9   9  8.16
-## 10 10 12.42
+## 1   1  1.06
+## 2   2  3.70
+## 3   3  2.68
+## 4   4  5.36
+## 5   5  4.16
+## 6   6  6.29
+## 7   7  6.77
+## 8   8  8.31
+## 9   9  7.66
+## 10 10 11.09
 ```
  
 ## Plots
@@ -140,7 +155,7 @@ Here is a basic plot using base graphics:
     plot(x)
     ```
     
-    ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+    ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
  
 
 ```r
@@ -160,13 +175,13 @@ Also, unlike traditional Sweave, you can include multiple plots in one code chun
     boxplot(1:10~rep(1:2,5))
     ```
     
-    ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+    ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
     
     ```r
     plot(x, y)
     ```
     
-    ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-2.png) 
+    ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-2.png) 
  
 
 

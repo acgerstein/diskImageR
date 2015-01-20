@@ -45,7 +45,7 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6)
 
 	system(call)
 
-	cat(paste("\nOutput of imageJ analyses saved in directory: ", fileDir, "\n", sep=""))
+	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))
 	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	cat("\a")
