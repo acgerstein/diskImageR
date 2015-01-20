@@ -52,6 +52,7 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))
 	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
+		
 	cat("\a")
 	assign(projectName, temp, envir=globalenv())
 	}

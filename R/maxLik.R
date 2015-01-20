@@ -125,10 +125,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	par.tryD<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		
 
 	mlpoint<-c()
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=20000))
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
+	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=30000))
+	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
@@ -174,14 +174,14 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
 	
 	mlpoint<-c()
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))
-	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=20000))	
-	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=20000))	
+	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))
+	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=30000))	
+	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=30000))	
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
@@ -272,7 +272,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, plotPDF = TRUE){
+.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE){
 
 	data <- eval(parse(text=projectName))
 
@@ -300,7 +300,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		yplots<- ceiling(length(data)/xplots)}
 	else {yplots<- 6}
 	numpages <- ceiling(length(data)/(xplots*yplots))
-	if(plotPDF){
+	if(savePDF){
 		pdf(t, width=width, height=height)
 	}
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
@@ -339,7 +339,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
 	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)
 
-	if(plotPDF){
+	if(savePDF){
 		dev.off()	
 		cat(paste("\nFigure saved: ", t, sep=""))
 	
