@@ -22,7 +22,7 @@ Disk diffusion assays
 diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
 
 <center>
-<img src="../inst/pictures/A02_30_L_b.JPG"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
+<img src="../inst/pictures/p2_30_a.PDF"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -60,7 +60,7 @@ runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(),
 ## Output of imageJ analyses saved in directory: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/imageJ-out/vignette/
 ## 
 ## Elements in dataframe vignette: 
-## [1] "FH1_30_P_a" "FH1_37_P_a"
+## [1] "p1_30_a" "p2_30_a"
 ## 
 ```
 
@@ -87,11 +87,39 @@ plotRaw("vignette", savePDF=FALSE, height=4)
 ##Run the maximum likelihood analysis
 
 ```r
-maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all")
+maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all", ymax=150, needML=TRUE)
 ```
 
 ```
 ## ..
+```
+
+```
+## Warning in mle.search(func2, x.init, control, lower, upper): Convergence
+## problems in find.mle (subplex): number of function evaluations exceeds
+## `maxit'
+```
+
+```
+## Warning in mle.search(func2, x.init, control, lower, upper): Convergence
+## problems in find.mle (subplex): number of function evaluations exceeds
+## `maxit'
+```
+
+```
+## Warning in mle.search(func2, x.init, control, lower, upper): Convergence
+## problems in find.mle (subplex): number of function evaluations exceeds
+## `maxit'
+```
+
+```
+## Warning in mle.search(func2, x.init, control, lower, upper): Convergence
+## problems in find.mle (subplex): number of function evaluations exceeds
+## `maxit'
+```
+
+```
+## 
 ## vignette.ML has been written to the global environment
 ## vignette.ML2 has been written to the global environment
 ```

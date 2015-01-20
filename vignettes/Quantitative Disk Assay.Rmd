@@ -22,7 +22,7 @@ Disk diffusion assays
 diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. Specifically, 
 
 <center>
-<img src="../inst/pictures/A02_30_L_b.JPG"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
+<img src="../inst/pictures/p2_30_a.PDF"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -71,8 +71,9 @@ To plot pixel intensity from the average from all photographs use
 plotRaw("vignette", savePDF=FALSE, height=4)
 ```
 
-##Run the maximum likelihood analysis
+##Run the maximum likelihood analysis 
+
 ```{r}
-maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all")
+maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
 ```
  
