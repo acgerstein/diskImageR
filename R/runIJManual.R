@@ -30,8 +30,12 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6)
 		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n)", sep=""))
 		if(cont=="n"){
 			stop("Please delete existing files or change project name before continuing.")
+			}
+		if(cont=="y"){
+			unlink(outputDir)
 		}
 	}
+	
 	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(outputDir, showWarnings= FALSE)
