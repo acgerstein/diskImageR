@@ -69,7 +69,9 @@ To plot pixel intensity from the average from all photographs use
 plotRaw("vignette", savePDF=FALSE)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png) 
+```
+## Error in x[, 1]: object of type 'symbol' is not subsettable
+```
 
 ## Run the maximum likelihood analysis 
 The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.
@@ -97,11 +99,8 @@ maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE, height=4
 ```
 
 ```
-## 
-## Using existing ML results vignette.ML & vignette.ML2
+## Error in x[, 1]: object of type 'symbol' is not subsettable
 ```
-
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ### [OPTIONAL] Save the maximum likelihood results
 It is possible to save the maximum likelihood results using
@@ -119,10 +118,7 @@ createDataframe("vignette", clearHalo = 1, typeName="temp")
 ```
 
 ```
-## 
-## vignette.df has been written to the global environment
-## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette/vignette_df.csv
-## vignette_df.csv can be opened in MS Excel.
+## Error in eval(expr, envir, enclos): object 'vignette.ML' not found
 ```
 
 ```r
@@ -130,9 +126,7 @@ vignette.df
 ```
 
 ```
-##      name lines temp ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
-## 1 p1_30_a    p1   30    11    14    17   0.37   0.26   0.29 133.2
-## 2 p2_30_a    p2   30     0    13    17   1.00   0.94   0.63  75.6
+## Error in eval(expr, envir, enclos): object 'vignette.df' not found
 ```
 ### [OPTIONAL] Add additional factor columns
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
@@ -143,9 +137,15 @@ addType("vignette", typeName="rep")
 ```
 
 ```
-## vignette.df has been written to the global environment
-## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette/_df.csv/
-## vignette_df.csv can be opened in MS Excel.
+## Error in eval(expr, envir, enclos): object 'vignette.df' not found
+```
+
+```r
+vignette.df
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'vignette.df' not found
 ```
 
 

@@ -111,6 +111,7 @@ If your photograph names contain more than one factor that is important (i.e, if
 
 ```{r}
 addType("vignette", typeName="rep")
+vignette.df
 ```
 
 

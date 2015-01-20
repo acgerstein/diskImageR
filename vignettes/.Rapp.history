@@ -1,1350 +1,993 @@
-n <- readline("Output files already exist in specified directory. Overwrite? (n/y)")
-y
-n
-n <- readline(Output files already exist in specified directory. Overwrite? (n/y))
-cont <- readline(paste("Output files exist in directory ", outputDir. "Overwrite? (y/n)", sep="")
-cont <- readline(paste("Output files exist in directory ", outputDir. "Overwrite? (y/n)", sep=""))
-cont <- readline(paste("Output files exist in directory ", outputDir. "Overwrite? (y/n)", sep=""))
-cont <- readline(paste("Output files exist in directory ", outputDir, "Overwrite? (y/n)", sep=""))
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-#' Used to run the imageJ analysis by manually supplying path locations#
+par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
+dev.off()
+par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
+for (k in 1:length(data)){#
+			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])
+if(numpages == 1){#
+				if (k >= xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}
+if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
 #
-#' @description This function is used to run the imageJ analysis component of diskImageR by manually supplying the path location of the project directory (the directory where all subsequent analyses will be saved) and the location of the directory containing the photos to be analyzed.#
-#
-#' @param projectName the short name you want use for the project.#
-#' @param projectDir the path to the project directory where all analyses will be saved#
-#' @param pictureDir the path to the directory where the pictures are to be analyzed#
-#' @param script the location of the imageJ script (AUTOMATE THIS)#
-#' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.#
-#' @param imageJLoc the absolute path to imageJ on your computer. Current options are standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; ly \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub#
-#
-#' @details Each photograph in the directory specified by \code{pictureDir} is input into ImageJ, where the built-in ‘find particles’ macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5° out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the ‘plot-profile’ macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}.#
-#
-#' @return A .csv file is saved to the directory "imageJ-out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.#
-#
-#' @export#
-#
-#' @seealso \code{\link{runIJ}} to run the imageJ analysis using the tcltk interface (i.e., pop-up boxes) to supply the project and picture directories. Test#
-#
-#'@author Aleeza C. Gerstein#
-#
-runIJManual <-#
-function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6){#
-	fileDir <- projectName#
-	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")#
-	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")#
-	IJarguments <- paste(pictureDir, outputDir, discDiam, sep="*")#
-	if(length(dir(outputDir)) > 0){#
-		cont <- readline(paste("Output files exist in directory ", outputDir, "Overwrite? (y/n)", sep=""))#
-		if(cont=="n"){#
-			stop("Please delete existing files or change project name before continuing.")#
-		}#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+			}
+plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]] <- subset(data[[i]], x != "NA")#
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
+	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
+	points(exp(xx), yy2, type="l", col="red", lwd=2)#
+	if (!both){#
+		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
+		points(exp(xx), yy, type="l", col="green", lwd=2)#
 	}#
-	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)#
-	dir.create(outputDir, showWarnings= FALSE)#
-	dir.create(file.path(projectDir, "Figures"), showWarnings= FALSE)#
-	if (imageJLoc=="default" | imageJLoc=="loc2" ){#
-		if (imageJLoc=="loc2"){#
-			call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
-		if (imageJLoc=="default"){#
-			call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
-	}#
-	else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
-		}#
-#
-	system(call)#
-#
-	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))#
-	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	#
-	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
-	cat("\a")#
-	assign(projectName, temp, envir=globalenv())#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	abline(v=exp(MLparam2[[i]]$par[2]))#
+	abline(v=exp(MLparam2[[i]]$par[6]))#
+	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
+    mtext(label, side=3, cex=0.6)#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
 	}
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
+if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+			}
+plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]] <- subset(data[[i]], x != "NA")#
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
+	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
+	points(exp(xx), yy2, type="l", col="red", lwd=2)#
+	if (!both){#
+		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
+		points(exp(xx), yy, type="l", col="green", lwd=2)#
+	}#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	abline(v=exp(MLparam2[[i]]$par[2]))#
+	abline(v=exp(MLparam2[[i]]$par[6]))#
+	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
+    mtext(label, side=3, cex=0.6)#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
+	}
+for (k in 1:length(data)){#
+			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
+			if(numpages == 1){#
+				if (k >= xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}#
+			if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+			}
+par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
+for (k in 1:length(data)){#
+			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
+			if(numpages == 1){#
+				if (k >= xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}#
+			if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+			}
+dotedge <- 3.25
+ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
+test <- compLik(ML, ML2)
+test
+data <- contrTest2
+ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+			test <- compLik(ML, ML2)
+`	if(twoCurve){
+}
+sdfasdlkjfas
+}}}{
+dsfk;alsdjf;kladjsf;lkadjsf;lkasd
+1
+q
+test
+{}{}{}{}
+"""""
+"
+}
+6
+^.
+'
+''''
+"""
+\\
+source("/Users/acgerstein/Documents/Postdoc/Research/0CommonFiles/RScript/discAssay1_5f.R")
+MAT5.t4 <- readInDir()
+maxLik("MAT5.t4", dotedge=3.5, ymax=200, xplots=6, twoCurve=TRUE)
+plotMLCurve2Models <- function(data, i, ML, ML2, stand=stand,  ymax=200, dotedge=3, maxDist= 35, percentileHigh = 0.8, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]]$x <- data[[i]]$x + stand[i] #
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) #
+	yy2<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx) #
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.7, col=grey(0.4))#
+#	points(exp(xx)- (dotedge+0.5), yy2, type="l", col="red", lwd=2)#
+	slope <- max(ML2[[i]]$par[3], ML2[[i]]$par[7])#
+	if(slope > 0.001){#
+		points(exp(xx), yy2 + min(data[[i]]$x+stand[i]), type="l", col="red", lwd=2)	#
+		abline(v=exp(ML2[[i]]$par[2]), col="red", lty=2)#
+		abline(v=exp(ML2[[i]]$par[6]), col="red", lty=2)#
+		abline(h=ML2[[i]]$par[1] + ML2[[i]]$par[5] +  min(data[[i]]$x+stand[i]), col="red", lty=2)#
+#		abline(h=min(ML2[[i]]$par[1], ML2[[i]]$par[5]) +  min(data[[i]]$x+stand[i]), col="red", lty=2)#
+		abline(v=exp(xx[which.max(yy2 > yy2[length(yy2)]*0.9)]), col="blue", lwd=2) #
+	}#
+	if (both){#
+		yy<- curve(ML[[i]]$par[1], ML[[i]]$par[2], ML[[i]]$par[3],xx)#
+		points(exp(xx), yy + min(data[[i]]$x+stand[i]), type="l", col="green", lwd=2)#
+		abline(v=exp(ML[[i]]$par[2]), col="green", lty=2)#
+		abline(h=ML[[i]]$par[1], col="green", lty=2)			#
+	}#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+    mtext(label, side=3, cex=0.6)#
+#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
+	}#
+#exp(xx[which.max(yy2 > yy2[100]*0.9)])
+maxLik("MAT5.t4", dotedge=3.5, ymax=200, xplots=6, twoCurve=TRUE)
+MAT5.t4.ML2[[1]]
+data <- MAT5.t4#
+standardLoc <- 0
+dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+stand
+range(stand)
+range(stand)[2]
+seq(0, 3, 100)
+for (i in seq(0, 3, 0.1)
+}
+?append
+standMax <- c()#
+for (i in seq(0, 3, 0.1){#
+	standardLox <- i#
+	append(standMax, range(stand)[2])#
+	}
+standMax <- c()#
+for (i in seq(0, 3, 0.1)){#
+	standardLox <- i#
+	append(standMax, range(stand)[2])#
+	}
+standMax
+standMax <- c()#
+for (i in seq(0, 3, 0.1)){#
+	standardLox <- i#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
+	append(standMax, range(stand)[2])#
+	}
+standMax
+seq(0, 3, 0.1))
+seq(0, 3, 0.1)
+standMax <- c()#
+for (i in seq(0, 3, 0.1)){#
+	standardLoc <- i#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
+	append(standMax, range(stand)[2])#
+	}
+standMax
+i <- 0
+dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+stand
+range(stand)[2]
+append(standMax, range(stand)[2])
+standMax <- append(standMax, range(stand)[2])
+standMax
+standMax <- c()#
+for (i in seq(0, 3, 0.1)){#
+	standardLoc <- i#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
+	standMax <- append(standMax, range(stand)[2])#
+	}
+standMax
+min(standMax)
+standMax <- c()#
+for (i in seq(0, 3, 0.01)){#
+	standardLoc <- i#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
+	standMax <- append(standMax, range(stand)[2])#
+	}
+standMax
+min(standMax)
+plotRaw("MAT5.t4",  ymax = 275, xmax = 35, dotedge = 3.5)
+plotRaw("MAT5.t4",  ymax = 275, xmax = 35, dotedge = 3)
+plotRaw("MAT5.t4",  ymax = 325, xmax = 35, dotedge = 3)
+plotRaw("MAT5.t4",  ymax = 325, xmax = 35, dotedge = 4)
+plotRaw("MAT5.t4",  ymax = 325, xmax = 35, dotedge = 4, standardLoc = 4)
+plotRaw("MAT5.t4",  ymax = 400, xmax = 35, dotedge = 4, standardLoc = 4)
+maxLik("MAT5.t4", dotedge=4, ymax=200, xplots=6, twoCurve=TRUE, standardLoc = 4)
+data <- MAT5.t4#
+standardLoc <- 4#
+dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+plotMLCurve2Models(MAT5.t4, 1, MAT5.t4.ML, MAT5.t4.ML2, stand = stand, dotedge = 4)
+devdev.capabilitiesdev.capabilitiesdev.capabilities
+library(lme4)#
+library(lmerTest)#
+ cv <-function(x) sd(x,na.rm=TRUE)/mean(x,na.rm=TRUE)#
+d <- read.csv("/Users/acgerstein/Documents/Postdoc/Research/TLO/Noise/Noise non-flow/microscopy/motherDaughter/Mother_Daughter_TLO_expression_final.csv", sep=",")#
+d <- d[,1:3]#
+d$LT <- paste(d$Line, d$Type, sep=".")#
+ddn <- split(d, d$LT)#
+numcells <- sapply(ddn, function(x) length(x[,1]))#
+range(numcells)[1] #50 is the smallest#
+#
+ddnS <- lapply(ddn, function(x) sample(x$Expression, 50))#
+Col <- sapply(as.character(names(ddn)), function(x) strsplit(x, "[.]")[[1]][1])#
+Type <- sapply(as.character(names(ddn)), function(x) strsplit(x, "[.]")[[1]][2])#
+#
+dS <- data.frame(Line = rep(Col, each=50), Type = rep(Type, each=50), Expression=unlist(ddnS))#
+dS$Expression[dS$Expression <= 0] <- 0.0001#
+dS$Expression <- log(dS$Expression)
+is.factor(ds$Type)
+is.factor(dS$Type)
+library(KernSmooth)
+source("/Users/acgerstein/Documents/Postdoc/Research/0CommonFiles/RScript/discAssay2.R")
+library(zoo)
+F5DY<-readInExisting()
+maxLik("F5DY", clearHalo = 28, maxDist = 30, xplots=4)
+createDataframe("F5DY", clearHalo = 28)
+source("/Users/acgerstein/Documents/Postdoc/Research/0CommonFiles/RScript/discAssay2.R")
+createDataframe("F5DY", clearHalo = 28)
+findAUC <- function(data, ML, ML2, stand, clearHaloStand, ZOIcor, dotedge = 3.4, maxDist = 35, ymax = 200, standardLoc = 2.5, percentileLow = 0.2,  i){	#
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand #
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) #
+	yy<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) #
+	ic50 <- ML[[i]]$par[2]	#
+	ploty <- data[[i]]$x#
+	ploty[ploty < 0] <-0#
+	yhalo <- (yy[which.max(yy> yy[length(yy)] * percentileLow)]+min(data[[i]]$x))#
+	xhalo <- exp(xx[which.max(yy> yy[length(yy)] * 0.9)])		#
+	x50 <- exp(xx[which.max(yy> yy[length(yy)] * 0.5)])			#
+	minHalo <- exp(xx[which.max(yy> yy[length(yy)] * percentileLow)])		#
+	ZOI <- xhalo		#
+	slope <- ML[[i]]$par[3]#
+	if(slope > 1){		#
+			 xx <- seq(maxDist-1, maxDist, length=10)#
+			yy<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) #
+			yy <- (yy+min(data[[i]]$x))#
+			yy <- (yy+min(data[[i]]$x))*ZOIcor[i]#
+			id <- order(xx)#
+			maxAUC <- sum(diff(xx[id])*rollmean(yy[id], 2))	#
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
+		xx50 <- exp(xx[1:which.max(exp(xx) > x50)-1])		#
+#		xx50 <- exp(xx[1:which.max(exp(xx) > exp(ic50))-1])		#
+		xx90 <- exp(xx[1:which.max(exp(xx) > xhalo)-1])				#
+#		xx <- exp(xx[1:which.max(exp(xx) > xhalo)-1])#
+		if(length(xx50) == 0){#
+			xx50 <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) #
+			}			#
+		yy50<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx50)) #
+		yy90<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx90)) #
+#		yy <- (yy+min(data[[i]]$x))*ZOIcor[i]#
+		yy50 <- (yy50+min(data[[i]]$x))#
+		yy90 <- (yy90+min(data[[i]]$x))	#
+		yy50[yy50  < 0] <-0#
+		yy50[yy50 ==NaN] <- 0#
+		yy90[yy90  < 0] <-0#
+		yy90[yy90 ==NaN] <- 0#
+		id50 <- order(xx50)#
+		id90 <- order(xx90)#
+		if (length(xx50) > 1){#
+			AUC50 <- sum(diff(xx50[id50])*rollmean(yy50[id50], 2))		#
+			}#
+		else{#
+			AUC50 <- 0#
+			}#
+		if (length(xx90) > 1){#
+			AUC90 <- sum(diff(xx90[id90])*rollmean(yy90[id90], 2))		#
+			}#
+		else{#
+			AUC90 <- 0#
+			}#
+		return(list(ZOI = ZOI, minHalo = minHalo, AUC50= AUC50, AUC90 = AUC90, maxAUC = maxAUC))	#
+		}#
+	if(slope < 1){#
+		minHalo <- 0#
+		ZOI <- 0#
+		yy <- (yy+min(data[[i]]$x))*ZOIcor[i]#
+		yy[yy < 0] <- 0#
+		xx <- exp(xx)#
+		id <- order(xx)#
+		AUC <- sum(diff(xx[id])*rollmean(yy[id], 2))#
+		maxAUC <- 1#
+	}#
+	return(list(ZOI = ZOI, minHalo = minHalo, AUC= AUC, maxAUC = maxAUC))		#
+}
+findAUC <- function(data, ML, ML2, stand, clearHaloStand, ZOIcor, dotedge = 3.4, maxDist = 35, ymax = 200, standardLoc = 2.5, percentileLow = 0.2,  i){	#
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand #
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) #
+	yy<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) #
+	ic50 <- ML[[i]]$par[2]	#
+	ploty <- data[[i]]$x#
+	ploty[ploty < 0] <-0#
+	yhalo <- (yy[which.max(yy> yy[length(yy)] * percentileLow)]+min(data[[i]]$x))#
+	xhalo <- exp(xx[which.max(yy> yy[length(yy)] * 0.9)])	#
+	x50 <- exp(xx[which.max(yy> yy[length(yy)] * 0.5)])						#
+	minHalo <- exp(xx[which.max(yy> yy[length(yy)] * percentileLow)])		#
+	ZOI <- xhalo	#
+	slope <- ML[[i]]$par[3]#
+	if(slope > 1){		#
+			 xx <- seq(maxDist-1, maxDist, length=10)#
+			yy<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) #
+			yy <- (yy+min(data[[i]]$x))#
+			yy <- (yy+min(data[[i]]$x))*ZOIcor[i]#
+			id <- order(xx)#
+			maxAUC <- sum(diff(xx[id])*rollmean(yy[id], 2))	#
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
+		xx50 <- exp(xx[1:which.max(exp(xx) > x50)-1])		#
+		xx90 <- exp(xx[1:which.max(exp(xx) > xhalo)-1])#
+		if(length(xx50) == 0){#
+			xx50 <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) #
+			}#
+		yy50<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx50)) #
+		yy90<- curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx90)) #
+#
+		yy50 <- (yy50+min(data[[i]]$x))#
+		yy50[yy50  < 0] <-0#
+		yy50[yy50 ==NaN] <- 0#
+		id50 <- order(xx50)#
+		if (length(xx50) > 1){#
+			AUC50 <- sum(diff(xx50[id50])*rollmean(yy50[id50], 2))		#
+			}#
+		else{#
+			AUC50 <- 0#
+			}#
+#
+		yy90 <- (yy90+min(data[[i]]$x))#
+		yy90[yy90  < 0] <-0#
+		yy90[yy90 ==NaN] <- 0#
+		id90 <- order(xx90)#
+		if (length(xx90) > 1){#
+			AUC90 <- sum(diff(xx90[id90])*rollmean(yy90[id90], 2))		#
+			}#
+		else{#
+			AUC90 <- 0#
+			}#
+#
+		return(list(ZOI = ZOI, minHalo = minHalo, AUC50= AUC90, AUC50= AUC90, maxAUC = maxAUC))	#
+		}#
+	if(slope < 1){#
+		minHalo <- 0#
+		ZOI <- 0#
+		yy <- (yy+min(data[[i]]$x))*ZOIcor[i]#
+		yy[yy < 0] <- 0#
+		xx <- exp(xx)#
+		id <- order(xx)#
+		AUC <- sum(diff(xx[id])*rollmean(yy[id], 2))#
+		AUC50 <- AUC  #Not sure this is what should be done, stopgap#
+		AUC90 <- AUC  #Not sure this is what should be done, stopgap #
+		maxAUC <- 1#
+	}#
+	return(list(ZOI = ZOI, minHalo = minHalo, AUC50= AUC50, AUC90 = AUC90, maxAUC = maxAUC))		#
+}
+d <- read.csv("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/excel/CarlOverviewMIC.csv", sep=",")#
+ddn <- split(d, d$Strain)#
+#
+plotEE <- function(strain, name="", plotX = FALSE){#
+	plot(ddn[[strain]]$Day, log(ddn[[strain]]$FLC.level), type="n", xaxt="n", yaxt="n", ylab="", xlab="", cex=1.5, ylim=c(log(0.5), log(300)))#
+	axis(1, labels=FALSE)#
+		for (i in ddn[[strain]]$Line){#
+			sub <- subset(ddn[[strain]], Line ==i)#
+			text(sub$Day[length(sub$Day)], log(sub$FLC.level)[length(sub$Day)], "X", col="red",  cex=1.5, font=2) #
+			points(sub$Day, log(sub$FLC.level), type="b")#
+			}#
+	if(plotX) axis(1)#
+	axis(2, las=2, labels=c("0.5", "2", "8", "32", "128"), at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+	mtext(name, side=3, adj=0.01, font=2)#
+}#
+#
+FHT <- c(2, 10, 2, 7, 11, 10)#
+SCT <- c(14, 5, 8, 14, 4, 9)#
+T1 <- c(8, 5, 11, 9, 1, 14)
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResultsDemo.pdf", width=6, height=5)#
+plotEE(1, "Strain A", plotX = TRUE)#
+mtext("Day of transfer", side=1, line=2.5)#
+mtext(expression(paste("Fluconazole concentration (", mu, "g/mL)", sep="")), side=2, line=2.5, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResultsDemo.pdf")
+d <- read.csv("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/excel/CarlOverviewMIC.csv", sep=",")#
+ddn <- split(d, d$Strain)#
+#
+plotEE <- function(strain, name="", plotX = FALSE){#
+	plot(ddn[[strain]]$Day, log(ddn[[strain]]$FLC.level), type="n", xaxt="n", yaxt="n", ylab="", xlab="", cex=1.5, ylim=c(log(0.5), log(300)))#
+	axis(1, labels=FALSE)#
+		for (i in ddn[[strain]]$Line){#
+			sub <- subset(ddn[[strain]], Line ==i)#
+			text(sub$Day[length(sub$Day)], log(sub$FLC.level)[length(sub$Day)], "X", col="red",  cex=1.5, font=2) #
+			points(sub$Day, log(sub$FLC.level), type="b")#
+			}#
+	if(plotX) axis(1)#
+	axis(2, las=2, labels=c("0.5", "2", "8", "32", "128"), at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+	mtext(name, side=3, adj=0.01, font=2)#
+}#
+#
+FHT <- c(2, 10, 2, 7, 11, 10)#
+SCT <- c(14, 5, 8, 14, 4, 9)#
+T1 <- c(8, 5, 11, 9, 1, 14)#
+#
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResultsDemo.pdf", width=6, height=5)#
+plotEE(1, "Strain A", plotX = TRUE)#
+mtext("Day of transfer", side=1, line=2.5)#
+mtext(expression(paste("Fluconazole concentration (", mu, "g/mL)", sep="")), side=2, line=2.5, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResultsDemo.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResults.pdf", width=6, height=4.5)#
+par(mfrow=c(3, 1), mar=c(1,1,2,1), oma=c(4, 4, 1, 1))#
+plotEE(1, "Strain A")#
+plotEE(2, "Strain B")#
+plotEE(3,  "Strain C", plotX=TRUE)#
+mtext("Day of transfer", side=1, line=2.5)#
+mtext(expression(paste("Fluconazole concentration (", mu, "g/mL)", sep="")), side=2, line=1.5, outer=TRUE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/transferResults.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf", width=6, height=5)#
+plotMIC(1, "Strain A", plotX = TRUE)#
+abline(h=log(2), lty=2)#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf")
+plotMIC <- function(strain, name, plotX = FALSE, plotY = TRUE){#
+	plot(log(ddn[[strain]]$FLC.level), log(ddn[[strain]]$MIC1), type="n", xaxt="n", yaxt="n", ylab="", xlab="", cex=1.5, ylim=c(log(0.1), log(280)), xlim=c(log(0.5), log(160)))#
+	axis(1, las=2, labels=FALSE, at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+		for (i in ddn[[strain]]$Line){#
+			sub <- subset(ddn[[strain]], Line ==i)#
+#			text(log(sub$FLC.level)[length(sub$MIC1)], log(sub$MIC1)[length(sub$MIC1)], "o", col="red",  cex=1.5, font=2) #
+			points(log(sub$FLC.level), log(sub$MIC1), type="b")#
+			}#
+	if(plotY) axis(2, las=2, labels=c("0.125", "0.5", "2", "8", "32", "128", ">256"), at=c(log(0.125), log(0.5), log(2), log(8), log(32), log(128), log(275)))#
+	if(plotX) axis(1, labels=c("0.5", "2", "8", "32", "128"), at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+	mtext(name, side=3, adj=0.01, font=2)	#
+}#
+#
+sub2 <- sub <- subset(ddn[[1]], Line ==2)
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf", width=6, height=5)#
+plotMIC(1, "Strain A", plotX = TRUE)#
+abline(h=log(2), lty=2)#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsFH-2.pdf", width=6, height=4)#
+plot(log(sub2$FLC.level), log(sub2$MIC1), type="b", xaxt="n", yaxt="n", ylab="", xlab="", cex=1.5, ylim=c(log(0.25), log(280)), xlim=c(log(2), log(160)))#
+axis(2, las=2, labels=c("0.125", "0.5", "2", "8", "32", "128", "256"), at=c(log(0.125), log(0.5), log(2), log(8), log(32), log(128), log(256)))#
+axis(1, labels=c("0.5", "2", "8", "32", "128"), at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsFH-2.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf", width=6, height=5)#
+plotMIC(1, "Strain A", plotX = TRUE)#
+abline(h=log(2), lty=2)#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf")#
+#
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResults.pdf", width=6, height=4.75)#
+par(mfrow=c(3, 1), mar=c(1,1,1,1), oma=c(4, 4, 1, 1))#
+plotMIC(1, "Strain A")#
+abline(h=log(2), lty=2)#
+plotMIC(2, "Strain B")#
+points(c(log(16), log(64)), c(log(5), log(96)), type="l", lty=2)#
+points(c(log(2), log(8)), c(log(0.19), log(0.16)), type="l", lty=2)#
+abline(h=log(0.5), lty=2)#
+plotMIC(3, "Strain C", plotX=TRUE)#
+abline(h=log(0.5), lty=2)#
+mtext("MIC (fitness)", side=2, line=2.5, outer=TRUE)#
+mtext(expression(paste("Fluconazole concentration (", mu, "g/mL)", sep="")), side=1, line=2, outer=TRUE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResults.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResults.pdf", width=6, height=4.75)#
+par(mfrow=c(3, 1), mar=c(1,1,1,1), oma=c(4, 4, 1, 1))#
+plotMIC(1, "Strain A")#
+abline(h=log(4), lty=2)#
+plotMIC(2, "Strain B")#
+points(c(log(16), log(64)), c(log(5), log(96)), type="l", lty=2)#
+points(c(log(2), log(8)), c(log(0.19), log(0.16)), type="l", lty=2)#
+abline(h=log(0.5), lty=2)#
+plotMIC(3, "Strain C", plotX=TRUE)#
+abline(h=log(0.5), lty=2)#
+mtext("MIC (fitness)", side=2, line=2.5, outer=TRUE)#
+mtext(expression(paste("Fluconazole concentration (", mu, "g/mL)", sep="")), side=1, line=2, outer=TRUE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResults.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf", width=6, height=5)#
+plotMIC(1, "Strain A", plotX = TRUE)#
+abline(h=log(4), lty=2)#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsDemo.pdf")
+pdf("/Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsFH-2.pdf", width=6, height=4)#
+plot(log(sub2$FLC.level), log(sub2$MIC1), type="b", xaxt="n", yaxt="n", ylab="", xlab="", cex=1.5, ylim=c(log(0.25), log(280)), xlim=c(log(4), log(160)))#
+axis(2, las=2, labels=c("0.125", "0.5", "2", "8", "32", "128", "256"), at=c(log(0.125), log(0.5), log(2), log(8), log(32), log(128), log(256)))#
+axis(1, labels=c("0.5", "2", "8", "32", "128"), at=c(log(0.5), log(2), log(8), log(32), log(128)))#
+mtext("MIC (fitness)", side=2, line=3, outer=FALSE)#
+mtext(expression(paste("Fluconazole concentration in medium (", mu, "g/mL)", sep="")), side=1, line=3, outer=FALSE)#
+dev.off()#
+system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl/figures/MICResultsFH-2.pdf")
+?diff
+load("/Users/acgerstein/Documents/Postdoc/Things from:for others/UMN/Ben/test.RData")
+.RData
 library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)#
-setwd("Documents/Postdoc/Research/diskImageR/vignettes/")
-dir()
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")
-knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)#
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
-knit2html("Quantitative Disk Assay.Rmd") #
-browseURL("Quantitative Disk Assay.html")
-browseURL("Quantitative Disk Assay.html")
-library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)#
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")
-knit2html("Quantitative Disk Assay.Rmd")
-knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-dir()
-dir("..")
-library("diskImageR")
-dir("..")
-dir("../inst/")
-dir("../inst/pictures/")
-library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)#
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
-knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-?unique
-?basename
-dir()
-dir("imageJ-out/")
-dir("imageJ-out/vignette/")
-t <- "imageJ-out/vignette/"
-basename(t)
-basename(dir(t))
-duplicated(basename(dir(t)))
-unique(basename(dir(t)))
-knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)#
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
-knit2html("Quantitative Disk Assay.Rmd")
-?maxLik
-knit2html("Quantitative Disk Assay.Rmd")
-knit2html("Quantitative Disk Assay.Rmd")
 install_github("acgerstein/diskImageR")
 library("diskImageR")
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-install_github("acgerstein/diskImageR")#
-library("diskImageR")
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-?unlink
-install_github("acgerstein/diskImageR")#
-library("diskImageR")
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
 library(markdown)#
 library(knitr)#
 setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")
 knit2html("Quantitative Disk Assay.Rmd")
 browseURL("Quantitative Disk Assay.html")
-?plotRaw
-?plotRaw
-??plotRaw
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+?createDataframe
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+devtools::build("diskImageR")
+dir()
+setwd("..")
+dir()
+devtools::build("diskImageR")
+setwd("..")
+devtools::build("diskImageR")
+devtools::build("diskImageR")
+ls()
+dir()
+?install_github
+install_github("acgerstein/diskImageR", build_vignettes = TRUE )
+install_github("acgerstein/diskImageR", build_vignettes = TRUE )
+install_github("acgerstein/diskImageR", local=FALSE)
+ls()
+vignette()
+vignette
+vignette("disk")
+browseVignettes("diskImageR")
+browseVignettes()
+devtools::build()
+setwd("diskImageR/")
+devtools::build()
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+dir()
+setwd("vignettes/")
+dir()
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+rmarkdown::render("Quantitative Disk Assay.Rmd")
+knit("Quantitative Disk Assay.Rmd")
+markdownToHTML("diskImageR.md", "diskImageR.html")
+markdownToHTML("Quantitative Disk Assay.md", "diskImageR.html")
+---#
+title: "Quantitative Disk Assay"#
+author: "Aleeza C. Gerstein"#
+date: "`r Sys.Date()`"#
+output:#
+	html_document:#
+		toc: true#
+		theme: united#
+	pdf_document:#
+		toc: true#
+		highlight: zenburn#
+vignette: >#
+  %\VignetteIndexEntry{Quantitative Disk Assay}#
+  %\VignetteEngine{knitr::rmarkdown}#
+  \usepackage[utf8]{inputenc}#
+---#
+## Introduction to diskImageR#
+#
+diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays. diskImageR removes the need for subjective measurement by assessing zone diameter quantitatively from photographs taken of the disk diffusion plates. This method measures not only the zone of inhibition (i.e., resistance), but also how much growth there is above the zone of inhibition (tolerance), and the rate of change from no growth to full growth (sensitivity).#
+<center>#
+<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> #
+</center>#
+#
+## Prepare plates and photographs#
+The analysis done by diskImageR will only be as good as your disk assay plates and the photographs you take. Plates should always be labelled on the side, not on the bottom. Care should be taken when setting up the camera to take photographs, as you want the lighting conditions to be as uniform as possible, without any shadows on the plates. Camera settings should be manual rather than automatic as much as possible. Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory.#
+#
+Photograph naming can be used downstream to have diskImageR do a number of statistical things (e.g., averaging across replicates, caulculations of variance, t-tests). The general format is "strain_factor1_factor2_rep.pdf". Conversely, if you intend to do all the statistical analysis later, photographs can be named anything, even numbered.#
+#
+Finally, photographs should be cropped carefully around the disk.#
+#
+<b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). #
+#
+## Run the imageJ macro on the set of photographs#
+The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. #
+#
+<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.#
+#
+From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder "imageJ-out" on your computer, with one file for each photograph.#
+#
+This step can be completed using one of two functions.#
+```r#
+#This function allows you to run the imageJ macro through a user-interface with pop-up boxes to select #
+#where you want the main project directory to be and where to find the location of the photograph directory.#
+runIJ("projectName")#
+```#
+#
+```{r}#
+#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the #
+#alternate function to supply the desired main project directory and photograph directory locations.#
+runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")#
+```#
+#
+Depending on where imageJ is located, the script may not run unless you specify the filepath. See ?runIJ for more details.#
+#
+If you want to access the output of these functions in a later R session you can with#
+```r#
+readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used#
+```#
+#
+### [optional] Plot the imageJ output#
+To plot pixel intensity from the average from all photographs use#
+```{r}#
+plotRaw("vignette", savePDF=FALSE)#
+```#
+#
+## Run the maximum likelihood analysis #
+The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.#
+$$#
+y = \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)#
+$$#
+#
+We often observed disk assays that deviated from the single logistic, either rising more linearly than expected at low cell density, or with an intermediate asymptote around the midpoint. To fascilitate fitting these curves, we fit a double logistic, which allows greater flexibility. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data, rather than to test what model fits better.#
+$$#
+y = \frac{asymA*exp(scalA(x-od50A))}{1+exp(scalA(x-od50A))}+\frac{asymB*exp(scalB(x-od50B))}{1+exp(scalB(x-od50B))}+N(0, \sigma)#
+$$#
+#
+From these functions we substract off the plate background intensity from all values; this is common across all pictures taken at the same time and is determined from the observed pixel intensity on a plate with a clear halo (specified by the user). We then use the parameters identified in the logistic equations to determine the resistance parameters.#
+#
+* <b>Resistance</b>#
+	: asymA+asymB are added together to determine the maximum level of intensity (= cell density) achieved on each plate. The level of resistance (zone of inhibition, ZOI), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occurs (corresponding to *ZOI80*, *ZOI50*, and *ZOI20*)#
+* <b>Tolerance</b>#
+	: the 'rollmean' function from the zoo package is used to calculate the area under the curve (AUC)  in slice from the disk edge to each ZOI cutoff. This achieved growth is then compared to the potential growth, namely, the area of a rectangle with length and height equal to the ZOI. The calculated paramaters are thus the fraction of full growth in this region (*fAUC80*, *fACU50*, *fAUC20*).#
+* <b>Sensitivity</b>#
+	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.#
+#
+```{r}#
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE)#
+```#
+#
+### [OPTIONAL] Save the maximum likelihood results#
+It is possible to save the maximum likelihood results using#
+```#
+saveMLParam("vignette")#
+```#
+This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.#
+## Output and save the results #
+The last required step is to save a dataframe with the resistance parameter estimates. #
+#
+```{r}#
+createDataframe("vignette", clearHalo = 1)#
+vignette.df#
+```
+knit("Quantitative Disk Assay.Rmd")
+markdownToHTML("diskImageR.md", "diskImageR.html")
+markdownToHTML("Quantitative Disk Assay.md", "diskImageR.html")
+markdownToPDF("Quantitative Disk Assay.md", "diskImageR.pdf")
+render("Quantitative Disk Assay.Rmd", "QDA")
+pandoc("Quantitative Disk Assay.md", format=latex'
+")
+)
+"
+)
+'
+pandoc("Quantitative Disk Assay.md", format=latex
+)
+pandoc("Quantitative Disk Assay.md", format="latex")
+pandoc('Quantitative Disk Assay.md', format='latex')
+dir()
+require(knitr)#
+  require(tools)#
+  thedir <- file_path_as_absolute(dirname(fname))#
+  thefile <- (basename(fname)) #
+  create_latex <- function(f){#
+    knit(f, 'tmp-outputfile.md'); #
+    newname <- paste0(file_path_sans_ext(f), ".tex")#
+    mess <- paste('pandoc -f markdown -t latex -s -o', shQuote(newname), #
+                  "tmp-outputfile.md")#
+    system(mess)#
+    cat("The Latex file is", file.path(thedir, newname), #
+        "\nIf transporting do not forget to include the folder", file.path(thedir, "figure"), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+#
+  create_word <- function(f){#
+    knit(f, 'tmp-outputfile.md');#
+    newname <- paste0(file_path_sans_ext(f),".docx")#
+    mess <- paste('pandoc -f markdown -t docx -o', shQuote(newname), "tmp-outputfile.md")#
+    system(mess)#
+    cat("The Word (docx) file is", file.path(thedir, newname), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+  create_html <- function(f){#
+    knit2html(f)#
+    cat("The main HTML file is", file.path(thedir, paste0(file_path_sans_ext(f), ".html")), #
+        "\nIf transporting do not forget to include the folder", file.path(thedir, "figure"), "\n")#
+  }#
+#
+  create_pdf <- function(f){#
+    knit(f, 'tmp-outputfile.md');#
+    newname <- paste0(file_path_sans_ext(f),".pdf")#
+    mess <- paste('pandoc -f markdown -o', shQuote(newname), "tmp-outputfile.md")#
+    system(mess)#
+    cat("The PDF file is", file.path(thedir, newname), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+#
+  origdir <- getwd()  #
+  tryCatch({#
+    setwd(thedir) ## put us next to the original Rmarkdown file#
+    out <- match.arg(output)#
+    switch(out,#
+      latex=create_latex(thefile),#
+      html=create_html(thefile),#
+      pdf=create_pdf(thefile),#
+      word=create_word(thefile)#
+    )}, finally=setwd(origdir))#
+}
+thedir <- file_path_as_absolute(dirname(fname))
+library(tools)
+library(knitr)
+thedir <- file_path_as_absolute(dirname(fname))
+?file_path_as_absolute
+dir()
+setwd("..")
+dir()
+source('rmd2.R')
+source('rmdd.R')
+source('rmd.R')
+rmd.convert <- function(fname, output=c('latex', 'word', 'html', "pdf")){#
+  ## Thanks to Robert Musk for helpful additions to make this run better on Windows#
+#
+  require(knitr)#
+  require(tools)#
+  thedir <- file_path_as_absolute(dirname(fname))#
+  thefile <- (basename(fname)) #
+  create_latex <- function(f){#
+    knit(f, 'tmp-outputfile.md'); #
+    newname <- paste0(file_path_sans_ext(f), ".tex")#
+    mess <- paste('pandoc -f markdown -t latex -s -o', shQuote(newname), #
+                  "tmp-outputfile.md")#
+    system(mess)#
+    cat("The Latex file is", file.path(thedir, newname), #
+        "\nIf transporting do not forget to include the folder", file.path(thedir, "figure"), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+#
+  create_word <- function(f){#
+    knit(f, 'tmp-outputfile.md');#
+    newname <- paste0(file_path_sans_ext(f),".docx")#
+    mess <- paste('pandoc -f markdown -t docx -o', shQuote(newname), "tmp-outputfile.md")#
+    system(mess)#
+    cat("The Word (docx) file is", file.path(thedir, newname), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+  create_html <- function(f){#
+    knit2html(f)#
+    cat("The main HTML file is", file.path(thedir, paste0(file_path_sans_ext(f), ".html")), #
+        "\nIf transporting do not forget to include the folder", file.path(thedir, "figure"), "\n")#
+  }#
+#
+  create_pdf <- function(f){#
+    knit(f, 'tmp-outputfile.md');#
+    newname <- paste0(file_path_sans_ext(f),".pdf")#
+    mess <- paste('pandoc -f markdown -o', shQuote(newname), "tmp-outputfile.md")#
+    system(mess)#
+    cat("The PDF file is", file.path(thedir, newname), "\n")#
+    mess <- paste('rm tmp-outputfile.md')#
+    system(mess)#
+  }#
+#
+  origdir <- getwd()  #
+  tryCatch({#
+    setwd(thedir) ## put us next to the original Rmarkdown file#
+    out <- match.arg(output)#
+    switch(out,#
+      latex=create_latex(thefile),#
+      html=create_html(thefile),#
+      pdf=create_pdf(thefile),#
+      word=create_word(thefile)#
+    )}, finally=setwd(origdir))#
+}
+dir()
+setwd("vignettes/")
+rmd.convert('Quantitative Disk Assay.Rmd', 'latex') ## for a latex document
+rmd.convert('Quantitative Disk Assay.Rmd', 'html') ## for a latex document
+pandoc("Quantitative Disk Assay.md", format = "pdf")
+pandoc("Quantitative Disk Assay.md", format = "html")
+dir()
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+graphics.off()
+library(devtools)#
+install_github("acgerstein/diskImageR")
+library("diskImageR")#
+library(markdown)#
+library(knitr)#
+setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")
+knit2html("Quantitative Disk Assay.Rmd")
+browseURL("Quantitative Disk Assay.html")
+library("diskImageR")
+?maxLik
 install_github("acgerstein/diskImageR")
 library(devtools)
 install_github("acgerstein/diskImageR")
-library("diskImageR")
-library(markdown)#
-library(knitr)
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
-plotRaw("vignette", savePDF=FALSE, height=3)
-quartz(width=4, height=2)
-plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE, savePDF= TRUE){#
-	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)#
-	t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))#
-	if (!overwrite){#
-		if (file.exists(t)){#
-			t <- file.path("figures", projectName, paste(projectName, "_raw_2.pdf", sep=""))#
-			if (file.exists(t)){#
-				k <- 2#
-				while(file.exists(t)){#
-					k <- k+1#
-					t <- file.path("figures", projectName, paste(projectName, "_raw_", k, ".pdf", sep=""))#
-					}#
-				}#
-			}#
-		}#
-	data <- eval(parse(text=projectName))#
-	standardLoc <- 2.5#
-	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
-	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
-	convert <- unlist(lapply(data, function(x) 40/length(x[,1])))#
-	if (is.logical(nameVector)){#
-		if (nameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- nameVector}#
-#
-	if (xplots > length(data)){#
-		xplots <- length(data)#
-		}#
-	if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}#
-	else {yplots<- 6}#
-	numpages <- ceiling(length(data)/(xplots*yplots))#
-	if(savePDF){#
-		pdf(t, width=width, height=height)#
-		}#
-	if(!savePDF){#
-		quartz(width=width, height=height)#
-		}#
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
-	for (i in 1:length(data)){#
-		discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)#
-		if(numpages == 1){#
-			if (i >= xplots*yplots-xplots+1){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-		}#
-		if(numpages == 2){#
-			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-			if (i >= 2*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-		}				#
-		if(numpages == 3){#
-			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-			if (i >= 2*xplots*yplots-xplots+1 & i < 2*xplots*yplots+1){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-			if (i >= (length(data)-xplots)){#
-				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-			}#
-		}				#
-		k <- 1#
-		while (k <= numpages){#
-		if (i %in% seq(1, k*yplots*xplots, by=xplots)) {axis(2, cex.axis=cexY, las=2)}#
-			k <- k+1}#
-		if(showNum){#
-			text(maxDist*0.95, maxDist*0.95, i)#
-		}#
-	}#
-	mtext("Distance from center of disk (mm)", side= 1, outer=TRUE, line=2)#
-	mtext("Pixel intensity", side=2, outer=TRUE, line=2)#
-	if(savePDF){#
-		dev.off()#
-		cat(paste("\tFigure saved: ", t, sep=""))#
-		if(popUp){#
-		tt <- paste("open ",t)#
-		system(tt)#
-	}#
-	}#
-	}#
-#
-#' Used to plot the results of a single picture analyzed in imageJ#
-#
-#' @description This function is used by \code{\link{plotRaw}} to plot the results from each photograph#
-#
-#' @param data a dataframe containing two columns, with the x coordinates and image intensity height. Typically stored in a list named from the projectName in \code{\link{runIJ}}, \code{\link{runIJManual}} or \code{\link{readInExisting}}#
-#' @param label what to title the plot#
-#' @param ymin a numeric value indicating the minimum y value plotted in each graph#
-#' @param ymax a numeric value indicating the maximum y value plotted in each graph#
-#' @param xmin a numeric value indicating the minimum x value plotted in each graph#
-#' @param xmax a numeric value indicating the maximum x value plotted in each graph#
-#' @param standardLoc a numeric value indicating the location on the disk in mm used to standardize pixel intensity across all pictures, defaults to 2.5#
-#' @param cexPt  a numeric value indicating the size to plot for points, x-axis text and y-axis text, respectively#
-#' @param xaxt a character string to determine whether to plot the x axis, defaults to "n"#
-#' @param yaxt a character string to determine whether to plot the y axis, defaults to "n"#
-#' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point#
-#
-#' @export#
-discplotNoRep <- function(data,  label=label, ymin=0, ymax=250, xmin=0, xmax=40, standardLoc = 2.5, cexPt = 0.6, stand = 0, xaxt="n", yaxt="n", plotStandardLoc =FALSE){#
-	plot(data[,1], data[,2]+stand, ylim=c(ymin, ymax), xlim=c(xmin, xmax), xaxt=xaxt, yaxt="n", cex=cexPt, col="black")#
-	if (yaxt=="s"){#
-		axis(2, las=2)}#
-	axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	axis(2, labels=FALSE)#
-	mtext(label, side=3, cex=0.6)#
-	if(plotStandardLoc){#
-		abline(v= standardLoc, lty=2, col="red")#
-		}#
-	}
-plotRaw("vignette", savePDF=FALSE, height=4)
-maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all")
-maxLik("vignette", clearHalo=2, savePDF=FALSE, height=4, ZOI="all", ymax=150, needML=FALSE)
-library(devtools)#
-install_github("acgerstein/diskImageR")#
-library("diskImageR")#
-library(markdown)#
-library(knitr)
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
-knit2html("Quantitative Disk Assay.Rmd")
-setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
-knit2html("Quantitative Disk Assay.Rmd")
-knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150, needML=FALSE)
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
-library(diversitree)
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
-?find.mle
-#' Maximum Likelihood Inference#
-#
-#' @description Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, tolerance, and sensitivity#
-#
-#' @param projectName the short name in use for the project.#
-#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine tolerance, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. #
-#' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.#
-#' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.#
-#' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting#
-#' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting#
-#' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param width a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param AUC a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{AUC} = "80" (80\% reduction in growth), \code{AUC} = "50" (50\% reduction in growth), and \code{AUC} = "20" (20\% reduction in growth) are supported.#
-#' @param ZOI a numeric value indicating the the critical level of the zone of inhibition (resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{ZOI} = "80" (80\% reduction in growth), \code{ZOI} = "50" (50\% reduction in growth), \code{ZOI} = "20" (20\% reduction in growth), and \code{ZOI} = "all" are supported.#
-#' @param needML a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.#
-#' @param popUp a logical value indicating whether to pop up the figure after it has been created.#
-#' @param plotNameVector either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.#
-#' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.#
-#' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE#
-#' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.#
-#
-#' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{runIJ}}. The equations fit are#
-#'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}#
-#'  \deqn{double ('ML2'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, \sigma)}#
-#' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.#
-#
-#' @return Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).#
-#
-#' @export#
-#
-#' @author Aleeza C. Gerstein#
-#
-# See if can do clearHalo automatically somehow#
-#
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){#
-	if(!(hasArg(clearHalo))){#
-		stop("No picture with clear halo specified.")#
-	}#
-	if(!AUC %in% c(80, 50, 20)){#
-		stop("Current suppported AUC values = 80, 50, 20")#
-		}#
-	if(!ZOI %in% c(80, 50, 20, "all")){#
-		stop("Current suppported ZOI values = 80, 50, 20")#
-		}#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	data <- eval(parse(text=projectName))#
-	standardLoc <- 2.5#
-	if (is.logical(plotNameVector)){#
-		if (plotNameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- plotNameVector}	#
-#
-	if (!is.logical(standardLoc)){#
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
-		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))#
-		}#
-	else{#
-		stand <- rep(0, length(data))#
-		}#
-	dotedge <- diskDiam/2+0.4#
-	if(needML){		#
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))#
-		assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment", sep=""))#
-	}#
-	if(!needML){		#
-		MLt <- paste(projectName, ".ML", sep="") #
-		MLt2 <- paste(projectName, ".ML2", sep="") #
-		ML <- eval(parse(text=MLt))#
-		ML2 <- eval(parse(text=MLt2))#
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		#
-		}#
-#
-	if(plotAUC){#
-		clearHaloData <- data[[clearHalo]]#
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]#
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]#
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]#
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo] #
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)#
-		clearHaloStand <- clearHaloData[1,2]#
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)#
-	}#
-}#
-#
-.curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}#
-#
-.curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))} #
-#
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	cat(".")#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		ic50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowIC <- min(data[[i]]$x)#
-	highIC <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(highIC*0.8, 0, 0,0)#
-	upper <- c(highIC, max(data[[i]]$distance), maxSlope,maxSlope)#
-	par.tryA <-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2)#
-	par.tryB<-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.1, sigma = 0.2)#
-	par.tryC<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1)#
-	par.tryD<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		#
-#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=50000))#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint#
-}#
-#
-.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		od50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		asymB<-theta[[5]]#
-		od50B<-theta[[6]]#
-		scalB<-theta[[7]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowOD <- min(data[[i]]$x)#
-	highOD <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(0, 0, 0,0, 0, 0, 0)#
-	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)#
-	#This is conservative, keeping them symmetric 	#
-	par.tryA <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.01)#
-	par.tryB <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.1)#
-	par.tryC<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scal =  maxSlope*0.01)#
-	par.tryD<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.1, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scalB =  maxSlope*0.1)#
-	#Change asym and od50 #
-	par.tryE <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryF <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryG <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.1)#
-	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))#
-	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=50000))	#
-	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))	#
-#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint <- if (mlpointE$lnLik>mlpoint$lnLik) mlpointE else mlpoint#
-	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint#
-	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint			#
-	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint			#
-	mlpoint#
-}#
-#
-.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand #
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)#
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) #
-	#ZOI#
-	ploty <- data[[i]]$x#
-	ploty[ploty < 0] <-0#
-	slope <- ML[[i]]$par[3]#
-	ic50 <- ML[[i]]$par[2]	#
-	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))#
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.4), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")#
-	yyplot <- (yy+min(data[[i]]$x))#
-	yyplot[yyplot < 0] <- 0#
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)			#
-#
-	useAsym <- "TRUE"#
-	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]#
-	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]#
-	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]#
-	if(yy20halo < yy50halo){#
-		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]#
-		useAsym <- "FALSE"#
-	}#
-#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])#
-	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])#
-	xx20 <- exp(xx[which.max(yyplot> asym * 0.8)])#
-	if(useAsym == "FALSE"){#
-		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])#
-	}#
-#
-	if(AUC==50){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])	#
-		}#
-	if(AUC==80){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])	#
-		}#
-	if(AUC==20){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])	#
-		}#
-#
-	if(length(xx)<1){#
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)#
-	}		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) #
-	yy <- (yy+min(data[[i]]$x))#
-	yy[yy < 0] <- 0#
-	if (slope >1){#
-		xx2 <- c(xx[1], xx, xx[length(xx)])#
-		yy2 <- c(0, yy, 0)#
-		if(plotAUC){#
-			polygon(xx2, yy2, density=15, col="red")#
-			}#
-		if(ZOI == 20){#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==50){#
-			points(xx50, yy50halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==80){#
-			points(xx80, yy80halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI=="all"){#
-			points(xx80, yy80halo, col="yellow", cex=1.5, pch=19)#
-			points(xx50, yy50halo, col="purple", cex=1.5, pch=19)#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}			#
-		}#
-	mtext(label, side=3, cex=0.6)#
-}#
-#
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE){#
-#
-	data <- eval(parse(text=projectName))#
-#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	t <- file.path("figures", projectName , paste(projectName, "_AUC.pdf", sep=""))#
-	if (!overwrite){#
-		if (file.exists(t)){#
-			t <- file.path("figures", projectName , paste(projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-			if (file.exists(t)){#
-				k <- 2#
-				while(file.exists(t)){#
-					k <- k+1#
-					t <- file.path("figures", projectName, paste(projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-					}#
-				}#
-			}#
-		}#
-#
-	if(xplots > length(data)){#
-		xplots <- length(data)#
-	}#
-	if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}#
-	else {yplots<- 6}#
-	numpages <- ceiling(length(data)/(xplots*yplots))#
-	if(savePDF){#
-		pdf(t, width=width, height=height)#
-	}#
-	if(!savePDF){#
-		quartz(width=width, height=height)#
-	}#
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
-	for (k in 1:length(data)){#
-		.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)#
-#
-		if(numpages == 1){#
-			if (k >= xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}#
-			}#
-		if(numpages == 2){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			if (k >= 2*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}	#
-			}				#
-		if(numpages == 3){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else{axis(1, labels=FALSE)}#
-			}				#
-		axis(1, labels=FALSE)#
-		j <- 1#
-		while (j <= numpages){#
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-			j <- j+1#
-		}#
-	}#
-	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)#
-	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)#
-#
-	if(savePDF){#
-		dev.off()	#
-		cat(paste("\nFigure saved: ", t, sep=""))#
-		if(popUp){#
-			tt <- paste("open", t)#
-			system(tt)#
-		}#
-	}#
-}
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
-?mle.search
-??mle.search
-#' Maximum Likelihood Inference#
-#
-#' @description Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, tolerance, and sensitivity#
-#
-#' @param projectName the short name in use for the project.#
-#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine tolerance, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. #
-#' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.#
-#' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.#
-#' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting#
-#' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting#
-#' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param width a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param AUC a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{AUC} = "80" (80\% reduction in growth), \code{AUC} = "50" (50\% reduction in growth), and \code{AUC} = "20" (20\% reduction in growth) are supported.#
-#' @param ZOI a numeric value indicating the the critical level of the zone of inhibition (resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{ZOI} = "80" (80\% reduction in growth), \code{ZOI} = "50" (50\% reduction in growth), \code{ZOI} = "20" (20\% reduction in growth), and \code{ZOI} = "all" are supported.#
-#' @param needML a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.#
-#' @param popUp a logical value indicating whether to pop up the figure after it has been created.#
-#' @param plotNameVector either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.#
-#' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.#
-#' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE#
-#' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.#
-#
-#' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{runIJ}}. The equations fit are#
-#'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}#
-#'  \deqn{double ('ML2'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, \sigma)}#
-#' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.#
-#
-#' @return Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).#
-#
-#' @export#
-#
-#' @author Aleeza C. Gerstein#
-#
-# See if can do clearHalo automatically somehow#
-#
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){#
-	if(!(hasArg(clearHalo))){#
-		stop("No picture with clear halo specified.")#
-	}#
-	if(!AUC %in% c(80, 50, 20)){#
-		stop("Current suppported AUC values = 80, 50, 20")#
-		}#
-	if(!ZOI %in% c(80, 50, 20, "all")){#
-		stop("Current suppported ZOI values = 80, 50, 20")#
-		}#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	data <- eval(parse(text=projectName))#
-	standardLoc <- 2.5#
-	if (is.logical(plotNameVector)){#
-		if (plotNameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- plotNameVector}	#
-#
-	if (!is.logical(standardLoc)){#
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
-		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))#
-		}#
-	else{#
-		stand <- rep(0, length(data))#
-		}#
-	dotedge <- diskDiam/2+0.4#
-	if(needML){		#
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))#
-		assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment", sep=""))#
-	}#
-	if(!needML){		#
-		MLt <- paste(projectName, ".ML", sep="") #
-		MLt2 <- paste(projectName, ".ML2", sep="") #
-		ML <- eval(parse(text=MLt))#
-		ML2 <- eval(parse(text=MLt2))#
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		#
-		}#
-#
-	if(plotAUC){#
-		clearHaloData <- data[[clearHalo]]#
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]#
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]#
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]#
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo] #
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)#
-		clearHaloStand <- clearHaloData[1,2]#
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)#
-	}#
-}#
-#
-.curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}#
-#
-.curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))} #
-#
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	cat(".")#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		ic50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowIC <- min(data[[i]]$x)#
-	highIC <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(highIC*0.8, 0, 0,0)#
-	upper <- c(highIC, max(data[[i]]$distance), maxSlope,maxSlope)#
-	par.tryA <-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2)#
-	par.tryB<-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.1, sigma = 0.2)#
-	par.tryC<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1)#
-	par.tryD<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		#
-#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower)#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower)#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower)#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower)#
-#, control=list(maxit=50000)#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint#
-}#
-#
-.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		od50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		asymB<-theta[[5]]#
-		od50B<-theta[[6]]#
-		scalB<-theta[[7]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowOD <- min(data[[i]]$x)#
-	highOD <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(0, 0, 0,0, 0, 0, 0)#
-	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)#
-	#This is conservative, keeping them symmetric 	#
-	par.tryA <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.01)#
-	par.tryB <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.1)#
-	par.tryC<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scal =  maxSlope*0.01)#
-	par.tryD<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.1, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scalB =  maxSlope*0.1)#
-	#Change asym and od50 #
-	par.tryE <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryF <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryG <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.1)#
-	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower)#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower)#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower)#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower)#
-	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower)#
-	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower)#
-	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower)	#
-	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower)	#
-#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint <- if (mlpointE$lnLik>mlpoint$lnLik) mlpointE else mlpoint#
-	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint#
-	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint			#
-	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint			#
-	mlpoint#
-}#
-#
-.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand #
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)#
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) #
-	#ZOI#
-	ploty <- data[[i]]$x#
-	ploty[ploty < 0] <-0#
-	slope <- ML[[i]]$par[3]#
-	ic50 <- ML[[i]]$par[2]	#
-	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))#
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.4), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")#
-	yyplot <- (yy+min(data[[i]]$x))#
-	yyplot[yyplot < 0] <- 0#
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)			#
-#
-	useAsym <- "TRUE"#
-	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]#
-	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]#
-	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]#
-	if(yy20halo < yy50halo){#
-		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]#
-		useAsym <- "FALSE"#
-	}#
-#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])#
-	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])#
-	xx20 <- exp(xx[which.max(yyplot> asym * 0.8)])#
-	if(useAsym == "FALSE"){#
-		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])#
-	}#
-#
-	if(AUC==50){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])	#
-		}#
-	if(AUC==80){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])	#
-		}#
-	if(AUC==20){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])	#
-		}#
-#
-	if(length(xx)<1){#
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)#
-	}		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) #
-	yy <- (yy+min(data[[i]]$x))#
-	yy[yy < 0] <- 0#
-	if (slope >1){#
-		xx2 <- c(xx[1], xx, xx[length(xx)])#
-		yy2 <- c(0, yy, 0)#
-		if(plotAUC){#
-			polygon(xx2, yy2, density=15, col="red")#
-			}#
-		if(ZOI == 20){#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==50){#
-			points(xx50, yy50halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==80){#
-			points(xx80, yy80halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI=="all"){#
-			points(xx80, yy80halo, col="yellow", cex=1.5, pch=19)#
-			points(xx50, yy50halo, col="purple", cex=1.5, pch=19)#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}			#
-		}#
-	mtext(label, side=3, cex=0.6)#
-}#
-#
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE){#
-#
-	data <- eval(parse(text=projectName))#
-#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	t <- file.path("figures", projectName , paste(projectName, "_AUC.pdf", sep=""))#
-	if (!overwrite){#
-		if (file.exists(t)){#
-			t <- file.path("figures", projectName , paste(projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-			if (file.exists(t)){#
-				k <- 2#
-				while(file.exists(t)){#
-					k <- k+1#
-					t <- file.path("figures", projectName, paste(projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-					}#
-				}#
-			}#
-		}#
-#
-	if(xplots > length(data)){#
-		xplots <- length(data)#
-	}#
-	if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}#
-	else {yplots<- 6}#
-	numpages <- ceiling(length(data)/(xplots*yplots))#
-	if(savePDF){#
-		pdf(t, width=width, height=height)#
-	}#
-	if(!savePDF){#
-		quartz(width=width, height=height)#
-	}#
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
-	for (k in 1:length(data)){#
-		.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)#
-#
-		if(numpages == 1){#
-			if (k >= xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}#
-			}#
-		if(numpages == 2){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			if (k >= 2*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}	#
-			}				#
-		if(numpages == 3){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else{axis(1, labels=FALSE)}#
-			}				#
-		axis(1, labels=FALSE)#
-		j <- 1#
-		while (j <= numpages){#
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-			j <- j+1#
-		}#
-	}#
-	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)#
-	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)#
-#
-	if(savePDF){#
-		dev.off()	#
-		cat(paste("\nFigure saved: ", t, sep=""))#
-		if(popUp){#
-			tt <- paste("open", t)#
-			system(tt)#
-		}#
-	}#
-}
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
-#' Maximum Likelihood Inference#
-#
-#' @description Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, tolerance, and sensitivity#
-#
-#' @param projectName the short name in use for the project.#
-#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine tolerance, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. #
-#' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.#
-#' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.#
-#' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting#
-#' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting#
-#' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param width a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting#
-#' @param AUC a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{AUC} = "80" (80\% reduction in growth), \code{AUC} = "50" (50\% reduction in growth), and \code{AUC} = "20" (20\% reduction in growth) are supported.#
-#' @param ZOI a numeric value indicating the the critical level of the zone of inhibition (resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{ZOI} = "80" (80\% reduction in growth), \code{ZOI} = "50" (50\% reduction in growth), \code{ZOI} = "20" (20\% reduction in growth), and \code{ZOI} = "all" are supported.#
-#' @param needML a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.#
-#' @param popUp a logical value indicating whether to pop up the figure after it has been created.#
-#' @param plotNameVector either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.#
-#' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.#
-#' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE#
-#' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.#
-#
-#' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{runIJ}}. The equations fit are#
-#'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}#
-#'  \deqn{double ('ML2'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, \sigma)}#
-#' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.#
-#
-#' @return Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).#
-#
-#' @export#
-#
-#' @author Aleeza C. Gerstein#
-#
-# See if can do clearHalo automatically somehow#
-#
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){#
-	if(!(hasArg(clearHalo))){#
-		stop("No picture with clear halo specified.")#
-	}#
-	if(!AUC %in% c(80, 50, 20)){#
-		stop("Current suppported AUC values = 80, 50, 20")#
-		}#
-	if(!ZOI %in% c(80, 50, 20, "all")){#
-		stop("Current suppported ZOI values = 80, 50, 20")#
-		}#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	data <- eval(parse(text=projectName))#
-	standardLoc <- 2.5#
-	if (is.logical(plotNameVector)){#
-		if (plotNameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- plotNameVector}	#
-#
-	if (!is.logical(standardLoc)){#
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
-		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))#
-		}#
-	else{#
-		stand <- rep(0, length(data))#
-		}#
-	dotedge <- diskDiam/2+0.4#
-	if(needML){		#
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)#
-		assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))#
-		assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())#
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment", sep=""))#
-	}#
-	if(!needML){		#
-		MLt <- paste(projectName, ".ML", sep="") #
-		MLt2 <- paste(projectName, ".ML2", sep="") #
-		ML <- eval(parse(text=MLt))#
-		ML2 <- eval(parse(text=MLt2))#
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		#
-		}#
-#
-	if(plotAUC){#
-		clearHaloData <- data[[clearHalo]]#
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]#
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]#
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]#
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo] #
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)#
-		clearHaloStand <- clearHaloData[1,2]#
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)#
-	}#
-}#
-#
-.curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}#
-#
-.curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))} #
-#
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	cat(".")#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		ic50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowIC <- min(data[[i]]$x)#
-	highIC <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(highIC*0.8, 0, 0,0)#
-	upper <- c(highIC, max(data[[i]]$distance), maxSlope,maxSlope)#
-	par.tryA <-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2)#
-	par.tryB<-c(asym = 0.9*highIC, ic50 = log(maxDist)/4, scal = maxSlope*0.1, sigma = 0.2)#
-	par.tryC<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1)#
-	par.tryD<-c(asym = 0.9*highIC,ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		#
-#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=80000))#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint#
-}#
-#
-.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	data[[i]]$distance <- log(data[[i]]$distance)#
-	sumsquares.fit <- function(theta){#
-		asym<-theta[[1]]#
-		od50<-theta[[2]]#
-		scal<-theta[[3]]#
-		sigma<-theta[[4]]#
-		asymB<-theta[[5]]#
-		od50B<-theta[[6]]#
-		scalB<-theta[[7]]#
-		y<-data[[i]]$x#
-		x<-data[[i]]$distance#
-		res <- dnorm(y, (asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))), sigma, log= T) #
-		sum(res)#
-	}#
-	lowOD <- min(data[[i]]$x)#
-	highOD <- quantile(data[[i]]$x, 0.99)#
-	lower <- c(0, 0, 0,0, 0, 0, 0)#
-	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)#
-	#This is conservative, keeping them symmetric 	#
-	par.tryA <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.01)#
-	par.tryB <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.1)#
-	par.tryC<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scal =  maxSlope*0.01)#
-	par.tryD<-c(asym = 0.9*highOD,od50 = log(maxDist)/2, scal =  maxSlope*0.1, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scalB =  maxSlope*0.1)#
-	#Change asym and od50 #
-	par.tryE <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryF <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	par.tryG <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.1)#
-	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)#
-	mlpoint<-c()#
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointE<-diversitree::find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointF<-diversitree::find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))#
-	mlpointG<-diversitree::find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=80000))	#
-	mlpointH<-diversitree::find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))	#
-#
-	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB#
-	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint#
-	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint#
-	mlpoint <- if (mlpointE$lnLik>mlpoint$lnLik) mlpointE else mlpoint#
-	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint#
-	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint			#
-	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint			#
-	mlpoint#
-}#
-#
-.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE){#
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand #
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)#
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) #
-	#ZOI#
-	ploty <- data[[i]]$x#
-	ploty[ploty < 0] <-0#
-	slope <- ML[[i]]$par[3]#
-	ic50 <- ML[[i]]$par[2]	#
-	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))#
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.4), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")#
-	yyplot <- (yy+min(data[[i]]$x))#
-	yyplot[yyplot < 0] <- 0#
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)			#
-#
-	useAsym <- "TRUE"#
-	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]#
-	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]#
-	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]#
-	if(yy20halo < yy50halo){#
-		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]#
-		useAsym <- "FALSE"#
-	}#
-#
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	#
-	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])#
-	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])#
-	xx20 <- exp(xx[which.max(yyplot> asym * 0.8)])#
-	if(useAsym == "FALSE"){#
-		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])#
-	}#
-#
-	if(AUC==50){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])	#
-		}#
-	if(AUC==80){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])	#
-		}#
-	if(AUC==20){#
-		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])	#
-		}#
-#
-	if(length(xx)<1){#
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)#
-	}		#
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) #
-	yy <- (yy+min(data[[i]]$x))#
-	yy[yy < 0] <- 0#
-	if (slope >1){#
-		xx2 <- c(xx[1], xx, xx[length(xx)])#
-		yy2 <- c(0, yy, 0)#
-		if(plotAUC){#
-			polygon(xx2, yy2, density=15, col="red")#
-			}#
-		if(ZOI == 20){#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==50){#
-			points(xx50, yy50halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI ==80){#
-			points(xx80, yy80halo, col="blue", cex=1.5, pch=19)#
-			}#
-		if(ZOI=="all"){#
-			points(xx80, yy80halo, col="yellow", cex=1.5, pch=19)#
-			points(xx50, yy50halo, col="purple", cex=1.5, pch=19)#
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)#
-			}			#
-		}#
-	mtext(label, side=3, cex=0.6)#
-}#
-#
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE){#
-#
-	data <- eval(parse(text=projectName))#
-#
-	fileFolder <- projectName#
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)#
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)#
-	t <- file.path("figures", projectName , paste(projectName, "_AUC.pdf", sep=""))#
-	if (!overwrite){#
-		if (file.exists(t)){#
-			t <- file.path("figures", projectName , paste(projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-			if (file.exists(t)){#
-				k <- 2#
-				while(file.exists(t)){#
-					k <- k+1#
-					t <- file.path("figures", projectName, paste(projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))#
-					}#
-				}#
-			}#
-		}#
-#
-	if(xplots > length(data)){#
-		xplots <- length(data)#
-	}#
-	if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}#
-	else {yplots<- 6}#
-	numpages <- ceiling(length(data)/(xplots*yplots))#
-	if(savePDF){#
-		pdf(t, width=width, height=height)#
-	}#
-	if(!savePDF){#
-		quartz(width=width, height=height)#
-	}#
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
-	for (k in 1:length(data)){#
-		.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)#
-#
-		if(numpages == 1){#
-			if (k >= xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}#
-			}#
-		if(numpages == 2){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			if (k >= 2*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else {axis(1, cex.axis=0.8, labels= FALSE)}	#
-			}				#
-		if(numpages == 3){#
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){#
-				axis(1, cex.axis=0.8)#
-				}#
-			else{axis(1, labels=FALSE)}#
-			}				#
-		axis(1, labels=FALSE)#
-		j <- 1#
-		while (j <= numpages){#
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-			j <- j+1#
-		}#
-	}#
-	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)#
-	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)#
-#
-	if(savePDF){#
-		dev.off()	#
-		cat(paste("\nFigure saved: ", t, sep=""))#
-		if(popUp){#
-			tt <- paste("open", t)#
-			system(tt)#
-		}#
-	}#
-}
-maxLik("vignette", clearHalo=1, savePDF=FALSE, height=4, ZOI="all", ymax=150)
-library(devtools)#
-install_github("acgerstein/diskImageR")#
 library("diskImageR")#
 library(markdown)#
 library(knitr)#
 setwd("~/Documents/Postdoc/Research/diskImageR/vignettes/")#
 knit2html("Quantitative Disk Assay.Rmd")
-browseURL("Quantitative Disk Assay.html")
-?maxLik
-library(diskImageR)
-library("diskImageR")
-?maxLik
-install_github("acgerstein/diskImageR")
-library(devtools)#
-install_github("acgerstein/diskImageR")
-library("diskImageR")#
-library(markdown)#
-library(knitr)
 ?maxLik
