@@ -7,7 +7,7 @@
 plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
   xplots = 6, height = 4, width = 8, cexPt = 0.6, cexX = 0.8,
   cexY = 0.8, nameVector = TRUE, plotStandardLoc = TRUE,
-  showNum = FALSE, popUp = TRUE, overwrite = TRUE)
+  showNum = FALSE, popUp = TRUE, overwrite = TRUE, savePDF = TRUE)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}
@@ -37,6 +37,8 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name}
+
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
 }
 \value{
 A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses

@@ -7,7 +7,7 @@
 maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
   xplots = 6, height = 10, width = 8, AUC = 50, ZOI = 50,
   needML = TRUE, popUp = TRUE, plotNameVector = TRUE, overwrite = TRUE,
-  plotAUC = TRUE)
+  plotAUC = TRUE, savePDF = TRUE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -39,6 +39,8 @@ maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.}
 
 \item{plotAUC}{a logical value indicating whether to plot the AUC or not. Defaults to TRUE}
+
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
 }
 \value{
 Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).
