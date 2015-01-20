@@ -56,12 +56,7 @@ runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(),
 ```
 
 ```
-## 
-## Output of imageJ analyses saved in directory: vignette
-## 
-## Elements in dataframe vignette: 
-## [1] "A01_30_L_b"
-## 
+## Error in runIJManual("vignette", projectDir = getwd(), pictureDir = file.path(.libPaths(), : Output files already exist in specified directory. Please delete existing files or change project name before continuing.
 ```
 
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
@@ -79,11 +74,10 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 To plot pixel intensity from the average from all photographs use
 
 ```r
-plotRaw("vignette", popUp = FALSE, savePDF=FALSE)
+plotRaw("vignette", savePDF=FALSE)
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
-#<img src="/Figures/vignette/vignette_raw.pdf"  style="width: 50%; height: 50%" style="float:left," alt="" /> 
 
 ##Run the maximum likelihood analysis
 ``{r}
@@ -107,17 +101,17 @@ The following R code chunk labelled `basicconsole` is as follows:
     ```
     
     ```
-    ##     x     y
-    ## 1   1  0.78
-    ## 2   2  2.04
-    ## 3   3  1.28
-    ## 4   4  3.54
-    ## 5   5  6.15
-    ## 6   6  5.18
-    ## 7   7  5.97
-    ## 8   8  9.17
-    ## 9   9  9.90
-    ## 10 10 11.37
+    ##     x    y
+    ## 1   1 2.11
+    ## 2   2 1.04
+    ## 3   3 1.86
+    ## 4   4 3.32
+    ## 5   5 5.69
+    ## 6   6 5.09
+    ## 7   7 6.74
+    ## 8   8 7.58
+    ## 9   9 9.87
+    ## 10 10 9.47
     ```
     
 The code chunk input and output is then displayed as follows:
@@ -131,17 +125,17 @@ df
 ```
 
 ```
-##     x     y
-## 1   1  1.06
-## 2   2  3.70
-## 3   3  2.68
-## 4   4  5.36
-## 5   5  4.16
-## 6   6  6.29
-## 7   7  6.77
-## 8   8  8.31
-## 9   9  7.66
-## 10 10 11.09
+##     x    y
+## 1   1 2.78
+## 2   2 1.51
+## 3   3 2.99
+## 4   4 2.33
+## 5   5 4.89
+## 6   6 7.20
+## 7   7 7.40
+## 8   8 7.96
+## 9   9 9.17
+## 10 10 9.19
 ```
  
 ## Plots
