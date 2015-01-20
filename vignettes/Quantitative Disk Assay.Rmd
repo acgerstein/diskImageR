@@ -43,7 +43,7 @@ This step can be completed using one of two functions.
 runIJ("projectName")
 ```
 
-```r
+```{r}
 #If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
 #alternate function to supply the desired main project directory and photograph directory locations.
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
