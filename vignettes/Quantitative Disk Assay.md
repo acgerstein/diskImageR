@@ -125,6 +125,7 @@ maxLik("vignette", clearHalo=1)
 ```
 
 ```
-## Error in .plotAUC(projectName, ML = ML, ML2 = ML2, dotedge = dotedge, : unused argument (savePDF = savePDF)
+## 
+## Figure saved: figures/vignette/vignette_AUC.pdf
 ```
  
