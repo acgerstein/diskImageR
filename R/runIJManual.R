@@ -32,7 +32,7 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6)
 			stop("Please delete existing files or change project name before continuing.")
 			}
 		if(cont=="y"){
-			unlink(outputDir)
+			unlink(outputDir, recursive = TRUE)
 		}
 	}
 	
