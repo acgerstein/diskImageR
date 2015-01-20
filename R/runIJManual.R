@@ -22,7 +22,7 @@
 runIJManual <-
 function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6){
 	fileDir <- projectName
-	outputDir <- file.path(projectDir, "imageJ-out", fileDir, )
+	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
 	IJarguments <- paste(pictureDir, outputDir, discDiam, sep="*")
 	
