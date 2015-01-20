@@ -85,8 +85,20 @@ plotRaw("vignette", savePDF=FALSE)
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ##Run the maximum likelihood analysis
-``{r}
+
+```r
 maxLik("vignette", clearHalo=1)
+```
+
+```
+## .
+## vignette.ML has been written to the global environment
+## vignette.ML2 has been written to the global environment
+```
+
+```
+## Error in .plotAUC(projectName, ML = ML, ML2 = ML2, dotedge = dotedge, : unused argument (savePDF = savePDF)
+```
  
 ## Basic console output
 To insert an R code chunk, you can type it manually or just press `Chunks - Insert chunks` or use the shortcut key. This will produce the following code chunk:
@@ -106,17 +118,17 @@ The following R code chunk labelled `basicconsole` is as follows:
     ```
     
     ```
-    ##     x     y
-    ## 1   1  1.56
-    ## 2   2  2.79
-    ## 3   3  4.00
-    ## 4   4  3.36
-    ## 5   5  5.38
-    ## 6   6  5.78
-    ## 7   7  8.13
-    ## 8   8  8.83
-    ## 9   9 10.19
-    ## 10 10  9.06
+    ##     x    y
+    ## 1   1 0.65
+    ## 2   2 3.07
+    ## 3   3 3.26
+    ## 4   4 3.34
+    ## 5   5 4.54
+    ## 6   6 6.20
+    ## 7   7 6.76
+    ## 8   8 7.40
+    ## 9   9 9.87
+    ## 10 10 9.27
     ```
     
 The code chunk input and output is then displayed as follows:
@@ -130,17 +142,17 @@ df
 ```
 
 ```
-##     x     y
-## 1   1  0.88
-## 2   2  1.60
-## 3   3  2.67
-## 4   4  5.08
-## 5   5  3.95
-## 6   6  7.25
-## 7   7  6.16
-## 8   8  6.57
-## 9   9  9.30
-## 10 10 10.31
+##     x    y
+## 1   1 1.88
+## 2   2 1.36
+## 3   3 2.29
+## 4   4 4.95
+## 5   5 5.92
+## 6   6 7.93
+## 7   7 7.92
+## 8   8 8.96
+## 9   9 7.09
+## 10 10 9.37
 ```
  
 ## Plots
@@ -154,7 +166,7 @@ Here is a basic plot using base graphics:
     plot(x)
     ```
     
-    ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+    ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
  
 
 ```r
@@ -174,13 +186,13 @@ Also, unlike traditional Sweave, you can include multiple plots in one code chun
     boxplot(1:10~rep(1:2,5))
     ```
     
-    ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+    ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
     
     ```r
     plot(x, y)
     ```
     
-    ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-2.png) 
+    ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-2.png) 
  
 
 

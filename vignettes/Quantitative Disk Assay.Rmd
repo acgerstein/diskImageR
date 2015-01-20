@@ -72,8 +72,9 @@ plotRaw("vignette", savePDF=FALSE)
 ```
 
 ##Run the maximum likelihood analysis
-``{r}
+```{r}
 maxLik("vignette", clearHalo=1)
+```
  
 ## Basic console output
 To insert an R code chunk, you can type it manually or just press `Chunks - Insert chunks` or use the shortcut key. This will produce the following code chunk:
