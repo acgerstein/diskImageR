@@ -56,7 +56,12 @@ runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(),
 ```
 
 ```
-## Error in runIJManual("vignette", projectDir = getwd(), pictureDir = file.path(.libPaths(), : Output files already exist in specified directory. Please delete existing files or change project name before continuing.
+## 
+## Output of imageJ analyses saved in directory: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/imageJ-out/vignette/
+## 
+## Elements in dataframe vignette: 
+## [1] "A01_30_L_b"
+## 
 ```
 
 Depending on where imageJ is located, the script may not run unless you specify the filepath. See
@@ -101,17 +106,17 @@ The following R code chunk labelled `basicconsole` is as follows:
     ```
     
     ```
-    ##     x    y
-    ## 1   1 2.11
-    ## 2   2 1.04
-    ## 3   3 1.86
-    ## 4   4 3.32
-    ## 5   5 5.69
-    ## 6   6 5.09
-    ## 7   7 6.74
-    ## 8   8 7.58
-    ## 9   9 9.87
-    ## 10 10 9.47
+    ##     x     y
+    ## 1   1  1.56
+    ## 2   2  2.79
+    ## 3   3  4.00
+    ## 4   4  3.36
+    ## 5   5  5.38
+    ## 6   6  5.78
+    ## 7   7  8.13
+    ## 8   8  8.83
+    ## 9   9 10.19
+    ## 10 10  9.06
     ```
     
 The code chunk input and output is then displayed as follows:
@@ -125,17 +130,17 @@ df
 ```
 
 ```
-##     x    y
-## 1   1 2.78
-## 2   2 1.51
-## 3   3 2.99
-## 4   4 2.33
-## 5   5 4.89
-## 6   6 7.20
-## 7   7 7.40
-## 8   8 7.96
-## 9   9 9.17
-## 10 10 9.19
+##     x     y
+## 1   1  0.88
+## 2   2  1.60
+## 3   3  2.67
+## 4   4  5.08
+## 5   5  3.95
+## 6   6  7.25
+## 7   7  6.16
+## 8   8  6.57
+## 9   9  9.30
+## 10 10 10.31
 ```
  
 ## Plots

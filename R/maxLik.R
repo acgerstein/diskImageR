@@ -17,6 +17,7 @@
 #' @param plotNameVector either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.
 #' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE
+#' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{runIJ}}. The equations fit are
 #'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}
@@ -31,7 +32,7 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
@@ -86,7 +87,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 		 			
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC)
+		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)
 	}
 }
 
@@ -271,7 +272,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label){
+.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, plotPDF = TRUE){
 
 	data <- eval(parse(text=projectName))
 
@@ -299,7 +300,9 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		yplots<- ceiling(length(data)/xplots)}
 	else {yplots<- 6}
 	numpages <- ceiling(length(data)/(xplots*yplots))
-	pdf(t, width=width, height=height)
+	if(plotPDF){
+		pdf(t, width=width, height=height)
+	}
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (k in 1:length(data)){
 		.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)
@@ -335,12 +338,14 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	
 	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
 	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)
-	dev.off()	
-	cat(paste("\nFigure saved: ", t, sep=""))
 
-	if(popUp){
-		tt <- paste("open", t)
-		system(tt)
+	if(plotPDF){
+		dev.off()	
+		cat(paste("\nFigure saved: ", t, sep=""))
+	
+		if(popUp){
+			tt <- paste("open", t)
+			system(tt)
+		}
 	}
-
 }
