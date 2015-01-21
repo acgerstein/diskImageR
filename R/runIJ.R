@@ -6,7 +6,7 @@
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param imageJLoc the absolute path to imageJ on your computer. Current options are those standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJ} will also accept any absolute path
 
-#' @details Each photograph in the directory specified by \code{pictureDir} is input into ImageJ, where the built-in ‘find particles’ macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5° out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the ‘plot-profile’ macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
+#' @details Each photograph in the directory specified by \code{pictureDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
 
 #' @return A .csv file is saved to the directory "imageJ-out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.
 
@@ -88,9 +88,6 @@ function(workingDir, folderLoc, experAbbr){
 	tList
 	}
 
-# Used to recursively read in and average imageJ output for each picture
-#description Helper function used in \code{\link{.Readin_DirCreate}} to recursively read in the plot profile information for all 72 lines for each picture, find the average at each position, and save the average to a list 
-
 .readIn <-
 function(directoryPath, newList = list(), numDig=30) {
 	currDir <- getwd()
@@ -115,9 +112,6 @@ function(directoryPath, newList = list(), numDig=30) {
 	findMin <- c()
 	getData(i, newList, names)
 }
-
-# Used to load the imageJ output
-# Helper function to load imageJ output in \code{\link{.readIn}}
 
 .load.data <-
 function(filename) {

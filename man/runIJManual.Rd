@@ -25,7 +25,7 @@ A .csv file is saved to the directory "imageJ-out" in the directory specified by
 This function is used to run the imageJ analysis component of diskImageR by manually supplying the path location of the project directory (the directory where all subsequent analyses will be saved) and the location of the directory containing the photos to be analyzed.
 }
 \details{
-Each photograph in the directory specified by \code{pictureDir} is input into ImageJ, where the built-in ‘find particles’ macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5° out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the ‘plot-profile’ macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}.
+Each photograph in the directory specified by \code{pictureDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}.
 }
 \author{
 Aleeza C. Gerstein
