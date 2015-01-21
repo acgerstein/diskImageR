@@ -74,8 +74,8 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
-```{r}
-plotRaw("vignette", popUp = FALSE)
+```{r, fig.path="vignette/figures"}
+plotRaw("vignette", popUp = FALSE, savePDF = FALSE)
 ```
 
 ## Run the maximum likelihood analysis 
@@ -99,7 +99,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = FALSE)
+maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF = FALSE)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -144,16 +144,16 @@ manyReps.ag
 ```
 This will also save a .csv file into the *parameter_files* directory.
 
-##Addendum
-####Forthcoming
+## Addendum
+#### Forthcoming
 * basic t-tests (t.test)
 * basic anova (aov)
 * single parameter graphics
 * three parameter graphics
 
-####Acknowledgements
+#### Acknowledgements
 Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to do this.
 
-####Contact
+#### Contact
 Aleeza Gerstein, <gerst035@umn.edu>
 

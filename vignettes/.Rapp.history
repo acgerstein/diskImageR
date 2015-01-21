@@ -1,3 +1,267 @@
+maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
+maxLik <- function(data, standardLoc = 0, dotedge=3, maxDist=30, ymax=200, xplots = 6, maxSlope = 20, popUp = TRUE, log=TRUE, nameVector=TRUE, twoCurve=FALSE){#
+	projectName <- data#
+	fileFolder <- paste(Sys.Date(), projectName, sep="_")#
+	dir.create(paste(getwd(), "/figures/", sep=""), showWarnings= FALSE)#
+	dir.create(paste(getwd(), "/figures/", fileFolder, sep=""), showWarnings= FALSE)#
+	dir.create(paste(getwd(), "/parameter_files/", projectName, sep=""), showWarnings=FALSE)#
+#
+	data <- eval(parse(text=data))#
+	if (is.logical(nameVector)){#
+		if (nameVector){label <- names(data)}		#
+		else {label <- rep("", length(data))}#
+		}#
+	else {label <- nameVector}	#
+#
+#which(data[[i]][,1] > standardLoc)[1]]#
+	###The likelihoic part:#
+	if (!is.logical(standardLoc)){#
+#		dotMax <- max(sapply(data, function(x) {x[standardLoc,2]})) #
+		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+#		standMax <-c( sapply(data, function(x) {dotMax-x[standardLoc,2]}))#
+		standMax <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))#
+		}#
+	else{#
+		standMax <- rep(0, length(data))#
+		}#
+	if (log){#
+		if(twoCurve){#
+			ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+			}#
+		else{#
+			ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+		}#
+		}	#
+	else{#
+		ML <-lapply(c(1:length(data)), getstats, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
+		}#
+	names(ML) <- names(data)#
+	fileName <- paste(Sys.Date(), "_", projectName, sep="")#
+#
+	if (is.logical(nameVector)){#
+		if (nameVector){label <- names(data)}		#
+		else {label <- rep("", length(data))}#
+		}#
+	else {label <- nameVector}#
+#
+	t <- paste("figures/", Sys.Date(), "_", projectName , "/", projectName, "_MLfit.pdf", sep="")#
+	cat(paste("Saving figure: ", t, sep=""))#
+	xplots <- xplots#
+	if (ceiling(length(data)/xplots) < 6) {#
+		yplots<- ceiling(length(data)/xplots)}#
+	else {yplots<- 6}#
+	numpages <- ceiling(length(data)/(xplots*yplots))#
+	pdf(t, width=7, height=6)#
+	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
+	if(twoCurve){#
+		for (k in 1:length(data)){#
+			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
+			if(numpages == 1){#
+				if (k >= xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}#
+			if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+			}#
+		}#
+#
+	if(!twoCurve){	#
+		if(log){#
+			for (k in 1:length(data)){#
+				plotRawMLCurveLog(data, ML, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
+				if(numpages == 1){#
+					if (k >= xplots*yplots-xplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					}#
+				if(numpages == 2){#
+					if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					if (k >= 2*xplots*yplots-xplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					}				#
+				if(numpages == 3){#
+					if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					if (k >= 3*xplots*yplots-xplots+1){#
+						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+						}#
+					}				#
+#
+				j <- 1#
+				while (j <= numpages){#
+					if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+					j <- j+1#
+					}#
+			}#
+		}#
+	}#
+	else{#
+		for (k in 1:length(data)){#
+			plotRawMLCurve(data, ML, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label)#
+		if(numpages == 1){#
+				if (k >= xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}#
+			if(numpages == 2){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+			if(numpages == 3){#
+				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				if (k >= 3*xplots*yplots-xplots+1){#
+					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+					}#
+				}				#
+#
+			j <- 1#
+			while (j <= numpages){#
+				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
+				j <- j+1#
+				}#
+		}#
+	}	#
+#
+	mtext("Distance from edge of disc", outer=TRUE, side=1, line=2, cex=1.2)#
+	mtext("Pixel density", outer=TRUE, side=2, line=1.5, cex=1.2)#
+	dev.off()#
+#
+	if(popUp){#
+		tt <- paste("open", t)#
+		system(tt)#
+	}#
+	cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))#
+	assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())#
+}
+maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
+plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]] <- subset(data[[i]], x != "NA")#
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
+	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + standEdge[i] #
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
+	points(xx, yy2, type="l", col="red", lwd=2)#
+	if (!both){#
+		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
+		points(xx, yy, type="l", col="green", lwd=2)#
+	}#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	abline(v=exp(MLparam2[[i]]$par[2]))#
+	abline(v=exp(MLparam2[[i]]$par[6]))#
+	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] #
+    mtext(label, side=3, cex=0.6)#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
+	}
+plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]] <- subset(data[[i]], x != "NA")#
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
+	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + standEdge[i] #
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
+	points(xx, yy2, type="l", col="red", lwd=2)#
+	if (!both){#
+		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
+		points(xx, yy, type="l", col="green", lwd=2)#
+	}#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	abline(v=exp(MLparam2[[i]]$par[2]))#
+	abline(v=exp(MLparam2[[i]]$par[6]))#
+	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
+    mtext(label, side=3, cex=0.6)#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
+	}
+maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
+plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
+	data[[i]] <- data[[i]][startX:stopX, 1:2]#
+	data[[i]] <- subset(data[[i]], x != "NA")#
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
+	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
+	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
+	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
+	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
+	points(xx, yy2, type="l", col="red", lwd=2)#
+	if (!both){#
+		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
+		points(xx, yy, type="l", col="green", lwd=2)#
+	}#
+    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
+    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	abline(v=exp(MLparam2[[i]]$par[2]))#
+	abline(v=exp(MLparam2[[i]]$par[6]))#
+	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
+    mtext(label, side=3, cex=0.6)#
+# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
+#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
+	}
+maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
+data <- contrTest2
+label <- rep("", length(data))
+dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+standardLoc <- 0
+dotedge <- 3
+maxDist <- 30
+ymax <- 200
+xplots <- 6
+maxSlope <- 20
+dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+standMax <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
+ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
 compLik(ML, ML2)
 t <- compLik(ML, ML2)
 t
@@ -671,129 +935,107 @@ system("open /Users/acgerstein/Documents/Postdoc/Research/Clinical_isolates/Carl
 ?diff
 load("/Users/acgerstein/Documents/Postdoc/Things from:for others/UMN/Ben/test.RData")
 .RData
-library(devtools)#
+library(devtools)
 install_github("acgerstein/diskImageR")
 library("diskImageR")
-setwd("~/Documents/Postdoc/Research")
-check_doc("diskImageR") ## Only for checking the documentation
-?subplex
-document("diskImageR")
-install_github("acgerstein/diskImageR")
-check_doc("diskImageR") ## Only for checking the documentation
-dir()
-tools::showNonASCII( readLines("diskImageR/R/runIJ.R"))
-document("diskImageR")
-check_doc("diskImageR") ## Only for checking the documentation
-document("diskImageR")
-check_doc("diskImageR") ## Only for checking the documentation
-system.time(check("diskImageR"))
-?check
-check("diskImageR")
-system.time(check("diskImageR"))
-system.time(check("diskImageR"))
-system.time(check("diskImageR"))
-dir()
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-library(markdown)#
+library(rmarkdown)#
 library(knitr)
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-?render
-??render
-library(rmarkdown)
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-dir()
+setwd("~/Documents/Postdoc/Research")
 setwd("diskImageR/vignettes/")
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-system.time(check("diskImageR")) ## R CMD check with time information
-setwd("../..")
-system.time(check("diskImageR")) ## R CMD check with time information
-ls()
-ls("diskImageR")
-system.time(check("diskImageR")) ## R CMD check with time information
+setwd("~/Documents/Postdoc/Research")
+devtools:check()
+devtools::check()
+setwd("diskImageR/")
+devtools::check()
+devtools::build_vignettes()
+devtools::build_vignettes()
 dir()
-setwd("diskImageR/vignettes/")
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-dir()
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-manyReps <- read.csv("inst/manyReps.df")
-dir()
-dir("inst/")
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-render("Quantitative Disk Assay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-?INSTALL
+devtools::build_vignettes()
+manyReps <- read.csv("data/manyReps_df.csv")
+manyReps
+?system.file
+devtools::build_vignettes()
+manyReps <- system.file('data', 'manyReps.csv', package = 'mypackage')
+manyReps
+manyReps <- system.file("data", "manyReps.csv", package = "diskImageR")
+manyReps
+manyReps <- system.file("manyReps.csv", "data", package = "diskImageR")
+manyReps
+system.fil()
+system.file()
+system.file(package="diskImageR")
+manyReps <- system.file("../data", "manyReps.csv", package = "diskImageR")
+manyReps
+library(diskImageR(
+)
+)
+library(diskImageR)
+system.file(package="diskImageR")
+system.file("..", package="diskImageR")
+system.file("../data/", package="diskImageR")
+dir(system.file("../data/", package="diskImageR"))
+system.file("../data/", manyReps_df.csv, package="diskImageR"))
+system.file("../data/", manyReps_df.csv, package="diskImageR")
+system.file("../data/", "manyReps_df.csv", package="diskImageR")
+devtools::build_vignettes()
+devtools::build_vignettes()
+system.file(package="diskImageR")
+dir(system.file(package="diskImageR"))
+dir(system.file("..", package="diskImageR"))
+dir(system.file("../vignettes/", package="diskImageR"))
+dir(system.file("../vignettes/pictures/", package="diskImageR"))
+devtools::build_vignettes()
+system.file("../vignettes/", package="diskImageR")
+dir(system.file("../vignettes/", package="diskImageR"))
+dir(system.file("../vignettes/pictures/", package="diskImageR"))
+devtools::build_vignettes()
+?system.fil
+?system.file
+?system.dir
+??system.dir
+??system directory
+?system.file
+system.file("diskImageR")
+system.file(package="diskImageR")
+paste(system.file("../vignettes/pictures", package="diskImageR"), "/", sep="")
+devtools::build_vignettes()
+devtools::build_vignettes()
+manyReps <- system.file("../data/", "manyReps_df.csv", package="diskImageR")
+manyReps
+manyReps <- read.csv(system.file("../data/", "manyReps_df.csv", package="diskImageR"))
+manyReps
+devtools::build_vignettes()
+devtools::build_vignettes()
+devtools::check("diskImageR")
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+system.file(package="diskImageR")
+dir(system.file(package="diskImageR"))
+dir(system.file("pictures", package="diskImageR"))
+devtools::check()
+devtools::check()
+file.path(system.file("inst", package="diskImageR"),"pictures", "")
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+devtools::check()
+?plotRaw
+devtools::check()
+check()
 render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
-system.time(check("diskImageR")) ## R CMD check with time information
-setwd("../..")
-system.time(check("diskImageR")) ## R CMD check with time information
-system.time(check("diskImageR")) ## R CMD check with time information
-ls(package:diskImageR)
-? roxygenize
-dir()
-roxygenize("diskImageR")
-?roxygenize
-library(roxygen2)
-roxygenize("diskImageR")
-system.time(check("diskImageR")) ## R CMD check with time information
-check(document="diskImageR")
-dir()
-setwd("diskImageR/")
-check(document="diskImageR")
-check(document= F)
-?install
 dir()
 setwd("..")
+render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
+setwd("diskImageR/inst/doc/")
 dir()
-devtools::install("diskImageR")
-check(document= F)
-R CMD check
-check("diskImageR")
-check("diskImageR")
-devtools::document()
-setwd("diskImageR/")
-devtools::document()
-devtools::check(),
-devtools::check()
-devtools::check()
-install_github("acgerstein/diskImageR", build_vignettes = TRUE)
-dir)
-dir()
-setwd("vignettes/")
-?build
-setwd("..")
-dir()
-devtools::build()
-knit("diskImageR")
-knit("vignettes/diskImageR")
-knit("diskImageR/vignettes")
-dir()
-knit("vignettes/diskAssay")
-knit("vignettes/DiskAssay")
-setwd("vignettes/")
-knit("DiskAssay.Rmd")
-devtools::build()
-setwd("..")
-devtools::build()
-devtools::document()
-devtools::check()
-devtools::build_vignettes()
-devtools::build_vignettes()
-runIJManual("vignette", projectDir= getwd(), pictureDir = system.file("extdata/pictures"), imageJLoc = "loc2")
-dir(system.file("extdata/pictures"))
-dir(system.file())
-dir()
-install_github("acgerstein/diskImageR", build_vignettes = TRUE)
-install_github("acgerstein/diskImageR")
-library("diskImageR")
-dir(system.file())
-dir(system.file("R"))
-dir(system.file()/"..")
-dir(system.file()/..)
-getwd()
-knit("DiskAssay.Rmd")
-knit("vignettes/DiskAssay.Rmd")
-system.file("extdata")
-dir(system.file("extdata"))
-knit("vignettes/DiskAssay.Rmd")
-knit("vignettes/DiskAssay.Rmd")
-knit("vignettes/DiskAssay.Rmd")
-devtools::build_vignettes()
+render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
+setwd("../../vignettes/")
+render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))

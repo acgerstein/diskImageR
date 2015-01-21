@@ -40,7 +40,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	standardLoc <- 2.5
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
-	newdir3 <- file.path(getwd(), "figures", projectName)
+	newdir3 <- file.path(getwd(), "figure", projectName)
 	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 

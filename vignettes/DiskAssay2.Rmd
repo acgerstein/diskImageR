@@ -31,11 +31,16 @@ library("diskImageR")
 
 diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
 
+```{r}
+print(getwd)
+```
 
 <center>
-<img src=system.file("pictures", "p2_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src=system.file("pictures", "p1_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> 
+<img src=file.path("pictures", "p2_30_a.jpg")  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src=file.path("pictures", "p1_30_a.JPG")  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 
 </center>
+
+
 
 ## Prepare plates and photographs
 The analysis done by diskImageR will only be as good as your disk assay plates and the photographs you take. Plates should always be labelled on the side, not on the bottom. Care should be taken when setting up the camera to take photographs, as you want the lighting conditions to be as uniform as possible, without any shadows on the plates. Camera settings should be manual rather than automatic as much as possible. Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory.

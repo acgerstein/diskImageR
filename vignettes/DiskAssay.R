@@ -13,15 +13,14 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library("diskImageR")
 
 ## ------------------------------------------------------------------------
-print(getwd())
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(system.file("pictures", package="diskImageR"), ""), imageJLoc = "loc2")
 # runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
 
 ## ------------------------------------------------------------------------
-plotRaw("vignette", popUp = FALSE)
+plotRaw("vignette", popUp = FALSE, savePDF = FALSE)
 
 ## ------------------------------------------------------------------------
-maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = FALSE)
+maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF = FALSE)
 
 ## ------------------------------------------------------------------------
 createDataframe("vignette", clearHalo = 1, typeName="temp")

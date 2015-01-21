@@ -38,7 +38,7 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", diskDiam = 6)
 	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(outputDir, showWarnings= FALSE)
-	dir.create(file.path(projectDir, "Figures"), showWarnings= FALSE)
+	dir.create(file.path(projectDir, "figure"), showWarnings= FALSE)
 		
 	if (imageJLoc=="default" | imageJLoc=="loc2" ){
 		if (imageJLoc=="loc2"){

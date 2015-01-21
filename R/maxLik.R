@@ -43,8 +43,8 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		stop("Current suppported ZOI values = 80, 50, 20")
 		}
 	fileFolder <- projectName
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
+	dir.create(file.path(getwd(), "figure"), showWarnings= FALSE)
+	dir.create(file.path(getwd(), "figure", fileFolder), showWarnings= FALSE)
 	
 	data <- eval(parse(text=projectName))
 	standardLoc <- 2.5
