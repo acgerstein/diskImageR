@@ -98,7 +98,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r, fig.path="figure/vignette/", fig.width=5, fig.height=4}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = TRUE, savePDF =FALSE, AUC=20)
+maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = TRUE, savePDF =FALSE, AUC=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results

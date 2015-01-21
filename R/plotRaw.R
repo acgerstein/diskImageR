@@ -60,9 +60,9 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 	if(savePDF){
 		pdf(t, width=width, height=height)
 		}
-	if(!savePDF){
-		quartz(width=width, height=height)
-		}
+	# if(!savePDF){
+		# quartz(width=width, height=height)
+		# }
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (i in 1:length(data)){
 		.discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)
