@@ -2,7 +2,7 @@
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "2015-01-20"
-output: rmarkdown::html_vignette(fig_height = 3)
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Aleeza C. Gerstein}
   %\VignetteEngine{knitr::rmarkdown}
@@ -17,7 +17,7 @@ diskImageR provides a quantitative way to analyze photographs taken from disk di
 
 
 <center>
-<img src="inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> <img src="inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
+<img src="inst/pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="inst/pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -44,8 +44,18 @@ runIJ("projectName")
 
 Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
 
+
 ```r
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
+runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "inst", "pictures", ""), imageJLoc = "loc2")
+```
+
+```
+## 
+## Output of imageJ analyses saved in directory: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/imageJ-out/vignette/
+## 
+## Elements in dataframe vignette: 
+## [1] "p1_30_a" "p2_30_a"
+## new directory:  /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/
 ```
 Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
 
@@ -55,14 +65,13 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 ```
 
 ### [optional] Plot the imageJ output
-To plot pixel intensity from the average from all photographs use
-1
+To plot pixel intensity from the average from all photographs use:
 
 ```r
 plotRaw("vignette", savePDF=FALSE)
 ```
 
-![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ## Run the maximum likelihood analysis 
 The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.
@@ -84,9 +93,18 @@ From these functions we substract off the plate background intensity from all va
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
+
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", height=4, needML=FALSE)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
 ```
+
+```
+## ..
+## vignette.ML has been written to the global environment
+## vignette.ML2 has been written to the global environment
+```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 ### [OPTIONAL] Save the maximum likelihood results
 It is possible to save the maximum likelihood results using
@@ -105,6 +123,7 @@ createDataframe("vignette", clearHalo = 1, typeName="temp")
 
 ```
 ## 
+## Creating new directory:  /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette
 ## vignette.df has been written to the global environment
 ## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette/vignette_df.csv
 ## vignette_df.csv can be opened in MS Excel.
@@ -150,14 +169,90 @@ This function is useful if you have many replicate disk assays and want to calcu
 
 For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation.
 
+
 ```r
 readExistingDF("manyReps")
-head(manyReps.df)
+```
+
+```
+## manyReps.df now present in working directory
 ```
 
 ```r
+head(manyReps.df)
+```
+
+```
+##        name line   type ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
+## 1  A12_30_1  A12 levelA     0     1    10      1     NA   0.84  17.8
+## 2 A12_30_10  A12 levelA     1     2     8     NA   0.39   0.65  24.9
+## 3 A12_30_11  A12 levelA     0     1     9      1     NA   0.81  11.8
+## 4 A12_30_12  A12 levelA     0     1    20      1     NA   0.89  14.2
+## 5  A12_30_2  A12 levelA     0     1    12      1     NA   0.85  11.7
+## 6  A12_30_3  A12 levelA     0     1     9      1     NA   0.76  11.9
+```
+
+
+```r
 aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
+```
+
+```
+## 
+## manyReps.ag has been written to the global environment
+## 
+## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/manyReps/manyReps_ag.csv
+## manyReps.ag can be opened in MS Excel (save as .xls file if desired)
+```
+
+```r
 manyReps.ag
 ```
+
+```
+##    line   type ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope sd.ZOI80
+## 1   A12 levelA     0     1    10   0.93   0.65   0.79    18     0.29
+## 2   A13 levelA    13    18    21   0.71   0.36   0.31   181     2.14
+## 3   A14 levelA     9    14    19   0.56   0.39   0.38   130     1.37
+## 4   A15 levelA     9    15    18   0.66   0.35   0.32   174     5.02
+## 5   A16 levelA     7    14    20   0.78   0.46   0.42   117     3.60
+## 6   A17 levelA    10    15    18   0.60   0.33   0.29   193     3.81
+## 7   A18 levelA     3     9    12   0.78   0.51   0.42   120     2.35
+## 8   A12 levelB     0     2    10   0.94   0.85   0.78    26     0.00
+## 9   A13 levelB     4    16    22   0.85   0.56   0.46    74     4.77
+## 10  A14 levelB     1    15    22   0.72   0.65   0.55    52     1.19
+## 11  A15 levelB     6    15    20   0.74   0.44   0.42    83     5.09
+## 12  A16 levelB     8    15    21   0.43   0.37   0.38    99     5.39
+## 13  A17 levelB     5    13    19   0.74   0.47   0.45    85     5.98
+## 14  A18 levelB     2     8    12   0.86   0.55   0.45   122     2.02
+##    sd.ZOI50 sd.ZOI20 sd.fAUC80 sd.fAUC50 sd.fAUC20 sd.slope
+## 1      0.62     4.23        NA        NA    0.0814     6.88
+## 2      1.29     1.60    0.1725    0.0706    0.0331    22.60
+## 3      0.97     1.47    0.2167    0.0706    0.0425    10.66
+## 4      0.90     0.90    0.3030    0.1368    0.0744    22.90
+## 5      1.09     1.82    0.2277    0.1195    0.0604    19.12
+## 6      1.07     1.51    0.2756    0.1097    0.0545    17.26
+## 7      0.85     1.38    0.2130    0.1065    0.0628    17.93
+## 8      0.49     5.50    0.2165        NA    0.0759     8.34
+## 9      1.76     2.50    0.1882    0.1839    0.1064    47.85
+## 10     0.92     2.70    0.3546    0.0935    0.0623    21.44
+## 11     1.56     2.71        NA    0.1106    0.0698    36.69
+## 12     1.15     3.27        NA    0.1665    0.1332    39.02
+## 13     5.20     1.83    0.3616        NA    0.1634    43.22
+## 14     0.75     1.24    0.1568    0.0899    0.0584    18.35
+```
 This will also save a .csv file into the *parameter_files* directory.
+
+##Addendum
+####Forthcoming
+* basic t-tests (t.test)
+* basic anova (aov)
+* single parameter graphics
+* three parameter graphics
+
+####Acknowledgements
+Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to do this.
+
+####Contact
+Aleeza Gerstein, <gerst035@umn.edu>
 
