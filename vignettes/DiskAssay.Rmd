@@ -16,6 +16,7 @@ library(knitr)
 # files needed to execute this document
 # thanks to http://stackoverflow.com/a/24585750/1036500
 opts_knit$set(root.dir=normalizePath('../'))
+opts_chunk$set(fig.path = "../figures/")
 ```
 
 ```{r, echo = FALSE}
@@ -31,11 +32,9 @@ library("diskImageR")
 
 diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
 
-
 <center>
-<img src=system.file("pictures", "p2_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src=system.file("pictures", "p1_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> 
-
-</center>
+<img src="pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
+</center> 
 
 ## Prepare plates and photographs
 The analysis done by diskImageR will only be as good as your disk assay plates and the photographs you take. Plates should always be labelled on the side, not on the bottom. Care should be taken when setting up the camera to take photographs, as you want the lighting conditions to be as uniform as possible, without any shadows on the plates. Camera settings should be manual rather than automatic as much as possible. Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory.
@@ -74,8 +73,8 @@ readInExistingIJ("projectName") 	#can be any project name, does not have to be t
 
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
-```{r}
-plotRaw("vignette", popUp = FALSE, savePDF = FALSE)
+```{r, fig.path="figure/vignette/", fig.width=6, fig.height=4}
+plotRaw("vignette", popUp = TRUE, savePDF = FALSE)
 ```
 
 ## Run the maximum likelihood analysis 
@@ -98,8 +97,8 @@ From these functions we substract off the plate background intensity from all va
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
-```{r}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF = FALSE)
+```{r, fig.path="figure/vignette/", fig.width=5, fig.height=4}
+maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = TRUE, savePDF =FALSE, AUC=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -132,8 +131,8 @@ This function is useful if you have many replicate disk assays and want to calcu
 For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation. Note 
 
 ```r
-# manyReps <- system.file("manyReps.csv", "data", package = "diskImageR")
-manyReps <- read.csv(system.file("../data/", "manyReps_df.csv", package="diskImageR"))
+ manyReps <- system.file( "data", "manyReps.csv", package = "diskImageR")
+# manyReps <- read.csv(system.file("../data/", "manyReps_df.csv", package="diskImageR"))
 # manyReps <- read.csv("data/manyReps_df.csv")
 head(manyReps.df)
 ```
