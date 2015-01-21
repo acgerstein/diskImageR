@@ -4,10 +4,12 @@
 \alias{readInExistingIJ}
 \title{Used to read in existing imageJ analyses}
 \usage{
-readInExistingIJ(projectName, newList = list(), numDig = 30)
+readInExistingIJ(projectName, newList = list())
 }
 \arguments{
 \item{projectName}{the name to be used for project. This name should be short, and can be different than what was used originally for the imageJ analysis step.}
+
+\item{newList}{dummy variable}
 }
 \description{
 This function can be used to read in existing imageJ analyses following either \code{\link{runIJ}} or \code{\link{runIJManual}}. Running this function will prompt the user to select the main project folder and to select the directory that contains

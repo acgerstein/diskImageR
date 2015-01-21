@@ -26,7 +26,11 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 
 \item{width}{a numeric value indicating the width of the pdf file generated}
 
-\item{cexPt,}{cexX, cexY a numeric value indicating the size to plot for points, x-axis text and y-axis text, respectively}
+\item{cexPt}{a numeric value indicating the size to plot for points}
+
+\item{cexX}{a numeric value indicating the size of x-axis text}
+
+\item{cexY}{a numeric value indicating the size of y-axis text}
 
 \item{nameVector}{either a logial value indicating whether to plot the name of the picture above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.}
 

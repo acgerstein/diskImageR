@@ -3,7 +3,6 @@
 export(addType)
 export(aggregateData)
 export(createDataframe)
-export(discplotNoRep)
 export(maxLik)
 export(plotRaw)
 export(readExistingDF)

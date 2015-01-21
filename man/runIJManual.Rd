@@ -5,7 +5,7 @@
 \title{Used to run the imageJ analysis by manually supplying path locations}
 \usage{
 runIJManual(projectName, projectDir, pictureDir, imageJLoc = "default",
-  discDiam = 6)
+  diskDiam = 6)
 }
 \arguments{
 \item{projectName}{the short name you want use for the project.}
@@ -15,8 +15,6 @@ runIJManual(projectName, projectDir, pictureDir, imageJLoc = "default",
 \item{pictureDir}{the path to the directory where the pictures are to be analyzed}
 
 \item{imageJLoc}{the absolute path to imageJ on your computer. Current options are standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; ly \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub}
-
-\item{script}{the location of the imageJ script (AUTOMATE THIS)}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 }

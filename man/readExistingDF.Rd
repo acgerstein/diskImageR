@@ -7,7 +7,7 @@
 readExistingDF(projectName)
 }
 \arguments{
-\item{\code{projectName}}{is the short name you want use for the project. Note, this can be different than the previous \code{projectName} used.}
+\item{projectName}{is the short name you want use for the project. Note, this can be different than the previous \code{projectName} used.}
 }
 \value{
 \code{projectName} is saved to the global directory and can be used for \code{aggregateData}.
