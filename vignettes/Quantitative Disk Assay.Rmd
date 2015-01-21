@@ -2,18 +2,13 @@
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "`r Sys.Date()`"
-output:
-	html_document:
-		toc: true
-		theme: united
-	pdf_document:
-		toc: true
-		highlight: zenburn
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Quantitative Disk Assay}
+  %\VignetteIndexEntry{Aleeza C. Gerstein}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+
 
 
 ## Introduction to diskImageR
@@ -22,7 +17,7 @@ diskImageR provides a quantitative way to analyze photographs taken from disk di
 
 
 <center>
-<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" />         <img src="../inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
+<img src="inst/pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="inst/pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -39,31 +34,28 @@ The first step in the diskImageR pipeline is to run the imageJ macro on the phot
 
 <b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
 
-From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder "imageJ-out" on your computer, with one file for each photograph.
+From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-This step can be completed using one of two functions.
+This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select 
+where you want the main project directory to be and where to find the location of the photograph directory:
 ```r
-#This function allows you to run the imageJ macro through a user-interface with pop-up boxes to select 
-#where you want the main project directory to be and where to find the location of the photograph directory.
 runIJ("projectName")
 ```
 
-```r
-#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
-#alternate function to supply the desired main project directory and photograph directory locations.
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
+Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
+
+```{r}
+runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "inst", "pictures", ""), imageJLoc = "loc2")
 ```
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
 
-Depending on where imageJ is located, the script may not run unless you specify the filepath. See ?runIJ for more details.
-
-If you want to access the output of these functions in a later R session you can with
+If you want to access the output of the imageJ macro in a later R session you can with
 ```r
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
 
 ### [optional] Plot the imageJ output
-To plot pixel intensity from the average from all photographs use
-1
+To plot pixel intensity from the average from all photographs use:
 ```{r}
 plotRaw("vignette", savePDF=FALSE)
 ```
@@ -89,7 +81,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r}
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE, height=4)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -100,12 +92,13 @@ saveMLParam("vignette")
 This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
 ## Save the results 
-The last required step is to create and save a dataframe (both in the global environment and in the *parameter_files* directory) with the resistance parameter estimates. 
+The last required step creates and save a dataframe with the resistance parameter estimates. A .csv file is written to the *parameter_files* directory which can be opened in excel or any program that opens text files. 
 
 ```{r}
 createDataframe("vignette", clearHalo = 1, typeName="temp")
 vignette.df
 ```
+
 ### [OPTIONAL] Add additional factor columns
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
 
@@ -113,6 +106,34 @@ If your photograph names contain more than one factor that is important (i.e, if
 addType("vignette", typeName="rep")
 vignette.df
 ```
+If you want to access this dataframe in a later R session you can do so using readExistingDF("projectName"). Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., temp <- read.csv(file)) though if you intend to use the functions below, you need to save it with a name that ends with ".df" (i.e., temp.df).
 
+### [OPTIONAL] Aggregate replicate pictures
+This function is useful if you have many replicate disk assays and want to calculate their average and variance. The function will calculate the standard error (se), coefficient of variantion (CV) or generic R variance measures (e.g., standard deviation, sd). 
 
+For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation.
+
+```{r}
+readExistingDF("manyReps")
+head(manyReps.df)
+```
+
+```{r}
+aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
+manyReps.ag
+```
+This will also save a .csv file into the *parameter_files* directory.
+
+##Addendum
+####Forthcoming
+* basic t-tests (t.test)
+* basic anova (aov)
+* single parameter graphics
+* three parameter graphics
+
+####Acknowledgements
+Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to do this.
+
+####Contact
+Aleeza Gerstein, <gerst035@umn.edu>
 

@@ -2,18 +2,13 @@
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "2015-01-20"
-output:
-	html_document:
-		toc: true
-		theme: united
-	pdf_document:
-		toc: true
-		highlight: zenburn
+output: rmarkdown::html_vignette(fig_height = 3)
 vignette: >
-  %\VignetteIndexEntry{Quantitative Disk Assay}
+  %\VignetteIndexEntry{Aleeza C. Gerstein}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+
 
 
 ## Introduction to diskImageR
@@ -22,7 +17,7 @@ diskImageR provides a quantitative way to analyze photographs taken from disk di
 
 
 <center>
-<img src="../inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" />         <img src="../inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
+<img src="inst/pictures/p2_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> <img src="inst/pictures/p1_30_a.JPG"  style="width: 40%; height: 40%" style="float:left," alt="" /> 
 </center>
 
 ## Prepare plates and photographs
@@ -39,24 +34,22 @@ The first step in the diskImageR pipeline is to run the imageJ macro on the phot
 
 <b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
 
-From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder "imageJ-out" on your computer, with one file for each photograph.
+From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-This step can be completed using one of two functions.
+This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select 
+where you want the main project directory to be and where to find the location of the photograph directory:
 ```r
-#This function allows you to run the imageJ macro through a user-interface with pop-up boxes to select 
-#where you want the main project directory to be and where to find the location of the photograph directory.
 runIJ("projectName")
 ```
 
+Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
+
 ```r
-#If you are more comfortable with R, and don't want to be bothered with pop-up boxes, use the 
-#alternate function to supply the desired main project directory and photograph directory locations.
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(.libPaths(), "diskImageR", "pictures", ""), imageJLoc = "loc2")
 ```
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
 
-Depending on where imageJ is located, the script may not run unless you specify the filepath. See ?runIJ for more details.
-
-If you want to access the output of these functions in a later R session you can with
+If you want to access the output of the imageJ macro in a later R session you can with
 ```r
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
@@ -69,9 +62,7 @@ To plot pixel intensity from the average from all photographs use
 plotRaw("vignette", savePDF=FALSE)
 ```
 
-```
-## Error in x[, 1]: object of type 'symbol' is not subsettable
-```
+![plot of chunk unnamed-chunk-1](figure/unnamed-chunk-1-1.png) 
 
 ## Run the maximum likelihood analysis 
 The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.
@@ -93,13 +84,8 @@ From these functions we substract off the plate background intensity from all va
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
-
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE, height=4)
-```
-
-```
-## Error in x[, 1]: object of type 'symbol' is not subsettable
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", height=4, needML=FALSE)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -110,7 +96,7 @@ saveMLParam("vignette")
 This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
 ## Save the results 
-The last required step is to create and save a dataframe (both in the global environment and in the *parameter_files* directory) with the resistance parameter estimates. 
+The last required step creates and save a dataframe with the resistance parameter estimates. A .csv file is written to the *parameter_files* directory which can be opened in excel or any program that opens text files. 
 
 
 ```r
@@ -118,7 +104,10 @@ createDataframe("vignette", clearHalo = 1, typeName="temp")
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'vignette.ML' not found
+## 
+## vignette.df has been written to the global environment
+## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette/vignette_df.csv
+## vignette_df.csv can be opened in MS Excel.
 ```
 
 ```r
@@ -126,8 +115,11 @@ vignette.df
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'vignette.df' not found
+##      name lines temp ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
+## 1 p1_30_a    p1   30    11    14    17   0.36   0.27   0.29 135.1
+## 2 p2_30_a    p2   30     0    14    16   1.00   0.65   0.48 101.0
 ```
+
 ### [OPTIONAL] Add additional factor columns
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
 
@@ -137,7 +129,9 @@ addType("vignette", typeName="rep")
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'vignette.df' not found
+## vignette.df has been written to the global environment
+## Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/parameter_files/vignette_df.csv
+## vignette_df.csv can be opened in MS Excel.
 ```
 
 ```r
@@ -145,8 +139,25 @@ vignette.df
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'vignette.df' not found
+##      name lines temp rep ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope
+## 1 p1_30_a    p1   30   a    11    14    17   0.36   0.27   0.29 135.1
+## 2 p2_30_a    p2   30   a     0    14    16   1.00   0.65   0.48 101.0
+```
+If you want to access this dataframe in a later R session you can do so using readExistingDF("projectName"). Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., temp <- read.csv(file)) though if you intend to use the functions below, you need to save it with a name that ends with ".df" (i.e., temp.df).
+
+### [OPTIONAL] Aggregate replicate pictures
+This function is useful if you have many replicate disk assays and want to calculate their average and variance. The function will calculate the standard error (se), coefficient of variantion (CV) or generic R variance measures (e.g., standard deviation, sd). 
+
+For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation.
+
+```r
+readExistingDF("manyReps")
+head(manyReps.df)
 ```
 
-
+```r
+aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
+manyReps.ag
+```
+This will also save a .csv file into the *parameter_files* directory.
 
