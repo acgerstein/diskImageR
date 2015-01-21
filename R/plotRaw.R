@@ -63,7 +63,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 		}
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (i in 1:length(data)){
-		discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)
+		.discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)
 		if(numpages == 1){
 			if (i >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))
@@ -108,26 +108,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 	}
 	}
 
-#' Used to plot the results of a single picture analyzed in imageJ
-
-#' @description This function is used by \code{\link{plotRaw}} to plot the results from each photograph
-
-#' @param data a dataframe containing two columns, with the x coordinates and image intensity height. Typically stored in a list named from the projectName in \code{\link{runIJ}}, \code{\link{runIJManual}} or \code{\link{readInExisting}}
-#' @param label what to title the plot
-#' @param ymin a numeric value indicating the minimum y value plotted in each graph
-#' @param ymax a numeric value indicating the maximum y value plotted in each graph
-#' @param xmin a numeric value indicating the minimum x value plotted in each graph
-#' @param xmax a numeric value indicating the maximum x value plotted in each graph
-#' @param standardLoc a numeric value indicating the location on the disk in mm used to standardize pixel intensity across all pictures, defaults to 2.5
-#' @param cexPt  a numeric value indicating the size to plot for points, x-axis text and y-axis text, respectively
-#' @param xaxt a character string to determine whether to plot the x axis, defaults to "n"
-#' @param yaxt a character string to determine whether to plot the y axis, defaults to "n"
-#' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point
-
-#' @export
-
-
-discplotNoRep <- function(data,  label=label, ymin=0, ymax=250, xmin=0, xmax=40, standardLoc = 2.5, cexPt = 0.6, stand = 0, xaxt="n", yaxt="n", plotStandardLoc =FALSE){
+.discplotNoRep <- function(data,  label=label, ymin=0, ymax=250, xmin=0, xmax=40, standardLoc = 2.5, cexPt = 0.6, stand = 0, xaxt="n", yaxt="n", plotStandardLoc =FALSE){
 	plot(data[,1], data[,2]+stand, ylim=c(ymin, ymax), xlim=c(xmin, xmax), xaxt=xaxt, yaxt="n", cex=cexPt, col="black")
 	if (yaxt=="s"){
 		axis(2, las=2)}
