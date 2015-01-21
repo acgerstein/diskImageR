@@ -10,7 +10,9 @@
 #' @param xplots a numeric value indicating how many plots to plot in each row
 #' @param height a numeric value indicating the height of the pdf file generated
 #' @param width a numeric value indicating the width of the pdf file generated
-#' @param cexPt, cexX, cexY a numeric value indicating the size to plot for points, x-axis text and y-axis text, respectively
+#' @param cexPt a numeric value indicating the size to plot for points
+#' @param cexX a numeric value indicating the size of x-axis text
+#' @param cexY a numeric value indicating the size of y-axis text
 #' @param nameVector either a logial value indicating whether to plot the name of the picture above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
 #' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point
 #' @param showNum a logical value indicating whether to annotate each graph with the picture number (determined alphabetically from the picture names)

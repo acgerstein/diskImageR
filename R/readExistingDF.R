@@ -2,7 +2,7 @@
 
 #' @description Open an existing dataframe previously created with either \code{\link{createDataframe}} or \code{\link{aggregateData}} using tcltk interface.
 
-#' @param \code{projectName} is the short name you want use for the project. Note, this can be different than the previous \code{projectName} used.
+#' @param projectName is the short name you want use for the project. Note, this can be different than the previous \code{projectName} used.
 
 #' @return \code{projectName} is saved to the global directory and can be used for \code{aggregateData}.
 
