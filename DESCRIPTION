@@ -1,6 +1,6 @@
 Package: diskImageR
 Title: A pipeline to analyze resistance and tolerance from drug disk diffusion assays
-Version: 0.1
+Version: 0.2
 Authors@R: "Aleeza Gerstein <gerstein@zoology.ubc.ca> [aut, cre]"
 Description: diskImageR is a pipeline to analyze photographs of disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. Furthermore, diskImageR removes measurement bias by assessing zone diameter quantitatively, without requiring the user to decide where prominent growth inhibition is seen. Finally, this method allows us to explicitly measure the zone of inhibition (resistance) as well as tolerance, i.e.,the size of the subpopulation that is able to grow above the resistance point, and the measure rate of change from no growth to full growth (sensitivity).
 Depends: R (>= 3.1.2)
