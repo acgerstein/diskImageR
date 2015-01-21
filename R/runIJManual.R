@@ -5,7 +5,6 @@
 #' @param projectName the short name you want use for the project.
 #' @param projectDir the path to the project directory where all analyses will be saved
 #' @param pictureDir the path to the directory where the pictures are to be analyzed
-#' @param script the location of the imageJ script (AUTOMATE THIS)
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param imageJLoc the absolute path to imageJ on your computer. Current options are standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; ly \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub
 
@@ -20,11 +19,11 @@
 #'@author Aleeza C. Gerstein
 
 runIJManual <-
-function(projectName, projectDir, pictureDir, imageJLoc="default", discDiam = 6){
+function(projectName, projectDir, pictureDir, imageJLoc="default", diskDiam = 6){
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
-	IJarguments <- paste(pictureDir, outputDir, discDiam, sep="*")
+	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")
 	
 	if(length(dir(outputDir)) > 0){
 		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))
