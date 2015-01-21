@@ -129,10 +129,8 @@ This function is useful if you have many replicate disk assays and want to calcu
 
 For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation. Note 
 
-```r
- manyReps <- system.file( "data", "manyReps.csv", package = "diskImageR")
-# manyReps <- read.csv(system.file("../data/", "manyReps_df.csv", package="diskImageR"))
-# manyReps <- read.csv("data/manyReps_df.csv")
+```{r}
+manyReps.df <- read.csv(file.path(getwd(), "data", "manyReps_df.csv"))
 head(manyReps.df)
 ```
 
@@ -152,7 +150,7 @@ This will also save a .csv file into the *parameter_files* directory.
 * three parameter graphics
 
 #### Acknowledgements
-Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to do this.
+Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to computationally capture the biological variation observed in the disk assay.
 
 #### Contact
 Aleeza Gerstein, <gerst035@umn.edu>
