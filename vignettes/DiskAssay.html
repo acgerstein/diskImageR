@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Aleeza C. Gerstein" />
+
+<meta name="date" content="2015-01-20" />
+
+<title>Quantitative Disk Assay</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Quantitative Disk Assay</h1>
+<h4 class="author"><em>Aleeza C. Gerstein</em></h4>
+<h4 class="date"><em>2015-01-20</em></h4>
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction-to-diskimager">Introduction to diskImageR</a></li>
+<li><a href="#prepare-plates-and-photographs">Prepare plates and photographs</a></li>
+<li><a href="#run-the-imagej-macro-on-the-set-of-photographs">Run the imageJ macro on the set of photographs</a><ul>
+<li><a href="#optional-plot-the-imagej-output">[optional] Plot the imageJ output</a></li>
+</ul></li>
+<li><a href="#run-the-maximum-likelihood-analysis">Run the maximum likelihood analysis</a><ul>
+<li><a href="#optional-save-the-maximum-likelihood-results">[OPTIONAL] Save the maximum likelihood results</a></li>
+</ul></li>
+<li><a href="#save-the-results">Save the results</a><ul>
+<li><a href="#optional-add-additional-factor-columns">[OPTIONAL] Add additional factor columns</a></li>
+<li><a href="#optional-aggregate-replicate-pictures">[OPTIONAL] Aggregate replicate pictures</a></li>
+</ul></li>
+<li><a href="#addendum">Addendum</a></li>
+</ul>
+</div>
+
+<div id="introduction-to-diskimager" class="section level2">
+<h2>Introduction to diskImageR</h2>
+<p>diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).</p>
+<center>
+</center>
+</div>
+<div id="prepare-plates-and-photographs" class="section level2">
+<h2>Prepare plates and photographs</h2>
+<p>The analysis done by diskImageR will only be as good as your disk assay plates and the photographs you take. Plates should always be labelled on the side, not on the bottom. Care should be taken when setting up the camera to take photographs, as you want the lighting conditions to be as uniform as possible, without any shadows on the plates. Camera settings should be manual rather than automatic as much as possible. Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory.</p>
+<p>Photograph naming can be used downstream to have diskImageR do a number of statistical things (e.g., averaging across replicates, caulculations of variance, t-tests). The general format is “strain_factor1_factor2_rep.pdf”. Conversely, if you intend to do all the statistical analysis later, photographs can be named anything, even numbered.</p>
+<p>Finally, photographs should be cropped carefully around the disk.</p>
+<p><b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go).</p>
+</div>
+<div id="run-the-imagej-macro-on-the-set-of-photographs" class="section level2">
+<h2>Run the imageJ macro on the set of photographs</h2>
+<p>The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory.</p>
+<p><b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.</p>
+<p>From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder <em>imageJ-out</em> on your computer, with one file for each photograph.</p>
+<p>This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select where you want the main project directory to be and where to find the location of the photograph directory:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">runIJ</span>(<span class="st">&quot;projectName&quot;</span>)</code></pre>
+<p>Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">getwd</span>())
+<span class="co">#&gt; [1] &quot;/Users/acgerstein/Documents/Postdoc/Research/diskImageR&quot;</span>
+<span class="kw">runIJManual</span>(<span class="st">&quot;vignette&quot;</span>, <span class="dt">projectDir=</span> <span class="kw">getwd</span>(), <span class="dt">pictureDir =</span> <span class="kw">file.path</span>(<span class="kw">system.file</span>(<span class="st">&quot;pictures&quot;</span>, <span class="dt">package=</span><span class="st">&quot;diskImageR&quot;</span>), <span class="st">&quot;&quot;</span>), <span class="dt">imageJLoc =</span> <span class="st">&quot;loc2&quot;</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Output of imageJ analyses saved in directory: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/imageJ-out/vignette/</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Elements in dataframe vignette: </span>
+<span class="co">#&gt; [1] &quot;p1_30_a&quot; &quot;p2_30_a&quot;</span>
+<span class="co">#&gt; </span>
+<span class="co"># runIJManual(&quot;vignette&quot;, projectDir= getwd(), pictureDir = file.path(getwd(), &quot;pictures&quot;, &quot;&quot;), imageJLoc = &quot;loc2&quot;)</span></code></pre>
+<p>Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.</p>
+<p>If you want to access the output of the imageJ macro in a later R session you can with</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">readInExistingIJ</span>(<span class="st">&quot;projectName&quot;</span>)     <span class="co">#can be any project name, does not have to be the same as previously used</span></code></pre>
+<div id="optional-plot-the-imagej-output" class="section level3">
+<h3>[optional] Plot the imageJ output</h3>
+<p>To plot pixel intensity from the average from all photographs use:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRaw</span>(<span class="st">&quot;vignette&quot;</span>, <span class="dt">popUp =</span> <span class="ot">FALSE</span>)
+<span class="co">#&gt;  Figure saved: figures/vignette/vignette_raw.pdf</span></code></pre>
+</div>
+</div>
+<div id="run-the-maximum-likelihood-analysis" class="section level2">
+<h2>Run the maximum likelihood analysis</h2>
+<p>The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic “S-shape” curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4. <span class="math">\[
+y = \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
+\]</span></p>
+<p>We often observed disk assays that deviated from the single logistic, either rising more linearly than expected at low cell density, or with an intermediate asymptote around the midpoint. To fascilitate fitting these curves, we fit a double logistic, which allows greater flexibility. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data, rather than to test what model fits better. <span class="math">\[
+y = \frac{asymA*exp(scalA(x-od50A))}{1+exp(scalA(x-od50A))}+\frac{asymB*exp(scalB(x-od50B))}{1+exp(scalB(x-od50B))}+N(0, \sigma)
+\]</span></p>
+<p>From these functions we substract off the plate background intensity from all values; this is common across all pictures taken at the same time and is determined from the observed pixel intensity on a plate with a clear halo (specified by the user). We then use the parameters identified in the logistic equations to determine the resistance parameters.</p>
+<ul>
+<li><b>Resistance</b> : asymA+asymB are added together to determine the maximum level of intensity (= cell density) achieved on each plate. The level of resistance (zone of inhibition, ZOI), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occurs (corresponding to <em>ZOI80</em>, <em>ZOI50</em>, and <em>ZOI20</em>)</li>
+<li><b>Tolerance</b> : the ‘rollmean’ function from the zoo package is used to calculate the area under the curve (AUC) in slice from the disk edge to each ZOI cutoff. This achieved growth is then compared to the potential growth, namely, the area of a rectangle with length and height equal to the ZOI. The calculated paramaters are thus the fraction of full growth in this region (<em>fAUC80</em>, <em>fACU50</em>, <em>fAUC20</em>).</li>
+<li><b>Sensitivity</b> : the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">maxLik</span>(<span class="st">&quot;vignette&quot;</span>, <span class="dt">clearHalo=</span><span class="dv">1</span>, <span class="dt">ZOI=</span><span class="st">&quot;all&quot;</span>, <span class="dt">needML=</span><span class="ot">TRUE</span>, <span class="dt">popUp =</span> <span class="ot">FALSE</span>)
+<span class="co">#&gt; ..</span>
+<span class="co">#&gt; vignette.ML has been written to the global environment</span>
+<span class="co">#&gt; vignette.ML2 has been written to the global environment</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Figure saved: figures/vignette/vignette_AUC.pdf</span></code></pre>
+<div id="optional-save-the-maximum-likelihood-results" class="section level3">
+<h3>[OPTIONAL] Save the maximum likelihood results</h3>
+<p>It is possible to save the maximum likelihood results using</p>
+<pre><code>saveMLParam(&quot;vignette&quot;)</code></pre>
+<p>This will save a .csv file into the <em>paramter_files</em> directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.</p>
+</div>
+</div>
+<div id="save-the-results" class="section level2">
+<h2>Save the results</h2>
+<p>The last required step creates and save a dataframe with the resistance parameter estimates. A .csv file is written to the <em>parameter_files</em> directory which can be opened in excel or any program that opens text files.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">createDataframe</span>(<span class="st">&quot;vignette&quot;</span>, <span class="dt">clearHalo =</span> <span class="dv">1</span>, <span class="dt">typeName=</span><span class="st">&quot;temp&quot;</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; vignette.df has been written to the global environment</span>
+<span class="co">#&gt; Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/parameter_files/vignette/vignette_df.csv</span>
+<span class="co">#&gt; vignette_df.csv can be opened in MS Excel.</span>
+vignette.df
+<span class="co">#&gt;      name lines temp ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope</span>
+<span class="co">#&gt; 1 p1_30_a    p1   30    11    14    17   0.36   0.27   0.29 135.1</span>
+<span class="co">#&gt; 2 p2_30_a    p2   30     0    14    16   1.00   0.65   0.48 101.0</span></code></pre>
+<div id="optional-add-additional-factor-columns" class="section level3">
+<h3>[OPTIONAL] Add additional factor columns</h3>
+<p>If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2…“) you can add extra factors into the dataframe using</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">addType</span>(<span class="st">&quot;vignette&quot;</span>, <span class="dt">typeName=</span><span class="st">&quot;rep&quot;</span>)
+<span class="co">#&gt; vignette.df has been written to the global environment</span>
+<span class="co">#&gt; Saving file: /Users/acgerstein/Documents/Postdoc/Research/diskImageR/parameter_files/vignette_df.csv</span>
+<span class="co">#&gt; vignette_df.csv can be opened in MS Excel.</span>
+vignette.df
+<span class="co">#&gt;      name lines temp rep ZOI80 ZOI50 ZOI20 fAUC80 fAUC50 fAUC20 slope</span>
+<span class="co">#&gt; 1 p1_30_a    p1   30   a    11    14    17   0.36   0.27   0.29 135.1</span>
+<span class="co">#&gt; 2 p2_30_a    p2   30   a     0    14    16   1.00   0.65   0.48 101.0</span></code></pre>
+<p>If you want to access this dataframe in a later R session you can do so using readExistingDF(“projectName”). Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., temp &lt;- read.csv(file)) though if you intend to use the functions below, you need to save it with a name that ends with “.df” (i.e., temp.df).</p>
+</div>
+<div id="optional-aggregate-replicate-pictures" class="section level3">
+<h3>[OPTIONAL] Aggregate replicate pictures</h3>
+<p>This function is useful if you have many replicate disk assays and want to calculate their average and variance. The function will calculate the standard error (se), coefficient of variantion (CV) or generic R variance measures (e.g., standard deviation, sd).</p>
+<p>For this example I am loading an existing dataset tha I will call “manyReps”. This dataset contains data for seven different lines, with twelve replicates per line, and a factor I’m interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation. Note</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># manyReps &lt;- system.file(&quot;manyReps.csv&quot;, &quot;data&quot;, package = &quot;diskImageR&quot;)</span>
+manyReps &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">system.file</span>(<span class="st">&quot;../data/&quot;</span>, <span class="st">&quot;manyReps_df.csv&quot;</span>, <span class="dt">package=</span><span class="st">&quot;diskImageR&quot;</span>))
+<span class="co"># manyReps &lt;- read.csv(&quot;data/manyReps_df.csv&quot;)</span>
+<span class="kw">head</span>(manyReps.df)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregateData</span>(<span class="st">&quot;manyReps&quot;</span>, <span class="dt">replicate=</span><span class="kw">c</span>(<span class="st">&quot;line&quot;</span>, <span class="st">&quot;type&quot;</span>), <span class="dt">varFunc=</span><span class="st">&quot;sd&quot;</span>)
+manyReps.ag</code></pre>
+<p>This will also save a .csv file into the <em>parameter_files</em> directory.</p>
+</div>
+</div>
+<div id="addendum" class="section level2">
+<h2>Addendum</h2>
+<div id="forthcoming" class="section level4">
+<h4>Forthcoming</h4>
+<ul>
+<li>basic t-tests (t.test)</li>
+<li>basic anova (aov)</li>
+<li>single parameter graphics</li>
+<li>three parameter graphics</li>
+</ul>
+</div>
+<div id="acknowledgements" class="section level4">
+<h4>Acknowledgements</h4>
+<p>Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to do this.</p>
+</div>
+<div id="contact" class="section level4">
+<h4>Contact</h4>
+<p>Aleeza Gerstein, <a href="mailto:gerst035@umn.edu">gerst035@umn.edu</a></p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

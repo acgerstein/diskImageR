@@ -33,6 +33,8 @@ diskImageR provides a quantitative way to analyze photographs taken from disk di
 
 
 <center>
+<img src=system.file("pictures", "p2_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src=system.file("pictures", "p1_30_a.JPG", package="diskImageR")  style="width: 35%; height: 35%" style="float:left," alt="" /> 
+
 </center>
 
 ## Prepare plates and photographs
@@ -60,7 +62,6 @@ runIJ("projectName")
 Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
 
 ```{r}
-print(getwd())
 runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(system.file("pictures", package="diskImageR"), ""), imageJLoc = "loc2")
 # runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
 ```
