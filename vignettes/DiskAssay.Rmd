@@ -69,10 +69,10 @@ If you want to access the output of the imageJ macro in a later R session you ca
 ```r
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
-
+# fig.path="figure/vignette/"
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
-```{r, fig.path="figure/vignette/", fig.width=6, fig.height=4}
+```{r, fig.width=6, fig.height=4}
 plotRaw("vignette", popUp = TRUE, savePDF = FALSE)
 ```
 
@@ -96,7 +96,9 @@ From these functions we substract off the plate background intensity from all va
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
-```{r, fig.path="figure/vignette/", fig.width=5, fig.height=4}
+#fig.path="figure/vignette/",
+
+```{r,  fig.width=5, fig.height=4}
 maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = TRUE, savePDF =FALSE, AUC=20)
 ```
 
@@ -134,7 +136,7 @@ manyReps.df <- read.csv(file.path(getwd(), "data", "manyReps_df.csv"))
 head(manyReps.df)
 ```
 
-```r
+```{r}
 aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
 manyReps.ag
 ```
