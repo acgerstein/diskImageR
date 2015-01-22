@@ -43,8 +43,9 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 			
 	if(.Platform$OS.type=="windows"){
 		script <- gsub("Program Files", "progra~1", script)
-		call <- paste("C:/progra~1/ImageJ/ImageJ.exe -batch", script, IJarguments, sep=" ")}
-		}
+		call <- paste("C:/progra~1/ImageJ/ImageJ.exe -batch", script, IJarguments, sep=" ")
+	}
+		
 	else{
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
 			if (imageJLoc=="loc2"){
