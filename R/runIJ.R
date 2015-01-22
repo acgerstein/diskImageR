@@ -21,9 +21,6 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
 	inputDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
-	if(.Platform$OS.type=="windows"){
-		script <- gsub("Program Files", "progra~1", script)
-		}
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	inputDir2 <- file.path(inputDir, "")
@@ -39,20 +36,25 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 		}
 	}
 
-	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(file.path(outputDir), showWarnings= FALSE)
 	dir.create(file.path(projectDir, "figure"), showWarnings= FALSE)
 	dir.create(file.path(projectDir, "parameter_files", sep=""), showWarnings=FALSE)
 			
-	if (imageJLoc=="default" | imageJLoc=="loc2" ){
-		if (imageJLoc=="loc2"){
-			call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-		if (imageJLoc=="default"){
-			call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-	}
-	else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
+	if(.Platform$OS.type=="windows"){
+		script <- gsub("Program Files", "progra~1", script)
+		call <- paste("C:/progra~1/ImageJ/ImageJ.exe -batch", script, IJarguments, sep=" ")}
 		}
+	else{
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){
+			if (imageJLoc=="loc2"){
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
+			if (imageJLoc=="default"){
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
+		}
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
+		}
+	}
 	print(call)
 	system(call)
 
