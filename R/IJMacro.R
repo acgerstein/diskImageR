@@ -132,9 +132,6 @@ function(filename) {
    d
  }
 
-IJMacro("test", "C:/Users/bermanlab/Desktop", "C:/Users/bermanlab/Documents/R/win-library/3.1/diskImageR/pictures/")
-IJMacro("testNew", "C:/Users/bermanlab/Desktop", "C:/Users/bermanlab/Documents/R/win-library/3.1/diskImageR/pictures/")
-
 
 
 
