@@ -57,7 +57,7 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 
 	}
 	else{		
-		script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")[1]
+		script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
 			if (imageJLoc=="loc2"){
 				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}

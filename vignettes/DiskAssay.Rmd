@@ -61,7 +61,7 @@ runIJ("projectName")
 Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
 
 ```{r}
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
+IJMacro("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
 ```
 Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
 
