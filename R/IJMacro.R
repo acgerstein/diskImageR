@@ -28,16 +28,16 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 			stop("Please supply a project directory and picture directory, or change the manual parameter to FALSE to select directories through a pop-up interface")
 		}
 	}
-		
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	if(!manual){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
 		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 		pictureDir <- file.path(pictureDir, "/")
 	}
+	
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
-	dir.create(outputDir, showWarnings= FALSE)
 	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	
+
 	if(length(dir(outputDir)) > 0){
 		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))
 		if(cont=="n"){
@@ -47,6 +47,9 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 			unlink(outputDir, recursive = TRUE)
 		}
 	}
+	
+	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
+	dir.create(file.path(outputDir), showWarnings= FALSE)
 		
 	if(.Platform$OS.type=="windows"){
 		script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]
