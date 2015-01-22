@@ -9,7 +9,7 @@ addType(projectName, typePlace = 3, typeName = "type2")
 \arguments{
 \item{projectName}{the short name in use for the project.}
 
-\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 3. For more details see \code{\link{runIJ}}}
+\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 3. For more details see \code{\link{IJMacro}}}
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type2".}
 }

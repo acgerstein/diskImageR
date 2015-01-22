@@ -12,6 +12,6 @@ readInExistingIJ(projectName, newList = list())
 \item{newList}{dummy variable}
 }
 \description{
-This function can be used to read in existing imageJ analyses following either \code{\link{runIJ}} or \code{\link{runIJManual}}. Running this function will prompt the user to select the main project folder and to select the directory that contains
+This function can be used to read in existing imageJ analyses following \code{\link{IJMacro}}. Running this function will prompt the user to select the main project folder and to select the directory that contains
 }
 

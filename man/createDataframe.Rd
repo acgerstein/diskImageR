@@ -19,9 +19,9 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 
 \item{nameVector}{either a logial value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign th photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.}
 
-\item{typeVector}{a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{runIJ}} for more details) while \code{typeVector} = "FALSE" will not add a type column.}
+\item{typeVector}{a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{IJMacro}} for more details) while \code{typeVector} = "FALSE" will not add a type column.}
 
-\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{runIJ}}}
+\item{typePlace}{a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{IJMacro}}}
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type".}
 }

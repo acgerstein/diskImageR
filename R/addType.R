@@ -2,7 +2,7 @@
 #' @description Add an extra factor ("type") column to the existing dataframe
 
 #' @inheritParams maxLik
-#' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 3. For more details see \code{\link{runIJ}}
+#' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 3. For more details see \code{\link{IJMacro}}
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type2".
 
 #' @return updates the existing dataframe 
