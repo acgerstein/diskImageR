@@ -90,16 +90,6 @@ function(workingDir, folderLoc, experAbbr){
 		}
 	temp <- data.frame(names = names(tList), len)
 	redo <- subset(temp, len==1, names)	
-	newdir1 <- file.path(workingDir, "figure", "")
-	newdir2 <- file.path(workingDir, "parameter_files", "")		
-	if (!file.exists(newdir1)){
-		dir.create(newdir1, showWarnings = FALSE)
-		cat(paste("new directory: ", newdir1), sep="")
-		}
-	if (!file.exists(newdir2)){		
-		dir.create(newdir2, showWarnings = FALSE)
-		cat(paste("new directory: ", newdir2), sep="")
-		}
 	tList
 	}
 
