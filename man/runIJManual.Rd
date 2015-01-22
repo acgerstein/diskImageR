@@ -4,7 +4,7 @@
 \alias{runIJManual}
 \title{Used to run the imageJ analysis by manually supplying path locations}
 \usage{
-runIJManual(projectName, projectDir, pictureDir, imageJLoc = "default",
+runIJManual(projectName, projectDir, pictureDir, imageJLoc = "loc2",
   diskDiam = 6)
 }
 \arguments{
