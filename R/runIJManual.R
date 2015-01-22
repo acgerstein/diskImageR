@@ -48,7 +48,7 @@ function(projectName, projectDir, pictureDir, imageJLoc="default", diskDiam = 6)
 	}
 	else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
 		}
-
+	print(call)
 	system(call)
 
 	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))
