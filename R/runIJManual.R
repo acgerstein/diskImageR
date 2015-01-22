@@ -19,7 +19,7 @@
 #'@author Aleeza C. Gerstein
 
 runIJManual <-
-function(projectName, projectDir, pictureDir, imageJLoc="default", diskDiam = 6){
+function(projectName, projectDir, pictureDir, imageJLoc="loc2", diskDiam = 6){
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")

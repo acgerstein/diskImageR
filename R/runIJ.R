@@ -21,6 +21,9 @@ function(projectName, imageJLoc="default", diskDiam = 6){
 	projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
 	inputDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.txt")
+	if(.Platform$OS.type=="windows"){
+		script <- gsub("Program Files", "progra~1", script)
+		}
 	fileDir <- projectName
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	inputDir2 <- file.path(inputDir, "")
