@@ -32,7 +32,7 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
@@ -87,7 +87,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 		 			
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)
+		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF, plotSub = plotSub)
 	}
 	alarm()
 }
@@ -275,10 +275,12 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE){
+.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE, plotSub = plotSub){
 
 	data <- eval(parse(text=projectName))
-
+	if(is.na(plotSub[1])){
+		plotSub <- 1:length(data)
+		}
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
@@ -296,13 +298,13 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 			}
 		}
 
-	if(xplots > length(data)){
-		xplots <- length(data)
+	if(xplots > length(plotSub)){
+		xplots <- length(plotSub)
 	}
-	if (ceiling(length(data)/xplots) < 6) {
-		yplots<- ceiling(length(data)/xplots)}
+	if (ceiling(length(plotSub)/xplots) < 6) {
+		yplots<- ceiling(length(plotSub)/xplots)}
 	else {yplots<- 6}
-	numpages <- ceiling(length(data)/(xplots*yplots))
+	numpages <- ceiling(length(plotSub)/(xplots*yplots))
 	if(savePDF){
 		pdf(t, width=width, height=height)
 	}
@@ -310,9 +312,8 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		# quartz(width=width, height=height)
 	# }
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-	for (k in 1:length(data)){
-		.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)
-
+	for (k in plotSub){
+			.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)
 		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
