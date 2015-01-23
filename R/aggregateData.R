@@ -31,22 +31,22 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 	ag[,	names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))] <- round(ag[,names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))], digits=2)	
 	ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))] <- round(ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))], digits=4)	
 	
-	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
-	newdir3 <- file.path(getwd(), "parameter_files", projectName)	
+	newdir2 <- file.path(getwd(), "parameter-files", sep="")		
+	newdir3 <- file.path(getwd(), "parameter-files", projectName)	
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
 	agName <- paste(projectName, ".ag", sep="")
-	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
+	filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag.csv", sep=""))
 
 	if (!overwrite){
 		if (file.exists(filename)){
-			filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_2.csv", sep=""))
+			filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag_2.csv", sep=""))
 			agName <- paste(projectName, "_2.ag", sep="")
 			if (file.exists(filename)){
 				k <- 2
 				while(file.exists(filename)){
 					k <- k+1
-					filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_", k, ".csv", sep=""))
+					filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag_", k, ".csv", sep=""))
 					agName <- paste(projectName, "_", k, ".ag", sep="")	
 					}
 				}
@@ -58,7 +58,6 @@ aggregateData <- function(projectName, replicate = c("lines", "type"), varFunc =
 
 	cat(paste("\n", agName, " has been written to the global environment", sep=""))
 	cat(paste("\n\nSaving file: ", filename, sep=""))
-	cat(paste("\n",  agName, " can be opened in MS Excel (save as .xls file if desired)",  sep=""))
 	
 	 assign(agName, ag, envir=globalenv())
 	}
