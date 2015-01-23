@@ -41,7 +41,7 @@ The analysis done by diskImageR will only be as good as your disk assay plates a
 
 Photograph naming can be used downstream to have diskImageR do a number of statistical things (e.g., averaging across replicates, caulculations of variance, t-tests). The general format is "strain_factor1_factor2_rep.pdf". Conversely, if you intend to do all the statistical analysis later, photographs can be named anything, even numbered.
 
-Finally, photographs should be cropped carefully around the disk.
+Finally, photographs should be cropped carefully around the disk. 
 
 <b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). 
 
@@ -66,7 +66,7 @@ Depending on where imageJ is located on your computer, the script may not run un
 
 If you want to access the output of the imageJ macro in a later R session you can with
 ```r
-readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
+readExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
