@@ -343,7 +343,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	}
 	
 	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
-	mtext("Pixel intensity", outer=TRUE, side=2, line=1.5, cex=1.2)
+	mtext("Pixel intensity", outer=TRUE, side=2, line=2, cex=1.2)
 
 	if(savePDF){
 		dev.off()	
