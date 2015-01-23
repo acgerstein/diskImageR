@@ -89,6 +89,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		 			
 		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF)
 	}
+	alarm()
 }
 
 .curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}
@@ -209,7 +210,8 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	slope <- ML[[i]]$par[3]
 	ic50 <- ML[[i]]$par[2]	
 	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")	
+	axis(2, labels=FALSE)
 	yyplot <- (yy+min(data[[i]]$x))
 	yyplot[yyplot < 0] <- 0
 	points(exp(xx), yyplot, type="l", col="black", lwd=3)			
@@ -313,29 +315,29 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 
 		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
-				axis(1, cex.axis=0.8)
+				axis(1, cex.axis=1)
 				}
-			else {axis(1, cex.axis=0.8, labels= FALSE)}
+			else {axis(1, cex.axis=1, labels= FALSE)}
 			}
 		if(numpages == 2){
 			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){
-				axis(1, cex.axis=0.8)
+				axis(1, cex.axis=1)
 				}
 			if (k >= 2*xplots*yplots-xplots+1){
-				axis(1, cex.axis=0.8)
+				axis(1, cex.axis=1)
 				}
-			else {axis(1, cex.axis=0.8, labels= FALSE)}	
+			else {axis(1, cex.axis=1, labels= FALSE)}	
 			}				
 		if(numpages == 3){
 			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){
-				axis(1, cex.axis=0.8)
+				axis(1, cex.axis=1)
 				}
 			else{axis(1, labels=FALSE)}
 			}				
 		axis(1, labels=FALSE)
 		j <- 1
 		while (j <= numpages){
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}
+			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=1, las=2)}
 			j <- j+1
 		}
 	}
