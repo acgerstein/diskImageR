@@ -14,7 +14,7 @@
 #' @param ZOI a numeric value indicating the the critical level of the zone of inhibition (resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{ZOI} = "80" (80\% reduction in growth), \code{ZOI} = "50" (50\% reduction in growth), \code{ZOI} = "20" (20\% reduction in growth), and \code{ZOI} = "all" are supported.
 #' @param needML a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created.
-#' @param plotNameVector either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.
+#' @param nameVector either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.
 #' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
@@ -33,7 +33,7 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
@@ -49,11 +49,11 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	
 	data <- eval(parse(text=projectName))
 	standardLoc <- 2.5
-	if (is.logical(plotNameVector)){
-		if (plotNameVector){label <- names(data)}		
+	if (is.logical(nameVector)){
+		if (nameVector){label <- names(data)}		
 		else {label <- rep("", length(data))}
 		}
-	else {label <- plotNameVector}	
+	else {label <- nameVector}	
 
 	if (!is.logical(standardLoc)){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		
