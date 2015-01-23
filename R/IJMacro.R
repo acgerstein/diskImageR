@@ -23,18 +23,13 @@
 IJMacro <-
 function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){
 	fileDir <- projectName
-	if(manual){
-		if(is.na(projectDir) | is.na(pictureDir)){
-			stop("Please supply a project directory and picture directory, or change the manual parameter to FALSE to select directories through a pop-up interface")
-		}
+	if(is.na(projectDir)){
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
+	}		
+	if(is.na(pictureDir)){
+		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 	}
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
-	if(!manual){
-		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
-		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
-		# pictureDir <- file.path(pictureDir, "/")
-	}
-	
 	outputDir <- file.path(projectDir, "imageJ-out", fileDir, "")
 	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	
 

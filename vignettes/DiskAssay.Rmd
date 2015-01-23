@@ -62,13 +62,12 @@ If you would prefer to avoid pop-up boxes you can specify your desired main proj
 ```{r}
 IJMacro("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""))
 ```
-Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?IJMacro for more details.
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath to imageJ. See ?IJMacro for more details.
 
 If you want to access the output of the imageJ macro in a later R session you can with
 ```r
 readInExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
 ```
-# fig.path="figure/vignette/"
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
 ```{r, fig.width=6, fig.height=4}
@@ -94,8 +93,6 @@ From these functions we substract off the plate background intensity from all va
 	: the 'rollmean' function from the zoo package is used to calculate the area under the curve (AUC)  in slice from the disk edge to each ZOI cutoff. This achieved growth is then compared to the potential growth, namely, the area of a rectangle with length and height equal to the ZOI. The calculated paramaters are thus the fraction of full growth in this region (*fAUC80*, *fACU50*, *fAUC20*).
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
-
-#fig.path="figure/vignette/",
 
 ```{r,  fig.width=5, fig.height=4}
 maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = TRUE, savePDF =FALSE, AUC=20)
