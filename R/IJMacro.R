@@ -45,9 +45,12 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 		}
 	}
 	
-	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
 	dir.create(file.path(outputDir), showWarnings= FALSE)
-		
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)
+	dir.create(file.path(projectDir, "parameter-files"), showWarnings=FALSE)
+	dir.create(file.path(projectDir, "parameter-files", fileDir), showWarnings=FALSE)	
+			
 	if(.Platform$OS.type=="windows"){
 		script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]
 		script <- gsub("Program Files", "progra~1", script)
@@ -121,6 +124,7 @@ function(filename) {
    names(d) <- c("count", "distance","x")
    d
  }
+
 
 
 
