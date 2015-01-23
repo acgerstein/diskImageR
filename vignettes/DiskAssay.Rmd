@@ -48,22 +48,21 @@ Finally, photographs should be cropped carefully around the disk.
 ## Run the imageJ macro on the set of photographs
 The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
 
-<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
+<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function. If you install it to default location (Applications folder on a mac, Program Files folder on a PC) then you should be able to use the default setting )see below)
 
 From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select 
-where you want the main project directory to be and where to find the location of the photograph directory:
+To run the imageJ macro through a user-interface with pop-up boxes to select where you want the main project directory to be and where to find the location of the photograph directory just select a project name (here I'm using 'vignette'):
 ```r
-runIJ("projectName")
+IJMacro("vignette")
 ```
 
-Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
+If you would prefer to avoid pop-up boxes you can specify your desired main project directory and photograph directory locations:
 
 ```{r}
-IJMacro("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
+IJMacro("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""))
 ```
-Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?IJMacro for more details.
 
 If you want to access the output of the imageJ macro in a later R session you can with
 ```r
