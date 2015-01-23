@@ -28,6 +28,7 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 	}		
 	if(is.na(pictureDir)){
 		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
+		pictureDir <- file.path(pictureDir, "")
 	}
 	
 	dir.create(file.path(projectDir, "imageJ-out"), showWarnings=FALSE)
