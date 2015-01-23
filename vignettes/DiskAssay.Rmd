@@ -148,7 +148,7 @@ This will also save a .csv file into the *parameter_files* directory.
 * three parameter graphics
 
 #### Acknowledgements
-Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Judith Berman and Darren Abbey for philosophical discussions about how best to computationally capture the biological variation observed in the disk assay.
+Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron and Alex Rosenberg for testing versions of the code presented here, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in the disk assay.
 
 #### Contact
 Aleeza Gerstein, <gerst035@umn.edu>
