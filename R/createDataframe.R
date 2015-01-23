@@ -38,11 +38,11 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
 	standardLoc <- 2.5
-	newdir <- file.path(getwd(), "parameter-files")
-	newdir2 <- file.path(getwd(), "parameter-files", projectName)
+	newdir <- file.path(getwd(), "parameter_files")
+	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
 	
-	filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_df.csv", sep=""))
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 
 	if (!file.exists(newdir)){		
 		dir.create(newdir, showWarnings = FALSE)
