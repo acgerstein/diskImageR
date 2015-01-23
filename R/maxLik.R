@@ -209,7 +209,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	slope <- ML[[i]]$par[3]
 	ic50 <- ML[[i]]$par[2]	
 	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.4), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
 	yyplot <- (yy+min(data[[i]]$x))
 	yyplot[yyplot < 0] <- 0
 	points(exp(xx), yyplot, type="l", col="black", lwd=3)			
@@ -254,19 +254,20 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		if(plotAUC){
 			polygon(xx2, yy2, density=15, col="red")
 			}
+		points(xx, yy, type="l", col="black", lwd=2)					
 		if(ZOI == 20){
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)
+			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
 			}
 		if(ZOI ==50){
-			points(xx50, yy50halo, col="blue", cex=1.5, pch=19)
+			points(xx50, yy50halo, col="blue", cex=2, pch=19)
 			}
 		if(ZOI ==80){
-			points(xx80, yy80halo, col="blue", cex=1.5, pch=19)
+			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
 			}
 		if(ZOI=="all"){
-			points(xx80, yy80halo, col="yellow", cex=1.5, pch=19)
-			points(xx50, yy50halo, col="purple", cex=1.5, pch=19)
-			points(xx20, yy20halo, col="blue", cex=1.5, pch=19)
+			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
+			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
+			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
 			}			
 		}
 	mtext(label, side=3, cex=0.6)
