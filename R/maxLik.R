@@ -32,7 +32,7 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 6, height = 10,  width = 8, AUC=50, ZOI=50, needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=80, ZOI="all", needML = TRUE, popUp = TRUE, plotNameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE){
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
