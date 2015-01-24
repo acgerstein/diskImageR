@@ -13,7 +13,7 @@
 #' @param cexPt a numeric value indicating the size to plot for points
 #' @param cexX a numeric value indicating the size of x-axis text
 #' @param cexY a numeric value indicating the size of y-axis text
-#' @param nameVector either a logial value indicating whether to plot the name of the picture above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
+#' @param nameVector either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
 #' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point
 #' @param showNum a logical value indicating whether to annotate each graph with the picture number (determined alphabetically from the picture names)
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created

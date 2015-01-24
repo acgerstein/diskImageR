@@ -11,7 +11,7 @@
 #' @details A dataframe with 11 columns:
 #' \itemize{
 #' 		\item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
-#'	 	\item\bold{lines:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
+#'	 	\item\bold{line:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
 #' 		\item\bold{type:} the location within the \code{name} of the phograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
 #' 		\item\bold{ZOI80, ZOI50, ZOI20:} resistance parameters, coresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
 #' 		\item\bold{fAUC80, fAUC50, fAUC20:} tolerance parameters, coresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
@@ -100,19 +100,19 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	
 	if (is.logical(nameVector)){
 		if (nameVector){
-			lines <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
-			df <- data.frame(name = names(data), lines)
+			line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
+			df <- data.frame(name = names(data), line)
 			}
 			
 		if (!nameVector){
-			lines <- seq(1, length(data))
-			df <- data.frame(name = names(data), lines, df)	
+			line <- seq(1, length(data))
+			df <- data.frame(name = names(data), line, df)	
 		}
 	}
 	if (!is.logical(nameVector)){
-		lines <- nameVector
+		line <- nameVector
 		names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
-		df <- data.frame(names=names, lines=lines, df)	
+		df <- data.frame(names=names, line=line, df)	
 		}
 
 	if (typeVector){	
@@ -126,7 +126,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 		
 	names(df)[3] <- typeName
 
-	df <- df[order(df$lines),] 
+	df <- df[order(df$line),] 
 	df$fAUC80[df$fAUC80 >1] <- 1
 	df$fAUC50[df$fAUC50 >1] <- 1
 	df$fAUC20[df$fAUC20 >1] <- 1	
