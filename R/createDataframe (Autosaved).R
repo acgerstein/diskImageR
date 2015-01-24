@@ -24,6 +24,7 @@
 
 #' @author Aleeza C. Gerstein
 
+#To do:
 #addin removal of blank disk plate
 #try to automate clearHalo
 
