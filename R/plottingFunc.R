@@ -19,7 +19,7 @@
 
 #' @author Aleeza c. Gerstein
 
-twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels=mp[1,], xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){
+twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){
 	
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
@@ -59,9 +59,10 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	}
 	tols <- ordData[, AUC]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
-	print(ordData)
-	print(orderFactor)
-	print(ordData[, orderFactor])
+	if(length(xlabels)==1){
+		 xlabels <- unique(as.character(ordData[, xlabels]))
+		}
+	print(xlabels)
 	if(savePDF){
 		 pdf(t, width=width, height=height)
 		}
@@ -72,8 +73,8 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	axis(1, at=mp[1,], labels=FALSE)
 	}
 	if(type=="df"){
-		plot(ordData[, orderFactor], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4)
-	axis(1, at=as.numeric(unique(ordData[, orderFactor])), labels=FALSE)
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
+	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	axis(2, las=2, cex.axis=0.8)
 	mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
@@ -86,15 +87,18 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 		if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 		else{
 			axis(1, at=mp[1,], labels=FALSE)
-			text(mp[1,],  -5, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
+			text(1:length(xlabels),  -5, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
 		}
 	}
 	if(type=="df"){
-		plot(as.numeric(ordData[, orderFactor]), ordData[, AUC], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4)
-		if(is.na(labAngle)) 	axis(1, at=as.numeric(unique(ordData[, orderFactor])), labels=xlabels)
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
+		if(is.na(xlabAngle)){
+			 axis(1, at=1:length(xlables), labels=xlabels)
+			 print("here")
+			 }
 		else{
-			axis(1, at=as.numeric(unique(ordData[, orderFactor])), labels=FALSE)
-			text(unique(ordData[, orderFactor]),  -5, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
+			axis(1, at=1:length(xlabels), labels=FALSE)
+			text(1:length(xlabels),  -5, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
 		}
 	}
 	axis(2, las=2, at=c(0, 20, 40, 60, 80, 100), cex.axis=0.8)
