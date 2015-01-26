@@ -56,8 +56,6 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 			ordData <-  data[order, ]
 			if(length(xlabels)==1){
 				 xlabels <- as.character(ordData[, xlabels])
-				 xlabels <- xlabels[order, ]
-				print(xlabels)
 			}
 		}
 		
