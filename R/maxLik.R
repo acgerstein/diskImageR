@@ -34,6 +34,8 @@
 # See if can do clearHalo automatically somehow
 
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
+	if(needML==TRUE & paste(projectName, ".ML", sep="") %in% ls()){
+		# print(paste(projectName, ".ML", sep="") already exists. Continue to fit maximum likelihood models again or proceed to plotting? (`fit`/`plot`)"
 	if(!(hasArg(clearHalo))){
 		stop("No picture with clear halo specified.")
 	}
