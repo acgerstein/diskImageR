@@ -71,7 +71,7 @@ readExistingIJ("projectName") 	#can be any project name, does not have to be the
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
 ```{r, fig.width=6, fig.height=4}
-plotRaw("vignette", popUp = TRUE, savePDF = TRUE)
+plotRaw("vignette", popUp = FALSE, savePDF = FALSE)
 ```
 
 ## Run the maximum likelihood analysis 
@@ -95,7 +95,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = TRUE, savePDF =TRUE, AUC=20)
+maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF =FALSE, AUC=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -142,7 +142,7 @@ This will also save a .csv file into the *parameter_files* directory.
 At this point the parameter esitmates and potentially aggregated and variance measurements exist in .csv files and can be used independently of the package. Three plotting functions are included here though, to plot single parameters (any) \link{\code{oneParamPlot}}, two parameters (ZOI and fAUC) \link{\code{twoParamPlot}} or three parameters (ZOI, slope, fAUC) \link\code{threeParamPlot}}. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. Single parameter plot can be either a barplot \code{barplot = TRUE} or a dotplot \code{barplot=FALSE}. In the two and three parameter plots the default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
 
 ```{r}
-singleParamPlot("present", "df", popUp = TRUE, savePDF =FALSE)
+oneParamPlot("present", "df", popUp = TRUE, savePDF =FALSE)
 ```
 
 

@@ -3,21 +3,20 @@
 #' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (ZOI) and tolerance (AUC).
 
 #' @inheritParams plotRaw
-#' @param ZOI what is the ZOI parameter to be plotted ("ZOI20", "ZOI50" or "ZOI80"), default = "ZOI20".
-#' @param AUC what is the AUC parameterto be plotted ("fAUC20", "fAUC50" or "fAUC80"), default = "fAUC20".
+#' @param ZOI specify the ZOI parameter to be plotted ("ZOI20", "ZOI50" or "ZOI80"), default = "ZOI20".
+#' @param AUC specify the AUC parameterto be plotted ("fAUC20", "fAUC50" or "fAUC80"), default = "fAUC20".
 #' @param ZOImin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param ZOImin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param tolMax maximum y axis value for tolerance plot. Note tolerance is coverted to a perent, default = 100.
-#' @param slopeMax maximum y value for sensitivity plot, default = 200.
 #' @param xlabels either a vector containing the desired x-axis labels, or a single value indicating the column name that contains the values to use (likely either the 'line' column or one of the type columns), default = "line".
 #' @param xlabAngle indicates whether to print the x axis labels on a angle, if a number is provided this will be the angle used. The defauilt is not to plot on an angle, default = NA.
 #' @param order can be either "factor" or "custom". If custom, supply a numberial vector the same length as the dataframe to indicate the desired order. If factor, supply the column name in \code{ordeFactor} to be used to factor. 
 #' @param orderFactor if \code{order = "factor"} supply the column name to be used to factor. 
-#' @param barplot in singleParamPlot, whether to plot a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = FALSE. In double and triple parameter plots, whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE.
+#' @param barplot whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
 
-#' @details Basic parameter plotting functions. Supports single (any), double (ZOI and fAUC), and triple (ZOI, fAUC , slope) parameter plots. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. Single parameter plot can be either a barplot \code{barplot = TRUE} or a dotplot \code{barplot=FALSE}. In the two and three parameter plots the default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
+#' @details Basic parameter plotting functions to plot ZOI and fAUC parameter plots. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. The default is to plot ZOI as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot ZOI as a barplot in this framework). 
 
-#' @return Either a pdf figure figure saved to the 'figures' directory or a figure on screen
+#' @return Either a pdf figure figure (projectName_ZOI-fAUC.pdf) saved to the 'figures' directory or a figure on screen
 
 #' @export
 
@@ -132,6 +131,22 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 
 }
 
+#' Used to plot the ZOI, slope and AUC parameter results
+
+#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (ZOI) and tolerance (AUC).
+
+#' @inheritParams plotRaw
+#' @inheritParams twoParamPlot
+
+#' @details Basic parameter plotting functions for three parameter plots (ZOI, fAUC , slope). Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. The default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
+
+#' @return Either a pdf figure figure saved to the 'figures' directory ("projectName_ZOI-slope-fAUC.pdf" or a figure on screen
+
+#' @export
+
+#' @author Aleeza c. Gerstein
+
+
 threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, slopeMax = 160, tolMax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){
 	
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
@@ -241,18 +256,34 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 
 }
 
+#' Used to plot a single parameter
+
+#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (ZOI), sensitivity (slope) and tolerance (AUC).
+
+#' @inheritParams plotRaw
+#' @inheritParams twoParamPlot
+#' @param barplot whether to plot values as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
+
+#' @details Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. 
+
+#' @return Either a pdf figure figure (projectName_ZOI-fAUC.pdf) saved to the 'figures' directory or a figure on screen
+
+#' @export
+
+#' @author Aleeza c. Gerstein
+
 oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot = TRUE){
 	
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
-	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
+	t <- file.path("figures", projectName,  paste(projectName, "_", param, ".pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_2.pdf", sep=""))
+			t <- file.path("figures", projectName, paste(projectName, "_", param, "_2.pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_", k, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, "_", param, "_", k, ".pdf", sep=""))
 					}
 				}
 			}
