@@ -31,8 +31,8 @@ aggregateData <- function(projectName, replicate = c("line", "type"), varFunc = 
 	ag[,	names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))] <- round(ag[,names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))], digits=2)	
 	ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))] <- round(ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))], digits=4)	
 	
-	newdir2 <- file.path(getwd(), "parameter-files", sep="")		
-	newdir3 <- file.path(getwd(), "parameter-files", projectName)	
+	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
+	newdir3 <- file.path(getwd(), "parameter_files", projectName)	
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
 	agName <- paste(projectName, ".ag", sep="")
