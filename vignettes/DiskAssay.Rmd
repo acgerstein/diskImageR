@@ -133,7 +133,7 @@ head(manyReps.df)
 ```
 
 ```{r}
-aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
+aggregateData("manyReps", replicate=c("line", "type"), varFunc="se")
 manyReps.ag
 ```
 This will also save a .csv file into the *parameter_files* directory.
@@ -141,8 +141,8 @@ This will also save a .csv file into the *parameter_files* directory.
 ### [OPTIONAL] Plot parameter results
 At this point the parameter esitmates and potentially aggregated and variance measurements exist in .csv files and can be used independently of the package. Three plotting functions are included here though, to plot single parameters (any) \link{\code{oneParamPlot}}, two parameters (ZOI and fAUC) \link{\code{twoParamPlot}} or three parameters (ZOI, slope, fAUC) \link\code{threeParamPlot}}. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. Single parameter plot can be either a barplot \code{barplot = TRUE} or a dotplot \code{barplot=FALSE}. In the two and three parameter plots the default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
 
-```{r}
-oneParamPlot("present", "df", popUp = TRUE, savePDF =FALSE)
+```{r, fig.width=5, fig.height=4}
+twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE)
 ```
 
 

@@ -35,6 +35,6 @@ manyReps.df <- read.csv(file.path(getwd(), "data", "manyReps_df.csv"))
 head(manyReps.df)
 
 ## ------------------------------------------------------------------------
-aggregateData("manyReps", replicate=c("line", "type"), varFunc="sd")
+aggregateData("manyReps", replicate=c("line", "type"), varFunc="se")
 manyReps.ag
 

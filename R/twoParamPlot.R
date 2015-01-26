@@ -22,12 +22,13 @@
 
 #' @author Aleeza C. Gerstein
 
-twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
+twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOImin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
 	if(!(hasArg(type))){
 		cont <- readline(paste("Please select whether dataframe is from 'createDataframe' (df) or `aggregateData (ag) ", sep=""))
 		type <- cont
 	}
-
+	print(orderFactor)
+	print(xlabels)
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
 	if (!overwrite){
@@ -42,43 +43,63 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 				}
 			}
 		}
-		
-	if(type == "ag" & !is.na(order)){
+	print(xlabels)
+	if(type == "ag" & !is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-		var <- substring(names(data)[length(data)], nchar(names(data)[length(data)])-1, nchar(names(data)[length(data)]))
-		if(order=="factor"){
-			ordData <- arrange(data, data[, orderFactor])
-			}
-		if(!order=="factor"){
-			ordData <- data %>%
-						 		mutate(order) %>%
-									arrange(order)			
+		var <- substring(names(data)[length(data)], 1, 2)
+		print(xlabels)
+		if(order[1]=="factor"){
+			ordData<-data[order(data[, orderFactor]),] 
+			if(length(xlabels)==1){
+		 		xlabels <- as.character(ordData[, xlabels])
+			}	
 		}
+		if(!order[1]=="factor"){
+			ordData <-  data[order, ]
+			if(length(xlabels)==1){
+				print("here")
+				 xlabels <- as.character(ordData[, xlabels])
+				 xlabels <- xlabels[order, ]
+				print(xlabels)
+			}
+		}
+		
 	}
-	else{
+	if(is.na(order[1])){
 		if(type=="ag"){
 			var <- substring(names(data)[length(data)], 1, 2)
 			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
+			if(length(xlabels)==1){
+				 xlabels <- as.character(ordData[, xlabels])
 			}
+		}
+		
 		if(type=="df"){
 			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
+			if(length(xlabels)==1){
+				 xlabels <- unique(as.character(ordData[, xlabels]))
 			}
+		}
 	}
 	tols <- ordData[, AUC]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
-	if(length(xlabels)==1){
-		 xlabels <- unique(as.character(ordData[, xlabels]))
-		}
 	if(savePDF){
 		 pdf(t, width=width, height=height)
 		}	
-	
 	par(mfrow=c(2, 1), oma=c(4, 4, 1, 1), mar=c(1, 1, 1, 1))
 	
 	if(type=="ag"){
-		plot(mp[1,], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
-		arrows(mp[1,], ordData[, ZOI]-ordData[, paste(var, ".", ZOI, sep="")], mp[1,], ordData[, ZOI]+ordData[,paste(var, ".", ZOI, sep="")], length=0)
-	axis(1, at=mp[1,], labels=FALSE)
+		if(barplot == TRUE){		
+			plot(mp[1,], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
+			arrows(mp[1,], ordData[, ZOI]-ordData[, paste(var, ".", ZOI, sep="")], mp[1,], ordData[, ZOI]+ordData[,paste(var, ".", ZOI, sep="")], length=0)
+		axis(1, at=mp[1,], labels=FALSE)
+		}
+	else{
+			plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
+			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI]-ordData[, paste(var, ".", ZOI, sep="")], as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI]+ordData[,paste(var, ".", ZOI, sep="")], length=0)
+		axis(1, at=mp[1,], labels=FALSE)
+		}
+		
 	}
 	
 	if(type=="df"){
@@ -92,25 +113,30 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	
 	if(type=="ag"){
 		if(barplot == TRUE){	
-		mp <- barplot(t(tols*100), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
-		box()
+			mp <- barplot(t(tols*100), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
+			box()
+		 	arrows(mp[1,], ordData[,AUC]*100-ordData[, paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+			if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
+			else{
+				axis(1, at=mp[1,], labels=FALSE)
+				text(mp[1,],  -10, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
+			}
 		}
-	else{
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, fAUC], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
-	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
-	}
-	 arrows(mp[1,], ordData[,AUC]*100-ordData[,paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
-		if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 		else{
-			axis(1, at=mp[1,], labels=FALSE)
-			text(mp[1,],  -10, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
-		}
+			plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, fAUC], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
+			axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
+			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[,AUC]*100-ordData[, paste(var, ".", AUC, sep="")]*100, as.numeric(as.factor(ordData[, orderFactor])), ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+			if(is.na(xlabAngle)) 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=xlabels)
+			else{
+				axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
+				text(as.numeric(as.factor(unique(ordData[, orderFactor]))),  -10, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
+			}
+		 }
 	}
 	if(type=="df"){
 		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(xlabels))+0.5))
 		if(is.na(xlabAngle)){
 			 axis(1, at=1:length(xlabels), labels=xlabels)
-			 print("here")
 			 }
 		else{
 			axis(1, at=1:length(xlabels), labels=FALSE)
