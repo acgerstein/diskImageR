@@ -8,10 +8,12 @@
 #' @param tolMax
 #' @param slopeMax
 #' @param xlabels
+#' @param xlabels
 #' @param xlabAngle
 #' @param order
+#' @param orderFactor
 
-#' @deails
+#' @details
 
 #' @return Either a pdf figure figure saved to the 'figures' directory or a figure on screen
 
@@ -62,10 +64,9 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	if(length(xlabels)==1){
 		 xlabels <- unique(as.character(ordData[, xlabels]))
 		}
-	print(xlabels)
 	if(savePDF){
 		 pdf(t, width=width, height=height)
-		}
+		}	
 	par(mfrow=c(2, 1), oma=c(4, 4, 1, 1), mar=c(1, 1, 1, 1))
 	if(type=="ag"){
 		plot(mp[1,], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
@@ -73,7 +74,7 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	axis(1, at=mp[1,], labels=FALSE)
 	}
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	axis(2, las=2, cex.axis=0.8)
@@ -87,13 +88,13 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 		if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 		else{
 			axis(1, at=mp[1,], labels=FALSE)
-			text(1:length(xlabels),  -5, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
+			text(mp[1,],  -10, xlabels, srt = xlabAngle, xpd=NA, adj=0, cex=0.8)
 		}
 	}
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(xlabels))+0.5))
 		if(is.na(xlabAngle)){
-			 axis(1, at=1:length(xlables), labels=xlabels)
+			 axis(1, at=1:length(xlabels), labels=xlabels)
 			 print("here")
 			 }
 		else{
