@@ -71,7 +71,7 @@ readExistingIJ("projectName") 	#can be any project name, does not have to be the
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
 ```{r, fig.width=6, fig.height=4}
-plotRaw("vignette", popUp = TRUE, savePDF = TRUE)
+plotRaw("vignette", popUp = TRUE, savePDF = FALSE)
 ```
 
 ## Run the maximum likelihood analysis 
