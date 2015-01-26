@@ -36,17 +36,17 @@ aggregateData <- function(projectName, replicate = c("line", "type"), varFunc = 
 	dir.create(newdir2, showWarnings = FALSE)
 	dir.create(newdir3, showWarnings = FALSE)
 	agName <- paste(projectName, ".ag", sep="")
-	filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag.csv", sep=""))
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag.csv", sep=""))
 
 	if (!overwrite){
 		if (file.exists(filename)){
-			filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag_2.csv", sep=""))
+			filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_2.csv", sep=""))
 			agName <- paste(projectName, "_2.ag", sep="")
 			if (file.exists(filename)){
 				k <- 2
 				while(file.exists(filename)){
 					k <- k+1
-					filename <- file.path(getwd(), "parameter-files", projectName, paste(projectName, "_ag_", k, ".csv", sep=""))
+					filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ag_", k, ".csv", sep=""))
 					agName <- paste(projectName, "_", k, ".ag", sep="")	
 					}
 				}
