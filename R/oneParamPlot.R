@@ -6,13 +6,13 @@
 #' @inheritParams twoParamPlot
 #' @param barplot whether to plot values as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
 
-#' @details Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. 
+#' @details Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\lnk{aggregateData}} \code{type=="ag"}. 
 
 #' @return Either a pdf figure figure (projectName_ZOI-fAUC.pdf) saved to the 'figures' directory or a figure on screen
 
 #' @export
 
-#' @author Aleeza c. Gerstein
+#' @author Aleeza C. Gerstein
 
 oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot = TRUE){
 	

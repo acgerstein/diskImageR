@@ -5,13 +5,13 @@
 #' @inheritParams plotRaw
 #' @inheritParams twoParamPlot
 
-#' @details Basic parameter plotting functions for three parameter plots (ZOI, fAUC , slope). Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. The default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
+#' @details Basic parameter plotting functions for three parameter plots (ZOI, fAUC , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
 
 #' @return Either a pdf figure figure saved to the 'figures' directory ("projectName_ZOI-slope-fAUC.pdf" or a figure on screen
 
 #' @export
 
-#' @author Aleeza c. Gerstein
+#' @author Aleeza C. Gerstein
 
 
 threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, slopeMax = 160, tolMax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){

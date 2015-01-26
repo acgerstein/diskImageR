@@ -14,13 +14,13 @@
 #' @param orderFactor if \code{order = "factor"} supply the column name to be used to factor. 
 #' @param barplot whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
 
-#' @details Basic parameter plotting functions to plot ZOI and fAUC parameter plots. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. The default is to plot ZOI as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot ZOI as a barplot in this framework). 
+#' @details Basic parameter plotting functions to plot ZOI and fAUC parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot ZOI as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot ZOI as a barplot in this framework). 
 
 #' @return Either a pdf figure figure (projectName_ZOI-fAUC.pdf) saved to the 'figures' directory or a figure on screen
 
 #' @export
 
-#' @author Aleeza c. Gerstein
+#' @author Aleeza C. Gerstein
 
 twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
 	if(!(hasArg(type))){
