@@ -31,34 +31,40 @@ oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 1
 			}
 		}
 
-	if(type == "ag" & !is.na(order)){
+	if(type == "ag" & !is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-		var <- substring(names(data)[length(data)], nchar(names(data)[length(data)])-1, nchar(names(data)[length(data)]))
-		if(order=="factor"){
-			ordData <- arrange(data, data[, orderFactor])
-			}
-		if(order=="custom"){
-			ordData <- data %>%
-						 		mutate(order) %>%
-									arrange(order)			
+		var <- substring(names(data)[length(data)], 1, 2)
+		if(order[1]=="factor"){
+			ordData<-data[order(data[, orderFactor]),] 
+			if(length(xlabels)==1){
+		 		xlabels <- as.character(ordData[, xlabels])
+			}	
 		}
-	}
-	else{
-		if(type=="ag"){
-			var <- substring(names(data)[length(data)], 1, 2)
-			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
+		if(!order[1]=="factor"){
+			ordData <-  data[order, ]
+			if(length(xlabels)==1){
+				 xlabels <- as.character(ordData[, xlabels])
 			}
+		}
+		
+	}
+	if(is.na(order[1])){
+		if(type=="ag"){
+			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
+			var <- substring(names(data)[length(data)], 1, 2)	
+			if(length(xlabels)==1){
+				 xlabels <- as.character(ordData[, xlabels])
+			}
+		}
+		
 		if(type=="df"){
 			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
+			if(length(xlabels)==1){
+				 xlabels <- unique(as.character(ordData[, xlabels]))
 			}
+		}
 	}
 
-
-
-	if(length(xlabels)==1){
-		 print(xlabels)
-		 xlabels <- unique(as.character(ordData[, xlabels]))
-		}
 	print(xlabels)
 	if(grep("ZOI", param)){
 		yrange <- c(ymax, ymin)

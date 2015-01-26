@@ -31,32 +31,42 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 			}
 		}
 		
-	if(type == "ag" & !is.na(order)){
+	if(type == "ag" & !is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-		var <- substring(names(data)[length(data)], nchar(names(data)[length(data)])-1, nchar(names(data)[length(data)]))
-		if(order=="factor"){
-			ordData <- arrange(data, data[, orderFactor])
-			}
-		if(order=="custom"){
-			ordData <- data %>%
-						 		mutate(order) %>%
-									arrange(order)			
+		var <- substring(names(data)[length(data)], 1, 2)
+		if(order[1]=="factor"){
+			ordData<-data[order(data[, orderFactor]),] 
+			if(length(xlabels)==1){
+		 		xlabels <- as.character(ordData[, xlabels])
+			}	
 		}
-	}
-	else{
-		if(type=="ag"){
-			var <- substring(names(data)[length(data)], 1, 2)
-			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
+		if(!order[1]=="factor"){
+			ordData <-  data[order, ]
+			if(length(xlabels)==1){
+				 xlabels <- as.character(ordData[, xlabels])
 			}
+		}
+		
+	}
+	if(is.na(order[1])){
+		if(type=="ag"){
+			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
+			var <- substring(names(data)[length(data)], 1, 2)	
+			if(length(xlabels)==1){
+				 xlabels <- as.character(ordData[, xlabels])
+			}
+		}
+		
 		if(type=="df"){
 			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
+			if(length(xlabels)==1){
+				 xlabels <- unique(as.character(ordData[, xlabels]))
 			}
+		}
 	}
+
 	tols <- ordData[, AUC]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
-	if(length(xlabels)==1){
-		 xlabels <- unique(as.character(ordData[, xlabels]))
-		}
 	if(savePDF){
 		 pdf(t, width=width, height=height)
 		}	
