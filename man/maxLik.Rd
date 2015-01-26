@@ -5,9 +5,9 @@
 \title{Maximum Likelihood Inference}
 \usage{
 maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
-  xplots = 6, height = 10, width = 8, AUC = 50, ZOI = 50,
-  needML = TRUE, popUp = TRUE, plotNameVector = TRUE, overwrite = TRUE,
-  plotAUC = TRUE, savePDF = TRUE)
+  xplots = 5, height = 8, width = 8, AUC = 20, ZOI = "all",
+  needML = TRUE, popUp = TRUE, nameVector = TRUE, overwrite = TRUE,
+  plotAUC = TRUE, savePDF = TRUE, plotSub = NA)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -34,13 +34,15 @@ maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created.}
 
-\item{plotNameVector}{either a logial value or a vector. \code{plotNameVector} = "TRUE" will use the name of the photograph;  \code{plotNameVector} = "FALSE" will suppress adding a title to each plot. Conversely, a vector the same length as the number of photographs can be supplied. Defaults to TRUE.}
+\item{nameVector}{either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.}
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.}
 
 \item{plotAUC}{a logical value indicating whether to plot the AUC or not. Defaults to TRUE}
 
 \item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
+
+\item{plotSub}{allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \link{\code{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.}
 }
 \value{
 Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).

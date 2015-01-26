@@ -35,7 +35,7 @@ Writes the main dataframe with resistance, tolerance and sensitivity parameters
 A dataframe with 11 columns:
 \itemize{
 		\item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
-	 	\item\bold{lines:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
+	 	\item\bold{line:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
 		\item\bold{type:} the location within the \code{name} of the phograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
 		\item\bold{ZOI80, ZOI50, ZOI20:} resistance parameters, coresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
 		\item\bold{fAUC80, fAUC50, fAUC20:} tolerance parameters, coresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points

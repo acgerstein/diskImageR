@@ -32,7 +32,7 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 
 \item{cexY}{a numeric value indicating the size of y-axis text}
 
-\item{nameVector}{either a logial value indicating whether to plot the name of the picture above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.}
+\item{nameVector}{either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.}
 
 \item{plotStandardLoc}{a logical value indicating whether to draw a dashed horizontal line at the standardization point}
 
