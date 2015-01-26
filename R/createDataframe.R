@@ -30,7 +30,7 @@
 createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
-		clearHalo <- cont
+		clearHalo <- as.numeric(cont)
 	}
 	data <- eval(parse(text=projectName))
 	df <- data.frame()

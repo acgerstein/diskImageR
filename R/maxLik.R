@@ -36,7 +36,7 @@
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
-		clearHalo <- cont
+		clearHalo <- as.numeric(cont)
 	}
 	if(!AUC %in% c(80, 50, 20)){
 		stop("Current suppported AUC values = 80, 50, 20")
