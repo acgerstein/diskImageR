@@ -3,11 +3,14 @@
 #' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (ZOI) and tolerance (AUC).
 
 #' @inheritParams plotRaw
+#' @param ZOI what is the ZOI parameter to be plotted ("ZOI20", "ZOI50" or "ZOI80"), default = "ZOI20".
+#' @param AUC what is the AUC parameterto be plotted ("fAUC20", "fAUC50" or "fAUC80"), default = "fAUC20".
+#' @param ZOImin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param ZOImin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param tolMax maximum y axis value for tolerance plot. Note tolerance is coverted to a perent, default = 100.
-#' @param slopeMax maximum y value for sensitivity plot, default = 200
-#' @param xlabels either a vector containing the desired x-axis labels, or a single value indicating the column name that contains the values to use (likely either the 'line' column or one of the type columns), default = "line"
-#' @param xlabAngle indicates whether to print the x axis labels on a angle, if a number is provided this will be the angle used. The defauilt is not to plot on an angle, default = NA
+#' @param slopeMax maximum y value for sensitivity plot, default = 200.
+#' @param xlabels either a vector containing the desired x-axis labels, or a single value indicating the column name that contains the values to use (likely either the 'line' column or one of the type columns), default = "line".
+#' @param xlabAngle indicates whether to print the x axis labels on a angle, if a number is provided this will be the angle used. The defauilt is not to plot on an angle, default = NA.
 #' @param order can be either "factor" or "custom". If custom, supply a numberial vector the same length as the dataframe to indicate the desired order. If factor, supply the column name in \code{ordeFactor} to be used to factor. 
 #' @param orderFactor if \code{order = "factor"} supply the column name to be used to factor. 
 #' @param barplot in singleParamPlot, whether to plot a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = FALSE. In double and triple parameter plots, whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE.
