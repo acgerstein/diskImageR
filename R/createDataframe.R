@@ -29,7 +29,8 @@
 
 createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){
-		stop("Need to specify a picture with a clear halo.")
+		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
+		clearHalo <- cont
 	}
 	data <- eval(parse(text=projectName))
 	df <- data.frame()

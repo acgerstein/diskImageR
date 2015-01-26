@@ -34,10 +34,9 @@
 # See if can do clearHalo automatically somehow
 
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
-	if(needML==TRUE & paste(projectName, ".ML", sep="") %in% ls()){
-		# print(paste(projectName, ".ML", sep="") already exists. Continue to fit maximum likelihood models again or proceed to plotting? (`fit`/`plot`)"
 	if(!(hasArg(clearHalo))){
-		stop("No picture with clear halo specified.")
+		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
+		clearHalo <- cont
 	}
 	if(!AUC %in% c(80, 50, 20)){
 		stop("Current suppported AUC values = 80, 50, 20")
@@ -279,7 +278,6 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 }
 
 .plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE, plotSub = plotSub){
-
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)

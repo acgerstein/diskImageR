@@ -12,7 +12,7 @@
 #' @param order
 #' @param orderFactor
 
-#' @details
+#' @details Basic parameter plotting functions. Supports single (any), double (ZOI and fAUC), and triple (ZOI, fAUC , slope) parameter plots. Input can be the dataframe from either \link{code{createDataframe}} (type=="df") or from \link{code{aggregateData}} (type=="ag")
 
 #' @return Either a pdf figure figure saved to the 'figures' directory or a figure on screen
 
@@ -20,8 +20,12 @@
 
 #' @author Aleeza c. Gerstein
 
-twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){
-	
+twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImin = 30, tolMax = 100, slopeMax = 200, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
+	if(!(hasArg(type))){
+		cont <- readline(paste("Please select whether dataframe is from 'createDataframe' (df) or `aggregateData (ag) ", sep=""))
+		type <- cont
+	}
+
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
 	if (!overwrite){
@@ -80,10 +84,16 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOImi
 	mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
 	mtext(expression(paste(bold(A), " Resistance", sep="")), side=3, adj=0.01)
 	
-	if(type=="ag"){	
+	if(type=="ag"{
+		if(barplot == TRUE){	
 		mp <- barplot(t(tols*100), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
 		box()
-		 arrows(mp[1,], ordData[,AUC]*100-ordData[,paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+		}
+	else{
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, fAUC], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
+	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
+	}
+	 arrows(mp[1,], ordData[,AUC]*100-ordData[,paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
 		if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 		else{
 			axis(1, at=mp[1,], labels=FALSE)
@@ -224,7 +234,7 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 
 }
 
-oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, hist = TRUE){
+oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot = TRUE){
 	
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
@@ -282,7 +292,7 @@ oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 1
 	par(mfrow=c(2, 1), oma=c(4, 4, 1, 1), mar=c(1, 1, 1, 1))
 
 	if(type=="ag"){
-		if(hist!=TRUE){
+		if(barplot!=TRUE){
 			plot(mp[1,], ordData[, param], ylim=yrange, yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
 			arrows(mp[1,], ordData[, ZOI]-ordData[, paste(var, ".", ZOI, sep="")], mp[1,], ordData[, ZOI]+ordData[,paste(var, ".", ZOI, sep="")], length=0)
 		axis(1, at=mp[1,], labels=FALSE)
