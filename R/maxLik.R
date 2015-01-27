@@ -35,7 +35,7 @@
 
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
 	if(!(hasArg(clearHalo))){
-		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
+		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
 		clearHalo <- as.numeric(cont)
 	}
 	if(!AUC %in% c(80, 50, 20)){
@@ -66,11 +66,11 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	dotedge <- diskDiam/2+0.4
 	if(needML){		
 		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
-		cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))
+		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
+		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment", sep=""))
+		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 	}
 	if(!needML){		
 		MLt <- paste(projectName, ".ML", sep="") 
@@ -140,6 +140,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 }
 
 .getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=20){
+	cat(".")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
