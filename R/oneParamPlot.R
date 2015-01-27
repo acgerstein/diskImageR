@@ -51,7 +51,7 @@ oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 1
 	if(is.na(order[1])){
 		if(type=="ag"){
 			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-			var <- substring(names(data)[length(data)], 1, 2)	
+			var <- substring(names(ordData)[length(ordData)], 1, 2)	
 			if(length(xlabels)==1){
 				 xlabels <- as.character(ordData[, xlabels])
 			}
@@ -64,7 +64,7 @@ oneParamPlot <- function(projectName, type, param  = "ZOI20", ymin = 0, ymax = 1
 			}
 		}
 	}
-
+	
 	print(xlabels)
 	if(grep("ZOI", param)){
 		yrange <- c(ymax, ymin)

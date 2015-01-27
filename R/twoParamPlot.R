@@ -63,7 +63,7 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 	if(is.na(order[1])){
 		if(type=="ag"){
 			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-			var <- substring(names(data)[length(data)], 1, 2)	
+			var <- substring(names(ordData)[length(ordData)], 1, 2)	
 			if(length(xlabels)==1){
 				 xlabels <- as.character(ordData[, xlabels])
 			}
