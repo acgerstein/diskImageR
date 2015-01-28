@@ -24,7 +24,7 @@
 
 #' @author Aleeza C. Gerstein
 
-twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  group = "type", ZOImin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE, colours = c(grey(0.3), "grey")){
+twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  group = "type", ZOImin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE, colours = c(grey(0.3), "grey"), 	addLegend = TRUE, legendPlace = "bottomleft", legendText = "default"){
 	if(!(hasArg(type))){
 		cont <- readline(paste("Please select whether dataframe is from 'createDataframe' (df) or `aggregateData (ag) ", sep=""))
 		type <- cont
@@ -45,7 +45,6 @@ twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20
 			}
 		}
 		
-
 	if(type == "ag" & !is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
 		var <- substring(names(data)[length(data)], 1, 2)
@@ -61,8 +60,7 @@ twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20
 		if(type=="ag"){
 			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
 			var <- substring(names(ordData)[length(ordData)], 1, 2)	
-		}
-		
+		}		
 		if(type=="df"){
 			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
 		}
@@ -71,6 +69,13 @@ twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20
 	f2 <- as.character(unique(ordData[, group])[2])
 	ordData1 <- subset(ordData, type == f1 )
 	ordData2 <- subset(ordData, type == f2 )
+	
+	if(addLegend){
+		if(legendText == "default"){
+			legendText <- c(f1, f2)
+			}
+		}
+	
 	if(length(xlabels)==1){
 		xlabels <- unique(as.character(ordData1[, xlabels]))
 			}	
@@ -148,6 +153,10 @@ twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20
 	axis(2, las=2, at=c(0, 20, 40, 60, 80, 100), cex.axis=0.8)
 	mtext("Growth\n above ZOI (%)",  side=2, line=2.5, cex=0.8)
 	mtext(expression(paste(bold(B), " Tolerance", sep="")), side=3, adj=0.01)
+	if(addLegend){
+		legend(legendPlace, legend=legendText, col=colours, pch=19, cex=0.8)
+		}
+	
 	if(savePDF){
 		dev.off()
 		cat(paste("\tFigure saved: ", t, sep=""))
