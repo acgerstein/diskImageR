@@ -99,7 +99,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 
 .curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))} 
 
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=250){
+.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -129,10 +129,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	par.tryD<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		
 
 	mlpoint<-c()
-	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=80000))
-	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))
-	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))
-	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=80000))
+	mlpointA<-diversitree::find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=50000))
+	mlpointB<-diversitree::find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+	mlpointC<-diversitree::find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+	mlpointD<-diversitree::find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
@@ -140,7 +140,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mlpoint
 }
 
-.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=250){
+.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
