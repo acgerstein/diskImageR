@@ -43,7 +43,7 @@ Either a pdf figure figure (projectName_ZOI-fAUC.pdf) saved to the 'figures' dir
 This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (ZOI), sensitivity (slope) and tolerance (AUC).
 }
 \details{
-Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\lnk{aggregateData}} \code{type=="ag"}.
+Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}.
 }
 \author{
 Aleeza C. Gerstein
