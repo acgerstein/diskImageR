@@ -95,7 +95,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=TRUE, popUp = FALSE, savePDF =FALSE, AUC=20)
+maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF =FALSE, AUC=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -125,7 +125,7 @@ If you want to access this dataframe in a later R session you can do so using re
 ### [OPTIONAL] Aggregate replicate pictures
 This function is useful if you have many replicate disk assays and want to calculate their average and variance. The function will calculate the standard error (se), coefficient of variantion (CV) or generic R variance measures (e.g., standard deviation, sd). 
 
-For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation. Note 
+For this example I am loading an existing dataset tha I will call "manyReps". This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two two levels. I can then use the function aggregateData to average among the 12 replicates and calculate their standard deviation. Note that you can "cheat" - as long as you save your dataframe with .df at the end of the name you can run \code{\link{aggregateData}} on any dataframe, not just one imported with \link\code{readExistingDF}}.
 
 ```{r}
 manyReps.df <- read.csv(file.path(getwd(), "data", "manyReps_df.csv"))
@@ -143,6 +143,11 @@ At this point the parameter esitmates and potentially aggregated and variance me
 
 ```{r, fig.width=5, fig.height=4}
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
+```
+
+There is also a built in plotting function to plot the two groups on top/beside of each other, with all the same options as previously described.
+```{r, fig.width=5, fig.height=4}
+twoParamTwoGroupPlot("manyReps", type="df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
 ```
 
 
