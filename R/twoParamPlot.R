@@ -43,39 +43,56 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 			}
 		}
 	
-	if(type == "ag" & !is.na(order[1])){
+	if(type == "ag"){
+		if(!is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-		var <- substring(names(data)[length(data)], 1, 2)
-		if(order[1]=="factor"){
-			ordData<-data[order(data[, orderFactor]),] 
-			if(length(xlabels)==1){
-		 		xlabels <- as.character(ordData[, xlabels])
-			}	
-		}
-		if(!order[1]=="factor"){
-			ordData <-  data[order, ]
-			if(length(xlabels)==1){
-				 xlabels <- as.character(ordData[, xlabels])
+		var <- substring(names(data)[length(data)-2], 1, 2)
+			if(order[1]=="factor"){
+				ordData<-data[order(data[, orderFactor]),] 
+				if(length(xlabels)==1){
+			 		xlabels <- as.character(ordData[, xlabels])
+				}	
+			}
+			if(!order[1]=="factor"){
+				ordData <-  data[order, ]
+				if(length(xlabels)==1){
+					 xlabels <- as.character(ordData[, xlabels])
+				}
 			}
 		}
-		
-	}
-	if(is.na(order[1])){
-		if(type=="ag"){
+		if(is.na(order[1])){
 			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-			var <- substring(names(ordData)[length(ordData)], 1, 2)	
+			var <- substring(names(ordData)[length(ordData)-2], 1, 2)	
 			if(length(xlabels)==1){
 				 xlabels <- as.character(ordData[, xlabels])
 			}
 		}
-		
-		if(type=="df"){
-			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
+	}	
+	if(type=="df"){
+		if(!is.na(order[1])){
+			data <- eval(parse(text=paste(projectName, ".df", sep="")))			
+			if(order[1]=="factor"){
+				ordData<-data[order(data[, orderFactor]),] 
+				if(length(xlabels)==1){
+			 		xlabels <- unique(as.character(ordData[, xlabels]))
+				}	
+			}
+			if(!order[1]=="factor"){
+				ordData <-  data[order, ]
+				if(length(xlabels)==1){
+					 xlabels <- unique(as.character(ordData[, xlabels]))
+				}
+			}
+		}
+		if(is.na(order[1])){
+			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))	
 			if(length(xlabels)==1){
 				 xlabels <- unique(as.character(ordData[, xlabels]))
 			}
 		}
-	}
+	}	
+		
+			
 	tols <- ordData[, AUC]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
 	if(savePDF){
@@ -98,7 +115,7 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 	}
 	
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(as.numeric(as.factor(ordData[, orderFactor]))))+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	
@@ -129,7 +146,7 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 		 }
 	}
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(xlabels))+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(as.numeric(as.factor(ordData[, orderFactor]))))+0.5))
 		if(is.na(xlabAngle)){
 			 axis(1, at=1:length(xlabels), labels=xlabels)
 			 }
