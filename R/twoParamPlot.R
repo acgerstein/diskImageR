@@ -29,15 +29,15 @@ twoParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  ZOIm
 	}
 
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
-	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
+	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC-", type, ".pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_2.pdf", sep=""))
+			t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_2-", type, ".pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_", k, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_", k, "-", type, ".pdf", sep=""))
 					}
 				}
 			}
