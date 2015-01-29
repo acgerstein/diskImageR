@@ -33,7 +33,6 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 	
 	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)
 	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")
-	dir.create(file.path(outputDir), showWarnings= FALSE)	
 	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	
 
 	if(length(dir(outputDir)) > 0){
@@ -46,6 +45,7 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 		}
 	}
 	
+	dir.create(file.path(outputDir), showWarnings= FALSE)
 	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)
 	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)
 	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)
@@ -124,7 +124,6 @@ function(filename) {
    names(d) <- c("count", "distance","x")
    d
  }
-
 
 
 
