@@ -31,20 +31,19 @@ twoParamTwoGroupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20
 	}
 
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
-	t <- file.path("figures", projectName,  paste(projectName, "_ZOI-fAUC.pdf", sep=""))
+	t <- file.path("figures", projectName,  paste(projectName, group, "_ZOI-fAUC-", type, ".pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_2.pdf", sep=""))
+			t <- file.path("figures", projectName, paste(projectName, group,  "_ZOI-fAUC_2-", type, ".pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_ZOI-fAUC_", k, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, group, "_ZOI-fAUC_", k, "-", type, ".pdf", sep=""))
 					}
 				}
 			}
-		}
-		
+		}		
 	if(type == "ag" & !is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
 		var <- substring(names(data)[length(data)], 1, 2)
