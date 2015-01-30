@@ -14,7 +14,7 @@
 #' @author Aleeza C. Gerstein
 
 
-aggregateData <- function(projectName, replicate = c("line", "type"), varFunc = "se", overwrite = TRUE){
+aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "type"), overwrite = TRUE){
 	dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
 	
 	if (varFunc == "se") var <- se
