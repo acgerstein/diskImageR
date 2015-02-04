@@ -147,7 +147,7 @@ twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 
 There is also a built in plotting function to plot the two groups on top/beside of each other, with all the same options as previously described.
 ```{r, fig.width=5, fig.height=4}
-twoParamTwoGroupPlot("manyReps", type="df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
+groupPlot("manyReps", type="df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
 ```
 
 
