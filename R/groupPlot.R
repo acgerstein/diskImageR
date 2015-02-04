@@ -31,39 +31,38 @@ groupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  group =
 	}
 
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
-	t <- file.path("figures", projectName,  paste(projectName, group, "_ZOI-fAUC-", type, ".pdf", sep=""))
+	t <- file.path("figures", projectName,  paste(projectName, "_", group, "_ZOI-fAUC-", type, ".pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName, paste(projectName, group,  "_ZOI-fAUC_2-", type, ".pdf", sep=""))
+			t <- file.path("figures", projectName, paste(projectName,"_",  group,  "_ZOI-fAUC_2-", type, ".pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, group, "_ZOI-fAUC_", k, "-", type, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, "_", group, "_ZOI-fAUC_", k, "-", type, ".pdf", sep=""))
 					}
 				}
 			}
 		}		
-	if(type == "ag" & !is.na(order[1])){
+	if(type == "ag"){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
 		var <- substring(names(data)[length(data)], 1, 2)
+	}
+	if(type=="df"){
+		data <- eval(parse(text=paste(projectName, ".df", sep="")))
+	}
+	if (!is.na(order[1])){
 		if(order[1]=="factor"){
 			ordData<-data[order(data[, orderFactor]),] 
 			}
 		if(!order[1]=="factor"){
 			ordData <-  data[order, ]
 		}
-		
 	}
 	if(is.na(order[1])){
-		if(type=="ag"){
-			ordData <- eval(parse(text=paste(projectName, ".ag", sep="")))	
-			var <- substring(names(ordData)[length(ordData)], 1, 2)	
-		}		
-		if(type=="df"){
-			ordData <- eval(parse(text=paste(projectName, ".df", sep="")))
-		}
+		ordData <- data
 	}
+		
 	f1 <- as.character(unique(ordData[, group])[1])
 	f2 <- as.character(unique(ordData[, group])[2])
 	ordData1 <- subset(ordData, type == f1 )
@@ -95,7 +94,7 @@ groupPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20",  group =
 		axis(1, at=apply(mp, 2, mean), labels=FALSE)		
 		}
 		else{
-			plot(as.numeric(as.factor(ordData1[, orderFactor])), ordData1[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=colours[1], xlim=c(0, max(mp)+1), cex=1.2)
+			plot(as.numeric(ordData1[, orderFactor]), ordData1[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=colours[1], xlim=c(0, max(mp)+1), cex=1.2)
 			points(as.numeric(as.factor(ordData2[, orderFactor]))+0.2, ordData2[, ZOI], col=colours[2], cex=1.2, pch=19)
 			arrows(as.numeric(as.factor(ordData1[, orderFactor])), ordData1[, ZOI]-ordData1[, paste(var, ".", ZOI, sep="")], as.numeric(as.factor(ordData1[, orderFactor])), ordData1[, ZOI]+ordData1[,paste(var, ".", ZOI, sep="")], length=0)
 			arrows(as.numeric(as.factor(ordData2[, orderFactor]))+0.2, ordData2[, ZOI]-ordData2[, paste(var, ".", ZOI, sep="")], as.numeric(as.factor(ordData2[, orderFactor]))+0.2, ordData2[, ZOI]+ordData2[,paste(var, ".", ZOI, sep="")], length=0)
