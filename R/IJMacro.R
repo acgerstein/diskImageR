@@ -55,7 +55,6 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 	if(.Platform$OS.type=="windows"){
 		IJarguments <- paste(paste(pictureDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		
 		script <- gsub("Program Files", "progra~1", script)
-		# cmd <- "C:/progra~1/ImageJ/ij.jar"
 		cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"
 		args <- paste("-batch", script, IJarguments)
 		args <- gsub("/", "\\\\", args)
