@@ -23,7 +23,7 @@ addType <- function(projectName, typePlace=3, typeName="type2"){
 	dfName <- paste(projectName, ".df", sep="")
 	cat(paste(dfName, " has been written to the global environment", sep=""))
 	cat(paste("\nSaving file: ", filename,  sep=""))
-	write.csv(dfName, file=filename, row.names=FALSE)		
+	write.csv(dfnew, file=filename, row.names=FALSE)		
 	cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 	assign(dfName, dfnew, envir=globalenv())
 	}
