@@ -20,9 +20,15 @@ addType <- function(projectName, typePlace=3, typeName="type2"){
 	if(typeName != "type2") names(dfnew)[place] <- typeName
 
 	filename <- file.path(getwd(), "parameter_files", paste(projectName, "_df.csv", sep="")	)
+	foldername <- file.path(getwd(), "parameter_files", projectName) 
 	dfName <- paste(projectName, ".df", sep="")
 	cat(paste(dfName, " has been written to the global environment", sep=""))
 	cat(paste("\nSaving file: ", filename,  sep=""))
+	newdir2 <- file.path(getwd(), "parameter_files", projectName)
+	if (!file.exists(newdir2)){		
+		dir.create(newdir2, showWarnings = FALSE)
+		cat(paste("\nCreating new directory: ", newdir2), sep="")
+		}	
 	write.csv(dfnew, file=filename, row.names=FALSE)		
 	cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 	assign(dfName, dfnew, envir=globalenv())
