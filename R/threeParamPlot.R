@@ -71,12 +71,12 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 		}	
 	par(mfrow=c(3, 1), oma=c(4, 4, 1, 1), mar=c(1, 1, 1, 1))
 	if(type=="ag"){
-		plot(mp[1,], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
+		plot(mp[1,], ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
 		arrows(mp[1,], ordData[, ZOI]-ordData[, paste(var, ".", ZOI, sep="")], mp[1,], ordData[, ZOI]+ordData[,paste(var, ".", ZOI, sep="")], length=0)
 	axis(1, at=mp[1,], labels=FALSE)
 	}
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, ZOI], ylim=c(ZOImin, 0), yaxt="n", xaxt="n", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	axis(2, las=2, cex.axis=1)
@@ -84,8 +84,8 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 	mtext(expression(paste(bold(A), " Resistance", sep="")), side=3, adj=0.01)
 
 	if(type=="ag"){
-		plot(mp[1,], ordData[, "slope"], ylim=c(0, slopeMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
-		arrows(mp[1,], ordData[, "slope"]-ordData[, paste(var, ".slope", sep="")], mp[1,], ordData[, ZOI]+ordData[,paste(var, ".slope", sep="")], length=0)
+		plot(mp[1,], ordData[, "slope"], ylim=c(0, slopeMax), yaxt="n", xaxt="n",  pch=19, xlab="", ylab="", col=grey(0.3), 	xlim=c(0, max(mp)+1), cex=1.4)
+		arrows(mp[1,], ordData[, "slope"]-ordData[, paste(var, ".slope", sep="")], mp[1,], ordData[, "slope"]+ordData[,paste(var, ".slope", sep="")], length=0)
 	axis(1, at=mp[1,], labels=FALSE)
 	}
 	if(type=="df"){
@@ -93,7 +93,7 @@ threeParamPlot <- function(projectName, type, ZOI = "ZOI20", AUC = "fAUC20", ZOI
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	axis(2, las=2, cex.axis=1)
-	title <- as.list(expression("slope" , paste( "(", Delta, "intensity/", Delta, "distance)", sep="")))
+	title <- as.list(expression("slope" , paste( "(at ", od[50], ")", sep="")))
 	mtext(do.call(expression, title), side=2, cex=0.8, line = c(3.75,2.5))
 	mtext(expression(paste(bold(B), " Sensitivity", sep="")), side=3, adj=0.01)
 		
