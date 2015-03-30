@@ -45,10 +45,10 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 \item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
 }
 \value{
-A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
+A pdf file with one plot for each photograph is saved to visualize the results of the ImageJ analyses
 }
 \description{
-This function creates a pdf figure of plots showing the results of the imageJ analysis, with one plot for each picture. This function is primarily for visualization purposes.
+This function creates a figure of plots showing the results of the ImageJ analysis, with one plot for each plate photo. This function is primarily for visualization purposes.
 }
 \author{
 Aleeza C. Gerstein
