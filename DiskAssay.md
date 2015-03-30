@@ -27,24 +27,24 @@ Finally, photographs should be cropped carefully around the disk.
 
 <b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). 
 
-## Run the imageJ macro on the set of photographs
+## Run the ImageJ macro on the set of photographs
 The first step in the diskImageR pipeline is to run the ImageJ macro on the photograph directory. 
 
-<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
+<b> Important! </b> ImageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to ImageJ, as this will be needed for the first function.
 
-From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
+From each photograph, the macro (in ImageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select 
+This step can be completed using one of two functions. To run the ImageJ macro through a user-interface with pop-up boxes to select 
 where you want the main project directory to be and where to find the location of the photograph directory:
 ```r
-runIJ("projectName")
+IJMacro("projectName", manual=FALSE)
 ```
 
 Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
 
 
 ```r
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
+IJMacro("vignette", manual=TRUE, projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
 ```
 
 ```
