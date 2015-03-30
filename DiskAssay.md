@@ -28,7 +28,7 @@ Finally, photographs should be cropped carefully around the disk.
 <b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). 
 
 ## Run the imageJ macro on the set of photographs
-The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
+The first step in the diskImageR pipeline is to run the ImageJ macro on the photograph directory. 
 
 <b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
 
