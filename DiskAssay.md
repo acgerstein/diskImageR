@@ -55,7 +55,7 @@ IJMacro("vignette", manual=TRUE, projectDir= getwd(), pictureDir = file.path(get
 ## [1] "p1_30_a" "p2_30_a"
 ## 
 ```
-Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?IJMacro for more details.
 
 If you want to access the output of the imageJ macro in a later R session you can with
 ```r
