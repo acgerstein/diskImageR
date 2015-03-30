@@ -51,6 +51,6 @@ A pdf file with one plot for each photograph is saved to visualize the results o
 This function creates a pdf figure of plots showing the results of the imageJ analysis, with one plot for each picture. This function is primarily for visualization purposes.
 }
 \author{
-Aleeza c. Gerstein
+Aleeza C. Gerstein
 }
 
