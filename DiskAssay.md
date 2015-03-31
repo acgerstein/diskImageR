@@ -103,6 +103,8 @@ vignette.ML has been written to the global environment
 vignette.ML2 has been written to the global environment
 ```
 
+Note that this function may take several minutes to run.
+
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 ### [OPTIONAL] Save the maximum likelihood results
