@@ -95,12 +95,14 @@ We substract the plate background intensity from all values; this is common acro
 
 
 ```r
-> maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
+```
 
-..
-vignette.ML has been written to the global environment
-..
-vignette.ML2 has been written to the global environment
+```
+## ..
+## vignette.ML has been written to the global environment
+## ..
+## vignette.ML2 has been written to the global environment
 ```
 
 Note that this function may take several minutes to run.
