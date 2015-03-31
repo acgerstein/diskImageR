@@ -95,12 +95,12 @@ We substract the plate background intensity from all values; this is common acro
 
 
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
-```
+> maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
 
-```
-## 
-## TODO what is the output?
+..
+vignette.ML has been written to the global environment
+..
+vignette.ML2 has been written to the global environment
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
