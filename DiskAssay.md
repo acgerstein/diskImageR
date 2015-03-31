@@ -95,12 +95,12 @@ We substract the plate background intensity from all values; this is common acro
 
 
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
 ```
 
 ```
 ## 
-## Using existing ML results vignette.ML & vignette.ML2
+## TODO what is the output?
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
