@@ -605,3 +605,12 @@ check.bounds <- function(lower, upper, x0=NULL) {
 }
 
 invert <- function(f) function(...) -f(...)
+
+boxconstrain <- function(f, lower, upper, fail.value=-Inf) {
+  function(x, ...) {
+    if ( any(x < lower | x > upper) )
+      fail.value
+    else
+      f(x, ...)
+  }
+}
