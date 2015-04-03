@@ -596,3 +596,10 @@ do.mle.search.subplex <- function(func, x.init, control, lower, upper) {
   
   ans
 }
+
+check.bounds <- function(lower, upper, x0=NULL) {
+  if ( !is.null(x0) && (any(x0 < lower) || any(x0 > upper)) )
+    stop("Starting parameter falls outside of problems bounds")
+  if ( any(lower >= upper) )
+    stop("'upper' must be strictly greater than 'lower'")
+}
