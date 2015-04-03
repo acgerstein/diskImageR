@@ -27,24 +27,24 @@ Finally, photographs should be cropped carefully around the disk.
 
 <b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). 
 
-## Run the imageJ macro on the set of photographs
-The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
+## Run the ImageJ macro on the set of photographs
+The first step in the diskImageR pipeline is to run the ImageJ macro on the photograph directory. 
 
-<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function.
+<b> Important! </b> ImageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to ImageJ, as this will be needed for the first function.
 
-From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
+From each photograph, the macro (in ImageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-This step can be completed using one of two functions. To run the imageJ macro through a user-interface with pop-up boxes to select 
+This step can be completed using one of two functions. To run the ImageJ macro through a user-interface with pop-up boxes to select 
 where you want the main project directory to be and where to find the location of the photograph directory:
 ```r
-runIJ("projectName")
+IJMacro("projectName", manual=FALSE)
 ```
 
 Conversely, to avoid pop-up boxes you can use the alternate function to supply the desired main project directory and photograph directory locations:
 
 
 ```r
-runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
+IJMacro("vignette", manual=TRUE, projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""), imageJLoc = "loc2")
 ```
 
 ```
@@ -55,7 +55,7 @@ runIJManual("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pi
 ## [1] "p1_30_a" "p2_30_a"
 ## 
 ```
-Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?runIJ for more details.
+Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath. See ?IJMacro for more details.
 
 If you want to access the output of the imageJ macro in a later R session you can with
 ```r
@@ -71,18 +71,20 @@ plotRaw("vignette", savePDF=FALSE)
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
-## Run the maximum likelihood analysis 
-The next step is to use maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.
+## Run the model fitting analysis 
+The next step is to use a maximum likelihood method to fit the logistic and double logistic equations to the output of ImageJ. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4.
+
 $$
 y = \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
 $$
 
 We often observed disk assays that deviated from the single logistic, either rising more linearly than expected at low cell density, or with an intermediate asymptote around the midpoint. To fascilitate fitting these curves, we fit a double logistic, which allows greater flexibility. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data, rather than to test what model fits better.
+
 $$
 y = \frac{asymA*exp(scalA(x-od50A))}{1+exp(scalA(x-od50A))}+\frac{asymB*exp(scalB(x-od50B))}{1+exp(scalB(x-od50B))}+N(0, \sigma)
 $$
 
-From these functions we substract off the plate background intensity from all values; this is common across all pictures taken at the same time and is determined from the observed pixel intensity on a plate with a clear halo (specified by the user). We then use the parameters identified in the logistic equations to determine the resistance parameters.
+We substract the plate background intensity from all values; this is common across all pictures taken at the same time and is determined from the observed pixel intensity on a plate with a clear halo (specified by the user). We then use the parameters identified in the logistic equations to determine the resistance parameters.
 
 * <b>Resistance</b>
 	: asymA+asymB are added together to determine the maximum level of intensity (= cell density) achieved on each plate. The level of resistance (zone of inhibition, ZOI), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occurs (corresponding to *ZOI80*, *ZOI50*, and *ZOI20*)
@@ -93,13 +95,17 @@ From these functions we substract off the plate background intensity from all va
 
 
 ```r
-maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all", needML=FALSE)
+maxLik("vignette", clearHalo=1, savePDF=FALSE, ZOI="all")
 ```
 
 ```
-## 
-## Using existing ML results vignette.ML & vignette.ML2
+## ..
+## vignette.ML has been written to the global environment
+## ..
+## vignette.ML2 has been written to the global environment
 ```
+
+Note that this function may take several minutes to run.
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
