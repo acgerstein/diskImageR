@@ -17,8 +17,10 @@
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.
 #' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE
+#' @param plotParam a logical value indicating whether to save plots containing, at minimum, the fitted logistic equatoin and specified ZOI levels to plot, but may also include the AUC \code{plotAUC} = "TRUE" or the components of the logistic equation \code{plotCompon} = "TRUE". Defaults to TRUE.
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
+#' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
 #'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}
@@ -33,7 +35,7 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
@@ -81,7 +83,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		
 		}
 
-	if(plotAUC){
+	if(plotParam){
 		clearHaloData <- data[[clearHalo]]
 		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
 		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
@@ -90,7 +92,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 		 			
-		.plotAUC(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF, plotSub = plotSub)
+		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
 }
@@ -198,7 +200,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mlpoint
 }
 
-.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE){
+.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE, plotAUC = TRUE, plotCompon=FALSE){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -275,11 +277,22 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
 			}			
+		if(plotCompon){
+			xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 
+			yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
+			yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)						
+			yy1plot <- (yy2.1 +min(data[[i]]$x))
+			yy1plot[yy1plot <0] <-0
+			yy2plot <- (yy2.2 +min(data[[i]]$x))
+			yy2plot[yy2plot <0] <-0
+			points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)	
+			points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)	
+			}		
 		}
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotAUC <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE, plotSub = plotSub){
+.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)
@@ -316,7 +329,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	# }
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (k in plotSub){
-			.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC)
+			.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC, plotCompon=plotCompon)
 		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
