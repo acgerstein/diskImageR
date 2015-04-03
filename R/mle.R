@@ -537,3 +537,19 @@ expand.parameters <- function(p, lik.new, repl=0,
   p.new[setdiff(target, names(p))] <- repl
   p.new
 }
+
+protect <- function(f, fail.value.default=NULL) {
+  function(..., fail.value=fail.value.default, finite=TRUE) {
+    if ( is.null(fail.value) )
+      f(...)
+    else {
+      ret <- try(f(...), silent=TRUE)
+      failed <- (inherits(ret, "try-error") ||
+                 (finite && !is.finite(ret)))
+      if ( failed )
+        fail.value
+      else
+        ret
+    }
+  }
+}
