@@ -603,3 +603,5 @@ check.bounds <- function(lower, upper, x0=NULL) {
   if ( any(lower >= upper) )
     stop("'upper' must be strictly greater than 'lower'")
 }
+
+invert <- function(f) function(...) -f(...)
