@@ -614,3 +614,22 @@ boxconstrain <- function(f, lower, upper, fail.value=-Inf) {
       f(x, ...)
   }
 }
+
+set.defaults <- function(f, ..., defaults=NULL) {
+  dots <- match.call(expand.dots=FALSE)[["..."]]
+  if ( missing(defaults) )
+    defaults <- dots
+  else if ( is.list(defaults) )
+    defaults <- c(dots, defaults)
+  else
+    stop("'defaults' must be a list")
+
+  if ( is.null(defaults) )
+    return(f)
+  if ( !all(names(defaults) %in% names(formals(f))) )
+    stop("Unknown defaults")
+  att <- attributes(f)
+  formals(f)[names(defaults)] <- defaults
+  attributes(f) <- att[names(att) != "srcref"]
+  f
+}
