@@ -6,8 +6,8 @@ Description: diskImageR is a pipeline to analyze photographs of disk diffusion p
 Depends: R (>= 3.0.3)
 License: GPL-3 
 LazyData: true
+Depends: subplex
 Imports:  zoo,
-    subplex,
     tcltk
 Suggests: knitr
 VignetteBuilder: knitr
