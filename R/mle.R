@@ -553,3 +553,46 @@ protect <- function(f, fail.value.default=NULL) {
     }
   }
 }
+
+do.mle.search.optim <- function(func, x.init, control, lower, upper) {
+  control <- modifyList(list(fnscale=-1,
+                             ndeps=rep(1e-5, length(x.init)),
+                             optim.method="L-BFGS-B"), control)
+
+  optim.method <- control$optim.method
+  control.optim <- control[c("fnscale", "ndeps")]
+
+  ans <- optim(x.init, func, method=optim.method,
+               control=control.optim, lower=lower, upper=upper)
+  names(ans)[names(ans) == "value"] <- "lnLik"  
+  ans$optim.method <- optim.method
+  
+  if ( ans$convergence != 0 )
+    warning("Convergence problems in find.mle (optim): ",
+            tolower(ans$message))
+
+  ans
+}
+
+do.mle.search.subplex <- function(func, x.init, control, lower, upper) {
+  ## By default, lower tolerance-- more likely to be met
+  control <- modifyList(list(reltol=.Machine$double.eps^0.25,
+                             parscale=rep(.1, length(x.init))),
+                        control)
+
+  check.bounds(lower, upper, x.init)
+  if ( any(is.finite(lower) | is.finite(upper)) )
+    func2 <- invert(boxconstrain(func, lower, upper))
+  else
+    func2 <- invert(func)
+
+  ans <- subplex(x.init, func2, control)
+  ans$value <- -ans$value
+  names(ans)[names(ans) == "value"] <- "lnLik"
+
+  if ( ans$convergence != 0 )
+    warning("Convergence problems in find.mle (subplex): ",
+            tolower(ans$message))
+  
+  ans
+}
