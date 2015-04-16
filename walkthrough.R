@@ -1,3 +1,4 @@
+install.packages("devtools")
 library(devtools)
 install_github("acgerstein/diskImageR")
 library(diskImageR)
