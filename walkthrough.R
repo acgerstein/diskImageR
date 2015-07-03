@@ -1,7 +1,17 @@
+#install the devtools package (only need to do once)
 install.packages("devtools")
+
+#load devtools
 library(devtools)
-install_github("acgerstein/diskImageR")
+
+#install the package and vignette (need to do everytime)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE) 
+
+#load diskImageR
 library(diskImageR)
+
+#For an overview
+browseVignettes("diskImageR")
 
 #Run the ImageJ analysis component, save output
 IJMacro("projectName"))
