@@ -6,6 +6,7 @@
 #' @param replicate a character vector indicating which the column names that contain which factors to use. Defaults to c("line", "type"). Note that if the typeVector name was changed in \code{createDataframe} this should be reflected here.
 #' @param varFunc what type of variation measurment to perform. Currently supports \code{varFunc} = "se" to calculate the standard error, \code{varFun} = "cv" to calculate the coefficient of variation or any built-in R function (e.g., sd). 
 #' @param overwrite a logical value indicating whether to overwrite existing aggregate dataframe for the same project name. This allows you to save different dataframes averaging across different factors or using different variance measures
+#' @param save denotes whether to overwrite the existing .csv file or just update the .df in the R global environment. Defaults to TRUE.
 
 #' @return A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory. 
 
@@ -14,7 +15,7 @@
 #' @author Aleeza C. Gerstein
 
 
-aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "type"), overwrite = TRUE){
+aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "type"), overwrite = TRUE, save=TRUE){
 	dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
 	
 	if (varFunc == "se") var <- se
@@ -53,14 +54,13 @@ aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "ty
 			}
 		}
 
-	
-	write.csv(ag, file=filename, row.names=FALSE)	
-
-	cat(paste("\n", agName, " has been written to the global environment", sep=""))
-	cat(paste("\n\nSaving file: ", filename, sep=""))
-	
-	 assign(agName, ag, envir=globalenv())
+	if(save){
+		write.csv(ag, file=filename, row.names=FALSE)	
+		cat(paste("\n", agName, " has been written to the global environment", sep=""))
+		cat(paste("\n\nSaving file: ", filename, sep=""))
 	}
+	 assign(agName, ag, envir=globalenv())
+}
 	
 cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))
 se <- function(x, na.rm=TRUE) sd(x)/sqrt(length(x))
