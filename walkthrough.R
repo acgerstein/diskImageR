@@ -1,6 +1,6 @@
 #install the devtools package (only need to do once)
 install.packages("devtools")
-
+install.packages("rmarkdown")
 #load devtools
 library(devtools)
 
@@ -14,7 +14,8 @@ library(diskImageR)
 browseVignettes("diskImageR")
 
 #Run the ImageJ analysis component, save output
-IJMacro("projectName"))
+#Bring each picture in the specified directory into imageJ; find the center of the disk; draw a line and find the pixel intensity, repeat every 5 degrees (72 lines); average
+IJMacro("projectName")
 
 #Plot the result of ImageJ analysis (averaged among 72 lines draft outward from the center of the diffusion disk)
 plotRaw("projectName")
