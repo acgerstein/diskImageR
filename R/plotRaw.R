@@ -97,7 +97,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 		if (i %in% seq(1, k*yplots*xplots, by=xplots)) {axis(2, cex.axis=cexY, las=2)}
 			k <- k+1}
 		if(showNum){
-			text(maxDist*0.95, maxDist*0.95, i)
+			text(xmax*0.95, xmax*0.95, i)
 		}
 	}
 	mtext("Distance from center of disk (mm)", side= 1, outer=TRUE, line=2)
