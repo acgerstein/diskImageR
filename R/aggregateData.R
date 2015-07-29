@@ -22,15 +22,15 @@ aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "ty
 	if (varFunc == "cv") var <- cv
 	if (!varFunc %in% c("se", "cv"))  var <- eval(parse(text=varFunc))
 	
-	temp <- aggregate(dataframe[c("ZOI80", "ZOI50", "ZOI20", "fAUC80", "fAUC50", "fAUC20", "slope")], dataframe[replicate], mean, na.rm=TRUE)
-	t <- apply(dataframe[,c("ZOI80", "ZOI50", "ZOI20", "fAUC80", "fAUC50", "fAUC20", "slope")], 2, function(x) aggregate(x, dataframe[replicate], var))
+	temp <- aggregate(dataframe[c("RAD80", "RAD50", "RAD20", "FoG80", "FoG50", "FoG20", "slope")], dataframe[replicate], mean, na.rm=TRUE)
+	t <- apply(dataframe[,c("RAD80", "RAD50", "RAD20", "FoG80", "FoG50", "FoG20", "slope")], 2, function(x) aggregate(x, dataframe[replicate], var))
 	 var <- data.frame(t[[1]]$x, t[[2]]$x, t[[3]]$x, t[[4]]$x, t[[5]]$x, t[[6]]$x, t[[7]]$x)
 	names(var) <- paste(varFunc, names(t), sep=".")
 	ag <- cbind(temp, var)
 	
-	ag[,names(ag) %in% c("ZOI80", "ZOI50", "ZOI20", "slope")] <- round(ag[,names(ag) %in% c("ZOI80", "ZOI50", "ZOI20", "slope")])
-	ag[,	names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))] <- round(ag[,names(ag) %in% c("fAUC80", "fAUC50", "fAUC20", paste(varFunc, "ZOI80", sep="."), paste(varFunc, "ZOI50", sep="."), paste(varFunc, "ZOI20", sep="."), paste(varFunc, "slope", sep="."))], digits=2)	
-	ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))] <- round(ag[, names(ag) %in% c(paste(varFunc, "fAUC80", sep="."), paste(varFunc, "fAUC50", sep="."), paste(varFunc, "fAUC20", sep="."))], digits=4)	
+	ag[,names(ag) %in% c("RAD80", "RAD50", "RAD20", "slope")] <- round(ag[,names(ag) %in% c("RAD80", "RAD50", "RAD20", "slope")])
+	ag[,	names(ag) %in% c("FoG80", "FoG50", "FoG20", paste(varFunc, "RAD80", sep="."), paste(varFunc, "RAD50", sep="."), paste(varFunc, "RAD20", sep="."), paste(varFunc, "slope", sep="."))] <- round(ag[,names(ag) %in% c("FoG80", "FoG50", "FoG20", paste(varFunc, "RAD80", sep="."), paste(varFunc, "RAD50", sep="."), paste(varFunc, "RAD20", sep="."), paste(varFunc, "slope", sep="."))], digits=2)	
+	ag[, names(ag) %in% c(paste(varFunc, "FoG80", sep="."), paste(varFunc, "FoG50", sep="."), paste(varFunc, "FoG20", sep="."))] <- round(ag[, names(ag) %in% c(paste(varFunc, "FoG80", sep="."), paste(varFunc, "FoG50", sep="."), paste(varFunc, "FoG20", sep="."))], digits=4)	
 	
 	newdir2 <- file.path(getwd(), "parameter_files", sep="")		
 	newdir3 <- file.path(getwd(), "parameter_files", projectName)	

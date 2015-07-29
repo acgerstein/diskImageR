@@ -1,23 +1,23 @@
 #' Maximum Likelihood Inference
 
-#' @description Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, tolerance, and sensitivity
+#' @description Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, perseverence, and sensitivity
 
 #' @param projectName the short name in use for the project.
-#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine tolerance, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. 
+#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine perseverence, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. 
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.
 #' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting
 #' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting
 #' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting
 #' @param width a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting
-#' @param AUC a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{AUC} = "80" (80\% reduction in growth), \code{AUC} = "50" (50\% reduction in growth), and \code{AUC} = "20" (20\% reduction in growth) are supported.
-#' @param ZOI a numeric value indicating the the critical level of the zone of inhibition (resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{ZOI} = "80" (80\% reduction in growth), \code{ZOI} = "50" (50\% reduction in growth), \code{ZOI} = "20" (20\% reduction in growth), and \code{ZOI} = "all" are supported.
+#' @param RAD a numeric value indicating the the critical level of the radius of inhibition (i.e., resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), \code{RAD} = "20" (20\% reduction in growth), and \code{RAD} = "all" are supported.
+#' @param FoG a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{FoG} = "80" (80\% reduction in growth), \code{FoG} = "50" (50\% reduction in growth), and \code{FoG} = "20" (20\% reduction in growth) are supported. Note, the critical level for FoG can be different than that chosen for RAD.
 #' @param needML a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created.
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.
-#' @param plotAUC a logical value indicating whether to plot the AUC or not. Defaults to TRUE
-#' @param plotParam a logical value indicating whether to save plots containing, at minimum, the fitted logistic equatoin and specified ZOI levels to plot, but may also include the AUC \code{plotAUC} = "TRUE" or the components of the logistic equation \code{plotCompon} = "TRUE". Defaults to TRUE.
+#' @param plotFoG a logical value indicating whether to plot the FoG or not. Defaults to TRUE
+#' @param plotParam a logical value indicating whether to save plots containing, at minimum, the fitted logistic equatoin and specified RAD levels to plot, but may also include the FoG \code{plotFoG} = "TRUE" or the components of the logistic equation \code{plotCompon} = "TRUE". Defaults to TRUE.
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
@@ -25,9 +25,9 @@
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
 #'  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}
 #'  \deqn{double ('ML2'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, \sigma)}
-#' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
+#' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus perseverence, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
 
-#' @return Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).
+#' @return Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (perseverence).
 
 #' @export
 
@@ -35,17 +35,17 @@
 
 # See if can do clearHalo automatically somehow
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, AUC=20, ZOI="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotAUC = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20, RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
 		clearHalo <- as.numeric(cont)
 	}
-	if(!AUC %in% c(80, 50, 20)){
-		stop("Current suppported AUC values = 80, 50, 20")
+	if(!FoG %in% c(80, 50, 20)){
+		stop("Current suppported FoG values = 80, 50, 20")
 		}
-	if(!ZOI %in% c(80, 50, 20, "all")){
-		stop("Current suppported ZOI values = 80, 50, 20")
+	if(!RAD %in% c(80, 50, 20, "all")){
+		stop("Current suppported RAD values = 80, 50, 20")
 		}
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
@@ -93,7 +93,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 		 			
-		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, AUC=AUC, ZOI=ZOI, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotAUC = plotAUC, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
 }
@@ -201,7 +201,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mlpoint
 }
 
-.singleAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, AUC=50, ZOI=50, i, label, plotAUC = TRUE, showIC = TRUE, plotCompon=FALSE){
+.singleFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -211,7 +211,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
 	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)		
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) 
-	#ZOI
+	#RAD
 	ploty <- data[[i]]$x
 	ploty[ploty < 0] <-0
 	slope <- ML[[i]]$par[3]
@@ -240,13 +240,13 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])
 	}
 
-	if(AUC==50){
+	if(FoG==50){
 		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])	
 		}
-	if(AUC==80){
+	if(FoG==80){
 		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])	
 		}
-	if(AUC==20){
+	if(FoG==20){
 		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])	
 		}
 
@@ -260,20 +260,20 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	if (slope >1){
 		xx2 <- c(xx[1], xx, xx[length(xx)])
 		yy2 <- c(0, yy, 0)
-		if(plotAUC){
+		if(plotFoG){
 			polygon(xx2, yy2, density=15, col="red")
 			}
 		points(xx, yy, type="l", col="black", lwd=2)					
-		if(ZOI == 20){
+		if(RAD == 20){
 			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
 			}
-		if(ZOI ==50){
+		if(RAD ==50){
 			points(xx50, yy50halo, col="blue", cex=2, pch=19)
 			}
-		if(ZOI ==80){
+		if(RAD ==80){
 			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
 			}
-		if(ZOI=="all"){
+		if(RAD=="all"){
 			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
@@ -293,7 +293,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  AUC=50, ZOI=50, overwrite = TRUE, popUp = TRUE, plotAUC = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
+.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, plotFoG = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)
@@ -301,15 +301,15 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	t <- file.path("figures", projectName , paste(projectName, "_AUC.pdf", sep=""))
+	t <- file.path("figures", projectName , paste(projectName, "_FoG.pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName , paste(projectName, "_AUC_2_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))
+			t <- file.path("figures", projectName , paste(projectName, "_FoG_2_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_AUC_", k, "_AUC", AUC, "_ZOI", ZOI, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, "_FoG_", k, "_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
 					}
 				}
 			}
@@ -330,7 +330,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	# }
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (k in plotSub){
-			.singleAUC(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,AUC=AUC, ZOI = ZOI, clearHaloStand = clearHaloStand, label=label[k], plotAUC = plotAUC, plotCompon=plotCompon)
+			.singleFoG(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
 		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)

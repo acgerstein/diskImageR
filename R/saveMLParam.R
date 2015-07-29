@@ -10,6 +10,8 @@
 
 #' @author Aleeza C. Gerstein
 
+#CHANGE THIS to saveRDS (and readRDS!)
+
 saveMLParam <- function(projectName){
 	fileFolder <- paste(Sys.Date(), projectName, sep="_")
 	newdir <- file.path(getwd(), "parameter_files")

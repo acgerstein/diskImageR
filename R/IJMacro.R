@@ -20,6 +20,7 @@
 
 IJMacro <-
 function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){
+	# if(!is.char(projectName))
 	fileDir <- projectName
 	if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 

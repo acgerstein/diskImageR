@@ -1,6 +1,6 @@
 #' Dataframe creation
 
-#' @description Writes the main dataframe with resistance, tolerance and sensitivity parameters
+#' @description Writes the main dataframe with resistance, perseverence and sensitivity parameters
 
 #' @inheritParams maxLik
 #' @param nameVector either a logial value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign th photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.
@@ -13,8 +13,8 @@
 #' 		\item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
 #'	 	\item\bold{line:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
 #' 		\item\bold{type:} the location within the \code{name} of the phograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
-#' 		\item\bold{ZOI80, ZOI50, ZOI20:} resistance parameters, coresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
-#' 		\item\bold{fAUC80, fAUC50, fAUC20:} tolerance parameters, coresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
+#' 		\item\bold{RAD80, RAD50, RAD20:} resistance parameters, coresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
+#' 		\item\bold{FoG80, FoG50, FoG20:} perseverence parameters, coresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
 #' 		\item\bold{slope:} sensitivity parameter, indicating the slope at the midpoint, i.e., how rapidly the population changes from low growth to full growth
 #'	}
 	
@@ -73,31 +73,31 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand)
 
-	AUC.df <-  sapply(c(1:length(data)), .findAUC, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge,  maxDist = maxDist, clearHaloStand = clearHaloStand, standardLoc = standardLoc)
+	FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge,  maxDist = maxDist, clearHaloStand = clearHaloStand, standardLoc = standardLoc)
 
-	x80 <- unlist(AUC.df[1,])	
-	x50 <- unlist(AUC.df[2,])	
-	x20 <- unlist(AUC.df[3,])
-	AUC80 <- unlist(AUC.df[4,])	
-	AUC50 <- unlist(AUC.df[5,])	
-	AUC20 <- unlist(AUC.df[6,])	
-	maxAUC <- unlist(AUC.df[7,])		
-	maxAUC80 <- unlist(AUC.df[8,])		
-	maxAUC50 <- unlist(AUC.df[9,])		
-	maxAUC20 <- unlist(AUC.df[10,])				
+	x80 <- unlist(FoG.df[1,])	
+	x50 <- unlist(FoG.df[2,])	
+	x20 <- unlist(FoG.df[3,])
+	FoG80 <- unlist(FoG.df[4,])	
+	FoG50 <- unlist(FoG.df[5,])	
+	FoG20 <- unlist(FoG.df[6,])	
+	maxFoG <- unlist(FoG.df[7,])		
+	maxFoG80 <- unlist(FoG.df[8,])		
+	maxFoG50 <- unlist(FoG.df[9,])		
+	maxFoG20 <- unlist(FoG.df[10,])				
 	
-	AUC80[slope < 5] <- NA
-	AUC50[slope < 5] <- NA
-	AUC20[slope < 5] <- NA
+	FoG80[slope < 5] <- NA
+	FoG50[slope < 5] <- NA
+	FoG20[slope < 5] <- NA
 	x80[slope < 5] <- 1
 	x50[slope < 5] <- 1
 	x20[slope < 5] <- 1
 
-	aveAUC80 <- AUC80/x80
-	aveAUC50 <- AUC50/x50
-	aveAUC20 <- AUC20/x20	
+	aveFoG80 <- FoG80/x80
+	aveFoG50 <- FoG50/x50
+	aveFoG20 <- FoG20/x20	
 
-	param <- data.frame(ZOI80 =round(x80, digits=0), ZOI50 = round(x50, digits=0), ZOI20 = round(x20, digits=0), fAUC80 = round(AUC80/maxAUC80, digits=2), fAUC50 = round(AUC50/maxAUC50, digits=2), fAUC20 = round(AUC20/maxAUC20, digits=2), slope=round(slope, digits=1))
+	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(slope, digits=1))
 	
 	if (is.logical(nameVector)){
 		if (nameVector){
@@ -128,12 +128,12 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	names(df)[3] <- typeName
 
 	df <- df[order(df$line),] 
-	df$fAUC80[df$fAUC80 >1] <- 1
-	df$fAUC50[df$fAUC50 >1] <- 1
-	df$fAUC20[df$fAUC20 >1] <- 1	
-	df$fAUC80[df$ZOI80 == 1] <- 1
-	df$fAUC50[df$ZOI50 == 1] <- 1
-	df$fAUC20[df$ZOI20 == 1] <- 1
+	df$FoG80[df$FoG80 >1] <- 1
+	df$FoG50[df$FoG50 >1] <- 1
+	df$FoG20[df$FoG20 >1] <- 1	
+	df$FoG80[df$RAD80 == 1] <- 1
+	df$FoG50[df$RAD50 == 1] <- 1
+	df$FoG20[df$RAD20 == 1] <- 1
 	
 	write.csv(df, file=filename, row.names=FALSE)	
 	
@@ -169,7 +169,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	return(slope)
 }
 
-.findAUC <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){	
+.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){	
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -217,16 +217,16 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	id50 <- order(xx50)
 	id20 <- order(xx20)		
 
-	maxAUC <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))	
-	maxAUC80 <- exp(x80)*max(yy80)
-	maxAUC50 <- exp(x50)*max(yy50)	
-	maxAUC20 <- exp(x20)*max(yy20)	
+	maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))	
+	maxFoG80 <- exp(x80)*max(yy80)
+	maxFoG50 <- exp(x50)*max(yy50)	
+	maxFoG20 <- exp(x20)*max(yy20)	
 		
-	AUC80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))		
-	AUC50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))		
-	AUC20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))		
+	FoG80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))		
+	FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))		
+	FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))		
 	
-	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , AUC80 = round(AUC80, digits=0), AUC50= round(AUC50, digits=0), AUC20= round(AUC20, digits=0), maxAUC = round(maxAUC, digits=0), maxAUC80 = round(maxAUC80, digits=0), maxAUC50 = round(maxAUC50, digits=0), maxAUC20 = round(maxAUC20, digits=0))	
+	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))	
 	 
 	 if (exp(param$x80)<1){
 	 	param$x80 <- 1}

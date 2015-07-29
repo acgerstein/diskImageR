@@ -1,0 +1,9 @@
+#install the devtools package (only need to do once)#
+install.packages("devtools")#
+install.packages("rmarkdown")#
+#load devtools#
+library(devtools)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+library(diskImageR)
+browseVignettes("diskImageR")
+browseVignettes("diskImageR")

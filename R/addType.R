@@ -16,7 +16,7 @@
 addType <- function(projectName, typePlace=3, typeName="type2", save = TRUE){
 	df <- eval(parse(text=paste(projectName, ".df", sep="")))
 	type2 <- unlist(lapply(df$name, function(x) strsplit(as.character(x), "_")[[1]][typePlace]) )
-	place <- which.max(names(df) == "ZOI80")
+	place <- which.max(names(df) == "RAD80")
 	dfnew <- cbind(df[,1:place-1], type2, df[,place:length(df)])
 	if(typeName != "type2") names(dfnew)[place] <- typeName
 
