@@ -22,7 +22,7 @@
 
 #' @author Aleeza C. Gerstein
 
-twoParamPlot <- function(projectName, type, RAD = "RAD20", AUC = "FoG20",  RADmin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
+twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
 	if(!(hasArg(type))){
 		cont <- readline(paste("Please select whether dataframe is from 'createDataframe' (df) or `aggregateData (ag) ", sep=""))
 		type <- cont
@@ -137,7 +137,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", AUC = "FoG20",  RADmi
 		else{
 			plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, FoG], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
 			axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
-			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[,AUC]*100-ordData[, paste(var, ".", AUC, sep="")]*100, as.numeric(as.factor(ordData[, orderFactor])), ordData[,AsUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100-ordData[, paste(var, ".", AUC, sep="")]*100, as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
 			if(is.na(xlabAngle)) 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=xlabels)
 			else{
 				axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
