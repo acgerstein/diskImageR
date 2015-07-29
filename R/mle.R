@@ -54,8 +54,8 @@ do.mle.search <- function(func, x.init, method, fail.value=-Inf,
   
   ## Add in verbosity, if needed:
   control$verbose <- verbose > 0
-  if ( control$verbose )
-    func2 <- func2 <- big.brother(func2, verbose)
+  # if ( control$verbose )
+    # func2 <- func2 <- big.brother(func2, verbose)
 
   ## Remember the names of the input vector, or try and get it from
   ## the supplied function.
