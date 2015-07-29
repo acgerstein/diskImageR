@@ -7,6 +7,7 @@
 ##   'nlminb'
 ##   'nlm'
 ## These now have a similar interface, though not identical.
+
 find.mle <- function(func, x.init, method, ...) {
   UseMethod("find.mle")
 }
@@ -586,7 +587,7 @@ do.mle.search.subplex <- function(func, x.init, control, lower, upper) {
   else
     func2 <- invert(func)
 
-  ans <- subplex(x.init, func2, control)
+  ans <- subplex::subplex(x.init, func2, control)
   ans$value <- -ans$value
   names(ans)[names(ans) == "value"] <- "lnLik"
 
