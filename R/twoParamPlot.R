@@ -93,7 +93,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 	}	
 		
 			
-	tols <- ordData[, AUC]
+	tols <- ordData[, FoG]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
 	if(savePDF){
 		 pdf(t, width=width, height=height)
@@ -127,7 +127,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 		if(barplot == TRUE){	
 			mp <- barplot(t(tols*100), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
 			box()
-		 	arrows(mp[1,], ordData[,AUC]*100-ordData[, paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+		 	arrows(mp[1,], ordData[,FoG]*100-ordData[, paste(var, ".", FoG, sep="")]*100, mp[1,], ordData[,FoG]*100+ ordData[,paste(var, ".", FoG, sep="")]*100, length=0)
 			if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 			else{
 				axis(1, at=mp[1,], labels=FALSE)
@@ -137,7 +137,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 		else{
 			plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, FoG], ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(xlabels)+0.5))
 			axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
-			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100-ordData[, paste(var, ".", AUC, sep="")]*100, as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+			arrows(as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100-ordData[, paste(var, ".", FoG, sep="")]*100, as.numeric(as.factor(ordData[, orderFactor])), ordData[,FoG]*100+ ordData[,paste(var, ".", FoG, sep="")]*100, length=0)
 			if(is.na(xlabAngle)) 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=xlabels)
 			else{
 				axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
@@ -146,7 +146,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 		 }
 	}
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, AUC]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(as.numeric(as.factor(ordData[, orderFactor]))))+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, FoG]*100, ylim=c(0, tolMax), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(as.numeric(as.factor(ordData[, orderFactor]))))+0.5))
 		if(is.na(xlabAngle)){
 			 axis(1, at=1:length(xlabels), labels=xlabels)
 			 }
