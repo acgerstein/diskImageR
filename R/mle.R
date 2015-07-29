@@ -78,12 +78,12 @@ do.mle.search <- function(func, x.init, method, fail.value=-Inf,
   if ( verbose )
     cat("\n")
 
-  if ( hessian ) {
-    if ( !require(numDeriv) )
-      warning("The package numDeriv is required to compute the hessian")
-    else
-      ans$hessian <- hessian(func2, ans$par)
-  }
+  # if ( hessian ) {
+    # if ( !require(numDeriv) )
+      # warning("The package numDeriv is required to compute the hessian")
+    # else
+      # ans$hessian <- hessian(func2, ans$par)
+  # }
 
   ## TODO: For constrained cases, store the full parameter vector
   ## too.
