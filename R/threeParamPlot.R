@@ -4,6 +4,7 @@
 
 #' @inheritParams plotRaw
 #' @inheritParams twoParamPlot
+#' @param slopeMax maximum y axis value for slope (sensitivity) plot
 
 #' @details Basic parameter plotting functions for three parameter plots (RAD, FoG , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot perseverence as a barplot and RAD and slope as a dotplot, perseverence can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework. 
 

@@ -4,6 +4,7 @@
 
 #' @inheritParams plotRaw
 #' @inheritParams twoParamPlot
+#' @param what parameter to plot (supported: "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope"), default = "RAD20"
 #' @param barplot whether to plot values as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
 
 #' @details Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. 

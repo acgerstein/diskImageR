@@ -3,9 +3,9 @@
 #' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and perseverence (FoG).
 
 #' @inheritParams plotRaw
+#' param type specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")
 #' @param RAD specify the RAD (radius) parameter to be plotted ("RAD20", "RAD50" or "RAD80"), default = "RAD20".
 #' @param FoG specify the FoG (fraction of growth) parameter to be plotted ("FoG20", "FoG50" or "FoG80"), default = "FoG20".
-#' @param RADmin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param RADmin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
 #' @param tolMax maximum y axis value for perseverence plot. Note perseverence is coverted to a perent, default = 100.
 #' @param xlabels either a vector containing the desired x-axis labels, or a single value indicating the column name that contains the values to use (likely either the 'line' column or one of the type columns), default = "line".
