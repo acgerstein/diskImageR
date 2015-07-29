@@ -107,7 +107,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]] <- subset(data[[i]], x != "NA")
+	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
@@ -148,7 +148,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]] <- subset(data[[i]], x != "NA")
+	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
