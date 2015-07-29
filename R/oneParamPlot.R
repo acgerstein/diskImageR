@@ -86,12 +86,12 @@ oneParamPlot <- function(projectName, type, param  = "RAD20", ymin = 0, ymax = 1
 	else{
 		tols <- ordData[, param]
 		if(!param %in% c("FoG20", "FoG50", "FoG80")){
-			mp <- barplot(t(tols), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
+			mp <- barplot(t(tols), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
 			}
 		else{
-			mp <- barplot(t(tols)*100, ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
+			mp <- barplot(t(tols)*100, ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
 			}
-		arrows(mp[1,], ordData[,AUC]*100-ordData[,paste(var, ".", AUC, sep="")]*100, mp[1,], ordData[,AUC]*100+ ordData[,paste(var, ".", AUC, sep="")]*100, length=0)
+		arrows(mp[1,], ordData[, param]*100-ordData[,paste(var, ".", param, sep="")]*100, mp[1,], ordData[,param]*100+ ordData[,paste(var, ".", param, sep="")]*100, length=0)
 		if(is.na(xlabAngle)) 	axis(1, at=mp[1,], labels=xlabels)
 		else{
 			axis(1, at=mp[1,], labels=FALSE)
