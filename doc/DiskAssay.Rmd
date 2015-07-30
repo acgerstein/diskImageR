@@ -30,7 +30,7 @@ library("diskImageR")
 
 ## Introduction to diskImageR
 
-diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
+diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of perseverence, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
 
 <center>
 <img src="pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
@@ -88,14 +88,14 @@ $$
 From these functions we substract off the plate background intensity from all values; this is common across all pictures taken at the same time and is determined from the observed pixel intensity on a plate with a clear halo (specified by the user). We then use the parameters identified in the logistic equations to determine the resistance parameters.
 
 * <b>Resistance</b>
-	: asymA+asymB are added together to determine the maximum level of intensity (= cell density) achieved on each plate. The level of resistance (zone of inhibition, ZOI), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occurs (corresponding to *ZOI80*, *ZOI50*, and *ZOI20*)
-* <b>Tolerance</b>
-	: the 'rollmean' function from the zoo package is used to calculate the area under the curve (AUC)  in slice from the disk edge to each ZOI cutoff. This achieved growth is then compared to the potential growth, namely, the area of a rectangle with length and height equal to the ZOI. The calculated paramaters are thus the fraction of full growth in this region (*fAUC80*, *fACU50*, *fAUC20*).
+	: asymA+asymB are added together to determine the maximum level of intensity (= cell density) achieved on each plate. The level of resistance (zone of inhibition, RAD), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occurs (corresponding to *RAD80*, *RAD50*, and *RAD20*)
+* <b>perseverence</b>
+	: the 'rollmean' function from the zoo package is used to calculate the area under the curve (FoG)  in slice from the disk edge to each RAD cutoff. This achieved growth is then compared to the potential growth, namely, the area of a rectangle with length and height equal to the RAD. The calculated paramaters are thus the fraction of full growth in this region (*FoG80*, *fACU50*, *FoG20*).
 * <b>Sensitivity</b>
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("vignette", clearHalo=1, ZOI="all", needML=FALSE, popUp = FALSE, savePDF =FALSE, AUC=20)
+maxLik("vignette", clearHalo=1, RAD="all", needML=TRUE, popUp = FALSE, savePDF =FALSE, FoG=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
@@ -139,16 +139,13 @@ manyReps.ag
 This will also save a .csv file into the *parameter_files* directory.
 
 ### [OPTIONAL] Plot parameter results
-At this point the parameter esitmates and potentially aggregated and variance measurements exist in .csv files and can be used independently of the package. Three plotting functions are included here though, to plot single parameters (any) \link{\code{oneParamPlot}}, two parameters (ZOI and fAUC) \link{\code{twoParamPlot}} or three parameters (ZOI, slope, fAUC) \link\code{threeParamPlot}}. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. Single parameter plot can be either a barplot \code{barplot = TRUE} or a dotplot \code{barplot=FALSE}. In the two and three parameter plots the default is to plot tolerance as a barplot and ZOI and slope as a dotplot, tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either ZOI or slope as a barplot in this framework. 
+At this point the parameter esitmates and potentially aggregated and variance measurements exist in .csv files and can be used independently of the package. Three plotting functions are included here though, to plot single parameters (any) \link{\code{oneParamPlot}}, two parameters (RAD and FoG) \link{\code{twoParamPlot}} or three parameters (RAD, slope, FoG) \link\code{threeParamPlot}}. Input can be the dataframe from either \link{code{createDataframe}} \code{type="df"} or from \link{code{aggregateData}} \code{type=="ag"}. Single parameter plot can be either a barplot \code{barplot = TRUE} or a dotplot \code{barplot=FALSE}. In the two and three parameter plots the default is to plot perseverence as a barplot and RAD and slope as a dotplot, perseverence can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework. 
 
 ```{r, fig.width=5, fig.height=4}
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
 
-There is also a built in plotting function to plot the two groups on top/beside of each other, with all the same options as previously described.
-```{r, fig.width=5, fig.height=4}
-twoParamTwoGroupPlot("manyReps", type="df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
-```
+
 
 
 ## Addendum
@@ -163,3 +160,6 @@ Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron an
 
 #### Contact
 Aleeza Gerstein, <gerst035@umn.edu>
+
+### Updated
+Last updated March 2015
