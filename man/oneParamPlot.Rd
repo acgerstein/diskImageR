@@ -12,6 +12,10 @@ oneParamPlot(projectName, type, param = "RAD20", ymin = 0, ymax = 100,
 \arguments{
 \item{projectName}{the short name to be used for the project}
 
+\item{type}{specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")}
+
+\item{param}{what parameter to plot (supported: "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope"), default = "RAD20"}
+
 \item{ymin}{a numeric value indicating the minimum y value plotted in each graph}
 
 \item{ymax}{a numeric value indicating the maximum y value plotted in each graph}

@@ -7,6 +7,7 @@
 #' @param typeVector a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{IJMacro}} for more details) while \code{typeVector} = "FALSE" will not add a type column.
 #' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{IJMacro}}
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
+#' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo. Defaults to FALSE.
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -27,7 +28,7 @@
 #addin removal of blank disk plate
 #try to automate clearHalo
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
 		clearHalo <- as.numeric(cont)
@@ -134,7 +135,9 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	df$FoG80[df$RAD80 == 1] <- 1
 	df$FoG50[df$RAD50 == 1] <- 1
 	df$FoG20[df$RAD20 == 1] <- 1
-	
+
+	if (removeClear)	df <- df[-clearHalo,]
+	 	
 	write.csv(df, file=filename, row.names=FALSE)	
 	
 	dfName <- paste(projectName, ".df", sep="")
@@ -177,10 +180,8 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) 
-	# ic50 <- ML[[i]]$par[2]	
 	ploty <- data[[i]]$x
 	ploty[ploty < 0] <-0
-	# slope <- ML[[i]]$par[3]
 	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
 
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 				
@@ -193,8 +194,10 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 
 	if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
 	else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-	if(exp(x50)>1) xx50 <- seq(log(data[[i]]$distance[1]), log(round(exp(x50))), length=200)		
+
+	if(exp(x50)>1) xx50 <- seq(log(data[[i]]$distance[1]), log(round(exp(x50))), length=200)	
 	else xx50 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
+
 	if(exp(x20)>1) xx20 <- seq(log(data[[i]]$distance[1]), log(round(exp(x20))), length=200)
 	else xx20 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
 
@@ -228,11 +231,8 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	
 	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))	
 	 
-	 if (exp(param$x80)<1){
-	 	param$x80 <- 1}
-	 if (exp(param$x50)<1){
-	 	param$x50 <- 1}	 
-	if (exp(param$x20)<1){
-		param$x20 <- 1}	  
-		return(param)	
+	 if (exp(param$x80)<1) 	param$x80 <- 1
+	 if (exp(param$x50)<1)	param$x50 <- 1	 
+	 if (exp(param$x20)<1)	param$x20 <- 1	  
+	 return(param)	
 	}

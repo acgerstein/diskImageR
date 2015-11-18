@@ -25,7 +25,7 @@ IJMacro("projectName")
 plotRaw("projectName")
 
 #Use maximum likelihood to fit a bilogistic and single logistic model to the data from each photograph. "clearHalo" is used to specify a picture that has a clear halo; this is used to standardize all photographs and will be most effective when photographs are taken with equal lighting without shadows. Type ?maxLik for additional parameter options.
-maxLik("projectName", clearHalo=1, ZOI="all")
+maxLik("projectName", clearHalo=1, RAD="all")
 
 #Use the models to calculate resistance (20%, 50% and 80% reduction in growth = RAD20, RAD50, RAD80), perseverence (actual growth compared to potential growth up to each resistance point = FoG20, FoG50, FoG80), and sensitivity (slope at RAD50), which are saved in a .csv file. Type ?createDataframe for additional parameter options.
 createDataframe("projectName", clearHalo = 1)

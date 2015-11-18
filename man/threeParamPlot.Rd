@@ -12,11 +12,15 @@ threeParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
 \arguments{
 \item{projectName}{the short name to be used for the project}
 
+\item{type}{specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")}
+
 \item{RAD}{specify the RAD (radius) parameter to be plotted ("RAD20", "RAD50" or "RAD80"), default = "RAD20".}
 
 \item{FoG}{specify the FoG (fraction of growth) parameter to be plotted ("FoG20", "FoG50" or "FoG80"), default = "FoG20".}
 
 \item{RADmin}{minimum distance from the disk for resistance plot (minimum y axis value), default = 30.}
+
+\item{slopeMax}{maximum y axis value for slope (sensitivity) plot}
 
 \item{tolMax}{maximum y axis value for perseverence plot. Note perseverence is coverted to a perent, default = 100.}
 

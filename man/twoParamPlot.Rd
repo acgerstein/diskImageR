@@ -12,6 +12,8 @@ twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30,
 \arguments{
 \item{projectName}{the short name to be used for the project}
 
+\item{type}{specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")}
+
 \item{RAD}{specify the RAD (radius) parameter to be plotted ("RAD20", "RAD50" or "RAD80"), default = "RAD20".}
 
 \item{FoG}{specify the FoG (fraction of growth) parameter to be plotted ("FoG20", "FoG50" or "FoG80"), default = "FoG20".}
@@ -39,8 +41,6 @@ twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30,
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 
 \item{barplot}{whether to plot perseverence as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}}
-
-\item{RADmin}{minimum distance from the disk for resistance plot (minimum y axis value), default = 30.}
 }
 \value{
 Either a pdf figure figure (projectName_RAD-FoG.pdf) saved to the 'figures' directory or a figure on screen
