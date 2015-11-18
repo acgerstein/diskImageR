@@ -29,7 +29,10 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
 		pictureDir <- file.path(pictureDir, "")
 	}
-	
+	setwd(pictureDir)
+	if (TRUE %in% file.info(dir())[,2]) {
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")
+		}
 	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)
 	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")
 	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	
@@ -75,6 +78,9 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))
 	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
+	if(!length(dir(pictureDir)) == length(temp)){
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
+		}		
 	cat("\a")
 	assign(projectName, temp, envir=globalenv())
 	}
@@ -95,7 +101,7 @@ function(workingDir, folderLoc, experAbbr){
 
 .readIn <-function(directoryPath, newList = list(), numDig=30) {
 	currDir <- getwd()
-	print(currDir)
+	# print(currDir)
 	getData <- function(i, newList, names) {
 		if (i > length(dir())){
 			names(newList) <- names
