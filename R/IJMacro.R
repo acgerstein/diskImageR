@@ -27,10 +27,11 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 	}		
 	if(is.na(pictureDir)){
 		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")
+		pictureDirOrig <- pictureDir
 		pictureDir <- file.path(pictureDir, "")
 	}
 	setwd(pictureDir)
-	if (projectDir == pictureDir) {
+	if (projectDir == pictureDirOrig) {
 		cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
 		}
