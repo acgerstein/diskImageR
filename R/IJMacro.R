@@ -30,6 +30,10 @@ function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam =
 		pictureDir <- file.path(pictureDir, "")
 	}
 	setwd(pictureDir)
+	if (projectDir == pictureDir) {
+		cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
+		}
 	if (TRUE %in% file.info(dir())[,2]) {
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
 		}
