@@ -132,9 +132,12 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	df$FoG80[df$FoG80 >1] <- 1
 	df$FoG50[df$FoG50 >1] <- 1
 	df$FoG20[df$FoG20 >1] <- 1	
-	df$FoG80[df$RAD80 == 1] <- 1
-	df$FoG50[df$RAD50 == 1] <- 1
-	df$FoG20[df$RAD20 == 1] <- 1
+	df$FoG80[df$RAD80 == 0] <- NA
+	df$FoG50[df$RAD50 == 0] <- NA
+	df$FoG20[df$RAD20 == 0] <- NA
+	df$FoG80[df$RAD80 == 1] <- NA
+	df$FoG50[df$RAD50 == 1] <- NA
+	df$FoG20[df$RAD20 == 1] <- NA
 
 	if (removeClear)	df <- df[-clearHalo,]
 	 	
