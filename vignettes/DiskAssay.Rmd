@@ -110,13 +110,13 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("vignette", clearHalo=1, RAD="all", needML=TRUE, popUp = FALSE, savePDF =FALSE, FoG=20)
+maxLik("projectName", clearHalo=1, RAD="all", needML=TRUE, popUp = FALSE, savePDF =FALSE, FoG=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
 It is possible to save the maximum likelihood results using
 ```
-saveMLParam("vignette")
+saveMLParam("projectName")
 ```
 This will save a .csv file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
@@ -124,16 +124,16 @@ This will save a .csv file into the *paramter_files* directory that contains par
 The last required step creates and save a dataframe with the resistance parameter estimates. A .csv file is written to the *parameter_files* directory which can be opened in excel or any program that opens text files. 
 
 ```{r}
-createDataframe("vignette", clearHalo = 1, typeName="temp")
-vignette.df
+createDataframe("projectName", clearHalo = 1, typeName="temp")
+projectName.df
 ```
 
 ### [OPTIONAL] Add additional factor columns
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
 
 ```{r}
-addType("vignette", typeName="rep")
-vignette.df
+addType("projectName", typeName="rep")
+projectName.df
 ```
 If you want to access this dataframe in a later R session you can do so using readExistingDF("projectName"). Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., temp <- read.csv(file)) though if you intend to use the functions below, you need to save it with a name that ends with ".df" (i.e., temp.df).
 
