@@ -68,7 +68,7 @@ IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/p
 ```
 
 ```{r, echo=FALSE}
-IJMacro("projectName", projectDir= "/Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/", photoDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/pictures/")
+IJMacro("projectName", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
 ```
 
 If the function is unable to locate imageJ a red error will pop-up with a message like <span style="color:red">/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory</span>. The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
