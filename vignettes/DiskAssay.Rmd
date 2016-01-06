@@ -80,10 +80,11 @@ To access the output of \code{IJMacro} in a later R session use \link{code{readE
 readExistingIJ("projectName") 
 ```
 
-### Plot the output of imageJ analysis
+## Plot the output of imageJ analysis
 \code{plotRaw} will create a pdf figure of plots showing the average pixel intensity across all 72 lines from each photograph. It is not required for anything downstream, but is a good check to see whether the analysis proceeded properly. 
+
 ```{r, fig.width=6, fig.height=4}
-plotRaw("vignette", popUp = FALSE, savePDF = FALSE)
+plotRaw("projectName", popUp = FALSE, savePDF = FALSE)
 ```
 
 Many different factors can be specified to influence the plots and the pdf that is generated, including the minimum and maximum x and y values (xmin, xmax, ymin, ymax), the number of plots in each row (xplots), the height and width of the pdf file (height, width), the point size (cexPt), and the size of the x- and y-axis font (cexX, cexY). See ?plotRaw for all options and to see default values.
