@@ -32,7 +32,7 @@ library("diskImageR")
 diskImageR provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. This computational method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achived above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth. 
 
 <center>
-<img src="pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
+<img src="pictures/p2_30_a.jpg"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center> 
 
 ## Prepare plates and photographs
@@ -70,7 +70,8 @@ IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/p
 ```{r, echo=FALSE}
 IJMacro("projectName", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""))
 ```
-If the function is unable to locate imageJ a red error will pop-up with a message like "/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory". The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
+
+If the function is unable to locate imageJ a red error will pop-up with a message like <span style="color:red">/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory</span>. The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
 
 <b> Important! </b> This step must run completely, without error, for everything downstream. 
 
