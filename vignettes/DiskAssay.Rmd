@@ -29,45 +29,57 @@ library("diskImageR")
 
 
 ## Introduction to diskImageR
-
-diskImageR provides a quantitative way to analyze photographs taken from disk diffusion assays, and removes the need for subjective measurement by assessing zone diameter with a ruler. This computational method measures the zone of inhibition (i.e., resistance) at three different points (80%, 50% and 20% growth inhibition) as well as two measures of perseverence, how much growth there is above the zone of inhibition (area under the curve), and the rate of change from no growth to full growth (sensitivity).
+diskImageR provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. This computational method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achived above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth. 
 
 <center>
 <img src="pictures/p2_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center> 
 
 ## Prepare plates and photographs
-The analysis done by diskImageR will only be as good as your disk assay plates and the photographs you take. Plates should always be labelled on the side, not on the bottom. Care should be taken when setting up the camera to take photographs, as you want the lighting conditions to be as uniform as possible, without any shadows on the plates. Camera settings should be manual rather than automatic as much as possible. Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory.
+The analysis done by diskImageR will only be as good as the photographs taken of the disk assay plates. We use the Bencher Copymate II camera mounting system, though any setup that holds the camera a fixed distance from the disk assay plates should work. In this setup there are two fluorescent lights on either side of the disk, oriented to minimize shadows on the plate in an otherwise dark room. We use the Canon Rebel T3i camera with an ISO 800, white blaance "white fluorescent light", time 1/100s, picture stype "neutral", centre focused. Any camera of reasonably high quality should suffice, though the camera should always be set in manual rather than automatic mode, as the goal is to take photographs as consistently as possible. We also use the 2s timer to avoid potentially jostling the camera while taking images and/or having a hand/arm shadow in the picture. Plates should be photographed on a dark surface (we use black velvet) and plate labels are written on the side rather than the bottom of the plate. Prior to analysis, images are cropped close to the plate. Because the analysis program automatically detects the disk based on size, it is important that no other similar-sized circles be present in the image (e.g., from letters in labels).
 
-Photograph naming can be used downstream to have diskImageR do a number of statistical things (e.g., averaging across replicates, caulculations of variance, t-tests). The general format is "strain_factor1_factor2_rep.pdf". Conversely, if you intend to do all the statistical analysis later, photographs can be named anything, even numbered.
+Once you have the set of photographs that you want to be analyzed together they should be placed in the same directory, with nothing else inside that directory. 
+<b>Important!</b> If there are any other files within the directory the script will not run properly.
 
-Finally, photographs should be cropped carefully around the disk. 
-
-<b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that will lead to your pictures or the directory that you will use as the main project folder (i.e., the place where all the output files from this package will go). 
+The photograph file naming scheme will be be carried throughout, thus care should be taken with naming files in a logical manner. The general format that is compatible with the script default setting is "strain_factor1_factor2_rep.pdf". Conversely, if you intend to do statistical analysis separately (i.e., averaging among replicates), photographs can be named anything.
 
 ## Run the imageJ macro on the set of photographs
-The first step in the diskImageR pipeline is to run the imageJ macro on the photograph directory. 
+The first step in the diskImageR pipeline is to analyze each photograph in imageJ.
 
-<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function. If you install it to default location (Applications folder on a mac, Program Files folder on a PC) then you should be able to use the default setting )see below)
+<b> Important! </b> imageJ must be installed on your computer. ImageJ is a free, public domain Java image proessing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. Take note of the path to imageJ, as this will be needed for the first function. If you install it to default location (Applications folder on a mac, Program Files folder on a PC) then you should be able to use the default setting (see below). 
 
-From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
+From each photograph, the macro (in imageJ) will automatically determine where the disk is located on the plate, find the center of the disk, and draw 40mm radial lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line. This data will be stored in the folder *imageJ-out* on your computer, with one file for each photograph.
 
-To run the imageJ macro through a user-interface with pop-up boxes to select where you want the main project directory to be and where to find the location of the photograph directory just select a project name (here I'm using 'vignette'):
+The first command of the package is \link{code{IJMacro}}, which can be run in two different ways, either through a user-interface with pop-up boxes, or directly through the shell. At this point you will specify a project name, the main project directory, and the photograph directory.
+The project name should ideally be fairly short (easy to type without typos!) and specific to the project. It must start with a letter, not a number or special character, but can otherwise be anything.
+The mmain project directory is the place where all folders and files and generated by the package will show up.
+The photograph directory is the one used to store photographs from above (which has nothing except the photographs to be analyzed in it).
+
+<b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that lead to either the main project directory or the photograph directory.
+
+To run the imageJ macro through a user-interface with pop-up boxes: 
 ```r
-IJMacro("vignette")
+IJMacro("projectName")
 ```
 
 If you would prefer to avoid pop-up boxes you can specify your desired main project directory and photograph directory locations:
-
-```{r}
-IJMacro("vignette", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""))
+```r, eval=FALSE
+IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
 ```
-Depending on where imageJ is located on your computer, the script may not run unless you specify the filepath to imageJ. See ?IJMacro for more details.
 
-If you want to access the output of the imageJ macro in a later R session you can with
+```{r, echo=FALSE}
+IJMacro("projectName", projectDir= getwd(), pictureDir = file.path(getwd(), "pictures", ""))
+```
+If the function is unable to locate imageJ a red error will pop-up with a message like "/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory". The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
+
+<b> Important! </b> This step must run completely, without error, for everything downstream. 
+
+To access the output of \code{IJMacro} in a later R session use \link{code{readExistingIJ}}. At this step you can also change the project name, it does not have to be the same name that was used originally.
 ```r
-readExistingIJ("projectName") 	#can be any project name, does not have to be the same as previously used
+readExistingIJ("projectName") 
 ```
+
+
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
 ```{r, fig.width=6, fig.height=4}
