@@ -67,7 +67,7 @@ If you would prefer to avoid pop-up boxes you can specify your desired main proj
 IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
 ```
 
-```{r, echo=FALSE}
+```{r}
 IJMacro("projectName", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
 ```
 
@@ -83,7 +83,7 @@ readExistingIJ("projectName")
 ## Plot the output of imageJ analysis
 \code{plotRaw} will create a pdf figure of plots showing the average pixel intensity across all 72 lines from each photograph. It is not required for anything downstream, but is a good check to see whether the analysis proceeded properly. 
 
-```{r, fig.width=6, fig.height=4}
+```{r, fig.width=6, fig.height=4, eval=FALSE}
 plotRaw("projectName", popUp = FALSE, savePDF = FALSE)
 ```
 
