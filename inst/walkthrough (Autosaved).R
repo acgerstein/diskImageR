@@ -12,7 +12,7 @@ install.packages("devtools")
 library(devtools)
 
 #install the diskImageR package
-install_github("acgerstein/diskImageR", build_vignettes = TRUE) 
+install_github("acgerstein/diskImageR", build_vignettes = FALSE) 
 
 #load diskImageR
 library(diskImageR)
