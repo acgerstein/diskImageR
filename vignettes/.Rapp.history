@@ -1,506 +1,3 @@
-maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
-maxLik <- function(data, standardLoc = 0, dotedge=3, maxDist=30, ymax=200, xplots = 6, maxSlope = 20, popUp = TRUE, log=TRUE, nameVector=TRUE, twoCurve=FALSE){#
-	projectName <- data#
-	fileFolder <- paste(Sys.Date(), projectName, sep="_")#
-	dir.create(paste(getwd(), "/figures/", sep=""), showWarnings= FALSE)#
-	dir.create(paste(getwd(), "/figures/", fileFolder, sep=""), showWarnings= FALSE)#
-	dir.create(paste(getwd(), "/parameter_files/", projectName, sep=""), showWarnings=FALSE)#
-#
-	data <- eval(parse(text=data))#
-	if (is.logical(nameVector)){#
-		if (nameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- nameVector}	#
-#
-#which(data[[i]][,1] > standardLoc)[1]]#
-	###The likelihoic part:#
-	if (!is.logical(standardLoc)){#
-#		dotMax <- max(sapply(data, function(x) {x[standardLoc,2]})) #
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
-#		standMax <-c( sapply(data, function(x) {dotMax-x[standardLoc,2]}))#
-		standMax <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))#
-		}#
-	else{#
-		standMax <- rep(0, length(data))#
-		}#
-	if (log){#
-		if(twoCurve){#
-			ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-			}#
-		else{#
-			ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-		}#
-		}	#
-	else{#
-		ML <-lapply(c(1:length(data)), getstats, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-		}#
-	names(ML) <- names(data)#
-	fileName <- paste(Sys.Date(), "_", projectName, sep="")#
-#
-	if (is.logical(nameVector)){#
-		if (nameVector){label <- names(data)}		#
-		else {label <- rep("", length(data))}#
-		}#
-	else {label <- nameVector}#
-#
-	t <- paste("figures/", Sys.Date(), "_", projectName , "/", projectName, "_MLfit.pdf", sep="")#
-	cat(paste("Saving figure: ", t, sep=""))#
-	xplots <- xplots#
-	if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}#
-	else {yplots<- 6}#
-	numpages <- ceiling(length(data)/(xplots*yplots))#
-	pdf(t, width=7, height=6)#
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
-	if(twoCurve){#
-		for (k in 1:length(data)){#
-			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
-			if(numpages == 1){#
-				if (k >= xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}#
-			if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-			}#
-		}#
-#
-	if(!twoCurve){	#
-		if(log){#
-			for (k in 1:length(data)){#
-				plotRawMLCurveLog(data, ML, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
-				if(numpages == 1){#
-					if (k >= xplots*yplots-xplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					}#
-				if(numpages == 2){#
-					if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					if (k >= 2*xplots*yplots-xplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					}				#
-				if(numpages == 3){#
-					if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					if (k >= 3*xplots*yplots-xplots+1){#
-						axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-						}#
-					}				#
-#
-				j <- 1#
-				while (j <= numpages){#
-					if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-					j <- j+1#
-					}#
-			}#
-		}#
-	}#
-	else{#
-		for (k in 1:length(data)){#
-			plotRawMLCurve(data, ML, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label)#
-		if(numpages == 1){#
-				if (k >= xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}#
-			if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-		}#
-	}	#
-#
-	mtext("Distance from edge of disc", outer=TRUE, side=1, line=2, cex=1.2)#
-	mtext("Pixel density", outer=TRUE, side=2, line=1.5, cex=1.2)#
-	dev.off()#
-#
-	if(popUp){#
-		tt <- paste("open", t)#
-		system(tt)#
-	}#
-	cat(paste("\n", projectName, ".ML has been written to the global environment", sep=""))#
-	assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())#
-}
-maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
-plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
-	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + standEdge[i] #
-	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
-	points(xx, yy2, type="l", col="red", lwd=2)#
-	if (!both){#
-		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
-		points(xx, yy, type="l", col="green", lwd=2)#
-	}#
-    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
-    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	abline(v=exp(MLparam2[[i]]$par[2]))#
-	abline(v=exp(MLparam2[[i]]$par[6]))#
-	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] #
-    mtext(label, side=3, cex=0.6)#
-# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
-#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
-	}
-plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
-	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + standEdge[i] #
-	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
-	points(xx, yy2, type="l", col="red", lwd=2)#
-	if (!both){#
-		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
-		points(xx, yy, type="l", col="green", lwd=2)#
-	}#
-    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
-    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	abline(v=exp(MLparam2[[i]]$par[2]))#
-	abline(v=exp(MLparam2[[i]]$par[6]))#
-	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
-    mtext(label, side=3, cex=0.6)#
-# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
-#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
-	}
-maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
-plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
-	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
-	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
-	points(xx, yy2, type="l", col="red", lwd=2)#
-	if (!both){#
-		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
-		points(xx, yy, type="l", col="green", lwd=2)#
-	}#
-    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
-    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	abline(v=exp(MLparam2[[i]]$par[2]))#
-	abline(v=exp(MLparam2[[i]]$par[6]))#
-	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
-    mtext(label, side=3, cex=0.6)#
-# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
-#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
-	}
-maxLik("contrTest2", twoCurve=TRUE, maxDist=30)
-data <- contrTest2
-label <- rep("", length(data))
-dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-standardLoc <- 0
-dotedge <- 3
-maxDist <- 30
-ymax <- 200
-xplots <- 6
-maxSlope <- 20
-dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-standMax <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
-ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
-compLik(ML, ML2)
-t <- compLik(ML, ML2)
-t
-compLik <- function(ML1, ML2){	#
-	numPar <- c()#
-	diff <- c()#
-#
-	for (i in 1:length(ML1)){#
-	diff[i] <- ML2[[i]]$lnLik	-ML1[[i]]$lnLik#
-		if (((ML2[[i]]$lnLik - ML1[[i]]$lnLik)*2) > qchisq(0.95, 3)) {numPar[i] <- "2par"}#
-		else {numPar[i] <- "1par"}	#
-		}#
-	return(list(diff, numPar))#
-	}
-t <- compLik(ML, ML2)
-t
-compLik <- function(ML1, ML2){	#
-	numPar <- c()#
-	diff <- c()#
-#
-	for (i in 1:length(ML1)){#
-	diff[i] <- ML2[[i]]$lnLik	-ML1[[i]]$lnLik#
-		if (((ML2[[i]]$lnLik - ML1[[i]]$lnLik)*2) > qchisq(0.95, 3)) {numPar[i] <- "2par"}#
-		else {numPar[i] <- "1par"}	#
-		}#
-	return(data.frame(diff, numPar))#
-	}
-t <- compLik(ML, ML2)
-t
-xplots <- xplots
-if (ceiling(length(data)/xplots) < 6) {#
-		yplots<- ceiling(length(data)/xplots)}
-yplots
-numpages <- ceiling(length(data)/(xplots*yplots))
-numpages
-par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-dev.off()
-par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-for (k in 1:length(data)){#
-			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])
-if(numpages == 1){#
-				if (k >= xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}
-if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-			}
-plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
-	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
-	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
-	points(exp(xx), yy2, type="l", col="red", lwd=2)#
-	if (!both){#
-		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
-		points(exp(xx), yy, type="l", col="green", lwd=2)#
-	}#
-    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
-    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	abline(v=exp(MLparam2[[i]]$par[2]))#
-	abline(v=exp(MLparam2[[i]]$par[6]))#
-	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
-    mtext(label, side=3, cex=0.6)#
-# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
-#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
-	}
-if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-			}
-plotMLCurve2Models <- function(data, i, MLparam,MLparam2, stand=standMax,  ymax=200, dotedge=3, maxDist= 40, label="", both=FALSE){ #
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]#
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]#
-	data[[i]] <- data[[i]][startX:stopX, 1:2]#
-	data[[i]] <- subset(data[[i]], x != "NA")#
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0#
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)#
-	xx <- seq(0, log(length(data[[i]][,1])), length=100) #
-	yy2<- curve2(MLparam2[[i]]$par[1], MLparam2[[i]]$par[2], MLparam2[[i]]$par[3], MLparam2[[i]]$par[5], MLparam2[[i]]$par[6], MLparam2[[i]]$par[7],xx) + stand[i]#
-	plot(data[[i]]$distance, data[[i]]$x, type="p", ylim=c(0, ymax), xaxt="n", yaxt="n", xlab="", ylab="", cex=0.8)#
-	points(exp(xx), yy2, type="l", col="red", lwd=2)#
-	if (!both){#
-		yy<- curve(MLparam[[i]]$par[1], MLparam[[i]]$par[2], MLparam[[i]]$par[3],xx)#
-		points(exp(xx), yy, type="l", col="green", lwd=2)#
-	}#
-    axis(2, las=2, at=c(0, ymax*0.25, ymax*0.5, ymax*0.75, ymax), labels=FALSE)#
-    axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
-	abline(v=exp(MLparam2[[i]]$par[2]))#
-	abline(v=exp(MLparam2[[i]]$par[6]))#
-	abline(h=MLparam2[[i]]$par[1] + MLparam2[[i]]$par[5] )#
-    mtext(label, side=3, cex=0.6)#
-# 	mtext("Distance from edge of disc", outer=FALSE, side=1, line=2.5, cex=1.2)##
-#	mtext("Pixel density", outer=FALSE, side=2, line=3, cex=1.2)#
-	}
-for (k in 1:length(data)){#
-			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
-			if(numpages == 1){#
-				if (k >= xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}#
-			if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-			}
-par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-for (k in 1:length(data)){#
-			plotMLCurve2Models(data, ML, ML2, stand=standMax, i =k, dotedge=dotedge, maxDist=maxDist, ymax=ymax, label=label[k])#
-			if(numpages == 1){#
-				if (k >= xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}#
-			if(numpages == 2){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-			if(numpages == 3){#
-				if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				if (k >= 3*xplots*yplots-xplots+1){#
-					axis(1, cex.axis=0.8, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
-					}#
-				}				#
-#
-			j <- 1#
-			while (j <= numpages){#
-				if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=0.8, las=2)}#
-				j <- j+1#
-				}#
-			}
-dotedge <- 3.25
-ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)
-test <- compLik(ML, ML2)
-test
-data <- contrTest2
-ML <-lapply(c(1:length(data)), getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-			ML2 <- lapply(c(1:length(data)), getstats2curve, data=data, dotedge=dotedge, maxDist=maxDist, stand=standMax, maxSlope=maxSlope)#
-			test <- compLik(ML, ML2)
-`	if(twoCurve){
-}
-sdfasdlkjfas
-}}}{
-dsfk;alsdjf;kladjsf;lkadjsf;lkasd
-1
-q
-test
-{}{}{}{}
-"""""
-"
-}
-6
-^.
-'
-''''
-"""
-\\
 source("/Users/acgerstein/Documents/Postdoc/Research/0CommonFiles/RScript/discAssay1_5f.R")
 MAT5.t4 <- readInDir()
 maxLik("MAT5.t4", dotedge=3.5, ymax=200, xplots=6, twoCurve=TRUE)
@@ -1021,3 +518,624 @@ dir()
 render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
 setwd("../../vignettes/")
 render("DiskAssay.rmd", html_vignette(toc=TRUE, fig_width = 6, fig_height = 3))
+install.packages("devtools")
+library(devtools)
+install_github("acgerstein/diskImageR", build_vignettes = FALSE)
+library(diskImageR)
+IJMacro("projectName")
+IJMacro("test", projectDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/", pictureDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+choose.dir()
+?chooseDir
+choose.file()
+choose.file
+?choose.file
+??choose.file
+tk_choose.file()
+?tk_choose.file
+getwd()
+IJMacro("test", projectDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/", pictureDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures")
+IJMacro("test", projectDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", pictureDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures")
+IJMacro("test", projectDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", pictureDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures")
+IJMacro("test", projectDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", pictureDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+?IJMacro
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro <-#
+function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){#
+	# if(!is.char(projectName))#
+	fileDir <- projectName#
+	if(is.na(projectDir)){#
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+	}		#
+	if(is.na(pictureDir)){#
+		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")#
+		pictureDirOrig <- pictureDir#
+		pictureDir <- file.path(pictureDir, "")#
+		if (projectDir == pictureDirOrig) {#
+			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")#
+			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+		}#
+#
+	}#
+	setwd(pictureDir)#
+	if (TRUE %in% file.info(dir())[,2]) {#
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")#
+		}#
+	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)#
+	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")#
+	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	#
+#
+	if(length(dir(outputDir)) > 0){#
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))#
+		if(cont=="n"){#
+			stop("Please delete existing files or change project name before continuing.")#
+			}#
+		if(cont=="y"){#
+			unlink(outputDir, recursive = TRUE)#
+		}#
+	}#
+	dir.create(file.path(outputDir), showWarnings= FALSE)#
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)	#
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]			#
+	if(.Platform$OS.type=="windows"){#
+		IJarguments <- paste(paste(pictureDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		#
+		script <- gsub("Program Files", "progra~1", script)#
+	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"#
+		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'#
+		args <- paste("-batch", script, IJarguments)#
+		args <- gsub("/", "\\\\", args)#
+		shell(paste(cmd, args))#
+	}#
+	else{		#
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){#
+			if (imageJLoc=="loc2"){#
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+			if (imageJLoc=="default"){#
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+		}#
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
+		}#
+		system(call)#
+	}#
+	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))#
+	cat(paste("\nElements in dataframe ", projectName, ": \n", sep=""))	#
+	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
+	if(!length(dir(pictureDir)) == length(temp)){#
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")#
+		}		#
+	cat("\a")#
+	assign(projectName, temp, envir=globalenv())#
+	}#
+#
+.ReadIn_DirCreate <-#
+function(workingDir, folderLoc, experAbbr){#
+    setwd(workingDir)#
+	tList <- list()#
+	tList <- .readIn(folderLoc, tList, 30)#
+	len <- c()#
+		for (i in 1:length(tList)){#
+		len[i] <- length(tList[[i]][,1])#
+		}#
+	temp <- data.frame(names = names(tList), len)#
+	redo <- subset(temp, len==1, names)	#
+	tList#
+	}#
+#
+.readIn <-function(directoryPath, newList = list(), numDig=30) {#
+	currDir <- getwd()#
+	# print(currDir)#
+	getData <- function(i, newList, names) {#
+		if (i > length(dir())){#
+			names(newList) <- names#
+			print(names(newList))#
+			setwd(currDir)#
+			return (newList)#
+			}#
+		else {#
+			allLines <-  aggregate(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"], mean)#
+			newList[[length(newList)+1L]] <-  data.frame(distance = allLines[,1]*40/length(allLines[,1]), x= allLines[,2])#
+			temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")#
+			names[i] <- strsplit(temp,".txt")[[1]][1]#
+			getData(i+1, newList, names)#
+		}#
+	}#
+	setwd(directoryPath)#
+	i <-1#
+	names <- c()#
+	findMin <- c()#
+	getData(i, newList, names)#
+}#
+#
+.load.data <-#
+function(filename) {#
+	d <- read.csv(filename, header=TRUE, sep="\t")#
+   names(d) <- c("count", "distance","x")#
+   d#
+ }
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+test
+function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){#
+	# if(!is.char(projectName))#
+	fileDir <- projectName#
+	if(is.na(projectDir)){#
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+	}		#
+	if(is.na(pictureDir)){#
+		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")#
+		pictureDirOrig <- pictureDir#
+		pictureDir <- file.path(pictureDir, "")#
+		if (projectDir == pictureDirOrig) {#
+			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")#
+			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+		}#
+#
+	}#
+	setwd(pictureDir)#
+	if (TRUE %in% file.info(dir())[,2]) {#
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")#
+		}#
+	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)#
+	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")#
+	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	#
+#
+	if(length(dir(outputDir)) > 0){#
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))#
+		if(cont=="n"){#
+			stop("Please delete existing files or change project name before continuing.")#
+			}#
+		if(cont=="y"){#
+			unlink(outputDir, recursive = TRUE)#
+		}#
+	}#
+	dir.create(file.path(outputDir), showWarnings= FALSE)#
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)	#
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]			#
+	if(.Platform$OS.type=="windows"){#
+		IJarguments <- paste(paste(pictureDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		#
+		script <- gsub("Program Files", "progra~1", script)#
+	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"#
+		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'#
+		args <- paste("-batch", script, IJarguments)#
+		args <- gsub("/", "\\\\", args)#
+		shell(paste(cmd, args))#
+	}#
+	else{		#
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){#
+			if (imageJLoc=="loc2"){#
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+			if (imageJLoc=="default"){#
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+		}#
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
+		}#
+		system(call)#
+	}#
+	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))#
+	cat(paste("\nElements in list '", projectName, "': \n", sep=""))	#
+	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
+	if(!length(dir(pictureDir)) == length(temp)){#
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")#
+		}		#
+	cat("\a")#
+	assign(projectName, temp, envir=globalenv())#
+	}
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro <-#
+function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){#
+	# if(!is.char(projectName))#
+	fileDir <- projectName#
+	if(is.na(projectDir)){#
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+	}		#
+	if(is.na(pictureDir)){#
+		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")#
+		pictureDirOrig <- pictureDir#
+		pictureDir <- file.path(pictureDir, "")#
+		if (projectDir == pictureDirOrig) {#
+			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")#
+			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+		}#
+#
+	}#
+	setwd(pictureDir)#
+	if (TRUE %in% file.info(dir())[,2]) {#
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")#
+		}#
+	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)#
+	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")#
+	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	#
+#
+	if(length(dir(outputDir)) > 0){#
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))#
+		if(cont=="n"){#
+			stop("Please delete existing files or change project name before continuing.")#
+			}#
+		if(cont=="y"){#
+			unlink(outputDir, recursive = TRUE)#
+		}#
+	}#
+	dir.create(file.path(outputDir), showWarnings= FALSE)#
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)	#
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]			#
+	if(.Platform$OS.type=="windows"){#
+		IJarguments <- paste(paste(pictureDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		#
+		script <- gsub("Program Files", "progra~1", script)#
+	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"#
+		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'#
+		args <- paste("-batch", script, IJarguments)#
+		args <- gsub("/", "\\\\", args)#
+		shell(paste(cmd, args))#
+	}#
+	else{		#
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){#
+			if (imageJLoc=="loc2"){#
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+			if (imageJLoc=="default"){#
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+		}#
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
+		}#
+		system(call)#
+	}#
+	cat(paste("\nOutput of imageJ analyses saved in directory: ", outputDir, "\n", sep=""))#
+	cat(paste("\nElements in list '", projectName, "': \n", sep=""))	#
+	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
+	if(!length(dir(pictureDir)) == length(temp)){#
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")#
+		}		#
+	cat("\a")#
+	assign(projectName, temp, envir=globalenv())#
+	}
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro <-#
+function(projectName, projectDir=NA, pictureDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){#
+	# if(!is.char(projectName))#
+	fileDir <- projectName#
+	if(is.na(projectDir)){#
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+	}		#
+	if(is.na(pictureDir)){#
+		pictureDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")#
+		pictureDirOrig <- pictureDir#
+		pictureDir <- file.path(pictureDir, "")#
+		if (projectDir == pictureDirOrig) {#
+			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")#
+			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+		}#
+#
+	}#
+	setwd(pictureDir)#
+	if (TRUE %in% file.info(dir())[,2]) {#
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")#
+		}#
+	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)#
+	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")#
+	IJarguments <- paste(pictureDir, outputDir, diskDiam, sep="*")	#
+#
+	if(length(dir(outputDir)) > 0){#
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))#
+		if(cont=="n"){#
+			stop("Please delete existing files or change project name before continuing.")#
+			}#
+		if(cont=="y"){#
+			unlink(outputDir, recursive = TRUE)#
+		}#
+	}#
+	dir.create(file.path(outputDir), showWarnings= FALSE)#
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)	#
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]			#
+	if(.Platform$OS.type=="windows"){#
+		IJarguments <- paste(paste(pictureDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		#
+		script <- gsub("Program Files", "progra~1", script)#
+	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"#
+		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'#
+		args <- paste("-batch", script, IJarguments)#
+		args <- gsub("/", "\\\\", args)#
+		shell(paste(cmd, args))#
+	}#
+	else{		#
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){#
+			if (imageJLoc=="loc2"){#
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+			if (imageJLoc=="default"){#
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+		}#
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
+		}#
+		system(call)#
+	}#
+	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))#
+	cat(paste("\nElements in list '", projectName, "': \n", sep=""))	#
+	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
+	if(!length(dir(pictureDir)) == length(temp)){#
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")#
+		}		#
+	cat("\a")#
+	assign(projectName, temp, envir=globalenv())#
+	}
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro <-#
+function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6, manual=TRUE){#
+	# if(!is.char(projectName))#
+	fileDir <- projectName#
+	if(is.na(projectDir)){#
+		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+	}		#
+	if(is.na(photoDir)){#
+		photoDir <- tcltk::tk_choose.dir(caption = "Select location of photographs")#
+		photoDirOrig <- photoDir#
+		photoDir <- file.path(photoDir, "")#
+		if (projectDir == photoDirOrig) {#
+			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")#
+			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") #
+		}#
+#
+	}#
+	setwd(photoDir)#
+	if (TRUE %in% file.info(dir())[,2]) {#
+		stop("There is a folder located in your photograph directory. Please remove before continuing.")#
+		}#
+	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)#
+	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")#
+	IJarguments <- paste(photoDir, outputDir, diskDiam, sep="*")	#
+#
+	if(length(dir(outputDir)) > 0){#
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))#
+		if(cont=="n"){#
+			stop("Please delete existing files or change project name before continuing.")#
+			}#
+		if(cont=="y"){#
+			unlink(outputDir, recursive = TRUE)#
+		}#
+	}#
+	dir.create(file.path(outputDir), showWarnings= FALSE)#
+	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)#
+	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)	#
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]			#
+	if(.Platform$OS.type=="windows"){#
+		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		#
+		script <- gsub("Program Files", "progra~1", script)#
+	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"#
+		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'#
+		args <- paste("-batch", script, IJarguments)#
+		args <- gsub("/", "\\\\", args)#
+		shell(paste(cmd, args))#
+	}#
+	else{		#
+		if (imageJLoc=="default" | imageJLoc=="loc2" ){#
+			if (imageJLoc=="loc2"){#
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+			if (imageJLoc=="default"){#
+				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}#
+		}#
+		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")#
+		}#
+		system(call)#
+	}#
+	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))#
+	cat(paste("\nElements in list '", projectName, "': \n", sep=""))	#
+	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)#
+	if(!length(dir(photoDir)) == length(temp)){#
+		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")#
+		}		#
+	cat("\a")#
+	assign(projectName, temp, envir=globalenv())#
+	}#
+#
+.ReadIn_DirCreate <-#
+function(workingDir, folderLoc, experAbbr){#
+    setwd(workingDir)#
+	tList <- list()#
+	tList <- .readIn(folderLoc, tList, 30)#
+	len <- c()#
+		for (i in 1:length(tList)){#
+		len[i] <- length(tList[[i]][,1])#
+		}#
+	temp <- data.frame(names = names(tList), len)#
+	redo <- subset(temp, len==1, names)	#
+	tList#
+	}#
+#
+.readIn <-function(directoryPath, newList = list(), numDig=30) {#
+	currDir <- getwd()#
+	# print(currDir)#
+	getData <- function(i, newList, names) {#
+		if (i > length(dir())){#
+			names(newList) <- names#
+			print(names(newList))#
+			setwd(currDir)#
+			return (newList)#
+			}#
+		else {#
+			allLines <-  aggregate(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"], mean)#
+			newList[[length(newList)+1L]] <-  data.frame(distance = allLines[,1]*40/length(allLines[,1]), x= allLines[,2])#
+			temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")#
+			names[i] <- strsplit(temp,".txt")[[1]][1]#
+			getData(i+1, newList, names)#
+		}#
+	}#
+	setwd(directoryPath)#
+	i <-1#
+	names <- c()#
+	findMin <- c()#
+	getData(i, newList, names)#
+}#
+#
+.load.data <-#
+function(filename) {#
+	d <- read.csv(filename, header=TRUE, sep="\t")#
+   names(d) <- c("count", "distance","x")#
+   d#
+ }
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+IJMacro("test",  "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra", "/Users/acgerstein/Documents/Postdoc/Research/diskImageRextra/pictures/")
+?imageJ
+?IJMacro
+?plotRaw
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+?plotRaw
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+library(devtools)
+install_github("acgerstein/diskImageR", build_vignettes = FALSE)
+library(diskImageR)
+IJMacro("projectName")
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+?maxLik
+?diskImageR
+?IJMacro
+library(devtools)#
+#
+#install the diskImageR package#
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+library(diskImageR)
+?IJMacro
+IJMacro(
+)
+install_github("acgerstein/diskImageR", build_vignettes = FALSE)
+?maxLik
+library(diskImageR)
+IJMacro("projectName")
+plotRaw("projectName")
+projectName
+plotRaw("projectName")
+plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE, savePDF= TRUE){#
+	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)#
+	t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))#
+	if (!overwrite){#
+		if (file.exists(t)){#
+			t <- file.path("figures", projectName, paste(projectName, "_raw_2.pdf", sep=""))#
+			if (file.exists(t)){#
+				k <- 2#
+				while(file.exists(t)){#
+					k <- k+1#
+					t <- file.path("figures", projectName, paste(projectName, "_raw_", k, ".pdf", sep=""))#
+					}#
+				}#
+			}#
+		}#
+	data <- eval(parse(text=projectName))#
+	standardLoc <- 2.5#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	#
+	convert <- unlist(lapply(data, function(x) 40/length(x[,1])))#
+	if (is.logical(nameVector)){#
+		if (nameVector){label <- names(data)}		#
+		else {label <- rep("", length(data))}#
+		}#
+	else {label <- nameVector}#
+#
+	if (xplots > length(data)){#
+		xplots <- length(data)#
+		}#
+	if (ceiling(length(data)/xplots) < 6) {#
+		yplots<- ceiling(length(data)/xplots)}#
+	else {yplots<- 6}#
+	numpages <- ceiling(length(data)/(xplots*yplots))#
+	if(savePDF){#
+		pdf(t, width=width, height=height)#
+		}#
+	# if(!savePDF){#
+		# quartz(width=width, height=height)#
+		# }#
+	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))#
+	for (i in 1:length(data)){#
+		.discplotNoRep(data[[i]], label[i], ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, stand=standards[i], standardLoc = standardLoc, cexPt = cexPt, plotStandardLoc = plotStandardLoc)#
+		if(numpages == 1){#
+			if (i >= xplots*yplots-xplots+1){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+		}#
+		if(numpages == 2){#
+			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+			if (i >= 2*xplots*yplots-xplots+1){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+		}				#
+		if(numpages == 3){#
+			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+			if (i >= 2*xplots*yplots-xplots+1 & i < 2*xplots*yplots+1){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+			if (i >= (length(data)-xplots)){#
+				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))#
+			}#
+		}				#
+		k <- 1#
+		while (k <= numpages){#
+		if (i %in% seq(1, k*yplots*xplots, by=xplots)) {axis(2, cex.axis=cexY, las=2)}#
+			k <- k+1}#
+		if(showNum){#
+			text(xmax*0.95, xmax*0.95, i)#
+		}#
+	}#
+	mtext("Distance from center of disk (mm)", side= 1, outer=TRUE, line=2)#
+	mtext("Pixel intensity", side=2, outer=TRUE, line=2)#
+	if(savePDF){#
+		dev.off()#
+		cat(paste("\tFigure saved: ", t, sep=""))#
+		if(popUp){#
+		tt <- paste("open ",t)#
+		system(tt)#
+	}#
+	}#
+	}#
+#
+.discplotNoRep <- function(data,  label=label, ymin=0, ymax=250, xmin=0, xmax=40, standardLoc = 2.5, cexPt = 0.6, stand = 0, xaxt="n", yaxt="n", plotStandardLoc =FALSE){#
+	plot(data[,1], data[,2]+stand, ylim=c(ymin, ymax), xlim=c(xmin, xmax), xaxt=xaxt, yaxt="n", cex=cexPt, col="black")#
+	if (yaxt=="s"){#
+		axis(2, las=2)}#
+	axis(1, labels=FALSE, at=c(0, 10, 20, 30, 40))#
+	axis(2, labels=FALSE)#
+	mtext(label, side=3, cex=0.6)#
+	if(plotStandardLoc){#
+		abline(v= standardLoc, lty=2, col="red")#
+		}#
+	}
+projectName <- "projectName"
+t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))
+data <- eval(parse(text=projectName))
+data
+projectName
+projectName
+"projectName"
+IJMacro("projectName")
+projectName
+data <- eval(parse(text=projectName))
+data
+data <- eval(parse(text="projectName"))
+data
+standardLoc <- 2.5#
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		#
+	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+convert <- unlist(lapply(data, function(x) 40/length(x[,1])))
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+library(diskImageR)
+?IJMacro
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+install_github("acgerstein/diskImageR", build_vignettes = TRUE)
+library(diskImageR)
+?plotRaw
+?IJMacro
