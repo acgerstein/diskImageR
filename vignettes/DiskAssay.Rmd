@@ -67,8 +67,8 @@ If you would prefer to avoid pop-up boxes you can specify your desired main proj
 IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
 ```
 
-```{r}
-IJMacro("projectName", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
+```{r, echo=FALSE}
+IJMacro("projectName", projectDir= "/Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/", photoDir = "/Users/acgerstein/Documents/Postdoc/Research/diskImageR/vignettes/pictures/")
 ```
 
 If the function is unable to locate imageJ a red error will pop-up with a message like <span style="color:red">/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory</span>. The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
@@ -110,7 +110,7 @@ From these functions we substract off the plate background intensity from all va
 	: the ten data points on either side of the midpoint (od50) from the single logistic equation are used to find the slope of the best fit linear model using the lm function in R.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("projectName", clearHalo=1, RAD="all", needML=TRUE, popUp = FALSE, savePDF =FALSE, FoG=20)
+maxLik("projectName", clearHalo=1, RAD="all", needML=TRUE, popUp = FALSE, savePDF = FALSE, FoG=20)
 ```
 
 ### [OPTIONAL] Save the maximum likelihood results
