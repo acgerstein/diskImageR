@@ -59,16 +59,16 @@ The photograph directory is the one used to store photographs from above (which 
 
 To run the imageJ macro through a user-interface with pop-up boxes: 
 ```r
-IJMacro("projectName")
+IJMacro("newProject")
 ```
 
 If you would prefer to avoid pop-up boxes you can specify your desired main project directory and photograph directory locations:
 ```r
-IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
+IJMacro("newProject", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
 ```
 
 ```{r, echo=FALSE}
-IJMacro("projectName", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
+IJMacro("newProject", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
 ```
 
 If the function is unable to locate imageJ a red error will pop-up with a message like <span style="color:red">/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory</span>. The easiest solution is to move imageJ to the default location or to specify the path to imageJ with argument imageJLoc = "/path/to/imageJ".
@@ -77,5 +77,5 @@ If the function is unable to locate imageJ a red error will pop-up with a messag
 
 To access the output of \code{IJMacro} in a later R session use \link{code{readExistingIJ}}. At this step you can also change the project name, it does not have to be the same name that was used originally.
 ```r
-readExistingIJ("projectName") 
+readExistingIJ("newProject") 
 ```
