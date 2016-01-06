@@ -63,7 +63,7 @@ IJMacro("projectName")
 ```
 
 If you would prefer to avoid pop-up boxes you can specify your desired main project directory and photograph directory locations:
-```r, eval=FALSE
+```r
 IJMacro("projectName", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/phogoraphs/")
 ```
 
@@ -78,7 +78,6 @@ To access the output of \code{IJMacro} in a later R session use \link{code{readE
 ```r
 readExistingIJ("projectName") 
 ```
-
 
 ### [optional] Plot the imageJ output
 To plot pixel intensity from the average from all photographs use:
