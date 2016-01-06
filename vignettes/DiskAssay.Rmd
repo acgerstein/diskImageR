@@ -132,7 +132,7 @@ newProject.df
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using
 
 ```{r}
-addType("projectName", typeName="rep")
+addType("newProject", typeName="rep")
 newProject.df
 ```
 If you want to access this dataframe in a later R session you can do so using readExistingDF("betterName"). Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., temp <- read.csv(file)) though if you intend to use the functions below, you need to save it with a name that ends with ".df" (i.e., temp.df).
