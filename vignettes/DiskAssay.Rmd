@@ -192,7 +192,7 @@ The required input for all three functions can be the dataframe from either `cre
 Many aspects of these figure can be specified depending on the number of parameters. Full details are provided in the accompanying package help files in R (type `?oneParamPlot` etc. into the console).
 
 ```{r, fig.width=5, fig.height=4}
-twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
+twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
 ```
 
 ```{r, fig.width=5, fig.height=4}
