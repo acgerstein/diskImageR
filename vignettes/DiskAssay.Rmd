@@ -183,17 +183,23 @@ manyReps.ag
 ```
 
 ### [OPTIONAL] Plot parameter results
-Three plotting functions are included with `diskImageR` that use the dataframes generated `createDataframe()` and `aggregateData()`. The function `oneParamPlot()`will plot any of the single parameters (argument `param` supports "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope", the default = "RAD20") while twoParamPlot()` will plot RAD and FoG at specified cutoff values (`RAD` supports "RAD20", "RAD50", "RAD80"; `FoG` supports "FoG20", "FoG50", "FoG80"), and `threeParamPlot()` will plot RAD, FoG and slope. 
+Three plotting functions are included with `diskImageR` that use the dataframes generated `createDataframe()` and `aggregateData()`. The function `oneParamPlot()`will plot any of the single parameters (argument `param` supports "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope", the default = "RAD20") while `twoParamPlot()` will plot RAD and FoG at specified cutoff values (`RAD` supports "RAD20", "RAD50", "RAD80"; `FoG` supports "FoG20", "FoG50", "FoG80"), and `threeParamPlot()` will plot RAD, FoG and slope. 
 
-The required input for all three functions can be the dataframe from either `createDataframe()` (specified by argument `type="df"`) or from `aggregateData()` (specified by argument `type="ag"`. 
+The required input for all three functions can be the dataframe from either `createDataframe()` (specified by argument `type="df"`) or from `aggregateData()` (specified by argument `type="ag"`).  
 
 `oneParamePlot()` will plot either a barplot (argument `barplot = TRUE`) or a dotplot (argument `barplot=FALSE`). In the two and three parameter plots the default is to plot FoG as a barplot and RAD and slope as a dotplot, though FoG can also be plotted as a dotplot with argument `barplot=FALSE`. There is currently not support to plot either RAD or slope as a barplot in this framework. 
 
 Many aspects of these figure can be specified depending on the number of parameters. Full details are provided in the accompanying package help files in R (type `?oneParamPlot` etc. into the console).
 
 ```{r, fig.width=5, fig.height=4}
+twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
+```
+
+```{r, fig.width=5, fig.height=4}
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
+
+
 
 ### skeleton walkthrough of typical use
 
