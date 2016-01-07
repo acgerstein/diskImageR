@@ -227,19 +227,19 @@ library(diskImageR)
 #Run the ImageJ analysis component, save the output. "newProject" shhould be changed to something of your choice (and then the same name used throughout); note that the quotation marks are required.
 #To use a pop-up box interface:
 IJMacro("newProject")
-#To specify the appropriate directories without a popup:
+#OR To specify the appropriate directories without the pop-up interface:
 IJMacro("newProject",  "/path/to/projectDir", "/path/to/projectDir/photographs/")
 
-#Plot the result of ImageJ analysis (averaged among 72 lines draft outward from the center of the diffusion disk). Type ?plotRaw for additional parameter options.
+#Plot the result of imageJ analysis (averaged among 72 lines draft outward from the center of the diffusion disk). 
 plotRaw("newProject")
 
-#Use maximum likelihood to fit a bilogistic and single logistic model to the data from each photograph. "clearHalo" is used to specify a picture that has a clear halo; this is used to standardize all photographs and will be most effective when photographs are taken with equal lighting without shadows. 
+#Use maximum likelihood to fit single and double logistic models to the data from each photograph. "clearHalo" is used to specify a picture that has a clear halo; this is used to standardize all photographs and will be most effective when photographs are taken with equal lighting without shadows. This can be a blank plate with just a disk on it (removed in the next step).
 maxLik("newProject", clearHalo=1, RAD="all")
 
-#Use the models to calculate resistance (20%, 50% and 80% reduction in growth = RAD20, RAD50, RAD80), tolerance (actual fraction of growth achvied above RAD relative to potential growth = FoG20, FoG50, FoG80), and sensitivity (slope at RAD50), which are saved in a CSV file. 
+#Use the models to calculate resistance (20%, 50% and 80% reduction in growth = RAD20, RAD50, RAD80), tolerance (actual fraction of growth achvied above RAD relative to potential growth = FoG20, FoG50, FoG80), and sensitivity (slope at RAD50), which are saved in a CSV file. If you used a blank plate for clearHalo, remove with argument removeClear = TRUE.
 createDataframe("newProject", clearHalo = 1)
 
-#[OPTIONAL] Calculate the mean and error for parameter estimates across replicate pictures
+#[OPTIONAL] Calculate the mean and variance for parameter estimates across replicate pictures
 aggregateData("newProject")
 ```
 
