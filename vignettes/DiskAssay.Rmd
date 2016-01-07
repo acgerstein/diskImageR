@@ -138,7 +138,7 @@ Depending on the number of photographs to be analyzed, `maxLik()` can take a fai
 
 The output of `maxLik()` is a list that is saved to the R environment and a PDF file with one plot per photograph that shows the results of the model fitting (saved to the *figures* directory) as well as the calculated resistance and tolerance parameters. Many aspects of this figure can be specified including the maximum y axis (`ymax`) the number of plots on the x axis (`xplots`), the height and width of the PDF file (`height`, `width`), the values of RAD to be plotted (one of `80`, `50`, `20`, or `all`) and FoG cutoff value to plot (one of `80`, `50`, or `20`). Once `maxLik()` has been run once (in a given R session), it does not need to be rerun to made adjustments to the PDF file; to make a new figure use the argument `needML = FALSE`. The default is to save only a single PDF file (i.e., to repeatedly overwrite the same file with different figure iterations), this can be supressed with the argument `overwrite = FALSE`. 
 
-```{r,  fig.width=5, fig.height=4}
+```{r,  fig.width=5, fig.height=4, tidy=TRUE}
 maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
 ```
 
@@ -195,7 +195,7 @@ Many aspects of these figure can be specified depending on type of dataframe and
 twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -45)
 ```
 
-```{r, fig.width=5, fig.height=4}
+```{r, fig.width=5, fig.height=4, tidy=TRUE}
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
 
@@ -203,7 +203,7 @@ twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 
 ##Walkthrough of typical diskImageR use
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, tidy=TRUE}
 ##############################################################
 #Run this function the first time you want to run diskImageR
 ##############################################################
