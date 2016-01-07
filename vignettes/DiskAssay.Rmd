@@ -207,10 +207,13 @@ twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 ```{r, eval=FALSE, tidy=TRUE}
 #For all functions type ?functionName to bring up a help file and to see current argument default values.
 
-#install the devtools package. Run this function only the first time you want to run diskImageR.
+###Run this function only the first time you want to run diskImageR:
+
+#install the devtools package. 
 install.packages("devtools")
 
-#Run the following functions everytime to use diskImageR:
+###Run the following functions everytime to use diskImageR:
+
 #load devtools
 library(devtools)
 
