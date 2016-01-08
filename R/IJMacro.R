@@ -65,7 +65,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'
 		args <- paste("-batch", script, IJarguments)
 		args <- gsub("/", "\\\\", args)
-		shell(paste(cmd, args))
+		shell(paste(cmd, args), wait=TRUE)
 	}
 	else{		
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
