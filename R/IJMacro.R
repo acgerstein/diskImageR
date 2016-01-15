@@ -84,9 +84,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 	else{
 				
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
-			if ("ImageJ.app" %in% dir("/Applications/"){
+			if ("ImageJ.app" %in% dir("/Applications/")){
 				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-			if ("ImageJ.app" %in% dir("/Applications/ImageJ/"){			
+			if ("ImageJ.app" %in% dir("/Applications/ImageJ/")){			
 				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
 		}
 		else {
