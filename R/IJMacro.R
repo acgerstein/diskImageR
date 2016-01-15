@@ -76,13 +76,12 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 			}
 		if(knownIJloc == FALSE){
 			stop("ImageJ is not in expected location. Please move ImageJ to the Program Files directory, or specify the path to its location using the argument 'imageJLoc'")
-			
+		}		
 		args <- paste("-batch", script, IJarguments)
 		args <- gsub("/", "\\\\", args)
 		shell(paste(cmd, args), wait=TRUE,intern=TRUE)
 	}
-	else{
-				
+	else{				
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
 			if ("ImageJ.app" %in% dir("/Applications/")){
 				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
@@ -96,8 +95,10 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 			else{
 			stop("ImageJ is not in expected location. Please move ImageJ to the Applications directory, or specify the path to its location using the argument 'imageJLoc'")
 				}
-		system(call)
 	}
+		system(call)
+		}
+
 	count_wait<-0.0;
 	while(length(dir(outputDir))<length(dir(photoDir)) && count_wait<1e12)
 	{
