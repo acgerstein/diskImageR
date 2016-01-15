@@ -6,7 +6,7 @@
 #' @param projectDir the path to the project directory where all analyses will be saved. If using tcltk interface to select directories leave as is (default=NA)
 #' @param photoDir the path to the directory where the photographs are to be analyzed. If using tcltk interface to select directories leave as is (default=NA)
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
-#' @param imageJLoc the absolute path to imageJ on your computer. Current options are those standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJ} will also accept any absolute path. If you are on a windows machine please save imageJ to the default location when installing (Program Files/ImageJ).
+#' @param imageJLoc the absolute path to imageJ on your computer. Current options are those standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub. If you are on a windows machine please save imageJ to the default location when installing (Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.
 
 #' @details Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
 
@@ -61,24 +61,48 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 	if(.Platform$OS.type=="windows"){
 		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		
 		script <- gsub("Program Files", "progra~1", script)
-	  cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"
-		# cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'
+		knownIJLoc <- FALSE
+		if("ImageJ.exe" %in% "C:\\progra~1\\ImageJ\\"){
+		  	cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"
+		  	knownIJLoc <- TRUE
+		  	}
+		if("ImageJ.exe" %in% "C:\\Program Files (x86)\\ImageJ\\"){
+			cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'
+			knownIJLoc <- TRUE
+			}
+		if("ImageJ.exe" %in% imageJLoc){
+			cmd <- paste(imageJLoc, "ImageJ.exe", sep="")
+			knownIJLoc <- TRUE
+			}
+		if(knownIJloc == FALSE){
+			stop("ImageJ is not in expected location. Please move ImageJ to the Program Files directory, or specify the path to its location using the argument 'imageJLoc'")
+			
 		args <- paste("-batch", script, IJarguments)
 		args <- gsub("/", "\\\\", args)
-		shell(paste(cmd, args), wait=TRUE)
+		shell(paste(cmd, args), wait=TRUE,intern=TRUE)
 	}
-	else{		
+	else{
+				
 		if (imageJLoc=="default" | imageJLoc=="loc2" ){
-			if (imageJLoc=="loc2"){
-				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-			if (imageJLoc=="default"){
+			if ("ImageJ.app" %in% dir("/Applications/"){
 				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
+			if ("ImageJ.app" %in% dir("/Applications/ImageJ/"){			
+				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
 		}
-		else {call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
-		}
+		else {
+			if ("ImageJ.app" %in% imageJLoc){
+				call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
+				}
+			else{
+			stop("ImageJ is not in expected location. Please move ImageJ to the Applications directory, or specify the path to its location using the argument 'imageJLoc'")
+				}
 		system(call)
 	}
-	
+	count_wait<-0.0;
+	while(length(dir(outputDir))<length(dir(photoDir)) && count_wait<1e12)
+	{
+	  count_wait<-count_wait+1.0
+	}
 	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
 	cat(paste("\nElements in list '", projectName, "': \n", sep=""))	
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
