@@ -10,7 +10,7 @@
 
 #' @details Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
 
-#' @return A .csv file is saved to the directory "imageJ-out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.
+#' @return A .csv file is saved to the directory "imageJ_out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.
 
 #' @export
 
@@ -74,7 +74,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 			cmd <- paste(imageJLoc, "ImageJ.exe", sep="")
 			knownIJLoc <- TRUE
 			}
-		if(knownIJloc == FALSE){
+		if(knownIJLoc == FALSE){
 			stop("ImageJ is not in expected location. Please move ImageJ to the Program Files directory, or specify the path to its location using the argument 'imageJLoc'")
 		}		
 		args <- paste("-batch", script, IJarguments)
