@@ -62,11 +62,11 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc="loc2", diskDiam = 6
 		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")		
 		script <- gsub("Program Files", "progra~1", script)
 		knownIJLoc <- FALSE
-		if("ImageJ.exe" %in% "C:\\progra~1\\ImageJ\\"){
+		if("ImageJ.exe" %in% dir("C:\\progra~1\\ImageJ\\")){
 		  	cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"
 		  	knownIJLoc <- TRUE
 		  	}
-		if("ImageJ.exe" %in% "C:\\Program Files (x86)\\ImageJ\\"){
+		if("ImageJ.exe" %in% dir("C:\\Program Files (x86)\\ImageJ\\")){
 			cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'
 			knownIJLoc <- TRUE
 			}
