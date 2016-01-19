@@ -63,7 +63,7 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 							if (length(ind)>0) MIC[i]<-mean(MICdata[ind,2])
 							else MIC[i]<-NA
 						}
-						RAD <- subset(dataframe, names %in% MIC_names)[paste("RAD", RAD, sep=""]
+						RAD <- subset(dataframe, names %in% MIC_names)[paste("RAD", RAD, sep="")]
 						if(length(RAD) != length(MIC) & type=="df"){
 							stop(paste("The length of the MIC file does not match the length of ", projectName, ".df. If you have replicates for RAD please run 'aggregateData' and the rerun 'calcMIC' with 'type=\"ag\"'. If you have replicates for MIC please average in the standard curve file before proceeding", sep="") 
 						if(length(RAD) != length(MIC) & type=="df"){
