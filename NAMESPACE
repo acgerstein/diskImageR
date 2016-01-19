@@ -3,6 +3,7 @@
 export(IJMacro)
 export(addType)
 export(aggregateData)
+export(calcMIC)
 export(createDataframe)
 export(maxLik)
 export(oneParamPlot)

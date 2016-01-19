@@ -5,8 +5,8 @@
 \title{Dataframe creation}
 \usage{
 createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
-  nameVector = TRUE, typeVector = TRUE, typePlace = 2,
-  typeName = "type")
+  removeClear = FALSE, nameVector = TRUE, typeVector = TRUE,
+  typePlace = 2, typeName = "type")
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -16,6 +16,8 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.}
+
+\item{removeClear}{a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo. Defaults to FALSE.}
 
 \item{nameVector}{either a logial value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign th photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.}
 

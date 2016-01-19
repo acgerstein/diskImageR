@@ -16,9 +16,9 @@ oneParamPlot(projectName, type, param = "RAD20", ymin = 0, ymax = 100,
 
 \item{param}{what parameter to plot (supported: "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope"), default = "RAD20"}
 
-\item{ymin}{a numeric value indicating the minimum y value plotted in each graph}
+\item{ymin}{a numeric value indicating the minimum y value plotted in each plot}
 
-\item{ymax}{a numeric value indicating the maximum y value plotted in each graph}
+\item{ymax}{a numeric value indicating the maximum y value plotted in each plot}
 
 \item{width}{a numeric value indicating the width of the pdf file generated}
 
@@ -34,7 +34,7 @@ oneParamPlot(projectName, type, param = "RAD20", ymin = 0, ymax = 100,
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name}
 
-\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).}
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 

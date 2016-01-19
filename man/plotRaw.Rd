@@ -12,13 +12,13 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 \arguments{
 \item{projectName}{the short name to be used for the project}
 
-\item{ymin}{a numeric value indicating the minimum y value plotted in each graph}
+\item{ymin}{a numeric value indicating the minimum y value plotted in each plot}
 
-\item{ymax}{a numeric value indicating the maximum y value plotted in each graph}
+\item{ymax}{a numeric value indicating the maximum y value plotted in each plot}
 
-\item{xmin}{a numeric value indicating the minimum x value plotted in each graph}
+\item{xmin}{a numeric value indicating the minimum x value plotted in each plot}
 
-\item{xmax}{a numeric value indicating the maximum x value plotted in each graph}
+\item{xmax}{a numeric value indicating the maximum x value plotted in each plot}
 
 \item{xplots}{a numeric value indicating how many plots to plot in each row}
 
@@ -32,23 +32,23 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 
 \item{cexY}{a numeric value indicating the size of y-axis text}
 
-\item{nameVector}{either a logial value indicating whether to plot the photograph names above the graph or not or a vector the same length as the number of pictures containing the desired names. Defaults to TRUE.}
+\item{nameVector}{either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.}
 
 \item{plotStandardLoc}{a logical value indicating whether to draw a dashed horizontal line at the standardization point}
 
-\item{showNum}{a logical value indicating whether to annotate each graph with the picture number (determined alphabetically from the picture names)}
+\item{showNum}{a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names)}
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name}
 
-\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).}
 }
 \value{
 A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 }
 \description{
-This function creates a pdf figure of plots showing the results of the imageJ analysis, with one plot for each picture. This function is primarily for visualization purposes.
+This function creates a pdf figure showing the results of the imageJ analysis, with one plot for each photograph. This function is primarily for visualization purposes.
 }
 \author{
 Aleeza c. Gerstein

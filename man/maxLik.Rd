@@ -29,7 +29,7 @@ maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
 
 \item{FoG}{a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{FoG} = "80" (80\% reduction in growth), \code{FoG} = "50" (50\% reduction in growth), and \code{FoG} = "20" (20\% reduction in growth) are supported. Note, the critical level for FoG can be different than that chosen for RAD.}
 
-\item{RAD}{a numeric value indicating the the critical level of the radius of inhibition (i.e., resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), \code{RAD} = "20" (20\% reduction in growth), and \code{RAD} = "all" are supported.}
+\item{RAD}{a numeric value indicating the critical level of the radius of inhibition (i.e., resistance) parameter to plot, does not influence maximum likelihood fitting. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), \code{RAD} = "20" (20\% reduction in growth), and \code{RAD} = "all" are supported.}
 
 \item{needML}{a logical value indicating whether the maximum likelihood results already exist in the global environment or not. If \code{\link{maxLik}} has already been run in this session then needML can be set to FALSE, which allows the user to replot the results without the need to rerun the time consuming maximum likelihood models. Defaults to TRUE.}
 

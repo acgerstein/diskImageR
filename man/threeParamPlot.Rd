@@ -38,7 +38,7 @@ threeParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name}
 
-\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).}
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 }
