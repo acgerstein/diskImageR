@@ -4,8 +4,8 @@
 \alias{calcMIC}
 \title{Convert RAD to MIC based on built-in or provided parameters or datasets}
 \usage{
-calcMIC(projectName, type = "df", RAD = "20", addBreakpoints = TRUE,
-  savePDF = TRUE, popUp = TRUE)
+calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 8,
+  addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE)
 }
 \arguments{
 \item{projectName}{the short name you have been using for the project.}
@@ -23,6 +23,6 @@ In all cases the function will return an updated .csv file that contains the MIC
 Used to convert RAD into MIC. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of the linear relationship between RAD and log2(MIC) for their species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information.
 }
 \author{
-Aleeza C. Gerstein
+Aleeza C. Gerstein & Inbal Hecht
 }
 
