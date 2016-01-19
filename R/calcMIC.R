@@ -53,8 +53,8 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 					MICdata<- read.csv(MICFile, header=FALSE,sep=",") 
 					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, one containing the line name, and one wtih corresponding MIC values \n")
 					else{
-						MICdata <- read.csv(MICFile, header=FALSE,sep="\t",dec="."); 
-						MIC_length <- length(MICdata[[1]])
+						# MICdata <- read.csv(MICFile, header=FALSE,sep="\t",dec="."); 
+						# MIC_length <- length(MICdata[[1]])
 						MIC_names <- MICdata$V1
 						MIC<-0
 						N1 <- dataframe[,1]
@@ -64,10 +64,8 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 							else MIC[i]<-NA
 						}
 						RAD <- subset(dataframe, names %in% MIC_names)[paste("RAD", RAD, sep="")]
-						if(length(RAD) != length(MIC) & type=="df"){
-							stop(paste("The length of the MIC file does not match the length of ", projectName, ".df. If you have replicates for RAD please run 'aggregateData' and the rerun 'calcMIC' with 'type=\"ag\"'. If you have replicates for MIC please average in the standard curve file before proceeding", sep=""))
-						if(length(RAD) != length(MIC) & type=="df"){
-							stop(paste("The length of the MIC file does not match the length of ", projectName, ".ag.", sep="")
+						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".df. If you have replicates for RAD please run 'aggregateData' and the rerun 'calcMIC' with 'type=\"ag\"'. If you have replicates for MIC please average in the standard curve file before proceeding", sep=""))
+						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".ag.", sep="")
 						} 
 						fit<-lm(log(MIC)~RAD, na.action=na.exclude)
 						A <- summary(fit)$coefficients[1]
