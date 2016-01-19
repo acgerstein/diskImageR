@@ -4,6 +4,7 @@
 
 #' @param projectName the short name you have been using for the project.
 #' @inheritParams twoParamPlot
+#' @inheritParams oneParamPlot
 #' @param RAD a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20".
 #' @param addBreakpoints Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve).
 
@@ -12,9 +13,10 @@
 #' @export
 
 #'@author Aleeza C. Gerstein
+#'@author Inbal Hecht
 
 
-calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
+calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
 	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "casitone"), intercept=c(10, 11, 12), slope=c(-0.4, -0.5, -0.6))	
 	#Check whether file exists in environment or prompt user to load it
 	if(type == "df"){
