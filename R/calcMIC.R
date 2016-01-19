@@ -5,8 +5,8 @@
 #' @param projectName the short name you have been using for the project.
 #' @inheritParams twoParamPlot
 #' @inheritParams oneParamPlot
-#' @param RAD a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20".
-#' @param addBreakpoints Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve).
+#' @param RAD a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20"]
+#' @param addBreakpoints Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve)
 
 #' @return In all cases the function will return an updated .csv file that contains the MIC values that correspond to calculated RAD values in the directory "parameter_files" in the main project directory. If the user has supplied their own MIC data the function will also save the calculated model parameters into a separate file and will plot the linear relationship and line of best fit.
 
@@ -15,8 +15,9 @@
 #'@author Aleeza C. Gerstein & Inbal Hecht
 
 
-calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
-	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "casitone"), intercept=c(10, 11, 12), slope=c(-0.4, -0.5, -0.6))	
+calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
+	ZOIvalue <- RAD
+	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "posaconazole"), intercept=c(10, 11, 12), slope=c(-0.4, -0.5, -0.6))	
 	#Check whether file exists in environment or prompt user to load it
 	if(type == "df"){
 		if(paste(projectName, ".df", sep="") %in% ls(globalenv())) dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
@@ -27,7 +28,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addB
 		else stop(paste(projectName, ".ag not found in working environment. Please load with function 'readExistingAG'", sep=""))	
 		}	
 
-	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? (y/n)  ")
+	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? [y/n]  ")
 	if(useBuiltIn=="y"){
 		#do this eventually
 		# knownSppDrug <- file.path(.libPaths(), "diskImageR", "knownSppDrug.csv")
@@ -37,24 +38,25 @@ calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addB
 		# cat(paste(" interecept:," curvePars[1], "slope:", curvePars[2], sep=""))
 	}
 	else{
-		haveSI<-readline("Do you know the slope and intercept of the linear relationship between RAD and log2(MIC)? (y/n)  ")
+		haveSI<-readline("Do you know the slope and intercept of the linear relationship between RAD and log2(MIC)? [y/n]  ")
 		if(haveSI == "y"){
 	   		intercept <- readline("Enter the intercept: ")
-	   		intercept <- 2^intercept
+	   		intercept <- as.numeric(intercept)
 	   		slope <- readline("Enter the slope: ")
+	   		slope <- as.numeric(slope)
 	   		curvePars <- c(intercept, slope)
 	   	}
 		if(haveSI =="n"){
-	  		exFile <- readline("Do you have a standard curve file?  (y/n) ")   
+	  		exFile <- readline("Do you have a standard curve file?  [y/n] ")   
 	  		if(exFile == "n") stop("You must use data from built-in combinations, provide the required parameters or a standard curve file to proceed.")
 		  	else{
- 		 		sameData <- readline("Does your file have MIC data that corresponds to the same strains as your current dataset? (y/n)")
+ 		 		sameData <- readline("Does your file have MIC data that corresponds to the same strains as your current dataset? [y/n] ")
 				if(sameData == "y"){
 					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 
-					MICdata<- read.csv(MICFile, header=FALSE,sep=",") 
-					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, one containing the line name, and one wtih corresponding MIC values \n")
+					MICdata<- read.csv(MICFile, header=TRUE,sep=",") 
+					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, the first containing the line name, and the second wtih corresponding MIC values \n")
 					else{
-						MIC_names <- MICdata$V1
+						MIC_names <- MICdata[,1]
 						MIC<-0
 						N1 <- dataframe[,1]
 						for (i in 1:length(N1)){  
@@ -72,55 +74,56 @@ calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addB
 					curvePars <-c(exp(A), B)
 				}
 				if(sameData == "n"){
-					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 				
-					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, one containing RAD values ('RAD'), and one with corresponding MIC values ('MIC') \n")
+					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 		
+					MICdata <- read.csv(MICFile, header=TRUE)
+					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain at least two columns, one containing RAD values ('RAD'), and one with corresponding MIC values ('MIC') \n")
 					else{
-						RAD <- MICFile$RAD
-						MIC <- MICFile$MIC
-						fit <- lm(log(MIC)~RAD, na.action=na.exclude)
+						RAD <- MICdata$RAD
+						MIC <- MICdata$MIC
+						fit <- lm(log2(MIC)~RAD, na.action=na.exclude)
 						A <- summary(fit)$coefficients[1]
 						B <- summary(fit)$coefficients[2]
-						curvePars <-c(exp(A), B)
+						curvePars <-c(2^A, B)
 						}
 					}
 				}			
-			cat(paste(expression("\n The calculated equation from your standard curve is : ", log[2], "MIC = ", curvePars[1], "x", 2^(curePars[2]*RAD), sep="")))
-	if(savePDF){
-		pdf(t, width=width, height=height)
-		plot(RAD, log2(MIC), xlim=c(0, 35), yaxt="n", xaxt="n", xlab="", ylab="")
-		axis(1)
-		axis(2, at=log2(unique(MIC)), las=2, labels=unique(MIC))
-		if(addBreakpoints){
-			abline(v=(19-6)/2)
-			abline(v=(14.5-6)/2)
-			abline(h=log2((32+64)/2))
-			abline(h=log2((8+16)/2))
+		if(savePDF){
+			t <- file.path(getwd(), "figures", projectName,  "RAD-MIC_standardCurve.pdf")					
+			pdf(t, width=width, height=height)
+			par(oma=c(1, 4, 1, 1))
+			plot(RAD, log2(MIC), xlim=c(0, max(RAD)+3), yaxt="n", xaxt="n", xlab="", ylab="")
+			axis(1, cex.axis=0.8)
+			axis(2, at=log2(c(0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)), las=2, labels=c("0.12", "0.25", "0.5", "1", "2", "4", "8", "16", "32", "64", "128"), cex.axis=0.8)
+			if(addBreakpoints){
+				abline(v=(19-6)/2, col="grey")
+				abline(v=(14.5-6)/2, col="grey")
+				abline(h=log2((32+64)/2), col="grey")
+				abline(h=log2((8+16)/2), col="grey")
+				}
+			abline(lm(log2(MIC)~RAD), col="red")
+			mtext("Disk zone (mm)", side=1, outer=FALSE, line=3) 			
+			title <- as.list(expression(paste(log[2], "(MIC)", sep=""), paste("actual values indicated, ", mu, "g/mL)")))
+			mtext(do.call(expression, title), side=2, cex=0.8, line = c(3.5, 2.5))		
+			dev.off()
+			cat(paste("\nFigure saved: ", t, sep=""))
+			if(popUp){
+				tt <- paste("open ",t)
+				system(tt)
 			}
-		abline(lm(log2(MIC)~RAD), col="red")
-		mtext("Disk zone (mm)", side=1, outer=FALSE, line=3) 			
-		mtext("log2(MIC)\n (actual values indicated, ug/mL)", side=2, outer=FALSE, line=3.5) 			
-		dev.off()
-		t <- file.path(paste("figures", projectName,  "RAD-MIC_standardCurve.pdf", sep=""))		
-		cat (paste("\nA figure of this standard curve has been saved to ", t, sep=""))  
-		if(popUp){
-			tt <- paste("open ",t)
-			system(tt)
-		}
-	}
-	
-	        #ADD in plot
+	}	
 			paramName <- file.path(getwd(), "parameter_files", projectName, paste("RAD-MIC_parameters.csv", sep=""))
 			params <- data.frame(intercept = curvePars[1], slope = curvePars[2])
 			write.csv(params, file=paramName, row.names=FALSE)	
-			cat(paste("\nThe calculated parameters have been saved here: ", paramName, "\n and can be used in the future for the same species/drug combination", sep=""))
-			
+			cat(paste("\nThe calculated parameters have been saved here: \n", paramName, "\n and can be used in the future for the same species/drug combination\n", sep=""))
 			}
 		}
-	dataframe["MIC"] <- round(curvePars[1]*exp(curvePars[2]*dataframe[paste("RAD", RAD, sep="")]), 2)
+	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]), 2)	)
+	upDataframe <- data.frame(dataframe, MIC = MIC)
+	# names(upDataframe)[11] <- "MIC"
 	dfName <- paste(projectName, ".df", sep="")	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
-	write.csv(dataframe, file=filename, row.names=FALSE)	
-	cat(paste("\n", dfName, " has been written to the global environment", sep=""))
+	write.csv(upDataframe, file=filename, row.names=FALSE)	
+	cat(paste("\n", dfName, " has been updated and written to the global environment", sep=""))
 	cat(paste("\n\nSaving file: ", filename, sep=""))
-	assign(dfName, dataframe, envir=globalenv())
+	assign(dfName, upDataframe, envir=globalenv())
 	}
