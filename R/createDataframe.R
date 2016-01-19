@@ -7,7 +7,7 @@
 #' @param typeVector a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{IJMacro}} for more details) while \code{typeVector} = "FALSE" will not add a type column.
 #' @param typePlace a number that indicates the position of the photograph name to be stored as the 'type' vector'. Defaults to 2. For more details see \code{\link{IJMacro}}
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
-#' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo. Defaults to FALSE.
+#' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -25,8 +25,7 @@
 
 #' @author Aleeza C. Gerstein
 
-#addin removal of blank disk plate
-#try to automate clearHalo
+
 
 createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){
