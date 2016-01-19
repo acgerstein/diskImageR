@@ -116,7 +116,6 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 			}
 		}
 	dataframe["MIC"] <- round(curvePars[1]*exp(curvePars[2]*dataframe[paste("RAD", RAD, sep="")]), 2)
-	print(dataframe)
 	dfName <- paste(projectName, ".df", sep="")	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 	write.csv(dataframe, file=filename, row.names=FALSE)	
