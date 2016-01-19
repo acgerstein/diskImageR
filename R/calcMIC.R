@@ -17,10 +17,10 @@ calcMIC <- function(projectName, type="df", RAD="20"){
 	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "casitone"), intercept=c(10, 11, 12), slope=c(-0.4, -0.5, -0.6))	
 	#probably need to check whether this exists in the global environment first, otherwise prompt user to open it.
 	if(type == "df")
-		if(paste(data, ".df", sep="") %in% ls()) data <- eval(parse(text=paste(projectName, ".df", sep="")))
+		if(paste(projectName, ".df", sep="") %in% ls()) data <- eval(parse(text=paste(projectName, ".df", sep="")))
 		else stop(paste(data, ".df not found in working environment. Please load with function 'readExistingDF'", sep=""))
 	if(type == "ag"){
-		if(paste(data, ".ag", sep="") %in% ls()) data <- eval(parse(text=paste(projectName, ".ag", sep="")))
+		if(paste(projectName, ".ag", sep="") %in% ls()) data <- eval(parse(text=paste(projectName, ".ag", sep="")))
 		else stop(paste(data, ".ag not found in working environment. Please load with function 'readExistingAG'", sep=""))	
 		}	
 
