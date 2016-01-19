@@ -53,8 +53,6 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 					MICdata<- read.csv(MICFile, header=FALSE,sep=",") 
 					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, one containing the line name, and one wtih corresponding MIC values \n")
 					else{
-						# MICdata <- read.csv(MICFile, header=FALSE,sep="\t",dec="."); 
-						# MIC_length <- length(MICdata[[1]])
 						MIC_names <- MICdata$V1
 						MIC<-0
 						N1 <- dataframe[,1]
@@ -65,13 +63,12 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 						}
 						RAD <- subset(dataframe, names %in% MIC_names)[paste("RAD", RAD, sep="")]
 						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".df. If you have replicates for RAD please run 'aggregateData' and the rerun 'calcMIC' with 'type=\"ag\"'. If you have replicates for MIC please average in the standard curve file before proceeding", sep=""))
-						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".ag.", sep="")
-						} 
-						fit<-lm(log(MIC)~RAD, na.action=na.exclude)
-						A <- summary(fit)$coefficients[1]
-						B <- summary(fit)$coefficients[2]
-						curvePars <-c(exp(A), B)
+						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".ag.", sep=""))						
 					}
+					fit<-lm(log(MIC)~RAD, na.action=na.exclude)
+					A <- summary(fit)$coefficients[1]
+					B <- summary(fit)$coefficients[2]
+					curvePars <-c(exp(A), B)
 				}
 				if(sameData == "n"){
 					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 				
@@ -114,7 +111,7 @@ calcMIC <- function(projectName, type="df", RAD="20", addBreakpoints = TRUE, sav
 			paramName <- file.path(getwd(), "parameter_files", projectName, paste("RAD-MIC_parameters.csv", sep=""))
 			params <- data.frame(intercept = curvePars[1], slope = curvePars[2])
 			write.csv(params, file=paramName, row.names=FALSE)	
-			cat(paste("\n\The calculated parameters have been saved here: ", paramName, "\n and can be used in the future for the same species/drug combination", sep=""))
+			cat(paste("\nThe calculated parameters have been saved here: ", paramName, "\n and can be used in the future for the same species/drug combination", sep=""))
 			
 			}
 		}
