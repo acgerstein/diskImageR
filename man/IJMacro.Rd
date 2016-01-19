@@ -2,19 +2,19 @@
 % Please edit documentation in R/IJMacro.R
 \name{IJMacro}
 \alias{IJMacro}
-\title{Run the imageJ analysis macro}
+\title{Run an imageJ analysis macro on the folder that contains the photograph to be analyzed}
 \usage{
-IJMacro(projectName, projectDir = NA, photoDir = NA, imageJLoc = "loc2",
+IJMacro(projectName, projectDir = NA, photoDir = NA, imageJLoc = NA,
   diskDiam = 6)
 }
 \arguments{
-\item{projectName}{the short name you want use for the project.}
+\item{projectName}{the short name you want use for the project}
 
-\item{projectDir}{the path to the project directory where all analyses will be saved. If using tcltk interface to select directories leave as is (default=NA)}
+\item{projectDir}{the path to the project directory where all analyses will be saved. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)}
 
-\item{photoDir}{the path to the directory where the photographs are to be analyzed. If using tcltk interface to select directories leave as is (default=NA)}
+\item{photoDir}{the path to the directory where the photographs are to be analyzed. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)}
 
-\item{imageJLoc}{the absolute path to imageJ on your computer. Current options are those standard for a mac: \code{imageJLoc} = "default" when imageJ is located at /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub; \code{imageJLoc} = "loc2" for path /Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub. If you are on a windows machine please save imageJ to the default location when installing (Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.}
+\item{imageJLoc}{the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 }
@@ -22,10 +22,15 @@ IJMacro(projectName, projectDir = NA, photoDir = NA, imageJLoc = "loc2",
 A .csv file is saved to the directory "imageJ_out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.
 }
 \description{
-Used to run the imageJ analysis component of diskImageR and then load in the output from imageJ into R.
+\code{IJMacro} is used to run the imageJ analysis component of diskImageR and then load in the acquired output from imageJ into R.
 }
 \details{
-Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines at each distance and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
+Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines for each photograph and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
+}
+\section{Important}{
+
+There can not be any spaces or special characters in any of the folder names that are in the path that lead to either the main project directory or the photograph directory. If there are an error box titled "Macro Error" will pop up and the script will not run.
+The project name should ideally be fairly short (easy to type without typos!) and specific to the project. It must start with a letter, not a number or special character, but can otherwise be anything. The project name must always be specified with quotation marks around it (a surprisingly common error).
 }
 \author{
 Aleeza C. Gerstein

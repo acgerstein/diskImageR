@@ -1,6 +1,6 @@
 #' Used to plot the results of the imageJ analysis
 
-#' @description This function creates a pdf figure showing the results of the imageJ analysis, with one plot for each photograph. This function is primarily for visualization purposes.
+#' @description \code{plotRaw} creates a pdf figure showing the results of the ImageJ analysis, with one plot for each photograph. This function is optional, and is primarily for visualization purposes.
 
 #' @param projectName the short name to be used for the project
 #' @param ymin a numeric value indicating the minimum y value plotted in each plot
@@ -15,7 +15,7 @@
 #' @param cexY a numeric value indicating the size of y-axis text
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.
 #' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point
-#' @param showNum a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names)
+#' @param showNum a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).

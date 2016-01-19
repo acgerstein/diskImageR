@@ -13,7 +13,7 @@ maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
 \arguments{
 \item{projectName}{the short name in use for the project.}
 
-\item{clearHalo}{numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). This is extremely important to determine perseverence, as the intensity beside the disk for the photograph chosen is subtracted for all photographs. Choosing the correct photograph to be use is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that the plate background will be as similar as possible between plates, and thus any plate with a clear area beside the disk can be chosen. Photos are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE.}
+\item{clearHalo}{numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
@@ -50,18 +50,35 @@ maxLik(projectName, clearHalo, diskDiam = 6, maxDist = 30, ymax = 125,
 \item{plotCompon}{plots the two terms of the double logistic equation. Defaults to FALSE}
 }
 \value{
-Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (perseverence).
+Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).
 }
 \description{
-Find the maximum likelihood point of a single and double logistic equation by nonlinear optimisation to parameterize the single and double logistic models to use for determination of resistance, perseverence, and sensitivity
+\code{maxLik}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
 }
 \details{
 \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
  \deqn{single ('ML'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, \sigma)}
  \deqn{double ('ML2'): y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, \sigma)}
-where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus perseverence, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
+where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
+}
+\section{Important}{
+
+The photograph specified with \code{clearHalo} is extremely important to determine tolerance, as the intensity beside the disk for the chosen photograph is subtracted for all photographs. Choosing the photograph to be used for this purpose is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that plate background will be as similar as possible among different plates. Photographs are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. In many experiments a suitable strain will already be included, however a good practice is to always take a photograph of a blank plate with just the disk in the center to use for this purpose (and save it with a name like "a" so that it is always the first photograph in the list (i.e., `clearHalo = 1`). The (non)results from this photograph can be later removed in the function `createDataframe()`.
+}
+
+\section{Warning}{
+
+Depending on the number of photographs to be analyzed, `maxLik()` can take a fair amount of time, upwards of an hour or more. This is due to the maximum likelihood fitting procedures, which determine the best fit parameters from multiple different starting values. The status is indicated by a series of dots (".") in the R console, with one dot per photograph. If for some reason the procedure gets halted in the middle of \code{maxLik()} (e.g., computer is shut down) as long as R remains open it should resume where it left off when the computer is reactivated.
+}
+
+\section{References}{
+
+Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
 }
 \author{
 Aleeza C. Gerstein
+}
+\seealso{
+\code{\link{saveMLParam}} to save the parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
 }
 

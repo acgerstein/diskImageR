@@ -36,7 +36,7 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 
 \item{plotStandardLoc}{a logical value indicating whether to draw a dashed horizontal line at the standardization point}
 
-\item{showNum}{a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names)}
+\item{showNum}{a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.}
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 
@@ -48,7 +48,7 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 }
 \description{
-This function creates a pdf figure showing the results of the imageJ analysis, with one plot for each photograph. This function is primarily for visualization purposes.
+\code{plotRaw} creates a pdf figure showing the results of the ImageJ analysis, with one plot for each photograph. This function is optional, and is primarily for visualization purposes.
 }
 \author{
 Aleeza c. Gerstein

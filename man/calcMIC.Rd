@@ -4,7 +4,8 @@
 \alias{calcMIC}
 \title{Convert RAD to MIC based on built-in or provided parameters or datasets}
 \usage{
-calcMIC(projectName, type = "df", RAD = "20")
+calcMIC(projectName, type = "df", RAD = "20", addBreakpoints = TRUE,
+  savePDF = TRUE, popUp = TRUE)
 }
 \arguments{
 \item{projectName}{the short name you have been using for the project.}
@@ -12,12 +13,14 @@ calcMIC(projectName, type = "df", RAD = "20")
 \item{type}{specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")}
 
 \item{RAD}{a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20".}
+
+\item{addBreakpoints}{Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve).}
 }
 \value{
-An updated .csv file that contains the MIC values that correspond to calculated RAD values is saved to the directory "parameter_files" in the main project directory. The average line for each photograph is saved to the list \code{projectName} in the global environment.
+In all cases the function will return an updated .csv file that contains the MIC values that correspond to calculated RAD values in the directory "parameter_files" in the main project directory. If the user has supplied their own MIC data the function will also save the calculated model parameters into a separate file and will plot the linear relationship and line of best fit.
 }
 \description{
-Used to convert RAD into MIC based on a standard curve.
+Used to convert RAD into MIC. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of the linear relationship between RAD and log2(MIC) for their species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information.
 }
 \author{
 Aleeza C. Gerstein
