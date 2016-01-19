@@ -12,8 +12,7 @@
 
 #' @export
 
-#'@author Aleeza C. Gerstein
-#'@author Inbal Hecht
+#'@author Aleeza C. Gerstein & Inbal Hecht
 
 
 calcMIC <- function(projectName, type="df", RAD="20", height =4, width = 8, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
