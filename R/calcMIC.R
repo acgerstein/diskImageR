@@ -119,7 +119,6 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 		}
 	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]), 2)	)
 	upDataframe <- data.frame(dataframe, MIC = MIC)
-	# names(upDataframe)[11] <- "MIC"
 	dfName <- paste(projectName, ".df", sep="")	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 	write.csv(upDataframe, file=filename, row.names=FALSE)	
