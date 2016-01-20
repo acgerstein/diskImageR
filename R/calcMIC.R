@@ -1,6 +1,6 @@
 #' Convert RAD to MIC based on built-in or provided parameters or datasets
 
-#' @description Used to convert RAD into MIC. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of the linear relationship between RAD and log2(MIC) for their species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. 
+#' @description Used to convert RAD into MIC. In all cases the linear relationship is log2(MIC) regressed onto RAD^2. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of log2(MIC) regressed on RAD^2 for the species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. Note that user-supplied data should be MIC and RAD, not log2(MIC) and RAD^2 (the function will do this authomatically).
 
 #' @param projectName the short name you have been using for the project.
 #' @inheritParams twoParamPlot
@@ -16,8 +16,9 @@
 
 
 calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
+	
 	ZOIvalue <- RAD
-	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "posaconazole"), intercept=c(10, 11, 12), slope=c(-0.4, -0.5, -0.6))	
+	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "posaconazole"), intercept=c(6.83, 11, 12), slope=c(-0.04, -0.5, -0.6))	
 	# knownSppDrug <- file.path(.libPaths(), "diskImageR", "knownSppDrug.csv")	
 	#Check whether file exists in environment or prompt user to load it
 	if(type == "df"){
@@ -28,7 +29,6 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 		if(paste(projectName, ".ag", sep="") %in% ls(globalenv())) dataframe <- eval(parse(text=paste(projectName, ".ag", sep="")))
 		else stop(paste(projectName, ".ag not found in working environment. Please load with function 'readExistingAG'", sep=""))	
 		}	
-
 	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? [y/n]  ")
 	if(useBuiltIn=="y"){
 		#do this eventually
@@ -38,7 +38,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 		cat(paste("\nintercept: ", curvePars[1], "\tslope: ", curvePars[2], "\n", sep=""))		
 	}
 	else{
-		haveSI<-readline("Do you know the slope and intercept of the linear relationship between RAD and log2(MIC)? [y/n]  ")
+		haveSI<-readline("Do you know the slope and intercept of log2(MIC) regressed on RAD^2? [y/n]  ")
 		if(haveSI == "y"){
 	   		intercept <- readline("Enter the intercept: ")
 	   		intercept <- as.numeric(intercept)
@@ -48,12 +48,12 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			cat(paste("\nintercept: ", curvePars[1], "\tslope: ", curvePars[2], "\n", sep=""))		
 	   	}
 		if(haveSI =="n"){
-	  		exFile <- readline("Do you have a standard curve file?  [y/n] ")   
+	  		exFile <- readline("Do you have a standard curve file that provides MIC and RAD data?  [y/n] ")   
 	  		if(exFile == "n") stop("You must use data from built-in combinations, provide the required parameters or a standard curve file to proceed.")
 		  	else{
  		 		sameData <- readline("Does your file have MIC data that corresponds to the same strains as your current dataset? [y/n] ")
 				if(sameData == "y"){
-					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 
+					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (containing MIC and RAD data in a text file, comma delimited)") 
 					MICdata<- read.csv(MICFile, header=TRUE,sep=",") 
 					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain two columns, the first containing the line name, and the second wtih corresponding MIC values \n")
 					else{
@@ -76,13 +76,13 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 					cat(paste("\nintercept: ", round(curvePars[1],2), "\tslope: ", round(curvePars[2],2), "\n", sep=""))
 				}
 				if(sameData == "n"){
-					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (text file, comma delimited)") 		
+					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (containing MIC and RAD data in a text file, comma delimited)") 		
 					MICdata <- read.csv(MICFile, header=TRUE)
 					if (ncol(MICdata)<2) stop("Wrong data format: the file must contain at least two columns, one containing RAD values ('RAD'), and one with corresponding MIC values ('MIC') \n")
 					else{
 						RAD <- MICdata$RAD
 						MIC <- MICdata$MIC
-						fit <- lm(log2(MIC)~RAD, na.action=na.exclude)
+						fit <- lm(log2(MIC)~I(RAD^2), na.action=na.exclude)
 						A <- summary(fit)$coefficients[1]
 						B <- summary(fit)$coefficients[2]
 						curvePars <-c(A, B)
@@ -94,17 +94,18 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			t <- file.path(getwd(), "figures", projectName,  "RAD-MIC_standardCurve.pdf")					
 			pdf(t, width=width, height=height)
 			par(oma=c(1, 4, 1, 1))
-			plot(RAD, log2(MIC), xlim=c(0, max(RAD)+3), yaxt="n", xaxt="n", xlab="", ylab="")
+			plot(RAD^2, log2(MIC), xlim=c(0, max(RAD^2)+20), yaxt="n", xaxt="n", xlab="", ylab="")
 			axis(1, cex.axis=0.8)
 			axis(2, at=log2(c(0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)), las=2, labels=c("0.12", "0.25", "0.5", "1", "2", "4", "8", "16", "32", "64", "128"), cex.axis=0.8)
 			if(addBreakpoints){
-				abline(v=(19-6)/2, col="grey")
-				abline(v=(14.5-6)/2, col="grey")
+				abline(v=(19-6)^2/2, col="grey")
+				abline(v=(14.5-6)^2/2, col="grey")
 				abline(h=log2((32+64)/2), col="grey")
 				abline(h=log2((8+16)/2), col="grey")
 				}
-			abline(lm(log2(MIC)~RAD), col="red")
-			mtext("Disk zone (mm)", side=1, outer=FALSE, line=3) 			
+			abline(lm(log2(MIC)~I(RAD^2)), col="red")
+			mtext(expression(paste(RAD^2, " (mm)", sep="")), side=1, outer=FALSE, line=3) 		
+			
 			title <- as.list(expression(paste(log[2], "(MIC)", sep=""), paste("actual values indicated, ", mu, "g/mL)")))
 			mtext(do.call(expression, title), side=2, cex=0.8, line = c(3.5, 2.5))		
 			dev.off()
@@ -120,7 +121,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			cat(paste("\n\nThe calculated parameters have been saved here: \n", paramName, "\n and can be used in the future for the same species/drug combination\n", sep=""))
 			}
 		}
-	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]), 2)	)
+	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]^2), 2)	)
 	upDataframe <- data.frame(dataframe, MIC = MIC)
 	dfName <- paste(projectName, ".df", sep="")	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
