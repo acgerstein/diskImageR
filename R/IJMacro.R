@@ -48,7 +48,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	IJarguments <- paste(photoDir, outputDir, diskDiam, sep="*")	
 
 	if(length(dir(outputDir)) > 0){
-		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? (y/n) ", sep=""))
+		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? [y/n] ", sep=""))
 		if(cont=="n"){
 			stop("Please delete existing files or change project name before continuing.")
 			}
@@ -87,21 +87,24 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		args <- gsub("/", "\\\\", args)
 		shell(paste(cmd, args), wait=TRUE,intern=TRUE)
 	}
-	else{				
-		if (imageJLoc=="default" | imageJLoc=="loc2" ){
-			if ("ImageJ.app" %in% dir("/Applications/")){
-				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-			if ("ImageJ.app" %in% dir("/Applications/ImageJ/")){			
-				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")}
-		}
-		else {
-			if ("ImageJ.app" %in% imageJLoc){
+	else{
+		knownIJLoc <- FALSE				
+		if ("ImageJ.app" %in% dir("/Applications/")){
+			call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")
+			knownIJLoc <- TRUE	
+			}
+			
+		if (knownIJLoc == FALSE & "ImageJ.app" %in% dir("/Applications/ImageJ/")){			
+			call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")
+			knownIJLoc <- TRUE	
+			}
+		if (knownIJLoc == FALSE & "ImageJ.app" %in% imageJLoc){
 				call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
+				knownIJLoc <- TRUE	
 				}
-			else{
+		if(knownIJLoc == FALSE){
 			stop("ImageJ is not in expected location. Please move ImageJ to the Applications directory, or specify the path to its location using the argument 'imageJLoc'")
 				}
-	}
 		system(call)
 		}
 
