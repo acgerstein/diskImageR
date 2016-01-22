@@ -29,7 +29,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 		if(paste(projectName, ".ag", sep="") %in% ls(globalenv())) dataframe <- eval(parse(text=paste(projectName, ".ag", sep="")))
 		else stop(paste(projectName, ".ag not found in working environment. Please load with function 'readExistingAG'", sep=""))	
 		}	
-	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? [y/n]  ")
+	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? [y/n] ")
 	if(useBuiltIn=="y"){
 		#do this eventually
 		print(knownSppDrug[,1:3])
@@ -122,10 +122,12 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			}
 		}
 	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]^2), 2)	)
-	typicalMIC <- c(0.03, 0.0625, 0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)	
-	place <- apply(t(MIC), 1, function(x) which.min(typicalMIC - x))
-	roundMIC <- typical[place]
-	upDataframe <- data.frame(dataframe, MIC = roundMIC)
+	# The three lines below would round the MIC to the typical values that are tested:
+	# typicalMIC <- c(0.03, 0.0625, 0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)	
+	# place <- apply(t(MIC), 1, function(x) which.min(typicalMIC - x))
+	# MIC <- typicalMIC[place]
+	# upDataframe <- data.frame(dataframe, MIC = roundMIC)
+	upDataframe <- data.frame(dataframe, MIC = MIC)	
 	dfName <- paste(projectName, ".df", sep="")	
 	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
 	write.csv(upDataframe, file=filename, row.names=FALSE)	
