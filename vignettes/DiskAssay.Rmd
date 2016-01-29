@@ -1,7 +1,6 @@
 ---
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
-contributors: "Inbal Hecht" & "Richard G. Fitzjohn"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -255,7 +254,9 @@ aggregateData("newProject")
 ```
 
 ##Acknowledgements
-Thank you to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron, and Alexander Rosenberg for testing many versions of the code presented here, Yoav Ram for going through the code from the entire package, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in disk assay experiments.
+* Richard Fitzjohn: contributed the maximum likelihood function `find.mle()` from the `diversitree` package	
+* Inbal Hecht: coded portions of `calcMIC()` and contributed a patch to make IJMacro more compatible with Windows
+* Sincere thanks also to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron, and Alexander Rosenberg for testing many versions of the code presented here, Yoav Ram for going through the code from the entire package, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in disk assay experiments.
 
 ###Contact
 Aleeza Gerstein, <gerst035@umn.edu>
