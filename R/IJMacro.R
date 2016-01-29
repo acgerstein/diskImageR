@@ -121,7 +121,29 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		}		
 	cat("\a")
 	assign(projectName, temp, envir=globalenv())
+	dfNA <- .saveAveLine(temp)
+	cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
+	write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
 	}
+
+.saveAveLine <- function(L){
+  addNA <- function(x, maxLen){
+  	if(nrow(x) < maxLen){
+  		diffLen <- maxLen - nrow(x)
+	     tdf <- data.frame(rep(NA, diffLen), rep(NA, diffLen))		
+	     names(tdf) <- names(x)
+  		x <- rbind(x, tdf)
+  	 }
+  	else x <- x
+  } 
+  maxLen <- max(sapply(L, nrow))
+  newList <- lapply(L, addNA, maxLen)
+   df <- data.frame(matrix(unlist(newList), nrow=maxLen))
+   names(df) <- paste(c("distance", "instensity"), rep(names(L), each=2), sep=".")
+   df
+}
+
+
 
 .ReadIn_DirCreate <-
 function(workingDir, folderLoc, experAbbr){
