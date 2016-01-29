@@ -132,9 +132,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
   		diffLen <- maxLen - nrow(x)
 	     tdf <- data.frame(rep(NA, diffLen), rep(NA, diffLen))		
 	     names(tdf) <- names(x)
-  		x <- rbind(x, tdf)
+  		x <- rbind(round(x, 3), tdf)
   	 }
-  	else x <- x
+  	else x <- round(x, 3)
   } 
   maxLen <- max(sapply(L, nrow))
   newList <- lapply(L, addNA, maxLen)
