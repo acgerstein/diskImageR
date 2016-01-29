@@ -122,6 +122,20 @@ function findDisc(file){
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
+		print("Trying with different thresholding, parameter set 5");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(125, 162);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
 		print("Disc not found, macro needs to be updated to account for photo specifics.  Email Aleeza at acgerstein@gmail.com for assistance");
 	}
 	if (nResults > 1){
