@@ -1,6 +1,7 @@
 ---
 title: "Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
+contributors: "Inbal Hecht" & "Richard G. Fitzjohn"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -27,7 +28,6 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library("diskImageR")
 ```
 
-
 ##Introduction to diskImageR
 The R package `diskImageR` provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. This computational method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achived above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth). 
 
@@ -45,6 +45,7 @@ The R package `diskImageR` provides a quantitative, unbiased method to analyze p
 * `calcMIC`: calculate the corresponding MIC50 from RAD value using built-in or provided standard curves [optional]
 * `addType`: add a factor column to parameter estimate dataframe [optional]
 * `aggregateData`: averages data from photographs of the same strain & type [optional]
+* `calcMIC`: calculate the MIC from RAD values [optional]
 * `readExistingDF`: read in an existing dataframe using a pop-up box [optional]
 * `oneParamPlot`: plot a single resistance or tolerance parameter [optional]
 * `twoParamplot`: plot resistance (RAD) and tolerance (FoG) at a specified cutoff value [optional]
@@ -97,6 +98,8 @@ If `IJMacro()` is unable to locate imageJ a red error will pop-up with a message
 
 <b> Important! </b> `IJMacro()` must run completely, without error, for everything downstream. In our experience this is the most likely step for errors to occur. Errors should be indicated in the R console should they arise, and will hopefully give you clues as to what the problem is if they are different than those described above. 
 
+After `IJMacro()` has run successfully there will be three new directories created in the main project directory (*image_out*, *parameter_files* and *figures*). The output of the ImageJ analysis can be found in the "imageJ_out" directory, but is probably not particularly helpful unless you want to see the intensity calculations from each line. The information about the average line from each photograph can be found in the "averageLines" file located in the "parameter_out" folder. This is the information that is used for all further analysis within `diskImageR` and may be useful for other purposes.
+
 To access the output of `IJMacro()` in a later R session use the function `readInExistingIJ()`. At this step you can also change the project name, it does not have to be the same name that was used originally. This will also create new subdirectory folders within the main project directory. This function will bring up a pop-up box to select the main project folder and select the directory that contains the existing imageJ output files.
 
 ```r
@@ -104,7 +107,7 @@ readInExistingIJ("betterName")
 ```
 
 ##Plot the output of imageJ analysis
-The optional function `plotRaw()` will create a PDF file of plots that show the average pixel intensity across all 72 lines from each photograph. This will be saved to the *figures* directory. This function is a good check to see whether the analysis proceeded properly and in and of itself may be useful to visualize differences between different strains or experimental factors.
+The optional function `plotRaw()` will create a PDF file of plots that show the average pixel intensity across all 72 lines from each photograph (i.e., the data that can be found in the "averageLines" file as described above). This will be saved to the *figures* directory. This function is a good check to see whether the analysis proceeded properly and in and of itself may be useful to visualize differences between different strains or experimental factors.
 
 ```{r, fig.width=6, fig.height=4}
 plotRaw("newProject", popUp = FALSE, savePDF = FALSE)
@@ -182,6 +185,14 @@ head(manyReps.df)
 aggregateData("manyReps", replicate=c("line", "type"), varFunc="se")
 manyReps.ag
 ```
+
+##Calculate MIC
+The function `calcMIC` is used to convert the RAD values calculated here into the typical MIC values you would acquire with a broth microdilution assay (or an Etest strip). This conversino can be based on a) existing built-in data from a nubmer of species/drug combinations (see below), b) a user-supplied slope and intercept of the linear relationship between RAD^2 and log2(MIC) for their species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. A column containing the MIC information is added to the dataframe and the dataframe is saved. If the user has supplied their own MIC data the function will also plot and save the calculated model parameters in a separate file.
+
+Either a normal diskImageR dataframe (e.g., newProject.df) or aggregated dataframe (e.g., newProject.ag) can be used.
+
+The function asks the user for input on whether to use built-in data for existing species/drug combination, or the type of data that will be supplied. Note that for user-supplied data (c or d above) the data should not already be transformed. 
+
 
 ##Plot parameter results
 Three related plotting functions are included with `diskImageR` that use the dataframes generated `createDataframe()` and `aggregateData()`. The function `oneParamPlot()`will plot any of the single parameters (argument `param` supports "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope", the default = "RAD20") while `twoParamPlot()` will plot RAD and FoG at specified cutoff values (`RAD` supports "RAD20", "RAD50", "RAD80"; `FoG` supports "FoG20", "FoG50", "FoG80"), and `threeParamPlot()` will plot RAD, FoG and slope. 
