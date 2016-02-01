@@ -1,20 +1,20 @@
 #' Used to plot the RAD and FoG results
 
-#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and perseverence (FoG).
+#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and tolerance (FoG).
 
 #' @inheritParams plotRaw
 #' @param type specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")
 #' @param RAD specify the RAD (radius) parameter to be plotted ("RAD20", "RAD50" or "RAD80"), default = "RAD20".
 #' @param FoG specify the FoG (fraction of growth) parameter to be plotted ("FoG20", "FoG50" or "FoG80"), default = "FoG20".
 #' @param RADmin minimum distance from the disk for resistance plot (minimum y axis value), default = 30.
-#' @param tolMax maximum y axis value for perseverence plot. Note perseverence is coverted to a perent, default = 100.
+#' @param tolMax maximum y axis value for tolerance plot. Note tolerance is coverted to a percent, default = 100.
 #' @param xlabels either a vector containing the desired x-axis labels, or a single value indicating the column name that contains the values to use (likely either the 'line' column or one of the type columns), default = "line".
 #' @param xlabAngle indicates whether to print the x axis labels on a angle, if a number is provided this will be the angle used. The defauilt is not to plot on an angle, default = NA.
 #' @param order can be either "factor" or "custom". If custom, supply a numberial vector the same length as the dataframe to indicate the desired order. If factor, supply the column name in \code{ordeFactor} to be used to factor. 
 #' @param orderFactor if \code{order = "factor"} supply the column name to be used to factor. 
-#' @param barplot whether to plot perseverence as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
+#' @param barplot whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}
 
-#' @details Basic parameter plotting functions to plot RAD and FoG parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot RAD as a dotplot and perseverence as a barplot, though perseverence can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot RAD as a barplot in this framework). 
+#' @details Basic parameter plotting functions to plot RAD and FoG parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot RAD as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot RAD as a barplot in this framework). 
 
 #' @return Either a pdf figure figure (projectName_RAD-FoG.pdf) saved to the 'figures' directory or a figure on screen
 
@@ -157,7 +157,7 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 	}
 	axis(2, las=2, at=c(0, 20, 40, 60, 80, 100), cex.axis=0.8)
 	mtext("Growth\n above RAD (%)",  side=2, line=2.5, cex=0.8)
-	mtext(expression(paste(bold(B), " perseverence", sep="")), side=3, adj=0.01)
+	mtext(expression(paste(bold(B), " Tolerance", sep="")), side=3, adj=0.01)
 	if(savePDF){
 		dev.off()
 		cat(paste("\tFigure saved: ", t, sep=""))

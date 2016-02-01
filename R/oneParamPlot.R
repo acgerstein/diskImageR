@@ -1,6 +1,6 @@
 #' Used to plot a single parameter
 
-#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (radius from the disk, RAD), sensitivity (slope) and perseverence (fraction of growth above RAD, FoG).
+#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (radius from the disk, RAD), sensitivity (slope) and tolerance (fraction of growth above RAD, FoG).
 
 #' @inheritParams plotRaw
 #' @inheritParams twoParamPlot
@@ -104,11 +104,11 @@ oneParamPlot <- function(projectName, type, param  = "RAD20", ymin = 0, ymax = 1
 		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, param], ylim=yrange, yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
-	mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
-	mtext(expression(paste(bold(A), " Resistance", sep="")), side=3, adj=0.01)
+	# mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
+	# mtext(expression(paste(bold(A), " Resistance", sep="")), side=3, adj=0.01)
 	if(is.na(xlabAngle)){
 		 axis(1, at=1:length(xlabels), labels=xlabels)
-		 print("here")
+		 # print("here")
 		 }
 	else{
 		axis(1, at=1:length(xlabels), labels=FALSE)

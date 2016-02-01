@@ -1,12 +1,12 @@
 #' Used to plot the RAD, slope and FoG parameter results
 
-#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and perseverence (FoG).
+#' @description This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD), tolerance (FoG), and sensitivity (slope).
 
 #' @inheritParams plotRaw
 #' @inheritParams twoParamPlot
 #' @param slopeMax maximum y axis value for slope (sensitivity) plot
 
-#' @details Basic parameter plotting functions for three parameter plots (RAD, FoG , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot perseverence as a barplot and RAD and slope as a dotplot, perseverence can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework. 
+#' @details Basic parameter plotting functions for three parameter plots (RAD, FoG , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot tolerance as a barplot and RAD and slope as a dotplot; tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework. 
 
 #' @return Either a pdf figure figure saved to the 'figures' directory ("projectName_RAD-slope-FoG.pdf" or a figure on screen
 
@@ -94,7 +94,8 @@ threeParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20", RADm
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	axis(2, las=2, cex.axis=1)
-	title <- as.list(expression("slope" , paste( "(at ", od[50], ")", sep="")))
+
+	title <- as.list(expression(paste("slope at ", RAD[50], sep="")))
 	mtext(do.call(expression, title), side=2, cex=0.8, line = c(3.75,2.5))
 	mtext(expression(paste(bold(B), " Sensitivity", sep="")), side=3, adj=0.01)
 		
@@ -121,7 +122,7 @@ threeParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20", RADm
 	}
 	axis(2, las=2, at=c(0, 20, 40, 60, 80, 100), cex.axis=1)
 	mtext("Growth above\n RAD (%)",  side=2, line=2.5, cex=0.8)
-	mtext(expression(paste(bold(C), " Perseverence", sep="")), side=3, adj=0.01)
+	mtext(expression(paste(bold(C), " Tolerance", sep="")), side=3, adj=0.01)
 	if(savePDF){
 		dev.off()
 		cat(paste("\tFigure saved: ", t, sep=""))
