@@ -18,7 +18,7 @@
 calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
 	
 	ZOIvalue <- RAD
-	knownSppDrug <- data.frame(number = c(1:3), species=rep("C. albicans", 3), drug=c("fluconazole", "voriconazole", "posaconazole"), intercept=c(6.83, 11, 12), slope=c(-0.04, -0.5, -0.6))	
+	knownSppDrug <- data.frame(number = c(1:2), species=rep("Candida spp", 2), drug=c("fluconazole (25ug)", "voriconazole (1ug)"), intercept=c(6.83, 2.23), slope=c(-0.04, -0.035, -0.6))	
 	# knownSppDrug <- file.path(.libPaths(), "diskImageR", "knownSppDrug.csv")	
 	#Check whether file exists in environment or prompt user to load it
 	if(type == "df"){

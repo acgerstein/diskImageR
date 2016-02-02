@@ -14,7 +14,7 @@
 #' @param cexX a numeric value indicating the size of x-axis text
 #' @param cexY a numeric value indicating the size of y-axis text
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.
-#' @param plotStandardLoc a logical value indicating whether to draw a dashed horizontal line at the standardization point
+#' @param plotStandardLoc a logical value indicating whether to draw a dashed vertical line at the standardization point that is used in \code{maxLik} (where standardLoc is a numberic value that indicats the location on the disk to use to standardize intensity across photographs). The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately.
 #' @param showNum a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name

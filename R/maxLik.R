@@ -6,6 +6,7 @@
 #' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). 
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.
+#' @param standardLoc a numberic value indicating the location (on the disk) to use for standardization purposes of intensity across photographs. The position of standardLoc is a position that should have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line). To suppress this standardization use standardLoc = FALSE.
 #' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting
 #' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting
 #' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting
@@ -46,7 +47,7 @@
 #' Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
 
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20, RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
@@ -63,7 +64,6 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 	
 	data <- eval(parse(text=projectName))
-	standardLoc <- 2.5
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}		
 		else {label <- rep("", length(data))}
@@ -121,7 +121,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, x
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #only fits when it goes down to 0
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
