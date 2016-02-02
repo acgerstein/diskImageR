@@ -27,7 +27,7 @@
 
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
 		clearHalo <- as.numeric(cont)
@@ -35,7 +35,6 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	data <- eval(parse(text=projectName))
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
-	standardLoc <- 2.5
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
