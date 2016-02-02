@@ -20,7 +20,7 @@ twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30,
 
 \item{RADmin}{minimum distance from the disk for resistance plot (minimum y axis value), default = 30.}
 
-\item{tolMax}{maximum y axis value for perseverence plot. Note perseverence is coverted to a perent, default = 100.}
+\item{tolMax}{maximum y axis value for tolerance plot. Note tolerance is coverted to a percent, default = 100.}
 
 \item{width}{a numeric value indicating the width of the pdf file generated}
 
@@ -40,16 +40,16 @@ twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30,
 
 \item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 
-\item{barplot}{whether to plot perseverence as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}}
+\item{barplot}{whether to plot tolerance as a barplot (barplot = TRUE) or dotplot (barplot = FALSE), default = TRUE. Only possible when \code{type = "ag"}}
 }
 \value{
 Either a pdf figure figure (projectName_RAD-FoG.pdf) saved to the 'figures' directory or a figure on screen
 }
 \description{
-This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and perseverence (FoG).
+This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and tolerance (FoG).
 }
 \details{
-Basic parameter plotting functions to plot RAD and FoG parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot RAD as a dotplot and perseverence as a barplot, though perseverence can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot RAD as a barplot in this framework).
+Basic parameter plotting functions to plot RAD and FoG parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot RAD as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot RAD as a barplot in this framework).
 }
 \author{
 Aleeza C. Gerstein

@@ -5,8 +5,8 @@
 \title{Dataframe creation}
 \usage{
 createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
-  removeClear = FALSE, nameVector = TRUE, typeVector = TRUE,
-  typePlace = 2, typeName = "type")
+  standardLoc = 2.5, removeClear = FALSE, nameVector = TRUE,
+  typeVector = TRUE, typePlace = 2, typeName = "type")
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -16,6 +16,8 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.}
+
+\item{standardLoc}{a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line). To suppress this standardization use standardLoc = FALSE.}
 
 \item{removeClear}{a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.}
 

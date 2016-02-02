@@ -4,7 +4,7 @@
 \alias{calcMIC}
 \title{Convert RAD to MIC based on built-in or provided parameters or datasets}
 \usage{
-calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 8,
+calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 6,
   addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE)
 }
 \arguments{
@@ -12,15 +12,15 @@ calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 8,
 
 \item{type}{specify whether the dataset to use is a dataframe with all data ("df") or an aggregated dataframe ("ag")}
 
-\item{RAD}{a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20".}
+\item{RAD}{a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20"]}
 
-\item{addBreakpoints}{Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve).}
+\item{addBreakpoints}{Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve)}
 }
 \value{
 In all cases the function will return an updated .csv file that contains the MIC values that correspond to calculated RAD values in the directory "parameter_files" in the main project directory. If the user has supplied their own MIC data the function will also save the calculated model parameters into a separate file and will plot the linear relationship and line of best fit.
 }
 \description{
-Used to convert RAD into MIC. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of the linear relationship between RAD and log2(MIC) for their species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information.
+Used to convert RAD into MIC. In all cases the linear relationship is log2(MIC) regressed onto RAD^2. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of log2(MIC) regressed on RAD^2 for the species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. Note that user-supplied data should be MIC and RAD, not log2(MIC) and RAD^2 (the function will do this authomatically).
 }
 \author{
 Aleeza C. Gerstein & Inbal Hecht

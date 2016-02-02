@@ -22,7 +22,7 @@ threeParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
 
 \item{slopeMax}{maximum y axis value for slope (sensitivity) plot}
 
-\item{tolMax}{maximum y axis value for perseverence plot. Note perseverence is coverted to a perent, default = 100.}
+\item{tolMax}{maximum y axis value for tolerance plot. Note tolerance is coverted to a percent, default = 100.}
 
 \item{width}{a numeric value indicating the width of the pdf file generated}
 
@@ -46,10 +46,10 @@ threeParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
 Either a pdf figure figure saved to the 'figures' directory ("projectName_RAD-slope-FoG.pdf" or a figure on screen
 }
 \description{
-This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD) and perseverence (FoG).
+This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (RAD), tolerance (FoG), and sensitivity (slope).
 }
 \details{
-Basic parameter plotting functions for three parameter plots (RAD, FoG , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot perseverence as a barplot and RAD and slope as a dotplot, perseverence can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework.
+Basic parameter plotting functions for three parameter plots (RAD, FoG , slope). Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot tolerance as a barplot and RAD and slope as a dotplot; tolerance can also be plotted as a dotplot with \code{barplot=FALSE} though there is currently not support to plot either RAD or slope as a barplot in this framework.
 }
 \author{
 Aleeza C. Gerstein

@@ -36,4 +36,7 @@ createDataframe("newProject", clearHalo = 1)
 #[OPTIONAL] Calculate the mean and error for parameter estimates across replicate pictures
 aggregateData("newProject")
 
+#[OPTIONAL] Calculate corresponding MIC values from RAD values
+calcMIC("newProject")
+
 

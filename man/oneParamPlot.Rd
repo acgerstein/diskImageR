@@ -44,7 +44,7 @@ oneParamPlot(projectName, type, param = "RAD20", ymin = 0, ymax = 100,
 Either a pdf figure figure (projectName_RAD-FoG.pdf) saved to the 'figures' directory or a figure on screen
 }
 \description{
-This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (radius from the disk, RAD), sensitivity (slope) and perseverence (fraction of growth above RAD, FoG).
+This function creates a pdf figure of plots showing the results of the imageJ analysis for resistance (radius from the disk, RAD), sensitivity (slope) and tolerance (fraction of growth above RAD, FoG).
 }
 \details{
 Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}.

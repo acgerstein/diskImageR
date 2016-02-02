@@ -6,8 +6,9 @@
 \usage{
 plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
   xplots = 6, height = 4, width = 8, cexPt = 0.6, cexX = 0.8,
-  cexY = 0.8, nameVector = TRUE, plotStandardLoc = TRUE,
-  showNum = FALSE, popUp = TRUE, overwrite = TRUE, savePDF = TRUE)
+  cexY = 0.8, standardLoc = 2.5, nameVector = TRUE,
+  plotStandardLoc = TRUE, showNum = FALSE, popUp = TRUE,
+  overwrite = TRUE, savePDF = TRUE)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}
@@ -32,9 +33,11 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 
 \item{cexY}{a numeric value indicating the size of y-axis text}
 
+\item{standardLoc}{a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately.}
+
 \item{nameVector}{either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.}
 
-\item{plotStandardLoc}{a logical value indicating whether to draw a dashed horizontal line at the standardization point}
+\item{plotStandardLoc}{a logical value indicating whether to draw a dashed vertical line at the standardization point that is used in \code{maxLik} and \code{createDataframe}}
 
 \item{showNum}{a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.}
 
