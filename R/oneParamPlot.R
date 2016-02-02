@@ -101,7 +101,7 @@ oneParamPlot <- function(projectName, type, param  = "RAD20", ymin = 0, ymax = 1
 	}
 	
 	if(type=="df"){
-		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, param], ylim=yrange, yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1.4, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
+		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, param], ylim=yrange, yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1, xlim=c(0.5, length(unique(ordData[, orderFactor]))+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
 	# mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
