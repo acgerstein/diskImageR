@@ -3,7 +3,7 @@ Title: A Pipeline to Analyze Resistance and Tolerance From Drug Disk Diffusion A
 Version: 0.6
 Authors@R: c(
 	person("Aleeza", "Gerstein", email="gerst035@umn.edu", role=c("aut", "cre")),
-	person("Richard", "Fitzjohn", email="rich.fitzjohn@gmail.com", role="ctb"), person("Inbal", "Hecht", email="inbal.hecht@gmail.com", role="ctb"))
+	person("Inbal", "Hecht", email="inbal.hecht@gmail.com", role="ctb"))
 Description: A pipeline to analyze photographs of disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. Furthermore, diskImageR removes measurement bias by assessing zone diameter quantitatively, without requiring the user to decide where prominent growth inhibition is seen. Finally, this method allows us to explicitly measure the zone of inhibition (resistance) as well as tolerance, i.e.,the size of the subpopulation that is able to grow above the resistance point, and the measure rate of change from no growth to full growth (sensitivity).
 Depends: R (>= 3.0.3)
 License: GPL-3 

@@ -55,7 +55,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 	  		exFile <- readline("Do you have a standard curve file that provides MIC and RAD data?  [y/n] ")   
 	  		if(exFile == "n") stop("You must use data from built-in combinations, provide the required parameters or a standard curve file to proceed.")
 		  	else{
- 		 		sameData <- readline("Does your file have MIC data that corresponds to the same strains as your current dataset? [y/n] ")
+ 		 		sameData <- readline("Does your MIC data correspond to the same strains as your current project? [y/n] ")
 				if(sameData == "y"){
 					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (containing MIC and RAD data in a text file, comma delimited)") 
 					MICdata<- read.csv(MICFile, header=TRUE,sep=",") 
