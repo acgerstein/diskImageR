@@ -110,7 +110,7 @@ readInExistingIJ("betterName")
 The optional function `plotRaw()` will create a PDF file of plots saved to the *figures* directory that show the average pixel intensity across all 72 lines from each photograph (i.e., the data that can be found in the "averageLines.csv" file). This function is a good check to see whether the analysis proceeded properly and in and of itself may be useful to visualize differences between different strains or experimental factors.
 
 ```{r, fig.width=6, fig.height=4}
-plotRaw("newProject", shownNum = TRUE, popUp = FALSE, savePDF = FALSE)
+plotRaw("newProject", showNum = TRUE, popUp = FALSE, savePDF = FALSE)
 ```
 
 Many different arguments can be specified to influence the plots and the PDF that is generated, including the minimum and maximum x and y values (`xmin`, `xmax`, `ymin`, `ymax`), the number of plots in each row (`xplots`), the height and width of the PDF file (`height`, `width`), the point size (`cexPt`), and the size of the x- and y-axis font (`cexX`, `cexY`). As with all functions, you can type `?plotRaw` into the R console for all options and to see default values.
