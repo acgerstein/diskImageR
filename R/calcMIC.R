@@ -18,8 +18,9 @@
 calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
 	
 	ZOIvalue <- RAD
-	knownSppDrug <- data.frame(number = c(1:2), species=rep("Candida spp", 2), drug=c("fluconazole (25ug)", "voriconazole (1ug)"), intercept=c(6.83, 2.23), slope=c(-0.04, -0.035, -0.6))	
-	# knownSppDrug <- file.path(.libPaths(), "diskImageR", "knownSppDrug.csv")	
+	knownSppDrug <- file.path(.libPaths(), "diskImageR", "knownMIC-RAD.csv")[1]
+	knownSppDrug <- read.csv("knownMIC-RAD.csv")
+	head(knownSppDrug[,1:2])	
 	#Check whether file exists in environment or prompt user to load it
 	if(type == "df"){
 		if(paste(projectName, ".df", sep="") %in% ls(globalenv())) dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))
@@ -32,19 +33,24 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 	useBuiltIn <- readline("Do you want to use built-in data for existing species/drug combinations? [y/n] ")
 	if(useBuiltIn=="y"){
 		#do this eventually
-		print(knownSppDrug[,1:3])
+		print(knownSppDrug[,1:2])
 		sppDrug <- readline("Please choose the number that corresponds to the species/drug combination you wish to use: ")
-		curvePars <- c(knownSppDrug[sppDrug, 4], knownSppDrug[sppDrug, 5])
-		cat(paste("\nintercept: ", curvePars[1], "\tslope: ", curvePars[2], "\n", sep=""))		
+		curvePars <- c(knownSppDrug[sppDrug, 3], knownSppDrug[sppDrug, 4])
+		cat("_____________________________________________________________________")
+		cat(paste("\nintercept: ", curvePars[1], "\tslope: ", curvePars[2], sep=""))		
+		cat(paste("\nReference: ", knownSppDrug[sppDrug,8], "\nThis was based on ", knownSppDrug[sppDrug, 7], " isolates. The log2(MIC), RAD relationship was ", knownSppDrug[sppDrug, 5], " with an R^2 value of ", knownSppDrug[sppDrug, 6], "\n", sep=""))		
+		relat <- knownSppDrug[sppDrug, 5]
 	}
 	else{
-		haveSI<-readline("Do you know the slope and intercept of log2(MIC) regressed on RAD^2? [y/n]  ")
+		haveSI<-readline("Do you know the slope and intercept of log2(MIC) regressed on RAD? [y/n]  ")
 		if(haveSI == "y"){
 	   		intercept <- readline("Enter the intercept: ")
 	   		intercept <- as.numeric(intercept)
 	   		slope <- readline("Enter the slope: ")
 	   		slope <- as.numeric(slope)
 	   		curvePars <- c(intercept, slope)
+	   		relation <- readline("Is this from a linear (L: RAD) or quadratic (Q: RAD^2) relationship? [L/Q] ")
+	   		relat <- ifelse(relation == "L", "linear", "quadratic")
 			cat(paste("\nintercept: ", curvePars[1], "\tslope: ", curvePars[2], "\n", sep=""))		
 	   	}
 		if(haveSI =="n"){
@@ -69,11 +75,22 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".df. If you have replicates for RAD please run 'aggregateData' and the rerun 'calcMIC' with 'type=\"ag\"'. If you have replicates for MIC please average in the standard curve file before proceeding", sep=""))
 						if(length(RAD) != length(MIC) & type=="df") stop(paste("The length of the MIC file does not match the length of ", projectName, ".ag.", sep=""))						
 					}
-					fit<-lm(log(MIC)~RAD, na.action=na.exclude)
-					A <- summary(fit)$coefficients[1]
-					B <- summary(fit)$coefficients[2]
+					fitL<-lm(log(MIC)~RAD, na.action=na.exclude)
+					fitQ<-lm(log(MIC)~I(RAD^2), na.action=na.exclude)
+					if(fitL$adj.r.squared > fitR$adj.r.squared){
+						relat <- "linear"
+						A <- summary(fitL)$coefficients[1]
+						B <- summary(fitL)$coefficients[2]
+						R2 <- fitL$adj.r.squared
+						}
+					else{
+						relat <- "quadratic"
+						A <- summary(fitQ)$coefficients[1]
+						B <- summary(fitQ)$coefficients[2]
+						R2 <- fitQ$adj.r.squared
+						}
 					curvePars <-c(A, B)
-					cat(paste("\nintercept: ", round(curvePars[1],2), "\tslope: ", round(curvePars[2],2), "\n", sep=""))
+					cat(paste("\nThe best fit relationship is ", relat, "(R^2 = ", R2, ") \nwith intercept: ", round(curvePars[1],2), "\tslope: ", round(curvePars[2],2), "\n", sep=""))
 				}
 				if(sameData == "n"){
 					MICFile <- tcltk::tk_choose.files(caption = "Select the MIC standard curve file (containing MIC and RAD data in a text file, comma delimited)") 		
@@ -82,11 +99,22 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 					else{
 						RAD <- MICdata$RAD
 						MIC <- MICdata$MIC
-						fit <- lm(log2(MIC)~I(RAD^2), na.action=na.exclude)
-						A <- summary(fit)$coefficients[1]
-						B <- summary(fit)$coefficients[2]
+						fitL<-lm(log(MIC)~RAD, na.action=na.exclude)
+						fitQ<-lm(log(MIC)~I(RAD^2), na.action=na.exclude)
+						if(fitL$adj.r.squared > fitR$adj.r.squared){
+							relat <- "linear"
+							A <- summary(fitL)$coefficients[1]
+							B <- summary(fitL)$coefficients[2]
+							R2 <- fitL$adj.r.squared
+							}
+						else{
+							relat <- "quadratic"
+							A <- summary(fitQ)$coefficients[1]
+							B <- summary(fitQ)$coefficients[2]
+							R2 <- fitQ$adj.r.squared
+							}
 						curvePars <-c(A, B)
-						cat(paste("\nintercept: ", round(curvePars[1],2), "\tslope: ", round(curvePars[2],2), "\n", sep=""))		
+					cat(paste("\nThe best fit relationship is ", relat, "(R^2 = ", R2, ") \nwith intercept: ", round(curvePars[1],2), "\tslope: ", round(curvePars[2],2), "\n", sep=""))
 						}
 					}
 				}			
@@ -94,18 +122,24 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			t <- file.path(getwd(), "figures", projectName,  "RAD-MIC_standardCurve.pdf")					
 			pdf(t, width=width, height=height)
 			par(oma=c(1, 4, 1, 1))
-			plot(RAD^2, log2(MIC), xlim=c(0, max(RAD^2)+20), yaxt="n", xaxt="n", xlab="", ylab="")
+			if(relat == "quadratic"){
+				plot(RAD^2, log2(MIC), xlim=c(0, max(RAD^2)+20), yaxt="n", xaxt="n", xlab="", ylab="")
+				# abline(lm(log2(MIC)~I(RAD^2)), col="red")
+				mtext(expression(paste(RAD^2, " (mm)", sep="")), side=1, outer=FALSE, line=3) 		
+				}
+			else{
+				plot(RAD, log2(MIC), xlim=c(0, max(RAD)+20), yaxt="n", xaxt="n", xlab="", ylab="")
+				# abline(lm(log2(MIC)~RAD)), col="red")
+				mtext(expression(paste(RAD, " (mm)", sep="")), side=1, outer=FALSE, line=3) 		
+				}
 			axis(1, cex.axis=0.8)
-			axis(2, at=log2(c(0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)), las=2, labels=c("0.12", "0.25", "0.5", "1", "2", "4", "8", "16", "32", "64", "128"), cex.axis=0.8)
+			axis(2, at=log2(c(unique(MIC))), las=2, labels=c(unique(MIC)), cex.axis=0.8)
 			if(addBreakpoints){
 				abline(v=(19-6)^2/2, col="grey")
 				abline(v=(14.5-6)^2/2, col="grey")
 				abline(h=log2((32+64)/2), col="grey")
 				abline(h=log2((8+16)/2), col="grey")
-				}
-			abline(lm(log2(MIC)~I(RAD^2)), col="red")
-			mtext(expression(paste(RAD^2, " (mm)", sep="")), side=1, outer=FALSE, line=3) 		
-			
+				}			
 			title <- as.list(expression(paste(log[2], "(MIC)", sep=""), paste("actual values indicated, ", mu, "g/mL)")))
 			mtext(do.call(expression, title), side=2, cex=0.8, line = c(3.5, 2.5))		
 			dev.off()
@@ -121,7 +155,8 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 			cat(paste("\n\nThe calculated parameters have been saved here: \n", paramName, "\n and can be used in the future for the same species/drug combination\n", sep=""))
 			}
 		}
-	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]^2), 2)	)
+	if(relat == "quadratic")	MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]^2), 2))
+	else MIC <- c(round(2^curvePars[1]*2^(curvePars[2]*dataframe[paste("RAD", ZOIvalue, sep="")]), 2))
 	# The three lines below would round the MIC to the typical values that are tested:
 	# typicalMIC <- c(0.03, 0.0625, 0.12, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)	
 	# place <- apply(t(MIC), 1, function(x) which.min(typicalMIC - x))
