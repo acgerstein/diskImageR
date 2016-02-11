@@ -1,5 +1,5 @@
 ---
-title: "Quantitative Disk Assay"
+title: "Supplementary File Quantitative Disk Assay"
 author: "Aleeza C. Gerstein"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -49,12 +49,12 @@ The R package `diskImageR` provides a quantitative, unbiased method to analyze p
 * `twoParamplot`: plot resistance (RAD) and tolerance (FoG) at a specified cutoff value [optional]
 * `threeParamplot`: plot resistance (RAD), tolerance (FoG), and sensitivity (slope) [optional]
 
-See the end of this document for the skeleton walkthrough of package use, or the document "walkthrough.R" available <a href="http://acgerstein.weebly.com/uploads/2/3/5/6/23564534/walkthrough.r">here</a> or in the diskImageR library directory.
+See the end of this document for the skeleton walkthrough of package use, or the document "walkthrough.R" is available in the diskImageR library directory and as a supplementary file.
 
 ##Required software
 If you do not have R (or R Studio) installed on your computer, that is step one. The use of `diskImageR` does not require prior knowledge of R and it is the goal of this tutorial to walk through everything that is necessary to analyze photographs of disk diffusion assays. Once the package has been loaded into R, support for all built-in function can be found by typing `?functionName` in the R console.
 
-The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download <a href="http://rsb.info.nih.gov/ij/download.html"> here</a>. If possible ImageJ should be installed to the default location (Applications folder on a Mac, Program Files folder on a PC). If it is installed in a different location you will need to specify the path to ImageJ (see `?IJMacro` after package install). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools <a href="https://developer.apple.com/xcode/download/">here</a>. You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
+The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download (http://rsb.info.nih.gov/ij/download.html). If possible ImageJ should be installed to the default location (Applications folder on a Mac, Program Files folder on a PC). If it is installed in a different location you will need to specify the path to ImageJ (see `?IJMacro` after package install). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools (https://developer.apple.com/xcode/download/). You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
 
 The primary output of `diskImageR` is CSV files that can be opened and used in any approprate program (e.g., Microsoft Excel) and a series of PDF figures that can be customized within the package functions. 
 
