@@ -24,18 +24,18 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library("diskImageR")
 ```
 
-#<i>diskImageR</i>: Quantification of resistance and tolerance to antimicrobial drugs using disk diffusion assays
+##<i>diskImageR</i>: Quantification of resistance and tolerance to antimicrobial drugs using disk diffusion assays
 
-#Supplementary File S1. <i>diskImageR</i> tutorial
+##Supplementary File S1. <i>diskImageR</i> tutorial
 
-##Introduction to <i>diskImageR</i>
+###Introduction to <i>diskImageR</i>
 The R package `diskImageR` provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. This computational method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achived above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth). 
 
 <center>
 <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p2_30_a.jpg"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center> 
 
-##diskImageR function overview (in the typical order of use)
+###<i>diskImageR</i> function overview (in the typical order of use)
 * `IJMacro`: runs an ImageJ macro on the folder that contains the photograph to be analyzed [required]
 * `readInExistingIJ`: used to read in existing ImageJ analyses [optional]
 * `plotRaw`: used to plot the results of ImageJ analysis [optional]
@@ -52,14 +52,14 @@ The R package `diskImageR` provides a quantitative, unbiased method to analyze p
 
 See the end of this document for the skeleton walkthrough of package use, or the document "walkthrough.R" is available in the diskImageR library directory and as a supplementary file.
 
-##Required software
+###Required software
 If you do not have R (or R Studio) installed on your computer, that is step one. The use of `diskImageR` does not require prior knowledge of R and it is the goal of this tutorial to walk through everything that is necessary to analyze photographs of disk diffusion assays. Once the package has been loaded into R, support for all built-in function can be found by typing `?functionName` in the R console.
 
 The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download (http://rsb.info.nih.gov/ij/download.html). If possible ImageJ should be installed to the default location (Applications folder on a Mac, Program Files folder on a PC). If it is installed in a different location you will need to specify the path to ImageJ (see `?IJMacro` after package install). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools (https://developer.apple.com/xcode/download/). You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
 
 The primary output of `diskImageR` is CSV files that can be opened and used in any approprate program (e.g., Microsoft Excel) and a series of PDF figures that can be customized within the package functions. 
 
-##Prepare plates and photographs
+###Prepare plates and photographs
 The analysis done by `diskImageR` will only be as good as the photographs taken of the disk assay plates. We use the Bencher Copymate II camera mounting system. In this setup there are two fluorescent lights on either side of the disk, oriented to minimize shadows on the plate in an otherwise dark room. We use the Canon Rebel T3i camera with an ISO 800, white balance "white fluorescent light", time 1/100s, picture stype "neutral", centre focused. Any camera of reasonably high quality should suffice, though the camera should always be set in manual rather than automatic mode, as the goal is to take photographs as consistently as possible. We also use the 2s timer to avoid potentially jostling the camera while taking images and/or having a hand/arm shadow in the picture. Plates should be photographed on a dark surface (we use black velvet) and plate labels are written on the side rather than the bottom of the plate. We have also used `diskImageR`  with the XXX scanner on XXX settings. 
 
 Prior to analysis, images should be cropped close to the plate (as above). Because the analysis program automatically detects the disk based on size, it is important that no other similar-sized circles be present in the image (e.g., from letters in labels).
@@ -69,7 +69,7 @@ Once you have the set of photographs that you want to be analyzed together they 
 
 The photograph file naming scheme will be be carried throughout, thus care should be taken with naming photographs in a logical manner. The general format that we use is "strain_factor1_factor2_rep.jpg". This format will allow you to use a built-in function to average across replicate pictures from the same strain. Conversely, if you intend to do this separately (or not at all) the photographs can be named anything. 
 
-## Run the ImageJ macro on the set of photographs
+###Run the ImageJ macro on the set of photographs
 The first function of the package is `IJMacro()`. From each photograph, an ImageJ macro that is included in `diskImageR` will automatically open each photograph from the specified directory, determine where the disk is located on the plate, find the center of the disk, and draw 40mm radial lines out from the center of the disk every 5 degrees. For each line, the pixel intensity will be determined at many points along the line using the built-in `plot profile` macro from ImageJ. This data will be stored in the folder *ImageJ_out* on your computer, with one file for each photograph.
 
 `IJMacro()` can be run in two different ways, either through a user-interface with pop-up boxes, or directly through the R console. At this point you will specify a project name, the main project directory, and the photograph directory.
@@ -107,7 +107,7 @@ To access the output of the ImageJ analysis in a later R session use the functio
 readInExistingIJ("betterName") 
 ```
 
-##Plot the output of ImageJ analysis
+###Plot the output of ImageJ analysis
 The optional function `plotRaw()` will create a PDF file of plots saved to the *figures* directory that show the average pixel intensity across all 72 lines from each photograph (i.e., the data that can be found in the "averageLines.csv" file). This function is a good check to see whether the analysis proceeded properly and in and of itself may be useful to visualize differences between different strains or experimental factors.
 
 ```{r, fig.width=6, fig.height=4}
@@ -138,15 +138,14 @@ The output of `maxLik()` is a list that is saved to the R environment and a PDF 
 maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
 ```
 
-###[OPTIONAL] Save the maximum likelihood results
+<b>[OPTIONAL] Save the maximum likelihood results</b>
 If you are intersted in the nuts and bolts of the maximum likelihood parameters it is possible to save these results using the `saveMLParam()` function, which will save a CSV file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
  
-
 ```
 saveMLParam("newProject")
 ```
  
-##Create and save a dataframe of parameter estimates
+###Create and save a dataframe of parameter estimates
 The last required step is to run the function `createDataframe()` to create and save a dataframe with the drug response parameter estimates, using the best fit parameters from the logistic equations:
 
 * <b>Resistance (<i>RAD</i>)</b>
@@ -164,7 +163,7 @@ newProject.df
 ```
 If you want to access this dataframe in a later R session you can do so with the function `readExistingDF("betterName")`. Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., `new.df <- read.csv(file)`) though if you intend to use the functions below, you need to save it with a name that ends with ".df".
 
-###[OPTIONAL] Add additional factor columns
+<b>[OPTIONAL] Add additional factor columns</b>
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using the function `addType()`. 
 
 ```{r}
@@ -172,7 +171,7 @@ addType("newProject", typeName="rep")
 newProject.df
 ```
 
-##Aggregate replicate pictures
+###Aggregate replicate pictures
 The function `aggregateData()` is used if you have done replicate disk assays on the same strain and want to calculate their average and variance. The variance function can be specified with basic R variance measures (e.g, standard deviation, `sd`), the standard error (`se`), or the coefficient of variantion (`CV`). 
 
 For this example I am loading an existing dataset that I call `manyReps.df`. This dataset contains data for seven different lines, with twelve replicates per line, and a factor I'm interested in that has two levels. I then use `aggregateData()` to average among the 12 replicates and calculate their standard error. `aggregateData()` will save a CSV file into the *parameter_files* directory as well as a new dataframe to the console (`manyReps.ag`).
@@ -187,13 +186,13 @@ aggregateData("manyReps", replicate=c("line", "type"), varFunc="se")
 manyReps.ag
 ```
 
-##Calculate MIC
+###Calculate MIC
 The function `calcMIC` is used to convert the RAD values calculated here into the typical MIC values you would acquire with a broth microdilution assay (or an Etest strip). This conversion can be based on a) existing built-in data from a nubmer of species/drug combinations (see below), b) a user-supplied slope and intercept of the linear or quadratic relationship between RAD and log2(MIC) for the species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. Note that for user-supplied data (c or d) the data should not already be transformed and the file should be a .CSV file containing columns labelled "MIC" and "RAD". If the user has supplied their own MIC data the function will first determine whether a linear or quadratic model provides a better fit. A figure that plots the standard curve will be saved in the file "RAD-MIC_standardCurve.pdf" in the *figures* directory and the calculated model parameters will be saved in the file "RAD-MIC_parameters.csv" in the *parameters_out* directory.  In all cases a column containing the MIC information is added to the dataframe and the dataframe is saved. 
 
 Either a `diskImageR` dataframe (e.g., newProject.df) or aggregated dataframe (e.g., newProject.ag) can be used.
 
 
-##Plot parameter results
+###Plot parameter results
 Three related plotting functions are included with `diskImageR`. The function `oneParamPlot()`will plot any of the single parameters (argument `param` supports "RAD20", "RAD50", "RAD80", "FoG20", "FoG50", "FoG80", "slope", the default = "RAD20") while `twoParamPlot()` will plot RAD and FoG at specified cutoff values (`RAD` supports "RAD20", "RAD50", "RAD80"; `FoG` supports "FoG20", "FoG50", "FoG80"), and `threeParamPlot()` will plot RAD, FoG and slope. 
 
 The required input for all three functions can be the dataframe from either `createDataframe()` (specified by argument `type="df"`, the default) or from `aggregateData()` (specified by argument `type="ag"`).  
@@ -210,9 +209,7 @@ twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
 
-
-
-##Walkthrough of typical diskImageR use
+###Walkthrough of typical diskImageR use
 
 
 ```{r, eval=FALSE, tidy=TRUE}
@@ -257,7 +254,7 @@ calcMIC("newProject")
 
 ```
 
-##Acknowledgements
+###Acknowledgements
 * Richard Fitzjohn: contributed the maximum likelihood function `find.mle()` (from the `diversitree` package	)
 * Inbal Hecht: coded portions of `calcMIC()` and contributed a patch to make `IJMacro()` more compatible with Windows
 * Sincere thanks also to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron, and Alexander Rosenberg for testing many versions of the code presented here, Yoav Ram for going through the code from the entire package, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in disk assay experiments.
