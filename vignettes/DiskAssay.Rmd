@@ -23,9 +23,12 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```{r, echo=FALSE}
 library("diskImageR")
 ```
-#Supplementary File S1. `diskImageR` tutorial
 
-##Introduction to diskImageR
+#<i>diskImageR</i>: Quantification of resistance and tolerance to antimicrobial drugs using disk diffusion assays
+
+#Supplementary File S1. <i>diskImageR</i> tutorial
+
+##Introduction to <i>diskImageR</i>
 The R package `diskImageR` provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. This computational method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achived above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth). 
 
 <center>
