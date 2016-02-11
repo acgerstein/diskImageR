@@ -90,7 +90,6 @@ If you would prefer to avoid pop-up boxes you can directly specify the main proj
 ```r
 IJMacro("newProject", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/photographs/")
 ```
-
 ```{r, echo=FALSE}
 IJMacro("newProject", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
 ```
