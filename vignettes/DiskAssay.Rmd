@@ -1,5 +1,6 @@
 ---
-title: "Supplementary File Quantitative Disk Assay"
+title: "Supplementary File S1. 
+diskImageR tutorial"
 author: "Aleeza C. Gerstein"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
