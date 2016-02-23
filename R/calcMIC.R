@@ -17,7 +17,14 @@
 
 calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE){
 	ZOIvalue <- RAD
-	knownSppDrug <- read.csv(file.path(.libPaths(), "diskImageR", "knownMIC-RAD.csv"))
+	if(.Platform$OS.type=="windows"){
+	    drugFile <- file.path(.libPaths(), "diskImageR", "knownMIC-RAD.csv")[1]
+		drugFile <- gsub("Program Files", "progra~1", drugFile)
+		knownSppDrug <- read.csv(drugFile)
+	}
+	else{
+		knownSppDrug <- read.csv(file.path(.libPaths(), "diskImageR", "knownMIC-RAD.csv"))
+	}
 	# knownSppDrug <- read.csv("knownMIC-RAD.csv")
 	head(knownSppDrug[,1:2])	
 	#Check whether file exists in environment or prompt user to load it
