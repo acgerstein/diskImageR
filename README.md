@@ -12,6 +12,10 @@ devtools::install_github("acgerstein/diskImageR")
 
 Since `diskImageR` requires third-party software (ImageJ), it was not possible to include the vignette in the package in the usual way. This readme file aims to cover some of the information that is present in the vignette, but the user is encouraged to download a pdf of the full vignette (i.e., help file) [here] (http://acgerstein.weebly.com/uploads/2/3/5/6/23564534/diskimager-helpfile.pdf). 
 
+## Required software
+
+The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download (http://rsb.info.nih.gov/ij/download.html). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools (https://developer.apple.com/xcode/download/). You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
+
 ## Function overview (in the typical order of use)
 
 * `IJMacro`: runs an ImageJ macro on the folder that contains the photograph to be analyzed [required]
@@ -28,12 +32,7 @@ Since `diskImageR` requires third-party software (ImageJ), it was not possible t
 * `twoParamplot`: plot resistance (RAD) and tolerance (FoG) at a specified cutoff value [optional]
 * `threeParamplot`: plot resistance (RAD), tolerance (FoG), and sensitivity (slope) [optional]
 
-
-## Required software
-
-The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download (http://rsb.info.nih.gov/ij/download.html). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools (https://developer.apple.com/xcode/download/). You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
-
-## Prepare plates and photographs
+### Prepare plates and photographs
 The analysis done by `diskImageR` will only be as good as the photographs taken of the disk assay plates. We use the Bencher Copymate II camera mounting system. In this setup there are two fluorescent lights on either side of the disk, oriented to minimize shadows on the plate in an otherwise dark room. We use the Canon Rebel T3i camera with an ISO 800, white balance "white fluorescent light", time 1/100s, picture stype "neutral", centre focused. Any camera of reasonably high quality should suffice, though the camera should always be set in manual rather than automatic mode, as the goal is to take photographs as consistently as possible. We also use the 2s timer to avoid potentially jostling the camera while taking images and/or having a hand/arm shadow in the picture. Plates should be photographed on a dark surface (we use black velvet) and plate labels are written on the side rather than the bottom of the plate. 
 
 Prior to analysis, images should be cropped close to the plate (as above). Because the analysis program automatically detects the disk based on size, it is important that no other similar-sized circles be present in the image (e.g., from letters in labels).
@@ -53,7 +52,7 @@ The photograph directory is the one used to store photographs from above (which 
 
 <b> Important! </b> There can not be any spaces or special characters in any of the folder names that are in the path that lead to either the main project directory or the photograph directory. If there are an error box titled "Macro Error" will pop up and the script will not run (the red error message <span style="color:red">Error in tList[[i]]: subscript out of bounds</span> will also show up in the R console). 
 
-The default assumption here and in all funtions is that the disk size is the standard 6mm. If you are using custom-sized disks you will need to specify that with the argument `diskDiam = X`, where X is the size of your disk in mm. This should also be specified in the functions `plotRaw()`, `maxLik()` and `createDataframe()`, discussed below. You will also need to change the argument `standardLoc` in `maxLik()` and `createDataframe()`. standardLoc is a numberic value that indicates the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line when `plotStandardLoc = TRUE`). To suppress this standardization use `standardLoc = FALSE`.
+The default assumption here and in all funtions is that the disk size is the standard 6mm. If you are using custom-sized disks you will need to specify that with the argument `diskDiam = X`, where X is the size of your disk in mm. This should also be specified in the functions `plotRaw()`, `maxLik()` and `createDataframe()`, discussed below. You will also need to change the argument `standardLoc` in `maxLik()` and `createDataframe()`. standardLoc is a numberic value that indicates the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in `plotRaw()` (the red dashed line when `plotStandardLoc = TRUE`). To suppress this standardization use `standardLoc = FALSE`.
 
 To run the ImageJ macro through a user-interface with pop-up boxes: 
 ```r
@@ -88,15 +87,8 @@ Many different arguments can be specified to influence the plots and the PDF tha
 
 ###Run the maximum likelihood analysis 
 The next step is the function `maxLik()`, which uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the ImageJ output data. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4. The midpoint from the single logistic is used to determine sensitivity.
-$$
-y = \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
-$$
 
 We often observed disk assays that deviated from the single logistic, either rising more linearly than expected at low cell density, or with an intermediate asymptote around the midpoint. To fascilitate fitting these curves, we also fit a double logistic, which allows greater flexibility. In practice, as the double logistic has extra parameters, it will always provide a closer fit to the underlying data, thus the results of this model are used to determine the resistance and tolerance parameters. 
-
-$$
-y = \frac{asymA*exp(scalA(x-od50A))}{1+exp(scalA(x-od50A))}+\frac{asymB*exp(scalB(x-od50B))}{1+exp(scalB(x-od50B))}+N(0, \sigma)
-$$
 
 Depending on the number of photographs to be analyzed, `maxLik()` can take a fair amount of time, upwards of an hour or more. This is due to the maximum likelihood fitting procedures, which determine the best fit parameters from multiple different starting values. The status is indicated by a series of dots (".") in the R console, with one dot per photograph. This procedure is the find.mle routine from the <a href="https://github.com/richfitz/diversitree">diversitree</a> package written by Richard Fitzjohn. If for some reason the procedure gets halted in the middle of `maxLik()` (e.g., computer is shut down) as long as R remains open it should resume where it left off when the computer is reactivated.
 
@@ -225,7 +217,7 @@ calcMIC("newProject")
 ```
 
 ###Acknowledgements
-* Richard Fitzjohn: contributed the maximum likelihood function `find.mle()` (from the `diversitree` package	)
+* Richard Fitzjohn: contributed the maximum likelihood function `find.mle()` from [diversitree] (https://github.com/richfitz/diversitree)
 * Inbal Hecht: coded portions of `calcMIC()` and contributed a patch to make `IJMacro()` more compatible with Windows
 * Sincere thanks also to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron, and Alexander Rosenberg for testing many versions of the code presented here, Yoav Ram for going through the code from the entire package, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in disk assay experiments.
 
@@ -233,4 +225,4 @@ calcMIC("newProject")
 Please contact Aleeza Gerstein, <gerst035@umn.edu>
 
 ###Updated
-Last updated February 2016
+Last updated March 2016
