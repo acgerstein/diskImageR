@@ -79,6 +79,10 @@ Depending on the number of photographs to be analyzed, `maxLik()` can take a fai
 
 Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
 }
+\examples{
+maxLik("myProject", clearHalo=1)
+maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
+}
 \author{
 Aleeza C. Gerstein
 }

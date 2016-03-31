@@ -53,6 +53,10 @@ A pdf file with one plot for each photograph is saved to visualize the results o
 \description{
 \code{plotRaw} creates a pdf figure showing the results of the ImageJ analysis, with one plot for each photograph. This function is optional, and is primarily for visualization purposes.
 }
+\examples{
+plotRaw("myProject")
+plotRaw("myProject", ymin = 50, ymax = 300, xplots=2, height=3, width=4, plotStandardLoc=FALSE)
+}
 \author{
 Aleeza c. Gerstein
 }

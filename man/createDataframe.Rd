@@ -46,6 +46,10 @@ A dataframe with 11 columns:
 		\item\bold{slope:} sensitivity parameter, indicating the slope at the midpoint, i.e., how rapidly the population changes from low growth to full growth
 	}
 }
+\examples{
+createDataframe("myProject", clearHalo=1)
+createDataframe("myProject", clearHalo=1, removeClear = TRUE, typeName = "drugAmt")
+}
 \author{
 Aleeza C. Gerstein
 }

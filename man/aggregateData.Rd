@@ -24,6 +24,10 @@ A dataframe "projectName.ag" is saved to the global environment and a .csv file 
 \description{
 Uses a user-supplied variance measure (currently supported: standard error, coefficient of variation, built-in R functions (e.g., sd) to calculate variance among photographs of the same type
 }
+\examples{
+aggregateData("myProject")
+aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
+}
 \author{
 Aleeza C. Gerstein
 }

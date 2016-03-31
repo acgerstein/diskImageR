@@ -32,6 +32,9 @@ Each photograph in the directory specified by \code{photoDir} is input into Imag
 There can not be any spaces or special characters in any of the folder names that are in the path that lead to either the main project directory or the photograph directory. If there are an error box titled "Macro Error" will pop up and the script will not run.
 The project name should ideally be fairly short (easy to type without typos!) and specific to the project. It must start with a letter, not a number or special character, but can otherwise be anything. The project name must always be specified with quotation marks around it (a surprisingly common error).
 }
+\examples{
+IJMacro("myProject")
+}
 \author{
 Aleeza C. Gerstein
 }

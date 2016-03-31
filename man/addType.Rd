@@ -21,6 +21,9 @@ updates the existing dataframe
 \description{
 Add an extra factor ("type") column to the existing dataframe
 }
+\examples{
+addType("myProject", typePlace=4, typeName="temperature")
+}
 \author{
 Aleeza C. Gerstein
 }
