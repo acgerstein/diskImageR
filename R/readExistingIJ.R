@@ -19,7 +19,8 @@ readInExistingIJ <- function(projectName, newList = list()) {
 			print(names(newList))
 			setwd(projectFolder)
 			cat("\a")	
-			assign(projectName, newList, envir=globalenv())
+			assign(projectName, newList, inherits=TRUE)
+			# assign(projectName, newList, envir=globalenv())
 			}
 		else {
 			allLines <-  aggregate(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"], mean)

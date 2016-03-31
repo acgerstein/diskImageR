@@ -19,11 +19,13 @@ readExistingDF <- function(projectName){
 	}
 	newDF <- read.csv(fileName)
 	if (grepl(".df", fileName) == TRUE){
-		assign(paste(projectName, ".df", sep=""), newDF, envir=globalenv())
+		assign(paste(projectName, ".df", sep=""), newDF, inherits=TRUE)
+		# assign(paste(projectName, ".df", sep=""), newDF, envir=globalenv())
 		name <- paste(projectName, ".df", sep="")
 	}
 	else {
-		assign(paste(projectName, ".ag", sep=""), newDF, envir=globalenv())	
+		assign(paste(projectName, ".ag", sep=""), newDF, inherits=TRUE)	
+		# assign(paste(projectName, ".ag", sep=""), newDF, envir=globalenv())	
 		name <- paste(projectName, ".ag", sep="")
 		}
 

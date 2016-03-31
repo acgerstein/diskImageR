@@ -145,7 +145,8 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	cat(paste("\n", dfName, " has been written to the global environment", sep=""))
 	cat(paste("\nSaving file: ", filename,  sep=""))
 	cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
-	assign(dfName, df, envir=globalenv())
+	# assign(dfName, df, envir=globalenv())
+	assign(dfName, df, inherits=TRUE)
 	}
 
 #Determine the slope

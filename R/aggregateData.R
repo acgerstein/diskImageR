@@ -59,7 +59,8 @@ aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "ty
 		cat(paste("\n", agName, " has been written to the global environment", sep=""))
 		cat(paste("\n\nSaving file: ", filename, sep=""))
 	}
-	 assign(agName, ag, envir=globalenv())
+	 # assign(agName, ag, envir=globalenv())
+	 assign(agName, ag, inherits=TRUE)
 }
 	
 cv <- function(x, na.rm=TRUE) (100*sd(x)/mean(x))

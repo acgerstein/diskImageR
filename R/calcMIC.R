@@ -178,5 +178,6 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 	write.csv(upDataframe, file=filename, row.names=FALSE)	
 	cat(paste("\n", dfName, " has been updated and written to the global environment", sep=""))
 	cat(paste("\n\nSaving file: ", filename, sep=""))
-	assign(dfName, upDataframe, envir=globalenv())
+	# assign(dfName, upDataframe, envir=globalenv())
+	assign(dfName, upDataframe, inherits=TRUE)
 	}

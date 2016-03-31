@@ -21,7 +21,8 @@ addType <- function(projectName, typePlace=3, typeName="type2", save = TRUE){
 	if(typeName != "type2") names(dfnew)[place] <- typeName
 
 	dfName <- paste(projectName, ".df", sep="")
-	assign(dfName, dfnew, envir=globalenv())
+	# assign(dfName, dfnew, envir=globalenv())
+	 assign(dfName, dfnew, inherits=TRUE)	
 	cat(paste(dfName, " has been written to the global environment", sep=""))
 
 	if(save){
