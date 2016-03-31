@@ -50,7 +50,4 @@ A dataframe with 11 columns:
 createDataframe("myProject", clearHalo=1)
 createDataframe("myProject", clearHalo=1, removeClear = TRUE, typeName = "drugAmt")
 }
-\author{
-Aleeza C. Gerstein
-}
 

@@ -35,7 +35,4 @@ The project name should ideally be fairly short (easy to type without typos!) an
 \examples{
 IJMacro("myProject")
 }
-\author{
-Aleeza C. Gerstein
-}
 

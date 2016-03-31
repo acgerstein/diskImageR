@@ -28,7 +28,7 @@ Uses a user-supplied variance measure (currently supported: standard error, coef
 aggregateData("myProject")
 aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
 }
-\author{
-Aleeza C. Gerstein
+\seealso{
+\code{\link{addType}} if there multiple factors in your experiment. Add whatever the new factor is called (default: "type2") to the replicate vector if this is appropriate.
 }
 

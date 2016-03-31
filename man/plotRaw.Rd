@@ -57,7 +57,4 @@ A pdf file with one plot for each photograph is saved to visualize the results o
 plotRaw("myProject")
 plotRaw("myProject", ymin = 50, ymax = 300, xplots=2, height=3, width=4, plotStandardLoc=FALSE)
 }
-\author{
-Aleeza c. Gerstein
-}
 

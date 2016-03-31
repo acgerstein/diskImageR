@@ -14,10 +14,9 @@
 #' aggregateData("myProject")
 #' aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
 
+#' @seealso \code{\link{addType}} if there multiple factors in your experiment. Add whatever the new factor is called (default: "type2") to the replicate vector if this is appropriate.
+
 #' @export
-
-#' @author Aleeza C. Gerstein
-
 
 aggregateData <- function(projectName, varFunc = "se", replicate = c("line", "type"), overwrite = TRUE, save=TRUE){
 	dataframe <- eval(parse(text=paste(projectName, ".df", sep="")))

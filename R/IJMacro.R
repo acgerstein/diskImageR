@@ -21,8 +21,6 @@
 
 #' @export
 
-#'@author Aleeza C. Gerstein
-
 IJMacro <-
 function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	# if(!is.char(projectName))

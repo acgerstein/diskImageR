@@ -8,8 +8,6 @@
 
 #' @export
 
-#'@author Aleeza C. Gerstein
-
 readExistingDF <- function(projectName){
 	projectFolder <- tcltk::tk_choose.dir(caption = "Select main project directory")
 	setwd(projectFolder)

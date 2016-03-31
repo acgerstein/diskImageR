@@ -51,7 +51,7 @@ This function creates a pdf figure of plots showing the results of the imageJ an
 \details{
 Basic parameter plotting functions to plot RAD and FoG parameter plots. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}. The default is to plot RAD as a dotplot and tolerance as a barplot, though tolerance can also be plotted as a dotplot with \code{barplot=FALSE} (currently there is not support to plot RAD as a barplot in this framework).
 }
-\author{
-Aleeza C. Gerstein
+\seealso{
+\code{\link{oneParamPlot}} for a similar figure with one parameter or \code{\link{threeParamPlot}} for a similar figure with three parameters
 }
 

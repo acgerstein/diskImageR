@@ -11,10 +11,8 @@
 #' @examples 
 #' addType("myProject", typePlace=4, typeName="temperature")
 
-
 #' @export
 
-#' @author Aleeza C. Gerstein
 
 
 addType <- function(projectName, typePlace=3, typeName="type2", save = TRUE){

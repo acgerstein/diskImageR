@@ -10,9 +10,11 @@
 
 #' @return Either a pdf figure figure saved to the 'figures' directory ("projectName_RAD-slope-FoG.pdf" or a figure on screen
 
+#' @seealso \code{\link{oneParamPlot}} for a similar figure with one parameter and \code{\link{twoParamPlot}} for a similar figure with two parameters 
+
 #' @export
 
-#' @author Aleeza C. Gerstein
+
 
 
 threeParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30, slopeMax = 160, tolMax = 100, width = 6, height = 4, xlabels="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE){

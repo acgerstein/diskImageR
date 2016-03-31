@@ -10,8 +10,6 @@
 
 #' @author Aleeza C. Gerstein
 
-#CHANGE THIS to saveRDS (and readRDS!)
-
 saveMLParam <- function(projectName){
 	fileFolder <- paste(Sys.Date(), projectName, sep="_")
 	newdir <- file.path(getwd(), "parameter_files")
@@ -37,9 +35,7 @@ saveMLParam <- function(projectName){
 	cat("\n")
 	cat(paste("\n", MLdf, " has been written to the global environment", sep=""))
 	assign(MLdf, ML.df, inherits=TRUE)
-#	assign(MLdf, ML.df, envir=globalenv())
 	cat(paste("\n", ML2df, " has been written to the global environment", sep=""))
-	# assign(ML2df, ML2.df, envir=globalenv())
 	assign(ML2df, ML2.df, inherits=TRUE)
 	cat(paste("\nSaving files: ", filename1, "\nand ", filename2, sep=""))
 

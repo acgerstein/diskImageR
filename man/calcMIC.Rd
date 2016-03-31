@@ -30,7 +30,4 @@ In all cases the function will return an updated .csv file that contains the MIC
 \description{
 Used to convert RAD into MIC. In all cases the linear relationship is log2(MIC) regressed onto RAD^2. This conversion can be based on a) existing built-in data from a number of species/drug combinations, b) a user-supplied slope and intercept of log2(MIC) regressed on RAD^2 for the species/drug combination of interest, c) a user supplied file containing MIC information from lines previously analyzed by diskImageR for RAD, or d) a user supplied file containing both RAD and MIC information. Note that user-supplied data should be MIC and RAD, not log2(MIC) and RAD^2 (the function will do this authomatically).
 }
-\author{
-Aleeza C. Gerstein & Inbal Hecht
-}
 

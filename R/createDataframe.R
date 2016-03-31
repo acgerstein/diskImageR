@@ -27,9 +27,6 @@
 
 #' @export
 
-#' @author Aleeza C. Gerstein
-
-
 
 createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type"){
 	if(!(hasArg(clearHalo))){

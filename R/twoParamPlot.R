@@ -18,9 +18,10 @@
 
 #' @return Either a pdf figure figure (projectName_RAD-FoG.pdf) saved to the 'figures' directory or a figure on screen
 
-#' @export
+#' @seealso \code{\link{oneParamPlot}} for a similar figure with one parameter or \code{\link{threeParamPlot}} for a similar figure with three parameters 
 
-#' @author Aleeza C. Gerstein
+
+#' @export
 
 twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmin = 30, tolMax = 100, width = 6, height = 4, xlabels ="line", xlabAngle=NA, order=NA, orderFactor = "line", overwrite=TRUE, savePDF= TRUE, popUp = TRUE, barplot=TRUE){
 	if(!(hasArg(type))){

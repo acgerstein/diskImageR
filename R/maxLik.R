@@ -42,8 +42,6 @@
 
 #' @export
 
-#' @author Aleeza C. Gerstein
-
 #' @section References:
 #' Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
 

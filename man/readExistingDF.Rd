@@ -15,7 +15,4 @@ readExistingDF(projectName)
 \description{
 Open an existing dataframe previously created with either \code{\link{createDataframe}} or \code{\link{aggregateData}} using tcltk interface.
 }
-\author{
-Aleeza C. Gerstein
-}
 

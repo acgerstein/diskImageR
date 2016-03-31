@@ -83,9 +83,6 @@ Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of div
 maxLik("myProject", clearHalo=1)
 maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 }
-\author{
-Aleeza C. Gerstein
-}
 \seealso{
 \code{\link{saveMLParam}} to save the parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
 }

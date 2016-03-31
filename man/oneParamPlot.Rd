@@ -49,7 +49,7 @@ This function creates a pdf figure of plots showing the results of the imageJ an
 \details{
 Basic parameter plotting functions to plot a single  parameter. Input can be the dataframe from either \code{\link{createDataframe}} \code{type="df"} or from \code{\link{aggregateData}} \code{type=="ag"}.
 }
-\author{
-Aleeza C. Gerstein
+\seealso{
+\code{\link{twoParamPlot}} for a similar figure with two parameters or \code{\link{threeParamPlot}} for a similar figure with three parameters
 }
 
