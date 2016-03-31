@@ -10,6 +10,10 @@
 
 #' @return A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory. 
 
+#' @examples
+#' aggregateData("myProject")
+#' aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
+
 #' @export
 
 #' @author Aleeza C. Gerstein

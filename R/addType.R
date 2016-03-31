@@ -8,6 +8,10 @@
 
 #' @return updates the existing dataframe 
 
+#' @examples 
+#' addType("myProject", typePlace=4, typeName="temperature")
+
+
 #' @export
 
 #' @author Aleeza C. Gerstein

@@ -16,6 +16,9 @@
 
 #' @return A .csv file is saved to the directory "imageJ_out" in the directory specified by \code{projectDir}. The average line for each photograph is saved to the list \code{projectName} in the global environment.
 
+#' @examples 
+#' IJMacro("myProject")
+
 #' @export
 
 #'@author Aleeza C. Gerstein

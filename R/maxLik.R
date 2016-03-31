@@ -23,7 +23,6 @@
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
 
-
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
 #' single logistic ('ML'):  
 #'	y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, sigma)
@@ -47,6 +46,10 @@
 
 #' @section References:
 #' Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
+
+#' @examples 
+#' maxLik("myProject", clearHalo=1)
+#' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 
 
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
