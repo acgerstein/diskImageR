@@ -4,8 +4,9 @@ This package provides a quantitative, unbiased method to analyze photographs of 
 
 The package can be installed directly from GitHub using [devtools] (http://github.com/hadley/devtools)
 ```r
-#install.packages("devtools"
+#install.packages("devtools")
 devtools::install_github("acgerstein/diskImageR")
+```
 
 ## Vignette
 
