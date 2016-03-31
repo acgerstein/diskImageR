@@ -122,13 +122,13 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		}		
 	cat("\a")
 #	assign(projectName, temp, envir=globalenv())
-	assign(projectName, temp, envir=	diskImageREnv)	
-	# assign(projectName, temp)
+#	assign(projectName, temp, envir=	diskImageREnv)	
+	assign(projectName, temp, inherits=TRUE)
 
 	dfNA <- .saveAveLine(temp)
 	cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
-	return(get(projectName, envir=diskImageREnv))	
+	# return(get(projectName, envir=diskImageREnv))	
 	}
 
 .saveAveLine <- function(L){
