@@ -1,6 +1,6 @@
 Package: diskImageR
-Title: A Pipeline to Analyze Resistance and Tolerance From Drug Disk Diffusion Assays
-Version: 0.6
+Title: A Pipeline to Analyze Resistance and Tolerance from Drug Disk Diffusion Assays
+Version: 0.6.0
 Authors@R: c(
 	person("Aleeza", "Gerstein", email="gerst035@umn.edu", role=c("aut", "cre")),
 	person("Inbal", "Hecht", email="inbal.hecht@gmail.com", role="ctb"))
@@ -12,4 +12,4 @@ Imports:  zoo,
     subplex,
     tcltk
 Suggests: knitr
-VignetteBuilder: knitr
+

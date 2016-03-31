@@ -14,7 +14,15 @@ calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 6,
 
 \item{RAD}{a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20"]}
 
+\item{height}{a numeric value indicating the height of the pdf file generated}
+
+\item{width}{a numeric value indicating the width of the pdf file generated}
+
 \item{addBreakpoints}{Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve)}
+
+\item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).}
+
+\item{popUp}{a logical value indicating whether to pop up the figure after it has been created}
 }
 \value{
 In all cases the function will return an updated .csv file that contains the MIC values that correspond to calculated RAD values in the directory "parameter_files" in the main project directory. If the user has supplied their own MIC data the function will also save the calculated model parameters into a separate file and will plot the linear relationship and line of best fit.

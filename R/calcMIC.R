@@ -5,6 +5,7 @@
 #' @param projectName the short name you have been using for the project.
 #' @inheritParams twoParamPlot
 #' @inheritParams oneParamPlot
+#' @inheritParams plotRaw
 #' @param RAD a numeric value the the critical level of the radius of inhibition (i.e., resistance) parameter to use for MIC. Currently only \code{RAD} = "80" (80\% reduction in growth), \code{RAD} = "50" (50\% reduction in growth), and \code{RAD} = "20" (20\% reduction in growth) are supported [Default = "20"]
 #' @param addBreakpoints Indicates whether to add breakpoint lines to the standard curve plot (if the user has supplied data to generate a standard curve)
 
@@ -82,7 +83,7 @@ calcMIC <- function(projectName, type="df", RAD="20", height = 4, width = 6, add
 					}
 					fitL<-lm(log2(MIC)~RAD, na.action=na.exclude)
 					fitQ<-lm(log2(MIC)~I(RAD^2), na.action=na.exclude)	
-					if(summary(fitL)$adj.r.squared > summary(fitR)$adj.r.squared){
+					if(summary(fitL)$adj.r.squared > summary(fitQ)$adj.r.squared){
 						relat <- "linear"
 						A <- summary(fitL)$coefficients[1]
 						B <- summary(fitL)$coefficients[2]
