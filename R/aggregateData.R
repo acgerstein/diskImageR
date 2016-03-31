@@ -11,8 +11,10 @@
 #' @return A dataframe "projectName.ag" is saved to the global environment and a .csv file "projectName_ag.csv" is exported to the "parameter_files" directory. 
 
 #' @examples
+#' \dontrun{
 #' aggregateData("myProject")
 #' aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
+#' }
 
 #' @seealso \code{\link{addType}} if there multiple factors in your experiment. Add whatever the new factor is called (default: "type2") to the replicate vector if this is appropriate.
 

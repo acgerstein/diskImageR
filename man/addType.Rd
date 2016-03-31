@@ -22,6 +22,8 @@ updates the existing dataframe
 Add an extra factor ("type") column to the existing dataframe
 }
 \examples{
+\dontrun{
 addType("myProject", typePlace=4, typeName="temperature")
+}
 }
 

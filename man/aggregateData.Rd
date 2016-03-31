@@ -25,8 +25,10 @@ A dataframe "projectName.ag" is saved to the global environment and a .csv file 
 Uses a user-supplied variance measure (currently supported: standard error, coefficient of variation, built-in R functions (e.g., sd) to calculate variance among photographs of the same type
 }
 \examples{
+\dontrun{
 aggregateData("myProject")
 aggregateData("myProject", varFunc= "sd", replicate = c("line", "drugAmt"), overwrite = FALSE)
+}
 }
 \seealso{
 \code{\link{addType}} if there multiple factors in your experiment. Add whatever the new factor is called (default: "type2") to the replicate vector if this is appropriate.

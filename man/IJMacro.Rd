@@ -33,6 +33,8 @@ There can not be any spaces or special characters in any of the folder names tha
 The project name should ideally be fairly short (easy to type without typos!) and specific to the project. It must start with a letter, not a number or special character, but can otherwise be anything. The project name must always be specified with quotation marks around it (a surprisingly common error).
 }
 \examples{
+\dontrun{
 IJMacro("myProject")
+}
 }
 

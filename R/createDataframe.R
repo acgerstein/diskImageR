@@ -22,8 +22,10 @@
 #' @return A dataframe "projectName.df" is saved to the global environment and a .csv file "projectName_df.csv" is exported to the "parameter_files" directory. 
 
 #' @examples 
+#' \dontrun{
 #' createDataframe("myProject", clearHalo=1)
 #' createDataframe("myProject", clearHalo=1, removeClear = TRUE, typeName = "drugAmt")
+#' }
 
 #' @export
 

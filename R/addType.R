@@ -9,7 +9,9 @@
 #' @return updates the existing dataframe 
 
 #' @examples 
+#' \dontrun{
 #' addType("myProject", typePlace=4, typeName="temperature")
+#' }
 
 #' @export
 

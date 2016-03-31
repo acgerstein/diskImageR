@@ -25,8 +25,10 @@
 #' @return A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 
 #' @examples 
+#' \dontrun{
 #' plotRaw("myProject")
 #' plotRaw("myProject", ymin = 50, ymax = 300, xplots=2, height=3, width=4, plotStandardLoc=FALSE)
+#' }
 
 #' @export
 

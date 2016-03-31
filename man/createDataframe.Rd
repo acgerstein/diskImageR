@@ -47,7 +47,9 @@ A dataframe with 11 columns:
 	}
 }
 \examples{
+\dontrun{
 createDataframe("myProject", clearHalo=1)
 createDataframe("myProject", clearHalo=1, removeClear = TRUE, typeName = "drugAmt")
+}
 }
 
