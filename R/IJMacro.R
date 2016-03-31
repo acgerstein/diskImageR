@@ -23,6 +23,7 @@
 IJMacro <-
 function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	# if(!is.char(projectName))
+	diskImageREnv <- new.env()
 	fileDir <- projectName
 	if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory") 
@@ -120,10 +121,14 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
 		}		
 	cat("\a")
-	assign(projectName, temp, envir=globalenv())
+#	assign(projectName, temp, envir=globalenv())
+	assign(projectName, temp, envir=	diskImageREnv)	
+	# assign(projectName, temp)
+
 	dfNA <- .saveAveLine(temp)
 	cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
+	return(get(projectName, envir=diskImageREnv))	
 	}
 
 .saveAveLine <- function(L){
