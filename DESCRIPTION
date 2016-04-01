@@ -10,7 +10,7 @@ License: GPL-3
 LazyData: true
 Imports:  zoo,
     subplex,
-    tcltk
+    tcltk,
     methods
 Suggests: knitr
 
