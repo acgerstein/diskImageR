@@ -181,21 +181,6 @@ twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 
 
 ```{r, eval=FALSE, tidy=TRUE}
-#For all functions type ?functionName to bring up a help file and to see current argument default values.
-
-###Run this function only the first time you want to run diskImageR (required to load R packages from github):
-
-#install the devtools package. 
-install.packages("devtools")
-
-###Run the following functions everytime to use diskImageR:
-
-#load devtools
-library(devtools)
-
-#install the diskImageR package
-install_github("acgerstein/diskImageR", build_vignettes = FALSE) 
-
 #load diskImageR
 library(diskImageR)
 
