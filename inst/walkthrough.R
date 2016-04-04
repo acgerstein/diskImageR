@@ -1,11 +1,4 @@
 ##############################################################
-#Run this function the first time you want to run diskImageR
-#(or any other package through github)
-##############################################################
-#install the devtools package
-install.packages("devtools")
-
-##############################################################
 #Run the following functions everytime to use up diskImageR
 #For all functions type ?functionName to bring up a help file
 ##############################################################
