@@ -2,7 +2,13 @@ This package provides a quantitative, unbiased method to analyze photographs of 
 
 ## Installing
 
-The package can be installed directly from GitHub using [devtools] (http://github.com/hadley/devtools)
+The package can be insalled directly from CRAN
+```r
+install.packages("diskImageR")
+```
+
+or, for the latest version, can be installed from GitHub using [devtools] (http://github.com/hadley/devtools)
+
 ```r
 #install.packages("devtools")
 devtools::install_github("acgerstein/diskImageR")
