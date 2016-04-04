@@ -9,18 +9,13 @@ install.packages("devtools")
 #Run the following functions everytime to use up diskImageR
 #For all functions type ?functionName to bring up a help file
 ##############################################################
-#load devtools
-library(devtools)
-
-#install the diskImageR package
-install_github("acgerstein/diskImageR", build_vignettes = FALSE) 
-
 #load diskImageR
 library(diskImageR)
 
 #Run the ImageJ analysis component, save the output. "newProject" shhould be changed to something of your choice (and then the same name used throughout); note that the quotation marks are required.
 #To use a pop-up box interface:
 IJMacro("newProject")
+
 #To specify the appropriate directories without a popup:
 IJMacro("newProject",  "/path/to/projectDir", "/path/to/projectDir/photographs/")
 
