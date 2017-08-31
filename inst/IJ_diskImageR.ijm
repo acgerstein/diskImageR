@@ -347,6 +347,7 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
+print("here");
 	setMinAndMax(50, 250);
 
 	//The filename is automatically set to be the title of the image (so title images accordingly)
