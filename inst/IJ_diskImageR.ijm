@@ -5,7 +5,7 @@ function alterImageSize(file) {
 	if (picWidth > picHeight)
 			run("Size...", "width=1000 constrain interpolation=None");
 	if (picWidth < picHeight)
-			run("Size...", "width=0 height=1000 constrain interpolation=None");
+			run("Size...", "height=1000 constrain interpolation=None");
 	if (picWidth == picHeight)
 			run("Size...", "width=1000 height=0 constrain interpolation=None");
 	
@@ -147,7 +147,7 @@ function findDisc(file){
 		roiManager("reset"); 
 		roiManager("Show All with labels");
 		roiManager("Show All");
-		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=2000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Trying with different thresholding, parameter set 3");
