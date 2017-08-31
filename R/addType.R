@@ -30,7 +30,7 @@ addType <- function(projectName, typePlace=3, typeName="type2", save = TRUE){
 	cat(paste(dfName, " has been written to the global environment", sep=""))
 
 	if(save){
-		filename <- file.path(getwd(), "parameter_files", paste(projectName, "_df.csv", sep="")	)
+		filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep="")	)
 		foldername <- file.path(getwd(), "parameter_files", projectName) 
 		cat(paste("\nSaving file: ", filename,  sep=""))
 		newdir2 <- file.path(getwd(), "parameter_files", projectName)
