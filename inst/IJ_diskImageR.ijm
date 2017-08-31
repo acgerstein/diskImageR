@@ -190,7 +190,7 @@ function findDisk8(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=6000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=6000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 if (nResults ==0){
 	print("Trying parameter set 2");
 	close();
@@ -203,7 +203,7 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=8000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying parameter set 3");
@@ -217,7 +217,7 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=8000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying parameter set 4");
@@ -228,7 +228,7 @@ if (nResults ==0){
 	run("8-bit");
 	setThreshold(97, 200);
 	run("Convert to Mask");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=10000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying parameter set 5");
@@ -242,74 +242,21 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=10000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying with less stringent circularity");
+	print("Trying parameter set 6");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
-	setThreshold(181, 255);
+	setThreshold(255, 255);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.2-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with less stringent circularity, parameter set 2");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(150, 255);
-	run("Convert to Mask");
-	roiManager("reset");
-	roiManager("Show All with labels");
-	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with less stringent circularity, parameter set 3");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(81, 255);
-	run("Convert to Mask");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with less stringent circularity, parameter set 4");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(200, 255);
-	run("Convert to Mask");
-	roiManager("reset");
-	roiManager("Show All with labels");
-	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with less stringent circularity, parameter set 5");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(97, 129);
-	run("Convert to Mask");
-	roiManager("reset");
-	roiManager("Show All with labels");
-	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=10000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 
 if (nResults ==0){
