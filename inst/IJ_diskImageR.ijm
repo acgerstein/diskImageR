@@ -180,7 +180,7 @@ function findDisc(file){
 	}
 	}
 	if (knownDiam > 8){
-		print ("Updating parameters for larger disk")
+		print ("Updating parameters for larger disk");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying with different thresholding, parameter set 4");
@@ -357,7 +357,7 @@ knownDiam = parts[2];
 print("Input directory: "+dir1);
 print("Output directory: "+dir2);
 print("Disk diameter: "+knownDiam);
-
+print("UPDATED");
 list = getFileList(dir1);
 print("Number of images: " + list.length);
 setBatchMode(true);
