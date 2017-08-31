@@ -17,7 +17,7 @@ function makeLineE(centerX, centerY, length, angle) {
 	makeLine(centerX, centerY, centerX + dX, centerY + dY);
 	}
 
-function findDisc(file){
+function findDisk(file){
 	run("Clear Results");
 	run("8-bit");
 	setThreshold(181, 255);
@@ -25,7 +25,6 @@ function findDisc(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	if (parts[2] < 8){
 	run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
@@ -175,7 +174,6 @@ function findDisc(file){
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
-	}
 	if (nResults ==0){
 		print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
 	}
@@ -192,7 +190,6 @@ function findDisk8(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	if (parts[2] < 8){
 	run("Analyze Particles...", "size=6000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 if (nResults ==0){
 	print("Trying with different thresholding, parameter set 4");
@@ -342,7 +339,7 @@ if (nResults ==0){
 	roiManager("Show All");
 	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
-}
+
 if (nResults ==0){
 	print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
 }
@@ -389,7 +386,7 @@ for (i=0; i<list.length; i++){
 	alterImageSize(getTitle);
 	if(diam10>1.25){
 		print("small disk");
-		findDisc(getTitle);
+		findDisk(getTitle);
 		}
 	if(diam10<=1.25){
 		print("Large disk");
