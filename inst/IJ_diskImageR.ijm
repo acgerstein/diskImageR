@@ -354,7 +354,7 @@ knownDiam = parts[2];
 print("Input directory: "+dir1);
 print("Output directory: "+dir2);
 print("Disk diameter: "+knownDiam);
-print("UPDATED");
+print(knownDiam < 8);
 list = getFileList(dir1);
 print("Number of images: " + list.length);
 setBatchMode(true);
