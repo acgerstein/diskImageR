@@ -184,7 +184,7 @@ function findDisc(file){
 	}
 }
 
-function findDisc8(file){
+function findDisk8(file){
 	run("Clear Results");
 	run("8-bit");
 	setThreshold(181, 255);
