@@ -8,24 +8,21 @@ function alterImageSize(file) {
 			run("Size...", "height=1000 constrain interpolation=None");
 	if (picWidth == picHeight)
 			run("Size...", "width=1000 height=0 constrain interpolation=None");
-	
 	}
 
-
-
-function makeLineE(centerX, centerY, length, angle) { 
-	angle = -angle * PI / 180; 
-	dX = cos(angle) * length; 
-	dY = sin(angle) * length; 
-	makeLine(centerX, centerY, centerX + dX, centerY + dY); 
-	} 
+function makeLineE(centerX, centerY, length, angle) {
+	angle = -angle * PI / 180;
+	dX = cos(angle) * length;
+	dY = sin(angle) * length;
+	makeLine(centerX, centerY, centerX + dX, centerY + dY);
+	}
 
 function findDisc(file){
 	run("Clear Results");
 	run("8-bit");
 	setThreshold(181, 255);
 	run("Convert to Mask");
-	roiManager("reset"); 
+	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
 	if (knownDiam < 8){
@@ -34,12 +31,12 @@ function findDisc(file){
 		print("Trying parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(150, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
@@ -48,23 +45,23 @@ function findDisc(file){
 		print("Trying parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(81, 255);
-		run("Convert to Mask");	
+		run("Convert to Mask");
 		run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Trying parameter set 4");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(200, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
@@ -73,12 +70,12 @@ function findDisc(file){
 		print("Trying with less stringent circularity");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(181, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-5000 circularity=0.2-1.00 show=Outlines display exclude add");
@@ -87,12 +84,12 @@ function findDisc(file){
 		print("Trying with less stringent circularity, parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(150, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -101,23 +98,23 @@ function findDisc(file){
 		print("Trying with less stringent circularity, parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(81, 255);
-		run("Convert to Mask");	
+		run("Convert to Mask");
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Trying with less stringent circularity, parameter set 4");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(200, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -126,12 +123,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 1");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(125, 162);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -140,12 +137,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(113, 134);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -154,12 +151,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(113, 173);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -168,30 +165,30 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 4b");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(97, 129);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	}
-	if (knownDiam > 8){
+	if ( parts[2] > 8){
 		print ("Updating parameters for larger disk");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying with different thresholding, parameter set 4");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(97, 129);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -200,12 +197,12 @@ function findDisc(file){
 		print("Trying parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(150, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
@@ -214,23 +211,23 @@ function findDisc(file){
 		print("Trying parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(81, 255);
-		run("Convert to Mask");	
+		run("Convert to Mask");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Trying parameter set 4");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(200, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
@@ -239,12 +236,12 @@ function findDisc(file){
 		print("Trying with less stringent circularity");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(181, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.2-1.00 show=Outlines display exclude add");
@@ -253,12 +250,12 @@ function findDisc(file){
 		print("Trying with less stringent circularity, parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(150, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -267,23 +264,23 @@ function findDisc(file){
 		print("Trying with less stringent circularity, parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(81, 255);
-		run("Convert to Mask");	
+		run("Convert to Mask");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Trying with less stringent circularity, parameter set 4");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(200, 255);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -292,12 +289,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 1");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(125, 162);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -306,12 +303,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 2");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(113, 134);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -320,12 +317,12 @@ function findDisc(file){
 		print("Trying with different thresholding, parameter set 3");
 		close();
 		selectWindow(getTitle);
-		run("Revert");	
+		run("Revert");
 		alterImageSize(getTitle);
 		run("8-bit");
 		setThreshold(113, 173);
 		run("Convert to Mask");
-		roiManager("reset"); 
+		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
@@ -364,7 +361,7 @@ setBatchMode(true);
 for (i=0; i<list.length; i++){
 //	print(i);
 	showProgress(i+1, list.length);
-	open(dir1 + list[i]);	
+	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
 //	print(outputFolder);
@@ -389,8 +386,8 @@ for (i=0; i<list.length; i++){
 //	run("Set Scale...", "distance=discDiam known=6 pixel=1 unit=mm");
 	makePoint(centerX, centerY);
 	run("Clear Results");
-//      setMinAndMax(50, 200); 
-      setMinAndMax(50, 250); 
+//      setMinAndMax(50, 200);
+      setMinAndMax(50, 250);
 
 //	makeLineE(centerX, centerY, 40, 0);
 	makeLineE(centerX, centerY, 40*convert, 5);
@@ -417,4 +414,3 @@ for (i=0; i<list.length; i++){
 	saveAs("Results", outputFolder+filename+".txt");
 	close();
 }
-
