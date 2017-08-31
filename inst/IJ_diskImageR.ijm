@@ -347,8 +347,6 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
-print("here");
-	setMinAndMax(50, 250);
 
 	//The filename is automatically set to be the title of the image (so title images accordingly)
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
@@ -357,6 +355,7 @@ print("here");
 	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
   run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 	alterImageSize(getTitle);
+
 	if(diam10>1.25){
 		print("small disk");
 		findDisk(getTitle);
@@ -375,6 +374,7 @@ print("here");
 	makePoint(centerX, centerY);
 	run("Clear Results");
 
+	setMinAndMax(50, 250);
 	makeLineE(centerX, centerY, 40*convert, 5);
 
 	Angle=0;
