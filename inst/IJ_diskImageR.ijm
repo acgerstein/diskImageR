@@ -368,7 +368,7 @@ knownDiam = parts[2];
 print("Input directory: "+dir1);
 print("Output directory: "+dir2);
 print("Disk diameter: "+knownDiam);
-diam10 = knownDiam/10;
+diam10 = 10/knownDiam;
 print(diam10);
 list = getFileList(dir1);
 print("Number of images: " + list.length);
