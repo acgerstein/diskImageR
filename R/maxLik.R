@@ -3,7 +3,7 @@
 #' @description \code{maxLik}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
 
 #' @param projectName the short name in use for the project.
-#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk). 
+#' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.
 #' @param standardLoc a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line). To suppress this standardization use standardLoc = FALSE.
@@ -24,9 +24,9 @@
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
-#' single logistic ('ML'):  
+#' single logistic ('ML'):
 #'	y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, sigma)
-#'  double logistic ('ML2'): 
+#'  double logistic ('ML2'):
 #'	y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, sigma)
 #' where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
 
@@ -45,7 +45,7 @@
 #' @section References:
 #' Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of diversification in R. Methods in Ecology and Evolution. 3:1084-1092.
 
-#' @examples 
+#' @examples
 #' \dontrun{
 #' maxLik("myProject", clearHalo=1)
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
@@ -58,49 +58,49 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		clearHalo <- as.numeric(cont)
 	}
 	if(!FoG %in% c(80, 50, 20)){
-		stop("Current suppported FoG values = 80, 50, 20")
+		stop("Current suppported FoG values = 80, 50, 20, 5")
 		}
 	if(!RAD %in% c(80, 50, 20, "all")){
-		stop("Current suppported RAD values = 'all', 80, 50, 20")
+		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
 		}
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	
+
 	data <- eval(parse(text=projectName))
 	if (is.logical(nameVector)){
-		if (nameVector){label <- names(data)}		
+		if (nameVector){label <- names(data)}
 		else {label <- rep("", length(data))}
 		}
-	else {label <- nameVector}	
+	else {label <- nameVector}
 
 	if (!is.logical(standardLoc)){
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		
+		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 		}
 	else{
 		stand <- rep(0, length(data))
 		}
 	dotedge <- diskDiam/2+0.4
-	if(needML){		
-		cat("\nStatus of single logistic ML: ")	
+	if(needML){
+		cat("\nStatus of single logistic ML: ")
 		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
-		cat("\nStatus of double logistic ML: ")	
+		cat("\nStatus of double logistic ML: ")
 		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		# assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 	}
-	if(!needML){		
-		MLt <- paste(projectName, ".ML", sep="") 
-		MLt2 <- paste(projectName, ".ML2", sep="") 
+	if(!needML){
+		MLt <- paste(projectName, ".ML", sep="")
+		MLt2 <- paste(projectName, ".ML2", sep="")
 		ML <- eval(parse(text=MLt))
 		ML2 <- eval(parse(text=MLt2))
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))		
+		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
 	if(plotParam){
@@ -108,10 +108,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
 		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
 		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo] 
+		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
-		 			
+
 		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
@@ -119,7 +119,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 
 .curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}
 
-.curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))} 
+.curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))}
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
@@ -144,11 +144,11 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	highOD <- quantile(data[[i]]$x, 0.99)
 	lower <- c(highOD*0.8, 0, 0,0)
 	upper <- c(highOD, max(data[[i]]$distance), maxSlope,maxSlope)
-		
+
 	par.tryA <-c(asym = 0.9*highOD, ic50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2)
 	par.tryB<-c(asym = 0.9*highOD, ic50 = log(maxDist)/4, scal = maxSlope*0.1, sigma = 0.2)
 	par.tryC<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1)
-	par.tryD<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)		
+	par.tryD<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)
 
 	mlpoint<-c()
 	mlpointA<-find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=50000))
@@ -188,18 +188,18 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	highOD <- quantile(data[[i]]$x, 0.99)
 	lower <- c(0, 0, 0,0, 0, 0, 0)
 	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)
-	
-	#This is conservative, keeping them symmetric 	
+
+	#This is conservative, keeping them symmetric
 	par.tryA <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.01)
 	par.tryB <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.1)
 	par.tryC<-c(asym = 0.9*highOD, od50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scal =  maxSlope*0.01)
 	par.tryD<-c(asym = 0.9*highOD, od50 = log(maxDist)/2, scal =  maxSlope*0.1, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scalB =  maxSlope*0.1)
-	#Change asym and od50 
+	#Change asym and od50
 	par.tryE <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
 	par.tryF <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
 	par.tryG <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.1)
 	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
-	
+
 	mlpoint<-c()
 	mlpointA<-find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
 	mlpointB<-find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
@@ -207,16 +207,16 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	mlpointD<-find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
 	mlpointE<-find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
 	mlpointF<-find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
-	mlpointG<-find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=50000))	
-	mlpointH<-find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))	
+	mlpointG<-find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=50000))
+	mlpointH<-find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
 
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
 	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint
 	mlpoint <- if (mlpointE$lnLik>mlpoint$lnLik) mlpointE else mlpoint
 	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint
-	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint			
-	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint			
+	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint
+	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
 	mlpoint
 }
 
@@ -224,56 +224,66 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand 
+	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)		
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx) 
+	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
+	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
 	#RAD
 	ploty <- data[[i]]$x
 	ploty[ploty < 0] <-0
 	slope <- ML[[i]]$par[3]
-	ic50 <- ML[[i]]$par[2]	
+	ic50 <- ML[[i]]$par[2]
 	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")	
+	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
 	yyplot <- (yy+min(data[[i]]$x))
 	yyplot[yyplot < 0] <- 0
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)			
+	points(exp(xx), yyplot, type="l", col="black", lwd=3)
 
 	useAsym <- "TRUE"
+  yy95halo <- yyplot[which.max(yyplot> asym * 0.05)]
 	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]
 	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]
 	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]
+	yy5halo <- yyplot[which.max(yyplot> asym * 0.95)]
 	if(yy20halo < yy50halo){
 		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]
 		useAsym <- "FALSE"
 	}
 
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 	
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+	xx95 <- exp(xx[which.max(yyplot> asym * 0.05)])
 	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])
 	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])
 	xx20 <- exp(xx[which.max(yyplot> asym * 0.8)])
+	xx5 <- exp(xx[which.max(yyplot> asym * 0.95)])
 	if(useAsym == "FALSE"){
 		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])
 	}
 
-	if(FoG==50){
-		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])	
+	if(FoG==95){
+		xx <- exp(xx[1:which.max(exp(xx) > xx95)-1])
 		}
 	if(FoG==80){
-		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])	
+		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])
+		}
+	if(FoG==50){
+		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])
 		}
 	if(FoG==20){
-		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])	
+		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])
 		}
+	if(FoG==5){
+			xx <- exp(xx[1:which.max(exp(xx) > xx5)-1])
+			}
 
 	if(length(xx)<1){
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	}		
-	
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx)) 
+	}
+
+	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
 	yy <- (yy+min(data[[i]]$x))
 	yy[yy < 0] <- 0
 	if (slope >1){
@@ -282,7 +292,10 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		if(plotFoG){
 			polygon(xx2, yy2, density=15, col="red")
 			}
-		points(xx, yy, type="l", col="black", lwd=2)					
+		points(xx, yy, type="l", col="black", lwd=2)
+		if(RAD ==5){
+				points(xx5, yy5halo, col="deepskyblue", cex=2, pch=19)
+				}
 		if(RAD == 20){
 			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
 			}
@@ -292,22 +305,25 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		if(RAD ==80){
 			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
 			}
+		if(RAD ==95){
+				points(xx95, yy95halo, col="deepskyblue", cex=2, pch=19)
+				}
 		if(RAD=="all"){
 			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
-			}			
+			}
 		if(plotCompon){
-			xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200) 
+			xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 			yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-			yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)						
+			yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
 			yy1plot <- (yy2.1 +min(data[[i]]$x))
 			yy1plot[yy1plot <0] <-0
 			yy2plot <- (yy2.2 +min(data[[i]]$x))
 			yy2plot[yy2plot <0] <-0
-			points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)	
-			points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)	
-			}		
+			points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)
+			points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)
+			}
 		}
 	mtext(label, side=3, cex=0.6)
 }
@@ -363,14 +379,14 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 			if (k >= 2*xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
 				}
-			else {axis(1, cex.axis=1, labels= FALSE)}	
-			}				
+			else {axis(1, cex.axis=1, labels= FALSE)}
+			}
 		if(numpages == 3){
 			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
 				}
 			else{axis(1, labels=FALSE)}
-			}				
+			}
 		axis(1, labels=FALSE)
 		j <- 1
 		while (j <= numpages){
@@ -378,14 +394,14 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 			j <- j+1
 		}
 	}
-	
+
 	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
 	mtext("Pixel intensity", outer=TRUE, side=2, line=2, cex=1.2)
 
 	if(savePDF){
-		dev.off()	
+		dev.off()
 		cat(paste("\nFigure saved: ", t, sep=""))
-	
+
 		if(popUp){
 			tt <- paste("open", t)
 			system(tt)
