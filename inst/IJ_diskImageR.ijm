@@ -180,6 +180,7 @@ function findDisc(file){
 	}
 	}
 	if (knownDiam > 8){
+		print ("Updating parameters for larger disk")
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
