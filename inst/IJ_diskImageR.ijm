@@ -184,6 +184,10 @@ function findDisk(file){
 
 function findDisk8(file){
 	run("Clear Results");
+	print("Trying parameter set 1");
+	selectWindow(getTitle);
+	run("Revert");
+	alterImageSize(getTitle);	
 	run("8-bit");
 	setThreshold(181, 255);
 	run("Convert to Mask");
@@ -307,14 +311,14 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
-	setMinAndMax(50, 250);
+	//setMinAndMax(50, 250);
 	//The filename is automatically set to be the title of the image (so title images accordingly)
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
 	name = getTitle;
 
 	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
   run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
-	alterImageSize(getTitle);
+	//alterImageSize(getTitle);
 
 	if(diam10>1.25){
 		print("small disk");
