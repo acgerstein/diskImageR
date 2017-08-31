@@ -192,7 +192,7 @@ function findDisk8(file){
 	roiManager("Show All");
 	run("Analyze Particles...", "size=6000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 if (nResults ==0){
-	print("Trying with different thresholding, parameter set 4");
+	print("Trying parameter set 2");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
@@ -203,16 +203,16 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=8000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying parameter set 2");
+	print("Trying parameter set 3");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
-	setThreshold(150, 255);
+	setThreshold(97, 150);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
@@ -220,7 +220,7 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying parameter set 3");
+	print("Trying parameter set 4");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
@@ -231,7 +231,7 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying parameter set 4");
+	print("Trying parameter set 5");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
@@ -298,41 +298,13 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying with different thresholding, parameter set 1");
+	print("Trying with less stringent circularity, parameter set 4");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
-	setThreshold(125, 162);
-	run("Convert to Mask");
-	roiManager("reset");
-	roiManager("Show All with labels");
-	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with different thresholding, parameter set 2");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(113, 134);
-	run("Convert to Mask");
-	roiManager("reset");
-	roiManager("Show All with labels");
-	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
-}
-if (nResults ==0){
-	print("Trying with different thresholding, parameter set 3");
-	close();
-	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
-	run("8-bit");
-	setThreshold(113, 173);
+	setThreshold(97, 129);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
