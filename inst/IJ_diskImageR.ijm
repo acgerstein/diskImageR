@@ -226,7 +226,7 @@ if (nResults ==0){
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
-	setThreshold(81, 255);
+	setThreshold(97, 200);
 	run("Convert to Mask");
 	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
@@ -237,7 +237,7 @@ if (nResults ==0){
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
-	setThreshold(200, 255);
+	setThreshold(97, 255);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
