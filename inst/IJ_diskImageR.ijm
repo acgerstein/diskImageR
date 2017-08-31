@@ -164,7 +164,7 @@ function findDisc(file){
 		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
-		print("Trying with different thresholding, parameter set 4");
+		print("Trying with different thresholding, parameter set 4b");
 		close();
 		selectWindow(getTitle);
 		run("Revert");	
@@ -175,7 +175,7 @@ function findDisc(file){
 		roiManager("reset"); 
 		roiManager("Show All with labels");
 		roiManager("Show All");
-		run("Analyze Particles...", "size=2000-4000 circularity=0.20-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=2000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 
 
