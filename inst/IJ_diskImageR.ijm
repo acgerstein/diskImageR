@@ -369,7 +369,6 @@ print("Input directory: "+dir1);
 print("Output directory: "+dir2);
 print("Disk diameter: "+knownDiam);
 diam10 = 10/knownDiam;
-print(diam10);
 list = getFileList(dir1);
 print("Number of images: " + list.length);
 setBatchMode(true);
@@ -388,11 +387,11 @@ for (i=0; i<list.length; i++){
 	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
       run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 	alterImageSize(getTitle);
-	if(knownDiam<8){
+	if(diam10>1.25){
 		print("small disk");
 		findDisc(getTitle);
 		}
-	if(knownDiam>=8){
+	if(diam10<=1.25){
 		print("Large disk");
 		findDisk8(getTitle);
 		}
