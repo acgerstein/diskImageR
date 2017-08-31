@@ -387,9 +387,10 @@ for (i=0; i<list.length; i++){
       run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 	alterImageSize(getTitle);
 	if(knownDiam<8){
+		print("small disk");
 		findDisc(getTitle);
 		}
-	if(knownDiam=>8){
+	if(knownDiam>=8){
 		print("Large disk");
 		findDisk8(getTitle);
 		}
