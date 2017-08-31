@@ -28,7 +28,7 @@ function findDisc(file){
 	roiManager("reset"); 
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	if (diskDiam < 8){
+	if (knownDiam < 8){
 	run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
@@ -179,7 +179,7 @@ function findDisc(file){
 		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
 	}
-	if (diskDiam > 8){
+	if (knownDiam > 8){
 		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
