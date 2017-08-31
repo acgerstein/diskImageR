@@ -25,7 +25,7 @@ function findDisc(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	if (knownDiam < 8){
+	if (parts[2] < 8){
 	run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
