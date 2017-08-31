@@ -217,7 +217,7 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=8000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying parameter set 4");
@@ -228,7 +228,7 @@ if (nResults ==0){
 	run("8-bit");
 	setThreshold(81, 255);
 	run("Convert to Mask");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying parameter set 5");
@@ -242,7 +242,7 @@ if (nResults ==0){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
 	print("Trying with less stringent circularity");
@@ -298,7 +298,7 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying with less stringent circularity, parameter set 4");
+	print("Trying with less stringent circularity, parameter set 5");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
