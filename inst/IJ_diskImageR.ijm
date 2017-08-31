@@ -28,6 +28,7 @@ function findDisc(file){
 	roiManager("reset"); 
 	roiManager("Show All with labels");
 	roiManager("Show All");
+	if (diskDiam < 8){
 	run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults ==0){
 		print("Trying parameter set 2");
@@ -175,9 +176,160 @@ function findDisc(file){
 		roiManager("reset"); 
 		roiManager("Show All with labels");
 		roiManager("Show All");
-		run("Analyze Particles...", "size=2000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 	}
-
+	}
+	if (diskDiam > 8){
+		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	if (nResults ==0){
+		print("Trying parameter set 2");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(150, 255);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying parameter set 3");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(81, 255);
+		run("Convert to Mask");	
+		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying parameter set 4");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(200, 255);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with less stringent circularity");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(181, 255);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.2-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with less stringent circularity, parameter set 2");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(150, 255);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with less stringent circularity, parameter set 3");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(81, 255);
+		run("Convert to Mask");	
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with less stringent circularity, parameter set 4");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(200, 255);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with different thresholding, parameter set 1");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(125, 162);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with different thresholding, parameter set 2");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(113, 134);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with different thresholding, parameter set 3");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(113, 173);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
+		print("Trying with different thresholding, parameter set 4b");
+		close();
+		selectWindow(getTitle);
+		run("Revert");	
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(97, 129);
+		run("Convert to Mask");
+		roiManager("reset"); 
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=10000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
+	}
+	}
 
 	if (nResults ==0){
 		print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
