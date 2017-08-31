@@ -190,7 +190,7 @@ function findDisk8(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=6000-50000 circularity=0.50-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=6000-50000 circularity=0.20-1.00 show=Outlines display exclude add");
 if (nResults ==0){
 	print("Trying parameter set 2");
 	close();
@@ -340,6 +340,7 @@ print("Disk diameter: "+knownDiam);
 diam10 = 10/knownDiam;
 list = getFileList(dir1);
 print("Number of images: " + list.length);
+setMinAndMax(50, 250);
 setBatchMode(true);
 for (i=0; i<list.length; i++){
 //	print(i);
@@ -347,16 +348,14 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
-//	print(outputFolder);
 
-	//The filename is automatically set to be the title of the image (so title images accordingly
+	//The filename is automatically set to be the title of the image (so title images accordingly)
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
 	name = getTitle;
 
 	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
-      run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
+  run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 	alterImageSize(getTitle);
-	setMinAndMax(50, 250);
 	if(diam10>1.25){
 		print("small disk");
 		findDisk(getTitle);
@@ -372,15 +371,9 @@ for (i=0; i<list.length; i++){
 	centerY = getResult("Y", 0);
 	discDiam = 2*sqrt(getResult("Area")/3.1412);
 	convert = discDiam/knownDiam;
-//	run("Revert");
-//	alterImageSize(getTitle);
-//	run("Set Scale...", "distance=discDiam known=6 pixel=1 unit=mm");
 	makePoint(centerX, centerY);
 	run("Clear Results");
-//      setMinAndMax(50, 200);
-      setMinAndMax(50, 250);
 
-//	makeLineE(centerX, centerY, 40, 0);
 	makeLineE(centerX, centerY, 40*convert, 5);
 
 	Angle=0;
