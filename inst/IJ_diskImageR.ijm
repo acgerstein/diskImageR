@@ -356,6 +356,7 @@ for (i=0; i<list.length; i++){
 	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
       run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 	alterImageSize(getTitle);
+	setMinAndMax(50, 250);
 	if(diam10>1.25){
 		print("small disk");
 		findDisk(getTitle);
