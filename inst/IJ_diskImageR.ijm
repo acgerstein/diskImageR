@@ -340,7 +340,6 @@ print("Disk diameter: "+knownDiam);
 diam10 = 10/knownDiam;
 list = getFileList(dir1);
 print("Number of images: " + list.length);
-setMinAndMax(50, 250);
 setBatchMode(true);
 for (i=0; i<list.length; i++){
 //	print(i);
@@ -348,6 +347,7 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
+	setMinAndMax(50, 250);
 
 	//The filename is automatically set to be the title of the image (so title images accordingly)
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
