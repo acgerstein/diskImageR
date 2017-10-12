@@ -143,7 +143,7 @@ cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 assign(dfName, df, inherits=TRUE)
 }
 
-plotParam <- function(x){
+.plotParamNew <- function(x){
 	plot(data[[x]][,1], data[[x]][,2], xlab="", xaxt="n", yaxt="n", ylim=c(0, 260))
 	arrows(whereMaxIntensity[x], maxIntensity[x]+minIntensity[x]+80, whereMaxIntensity[x], maxIntensity[x]+minIntensity[x]+20, length=0.1)
   text(whereMaxIntensity[x], maxIntensity[x]+minIntensity[x]+100, "maxGR", cex=0.6)
@@ -159,53 +159,6 @@ plotParam <- function(x){
 
 }
 
-par(mfrow=c(2, 1), mar=c(3, 3, 1, 1))
-plotParam(1)
-axis(1, labels=FALSE)
-axis(2, las=2)
-
-plotParam(2)
-axis(1)
-axis(2, las=2)
-
-#plotting to show it's working
-# plot(data[[1]][,1], data[[1]][,3])
-# abline(v=whereMax[1])
-# abline(v=whereMax[1]+dist2_90[1])
-# abline(v=whereMax[1]+dist2_75[1])
-# abline(v=whereMax[1]+dist2_50[1])
-# abline(v=whereMax[1]+dist2_25[1])
-# abline(v=whereMax[1]+dist2_10[1])
-#
-# plot(data[[2]][,1], data[[2]][,3])
-# abline(v=whereMax[2])
-# abline(v=whereMax[2]+dist2_90[2])
-# abline(v=whereMax[2]+dist2_75[2])
-# abline(v=whereMax[2]+dist2_50[2])
-# abline(v=whereMax[2]+dist2_25[2])
-# abline(v=whereMax[2]+dist2_10[2])
-
-#need to save data back to working space
-#plots with points on them
-#save a dataframe with the values in it - use this function to do all the extensions for this pupose
-
-
-####STOPPED EDITING HERE
-if(plotParam){
-		clearHaloData <- data[[clearHalo]]
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
-		clearHaloStand <- clearHaloData[1,2]
-
-.plotParam(projectName, MLtip=MLtip, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
-
-		# .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
-	}
-	alarm()
-}
 
 .curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}
 
