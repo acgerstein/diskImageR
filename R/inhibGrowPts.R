@@ -37,11 +37,11 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-inhibGrowPts <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, plotPts="all", popUp = TRUE, nameVector=TRUE, overwrite = TRUE, savePDF= TRUE){
+inhibGrowPts <- function(projectName, diskDiam = 12.7, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, plotPts="all", popUp = TRUE, nameVector=TRUE, overwrite = TRUE, savePDF= TRUE){
 # FoG=20, plotFoG = TRUE,  needML = TRUE,
 	options(warn=-1)
 
-	if(!plotPts %in% c(80, 50, 20, "all")){
+	if(!plotPts %in% c(90, 75, 50, 25, "all")){
 		stop("Current suppported growth point values for plotting = 'all', 90, 75, 50, 25, 10")
 		}
 
@@ -50,7 +50,7 @@ inhibGrowPts <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=
 			if (nameVector){label <- names(data)}
 			else {label <- rep("", length(data))}
 			}
-		else {label <- nameVector}
+		if (!is.logical(nameVector)) label <- nameVector
 
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
@@ -87,6 +87,7 @@ dataCor <- lapply(data, function(x) {x[,2] - min(x[,2])})
 
 #add the "corrected data" vector to the data list
 datas <- Map(cbind, data, dataCor)
+data <- datas
 
 #where is the maximum intensity? This is also the point of growth maximum
 maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)), 3])}))
@@ -112,7 +113,35 @@ dist2_50 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(
 dist2_25 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_25))
 dist2_10 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_10))
 
-param <- data.frame(GRMax.X =round(distance2Max, digits=2), GRMax.Y = round(maxIntensity, digits=2), slope2Max = slope2Max,  dist2_90 = whereMax+round(dist2_90, digits=2), dist2_75 = whereMax+round(dist2_75, digits=2), dist2_50 = whereMax+round(dist2_50, digits=2), dist2_25 = whereMax+round(dist2_25, digits=2), dist2_10 = whereMax+round(dist2_10, digits=2))
+param <- data.frame(GRMax.X =round(distance2Max, digits=2), GRMax.Y = round(maxIntensity, digits=2), slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2))
+
+if (is.logical(nameVector)){
+	if (nameVector){
+		line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
+		df <- data.frame(name = names(data), line, param)
+		}
+
+	if (!nameVector){
+		line <- seq(1, length(data))
+		df <- data.frame(name = names(data), line, df, param)
+	}
+}
+if (!is.logical(nameVector)){
+	line <- nameVector
+	names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
+	df <- data.frame(names=names, line=line, df, param)
+	}
+
+df <- df[order(df$line),]
+write.csv(df, file=filename, row.names=FALSE)
+
+dfName <- paste(projectName, ".df", sep="")
+cat(paste("\n", dfName, " has been written to the global environment", sep=""))
+cat(paste("\nSaving file: ", filename,  sep=""))
+cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
+# assign(dfName, df, envir=globalenv())
+assign(dfName, df, inherits=TRUE)
+}
 
 plotParam <- function(x){
 	plot(data[[x]][,1], data[[x]][,2], xlab="", xaxt="n", yaxt="n", ylim=c(0, 260))
@@ -139,58 +168,6 @@ plotParam(2)
 axis(1)
 axis(2, las=2)
 
-
-
-if (is.logical(nameVector)){
-	if (nameVector){
-		line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
-		df <- data.frame(name = names(data), line)
-		}
-
-	if (!nameVector){
-		line <- seq(1, length(data))
-		df <- data.frame(name = names(data), line, df)
-	}
-}
-if (!is.logical(nameVector)){
-	line <- nameVector
-	names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
-	df <- data.frame(names=names, line=line, df)
-	}
-
-if (typeVector){
-		type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
-		df <- data.frame(df, type, param)
-	}
-else {
-		df$type <- 1
-		df <- data.frame(df, param)
-	}
-
-names(df)[3] <- typeName
-
-df <- df[order(df$line),]
-df$FoG80[df$FoG80 >1] <- 1
-df$FoG50[df$FoG50 >1] <- 1
-df$FoG20[df$FoG20 >1] <- 1
-df$FoG80[df$RAD80 == 0] <- NA
-df$FoG50[df$RAD50 == 0] <- NA
-df$FoG20[df$RAD20 == 0] <- NA
-df$FoG80[df$RAD80 == 1] <- NA
-df$FoG50[df$RAD50 == 1] <- NA
-df$FoG20[df$RAD20 == 1] <- NA
-
-if (removeClear)	df <- df[-clearHalo,]
-
-write.csv(df, file=filename, row.names=FALSE)
-
-dfName <- paste(projectName, ".df", sep="")
-cat(paste("\n", dfName, " has been written to the global environment", sep=""))
-cat(paste("\nSaving file: ", filename,  sep=""))
-cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
-# assign(dfName, df, envir=globalenv())
-assign(dfName, df, inherits=TRUE)
-
 #plotting to show it's working
 # plot(data[[1]][,1], data[[1]][,3])
 # abline(v=whereMax[1])
@@ -211,6 +188,7 @@ assign(dfName, df, inherits=TRUE)
 #need to save data back to working space
 #plots with points on them
 #save a dataframe with the values in it - use this function to do all the extensions for this pupose
+
 
 ####STOPPED EDITING HERE
 if(plotParam){
