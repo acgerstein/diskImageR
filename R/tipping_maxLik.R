@@ -51,13 +51,14 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-tip_maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+tip_maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, RAD="all", popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+# FoG=20, plotFoG = TRUE,  needML = TRUE,
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
 		clearHalo <- as.numeric(cont)
 	}
-	if(!FoG %in% c(80, 50, 20)){
+	# if(!FoG %in% c(80, 50, 20)){
 		stop("Current suppported FoG values = 80, 50, 20, 5")
 		}
 	if(!RAD %in% c(80, 50, 20, "all")){
@@ -83,27 +84,50 @@ tip_maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standar
 		stand <- rep(0, length(data))
 		}
 
-	dotedge <- diskDiam/2+0.4
+#standard dot edge calculation - takes awhile to get down to dark so diskDiam/2-1
+	dotedge <- diskDiam/2+1
+
+	#where is the minimum intensity - can use for later calculations
+	minIntensity <- c(sapply(data, function(x) {x[which(x[,2]==min(x[,2])), 1]}))
+
+	#where is the maximum intensity? This is also the point of growth maximum?
+	maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)),2])}))
+	whereMax <- c(sapply(data, function(x) {x[which(x[,2]==maxIntensity),1]}))
+	distance2Max <- whereMax-diskDiam/2
+
+	#This is where it gets a bit tricky. Find the post-growth max point of resource limitation
+min2Intensity90 <- maxIntensity-(maxIntensity-minIntensity)*0.9
+min2Intensity75 <- maxIntensity-(maxIntensity-minIntensity)*0.75
+min2Intensity50 <- maxIntensity-(maxIntensity-minIntensity)*0.5
+min2Intensity25 <- maxIntensity-(maxIntensity-minIntensity)*0.25
+min2Intensity10 <- maxIntensity-(maxIntensity-minIntensity)*0.1
+
+	#figure out how to use the above numbers to calculate the interesting other points (where does inhibition end and where do resources become limited?
+	min2Intensity <- c(sapply(data, function(x) {min(x[min(which(x[,1]>whereMax)):max(which(x[,1]<maxDist)),2])}))
+	whereMin2 <- c(mapply(function(x, y) {x[which(x[,2]==y),1]}, x = data, y = min2Intensity))
+
+
+####STOPPED EDITING HERE
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
+		MLtip <-lapply(c(1:length(data)), .getstatsTipLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
-		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
-		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
-		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
-		cat("\nStatus of double logistic ML: ")
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
+		assign(paste(projectName, ".MLtip", sep=""), ML, inherits=TRUE)
+		cat(paste("\n", projectName, ".MLtip has been written to the global environment\n", sep=""))
+		# cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
+		# cat("\nStatus of double logistic ML: ")
+		# ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
 		# assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())
-		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
+		# assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
+		# cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 	}
-	if(!needML){
-		MLt <- paste(projectName, ".ML", sep="")
-		MLt2 <- paste(projectName, ".ML2", sep="")
-		ML <- eval(parse(text=MLt))
-		ML2 <- eval(parse(text=MLt2))
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
-		}
+	# if(!needML){
+		# MLt <- paste(projectName, ".ML", sep="")
+		# MLt2 <- paste(projectName, ".ML2", sep="")
+		# ML <- eval(parse(text=MLt))
+		# ML2 <- eval(parse(text=MLt2))
+		# cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
+		# }
 
 	if(plotParam){
 		clearHaloData <- data[[clearHalo]]
@@ -114,7 +138,9 @@ tip_maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standar
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 
-		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+.plotParam(projectName, MLtip=MLtip, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+
+		# .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
 }
@@ -123,7 +149,7 @@ tip_maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standar
 
 .curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))}
 
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
+.getstatsTipLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
