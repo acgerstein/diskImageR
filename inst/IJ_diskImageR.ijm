@@ -285,7 +285,6 @@ if (nResults ==0){
 	run("8-bit");
 	setAutoThreshold("Default dark");
 	setThreshold(255, 255);
-	setOption("BlackBackground", false);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
