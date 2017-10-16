@@ -277,19 +277,19 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying parameter set 8");
+	print("Trying parameter set 8-dark");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
 	alterImageSize(getTitle);
 	run("8-bit");
 	setAutoThreshold("Default dark");
-	setThreshold(255, 255);
+	setThreshold(240, 255);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
-	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=4000-25000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 
 if (nResults ==0){
