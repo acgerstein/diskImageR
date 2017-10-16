@@ -182,7 +182,7 @@ function findDisk(file){
 	}
 }
 
-function findDisk8(file){
+function findDiskLarge(file){
 	run("Clear Results");
 	print("Trying parameter set 1");
 	selectWindow(getTitle);
@@ -277,6 +277,22 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
+	print("Trying parameter set 8");
+	close();
+	selectWindow(getTitle);
+	run("Revert");
+	alterImageSize(getTitle);
+	run("8-bit");
+	setAutoThreshold("Default dark");
+	setThreshold(150, 255);
+	run("Convert to Mask");
+	roiManager("reset");
+	roiManager("Show All with labels");
+	roiManager("Show All");
+	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
+}
+
+if (nResults ==0){
 	print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
 }
 if (nResults > 1){
@@ -326,7 +342,7 @@ for (i=0; i<list.length; i++){
 		}
 	if(diam10<=1.25){
 		print("Large disk");
-		findDisk8(getTitle);
+		findDiskLarge(getTitle);
 		}
 	close();
 	run("Revert");
