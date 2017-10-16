@@ -284,7 +284,8 @@ if (nResults ==0){
 	alterImageSize(getTitle);
 	run("8-bit");
 	setAutoThreshold("Default dark");
-	setThreshold(150, 255);
+	setThreshold(255, 255);
+	setOption("BlackBackground", false);
 	run("Convert to Mask");
 	roiManager("reset");
 	roiManager("Show All with labels");
