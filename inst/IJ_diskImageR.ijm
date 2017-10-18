@@ -2,11 +2,12 @@ function alterImageSize(file) {
 	selectWindow(file);
 	picWidth = getWidth();
 	picHeight = getHeight();
-	if (picWidth > picHeight)
+	run("Size...", "width=1000 constrain interpolation=None");
+//	if (picWidth > picHeight)
 			run("Size...", "width=1000 constrain interpolation=None");
-	if (picWidth < picHeight)
+//	if (picWidth < picHeight)
 			run("Size...", "height=1000 constrain interpolation=None");
-	if (picWidth == picHeight)
+//	if (picWidth == picHeight)
 			run("Size...", "width=1000 height=0 constrain interpolation=None");
 	}
 
@@ -184,7 +185,7 @@ function findDisk(file){
 
 function findDiskLarge(file){
 	run("Clear Results");
-	print("Trying parameter set 1");
+	print("Trying large disk parameter set 1");
 	selectWindow(getTitle);
 	run("Revert");
 	alterImageSize(getTitle);	
