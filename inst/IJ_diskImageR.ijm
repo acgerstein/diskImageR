@@ -278,7 +278,7 @@ if (nResults ==0){
 	run("Analyze Particles...", "size=8000-20000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
 if (nResults ==0){
-	print("Trying parameter set 8-200");
+	print("Trying parameter set 8");
 	close();
 	selectWindow(getTitle);
 	run("Revert");
@@ -291,6 +291,21 @@ if (nResults ==0){
 	roiManager("Show All");
 	run("Analyze Particles...", "size=4000-25000 circularity=0.20-1.00 show=Outlines display exclude add");
 }
+if (nResults ==0){
+	print("Trying parameter set 9");
+	close();
+	selectWindow(getTitle);
+	run("Revert");
+	alterImageSize(getTitle);
+	run("8-bit");
+	setThreshold(243, 255);
+	run("Convert to Mask");
+	roiManager("reset");
+	roiManager("Show All with labels");
+	roiManager("Show All");
+	run("Analyze Particles...", "size=4000-25000 circularity=0.20-1.00 show=Outlines display exclude add");
+}
+
 
 if (nResults ==0){
 	print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
