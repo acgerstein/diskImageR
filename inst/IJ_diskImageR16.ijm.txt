@@ -100,6 +100,7 @@ for (i=0; i<list.length; i++){
 	open(dir1 + list[i]);
 	print("Current image: "+list[i]);
 	outputFolder = dir2;
+	outputResultsFolder = "results"+dir2;
 	//setMinAndMax(50, 250);
 	//The filename is automatically set to be the title of the image (so title images accordingly)
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
@@ -114,7 +115,7 @@ for (i=0; i<list.length; i++){
 	alterImageSize(getTitle);
 
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
-	saveAs("Results", outputFolder+filename+"_ResultsTable.txt");
+	saveAs("Results", outputResultsFolder+filename+"_ResultsTable.txt");
 	
 //walk through each of the 16 disks
 	for(m=0; m<16; m++) {
