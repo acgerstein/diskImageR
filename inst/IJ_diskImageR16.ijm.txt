@@ -112,5 +112,41 @@ for (i=0; i<list.length; i++){
 	close();
 	run("Revert");
 	alterImageSize(getTitle);
-     saveAs("Results", outputFolder+filename+"ResultsTable.txt");
+
+   \\save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
+	saveAs("Results", outputFolder+filename+"ResultsTable.txt");
+	
+	for(m=0, m<16, m++){
+		centerX = getResult("X", m);
+		centerY = getResult("Y", m);
+		discDiam = 2*sqrt(getResult("Area")/3.1412);
+		convert = discDiam/knownDiam;
+		makePoint(centerX, centerY);
+		run("Clear Results");
+
+		setMinAndMax(50, 250);
+		makeLineE(centerX, centerY, 40*convert, 5);
+
+		Angle=0;
+		while (Angle < 360){
+			Angle = Angle + 5;
+			makeLineE(centerX, centerY, 40*convert, Angle);
+
+			// Get profile and display values in "Results" window
+			profile = getProfile();
+			for (j=0; j<profile.length; j++){
+				k = nResults;
+				setResult("X", k, j);
+				setResult("Value", k, profile[j]);
+			}
+			updateResults();
+
+			// Plot profile
+			Plot.create("Profile", "X", "Value", profile);
+		}
+
+		//Save as spreadsheet compatible text file
+		saveAs("Results", outputFolder+filename+"_"+m+".txt");
+		close();
 	}
+}
