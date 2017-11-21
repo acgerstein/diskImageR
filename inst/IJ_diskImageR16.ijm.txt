@@ -117,7 +117,7 @@ for (i=0; i<list.length; i++){
 	saveAs("Results", outputFolder+filename+"_ResultsTable.txt");
 	
 //walk through each of the 16 disks
-	for(m=0, m<16, m++) {
+	for(m=0; m<16; m++) {
 		centerX = getResult("X", m);
 		centerY = getResult("Y", m);
 		discDiam = 2*sqrt(getResult("Area")/3.1412);
