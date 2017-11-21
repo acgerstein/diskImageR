@@ -116,6 +116,7 @@ for (i=0; i<list.length; i++){
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
 	saveAs("Results", outputFolder+filename+getTitle+"_ResultsTable.txt");
 	
+//walk through each of the 16 disks
 	for(m=0, m<16, m++){
 		centerX = getResult("X", m);
 		centerY = getResult("Y", m);
