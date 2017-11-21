@@ -92,12 +92,8 @@ data <- datas
 
 #where is the maximum intensity? This is also the point of growth maximum
 maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)), 3])}))
-print(maxIntensity)
 whichMaxIntensity <- mapply(function(x, y) {which(x[,3]==y)}, x = data, y = maxIntensity)
-whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y),1]}, x = data, y = maxIntensity)
-
-print(whichMaxIntensity)
-print(whereMaxIntensity)
+whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, y = maxIntensity)
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
 slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity5, z = whichMaxIntensity), digits=2)
@@ -150,111 +146,4 @@ cat(paste("\nSaving file: ", filename,  sep=""))
 cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 # assign(dfName, df, envir=globalenv())
 assign(dfName, df, inherits=TRUE)
-}
-
-plotParam3 <- function(projectName, x, diskDiam, xmax = 40, ymax = 260, plotType = "dot", showMaxGR = FALSE, showMaxGRLabel = FALSE, showCutoffs = FALSE, showCutoffLables = FALSE, showSlope = FALSE, showLimText=FALSE){
-	data <- eval(parse(text=projectName))
-	df <- eval(parse(text=paste(projectName, ".df", sep="")))
-	dotEdge <- diskDiam/2
-	if(plotType == "dot") plot(data[[x]][,1], data[[x]][,2], xlab="", ylab="", xaxt="n", yaxt="n", xlim=c(0, xmax), ylim=c(0, ymax))
-	if(plotType == "line") plot(data[[x]][,1], data[[x]][,2], xlab="", ylab="", xaxt="n", yaxt="n", xlim=c(0, xmax), ylim=c(0, ymax), type="l", lwd=2)
-	if(showMaxGR) arrows(df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+80, df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+20, length=0.1)
-	if(showMaxGRLabel) text(df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+85, "maxGR", cex=0.6)
-	if(showCutoffs){
-		arrows(df[x, "dist2_90"]+dotEdge, df[x, "min2_90"]+df[x, "minIntensity"]+60, df[x, "dist2_90"]+dotEdge, df[x, "min2_90"]+df[x, "minIntensity"]+20, length=0.05, col="grey")
-		arrows(df[x, "dist2_75"]+dotEdge, df[x, "min2_75"]+df[x, "minIntensity"]+60, df[x, "dist2_75"]+dotEdge, df[x, "min2_75"]+df[x, "minIntensity"]+20, length=0.05, col="grey")
-		arrows(df[x, "dist2_50"]+dotEdge, df[x, "min2_50"]+df[x, "minIntensity"]+60, df[x, "dist2_50"]+dotEdge, df[x, "min2_50"]+df[x, "minIntensity"]+20, length=0.05, col="grey")
-		arrows(df[x, "dist2_25"]+dotEdge, df[x, "min2_25"]+df[x, "minIntensity"]+60, df[x, "dist2_25"]+dotEdge, df[x, "min2_25"]+df[x, "minIntensity"]+20, length=0.05, col="grey")
-	}
-	if(showCutoffLables){
-	 	text(df[x, "whereMaxIntensity"]+df[x, "dist2_90"]-2, x[x, "min2_90"]+df[x, "minIntensity"]+80, "90%", cex=0.5, pos=4)
-	 	text(df[x, "whereMaxIntensity"]+df[x, "dist2_75"]-2, x[x, "min2_75"]+df[x, "minIntensity"]+70, "75%", cex=0.5, pos=4)
-	 	text(df[x, "whereMaxIntensity"]+df[x, "dist2_50"]-2, x[x, "min2_50"]+df[x, "minIntensity"]+60, "50%", cex=0.5, pos=4)
-		text(df[x, "whereMaxIntensity"]+df[x, "dist2_25"]-2, x[x, "min2_25"]+df[x, "minIntensity"]+50, "25%", cex=0.5, pos=4)
-	}
-if(showSlope){
- 	segments(df[x, "whereMinIntensity5"], lm(data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 2]~ data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 1])$fitted.values[1], df[x, "whereMaxIntensity"]+12.7/2, lm(data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 2]~ data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 1])$fitted.values[length(lm(data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 2]~ data[[x]][df[x, "whichMinIntensity5"]:df[x, "whichMaxIntensity"], 1])$fitted.values)], col="red", lwd=2)
-	}
-}
-
-
-.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, plotFoG = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
-	data <- eval(parse(text=projectName))
-	if(is.na(plotSub[1])){
-		plotSub <- 1:length(data)
-		}
-	fileFolder <- projectName
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	t <- file.path("figures", projectName , paste(projectName, "_FoG.pdf", sep=""))
-	if (!overwrite){
-		if (file.exists(t)){
-			t <- file.path("figures", projectName , paste(projectName, "_FoG_2_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
-			if (file.exists(t)){
-				k <- 2
-				while(file.exists(t)){
-					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_FoG_", k, "_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
-					}
-				}
-			}
-		}
-
-	if(xplots > length(plotSub)){
-		xplots <- length(plotSub)
-	}
-	if (ceiling(length(plotSub)/xplots) < 6) {
-		yplots<- ceiling(length(plotSub)/xplots)}
-	else {yplots<- 6}
-	numpages <- ceiling(length(plotSub)/(xplots*yplots))
-	if(savePDF){
-		pdf(t, width=width, height=height)
-	}
-	# if(!savePDF){
-		# quartz(width=width, height=height)
-	# }
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-	for (k in plotSub){
-			.singleFoG(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
-		if(numpages == 1){
-			if (k >= xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else {axis(1, cex.axis=1, labels= FALSE)}
-			}
-		if(numpages == 2){
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){
-				axis(1, cex.axis=1)
-				}
-			if (k >= 2*xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else {axis(1, cex.axis=1, labels= FALSE)}
-			}
-		if(numpages == 3){
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else{axis(1, labels=FALSE)}
-			}
-		axis(1, labels=FALSE)
-		j <- 1
-		while (j <= numpages){
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=1, las=2)}
-			j <- j+1
-		}
-	}
-
-	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
-	mtext("Pixel intensity", outer=TRUE, side=2, line=2, cex=1.2)
-
-	if(savePDF){
-		dev.off()
-		cat(paste("\nFigure saved: ", t, sep=""))
-
-		if(popUp){
-			tt <- paste("open", t)
-			system(tt)
-		}
-	}
 }
