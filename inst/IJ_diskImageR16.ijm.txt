@@ -107,7 +107,7 @@ for (i=0; i<list.length; i++){
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
 	saveAs("Results", outputFolder+filename+"_ResultsTable.txt");
 
-	close();
+//	close();
 	run("Revert");
 	alterImageSize(getTitle);
 
@@ -141,9 +141,9 @@ for (i=0; i<list.length; i++){
 			// Plot profile
 			Plot.create("Profile", "X", "Value", profile);
 		}
-
+		n = m+1
 		//Save as spreadsheet compatible text file
-		saveAs("Results", outputFolder+filename+"_"+m+".txt");
+		saveAs("Results", outputFolder+filename+"_"+n+".txt");
 		close();
 	}
 }
