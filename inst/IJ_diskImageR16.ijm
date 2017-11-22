@@ -195,7 +195,7 @@ for (i=0; i<fileList.length; i++){
 
 		Angle=0;
 		while (Angle < 360){
-			Angle = Angle + 5;
+			Angle = Angle + 2;
 			makeLineE(centerX, centerY, 30*convert, Angle);
 
 			// Get profile and display values in "Results" window
