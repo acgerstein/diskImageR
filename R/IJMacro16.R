@@ -121,7 +121,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	  count_wait<-count_wait+1.0
 	}
 	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
-	cat(paste("\nElements in list '", projectName, "': \n", sep=""))
+	# cat(paste("\nElements in list '", projectName, "': \n", sep=""))
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	if(!length(dir(photoDir))*16 == length(temp)){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
@@ -174,7 +174,7 @@ function(workingDir, folderLoc, experAbbr){
 	currDir <- getwd()
 	# print(currDir)
 	getData <- function(i, newList, names) {
-		print(i)
+		# print(i)
 		if (i > length(dir())){
 			names(newList) <- names
 			setwd(currDir)
@@ -191,7 +191,7 @@ function(workingDir, folderLoc, experAbbr){
 		  }
 		 names(newd)[3:72] <- paste0("L",2:71)
 
-		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[62:72]))
+		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[54:72]))
 			#the 25 comes from the IJ16 macro
 			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*30/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
