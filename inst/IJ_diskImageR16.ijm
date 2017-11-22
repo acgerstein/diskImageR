@@ -154,7 +154,9 @@ for (i=0; i<fileList.length; i++){
 	picWidth = getWidth();
 	picHeight = getHeight();
 	run("Size...", "width=1000 constrain interpolation=None");
-	
+	run("8-bit");
+	setMinAndMax(50, 250);
+
 	area = List.get("area");
 	discDiam = 2*sqrt(area/3.1412);
 	//the next line is just for debugging
@@ -168,16 +170,17 @@ for (i=0; i<fileList.length; i++){
 	for(m=0; m<16; m++) {
 //		m =5;
 //		print(m);
-		print(list);
+//		print(list);
+
+		run("Clear Results");
 
 		placeX = "X"+m;
 		placeY = "Y"+m;
 		centerX = List.get(placeX);
 		centerY = List.get(placeY);
 	
-		print(convert);
+//		print(convert);
 		makePoint(centerX, centerY);
-		setMinAndMax(50, 250);
 
 //function makeLineE(centerX, centerY, length, angle) {
 //	angle = -angle * PI / 180;
@@ -187,9 +190,9 @@ for (i=0; i<fileList.length; i++){
 //	}
 
 
-		makeLineE(centerX, centerY, 25*convert, 5);
+//		makeLineE(centerX, centerY, 25*convert, 5);
 
-		run("Clear Results");
+
 		Angle=0;
 		while (Angle < 360){
 			Angle = Angle + 5;
