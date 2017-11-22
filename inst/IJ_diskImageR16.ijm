@@ -196,10 +196,9 @@ for (i=0; i<list.length; i++){
 
 			// Plot profile
 			Plot.create("Profile", "X", "Value", profile);
+			n = m+1;
+			//Save as spreadsheet compatible text file
+			saveAs("Results", outputFolder+filename+"_"+n+".txt");
+			close();
 		}
-		n = m+1;
-		//Save as spreadsheet compatible text file
-		saveAs("Results", outputFolder+filename+"_"+n+".txt");
-		close();
-	}
 }
