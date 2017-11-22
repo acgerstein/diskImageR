@@ -110,7 +110,7 @@ for (i=0; i<fileList.length; i++){
 	run("Revert");
 
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
-	saveAs("Results", dir3+filename+"_ResultsTable.txt");
+//	saveAs("Results", dir3+filename+"_ResultsTable.txt");
 	List.set("X0", getResult("X", 0));
 	List.set("X1", getResult("X", 1));
 	List.set("X2", getResult("X", 2));
@@ -145,6 +145,7 @@ for (i=0; i<fileList.length; i++){
 	List.set("Y15", getResult("Y", 15));
 	List.set("area", getResult("Area", 0));
      list = List.getList();
+	print(list);
 
 //
 //	alterImageSize(getTitle);
@@ -157,8 +158,10 @@ for (i=0; i<fileList.length; i++){
 	
 //walk through each of the 16 disks
 
-	for(m=0; m<16; m++) {
+//
+//	for(m=0; m<16; m++) {
 //		print(m);
+		m =5;
 		placeX = "X"+m;
 		placeY = "Y"+m;
 		centerX = List.get(placeX);
@@ -167,12 +170,20 @@ for (i=0; i<fileList.length; i++){
 	
 		discDiam = 2*sqrt(area/3.1412);
 	//the next line is just for debugging
-	//	knownDiam = 6;
+		knownDiam = 6;
 	//	print(discDiam);
 		convert = discDiam/knownDiam;
-	//	print(convert);
+		print(convert);
 		makePoint(centerX, centerY);
 		setMinAndMax(50, 250);
+
+function makeLineE(centerX, centerY, length, angle) {
+	angle = -angle * PI / 180;
+	dX = cos(angle) * length;
+	dY = sin(angle) * length;
+	makeLine(centerX, centerY, centerX + dX, centerY + dY);
+	}
+
 
 		makeLineE(centerX, centerY, 25*convert, 5);
 
@@ -180,7 +191,7 @@ for (i=0; i<fileList.length; i++){
 		Angle=0;
 		while (Angle < 360){
 			Angle = Angle + 5;
-			makeLineE(centerX, centerY, 25*convert, Angle);
+			makeLineE(centerX, centerY, 30*convert, Angle);
 
 			// Get profile and display values in "Results" window
 			profile = getProfile();
