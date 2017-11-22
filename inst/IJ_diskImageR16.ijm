@@ -76,6 +76,7 @@ function findDisk(file){
 //Actual work flow starts here:
 print("Starting imageJ macro");
 folders = getArgument;
+print(folders);
 delimiter = "*";
 parts=split(folders, delimiter);
 print(parts);
