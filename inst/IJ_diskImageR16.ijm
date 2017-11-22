@@ -78,7 +78,7 @@ print("Starting imageJ macro");
 folders = getArgument;
 delimiter = "*";
 parts=split(folders, delimiter);
-
+print(parts);
 dir1 = parts[0];
 dir2 = parts[1];
 dir3 = parts[2];
