@@ -183,15 +183,15 @@ function(workingDir, folderLoc, experAbbr){
 		else {
 			lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 			names(lines) <- c("x", "distance")
-			numPts <- length(lines$distance)/72
+			numPts <- length(lines$distance)/180
 			newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts])
-		  start <- seq(1, length(lines$distance), by=length(lines$distance)/72)
+		  start <- seq(1, length(lines$distance), by=length(lines$distance)/180)
 		  for(j in 2:71){
 		 	 newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
 		  }
-		 names(newd)[3:72] <- paste0("L",2:71)
+		 names(newd)[3:180] <- paste0("L",2:179)
 
-		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[54:72]))
+		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[135:180]))
 			#the 25 comes from the IJ16 macro
 			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*30/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
