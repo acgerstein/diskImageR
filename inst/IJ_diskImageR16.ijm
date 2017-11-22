@@ -160,8 +160,6 @@ for (i=0; i<list.length; i++){
 //walk through each of the 16 disks
 
 	for(m=0; m<16; m++) {
-
-//	m = 1;
 		placeX = "X"+m;
 		placeY = "Y"+m;
 		centerX = List.get(placeX);
@@ -197,6 +195,7 @@ for (i=0; i<list.length; i++){
 			// Plot profile
 			Plot.create("Profile", "X", "Value", profile);
 			n = m+1;
+			print(n);
 			//Save as spreadsheet compatible text file
 			saveAs("Results", outputFolder+filename+"_"+n+".txt");
 			print("profile from disk "+ n+ " saved");
