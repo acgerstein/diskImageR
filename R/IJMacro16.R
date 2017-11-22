@@ -184,9 +184,9 @@ function(workingDir, folderLoc, experAbbr){
 			lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 			names(lines) <- c("x", "distance")
 			numPts <- length(lines$distance)/180
-			newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts])
+			newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts+1])
 		  start <- seq(1, length(lines$distance), by=length(lines$distance)/180)
-		  for(j in 2:71){
+		  for(j in 2:179){
 		 	 newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
 		  }
 		 names(newd)[3:180] <- paste0("L",2:179)
