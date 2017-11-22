@@ -81,7 +81,8 @@ parts=split(folders, delimiter);
 
 dir1 = parts[0];
 dir2 = parts[1];
-knownDiam = parts[2];
+dir3 = parts[2];
+knownDiam = parts[3];
 
 print("Input directory: "+dir1);
 print("Output directory: "+dir2);
@@ -110,7 +111,7 @@ for (i=0; i<fileList.length; i++){
 	run("Revert");
 
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
-	saveAs("Results", outputFolder+filename+"_ResultsTable.txt");
+	saveAs("Results", dir3+filename+"_ResultsTable.txt");
 	List.set("X0", getResult("X", 0));
 	List.set("X1", getResult("X", 1));
 	List.set("X2", getResult("X", 2));
