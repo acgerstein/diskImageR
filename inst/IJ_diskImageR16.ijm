@@ -104,6 +104,13 @@ for (i=0; i<list.length; i++){
   run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	findDisk(getTitle);
+
+
+	selectWindow(getTitle);
+	close();
+	selectWindow(getTitle);
+	run("Revert");
+
    //save the results table, will have to use this to figure out which disk is which based on X, Y coordinates
 	saveAs("Results", outputFolder+filename+"_ResultsTable.txt");
 	List.set("X0", getResult("X", 0));
@@ -141,35 +148,42 @@ for (i=0; i<list.length; i++){
 	List.set("area", getResult("Area", 0));
      list = List.getList();
 
-//	close();
+//
+//	alterImageSize(getTitle);
+//
 	selectWindow(getTitle);
-	run("Revert");
-	alterImageSize(getTitle);
+	picWidth = getWidth();
+	picHeight = getHeight();
+	run("Size...", "width=1000 constrain interpolation=None");
 
 	
 //walk through each of the 16 disks
+
 	for(m=0; m<16; m++) {
+
+//	m = 1;
 		placeX = "X"+m;
 		placeY = "Y"+m;
-		print(placeX);
 		centerX = List.get(placeX);
 		centerY = List.get(placeY);
-		area = List.get("Area");
-
+		area = List.get("area");
+	
 		discDiam = 2*sqrt(area/3.1412);
 	//the next line is just for debugging
-	//	knownDiam = 6.7;
+	//	knownDiam = 6;
+	//	print(discDiam);
 		convert = discDiam/knownDiam;
+	//	print(convert);
 		makePoint(centerX, centerY);
-		run("Clear Results");
-
 		setMinAndMax(50, 250);
-		makeLineE(centerX, centerY, 40*convert, 5);
 
+		makeLineE(centerX, centerY, 25*convert, 5);
+
+		run("Clear Results");
 		Angle=0;
 		while (Angle < 360){
 			Angle = Angle + 5;
-			makeLineE(centerX, centerY, 40*convert, Angle);
+			makeLineE(centerX, centerY, 25*convert, Angle);
 
 			// Get profile and display values in "Results" window
 			profile = getProfile();
