@@ -131,9 +131,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 #	assign(projectName, temp, envir=	diskImageREnv)
 	assign(projectName, temp, inherits=TRUE)
 
-	dfNA <- .saveAveLine(temp)
-	cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
-	write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
+	# dfNA <- .saveAveLine(temp)
+	# cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
+	# write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
 	# return(get(projectName, envir=diskImageREnv))
 	}
 
@@ -170,32 +170,6 @@ function(workingDir, folderLoc, experAbbr){
 	tList
 	}
 
-.readIn <-function(directoryPath, newList = list(), numDig=30) {
-	currDir <- getwd()
-	# print(currDir)
-	getData <- function(i, newList, names) {
-		if (i > length(dir())){
-			names(newList) <- names
-			print(names(newList))
-			setwd(currDir)
-			return (newList)
-			}
-		else {
-			allLines <-  aggregate(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"], mean)
-			newList[[length(newList)+1L]] <-  data.frame(distance = allLines[,1]*40/length(allLines[,1]), x= allLines[,2])
-			temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
-			names[i] <- strsplit(temp,".txt")[[1]][1]
-			getData(i+1, newList, names)
-		}
-	}
-	setwd(directoryPath)
-	i <-1
-	names <- c()
-	findMin <- c()
-	getData(i, newList, names)
-}
-
-
 .readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 10) {
 	currDir <- getwd()
 	# print(currDir)
@@ -219,9 +193,9 @@ function(workingDir, folderLoc, experAbbr){
 
 		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[62:72]))
 			#the 25 comes from the IJ16 macro
-			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*25/length(newd$x), x= aveSorted)
+			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*30/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
-			temp <- dir(currDir)[i]
+			temp <- dir(directoryPath)[i]
 			names[i] <- strsplit(temp,".txt")[[1]][1]
 			getData(i+1, newList, names)
 		}
@@ -239,3 +213,40 @@ function(filename) {
    names(d) <- c("count", "distance","x")
    d
  }
+
+#  lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
+#  names(lines) <- c("x", "distance")
+#  numPts <- length(lines$distance)/72
+#  newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts])
+#  start <- seq(1, length(lines$distance), by=length(lines$distance)/72)
+#  for(j in 2:71){
+# 	newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
+#  }
+# names(newd)[3:72] <- paste0("L",2:71)
+#
+#  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[62:72]))
+
+# .readIn <-function(directoryPath, newList = list(), numDig=30) {
+# 	currDir <- getwd()
+# 	# print(currDir)
+# 	getData <- function(i, newList, names) {
+# 		if (i > length(dir())){
+# 			names(newList) <- names
+# 			print(names(newList))
+# 			setwd(currDir)
+# 			return (newList)
+# 			}
+# 		else {
+# 			allLines <-  aggregate(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"], mean)
+# 			newList[[length(newList)+1L]] <-  data.frame(distance = allLines[,1]*40/length(allLines[,1]), x= allLines[,2])
+# 			temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
+# 			names[i] <- strsplit(temp,".txt")[[1]][1]
+# 			getData(i+1, newList, names)
+# 		}
+# 	}
+# 	setwd(directoryPath)
+# 	i <-1
+# 	names <- c()
+# 	findMin <- c()
+# 	getData(i, newList, names)
+# }
