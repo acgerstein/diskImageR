@@ -199,6 +199,7 @@ for (i=0; i<list.length; i++){
 			n = m+1;
 			//Save as spreadsheet compatible text file
 			saveAs("Results", outputFolder+filename+"_"+n+".txt");
-			close();
+			print("profile from disk "+ n+ " saved")
 		}
+		close();
 }
