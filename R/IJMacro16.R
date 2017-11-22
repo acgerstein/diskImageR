@@ -48,8 +48,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
 		}
 	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)
+	dir.create(file.path(projectDir, "disk_coordinates"), showWarnings=FALSE)
 	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")
-	outputDirCoord <- file.path(projectDir, "imageJ_coordinates", fileDir, "")
+	outputDirCoord <- file.path(projectDir, "disk_coordinates", fileDir, "")
 	IJarguments <- paste(photoDir, outputDir, outputDirCoord, diskDiam, sep="*")
 
 	if(length(dir(outputDir)) > 0){
@@ -71,7 +72,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 
 	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR16.ijm")[1]
 	if(.Platform$OS.type=="windows"){
-		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")
+		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"),paste(outputDirCoord, "", sep="\\"),  diskDiam, sep="*")
 		script <- gsub("Program Files", "progra~1", script)
 		knownIJLoc <- FALSE
 		if("ImageJ.exe" %in% dir("C:\\progra~1\\ImageJ\\")){
