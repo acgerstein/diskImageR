@@ -49,7 +49,8 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 		}
 	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)
 	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")
-	IJarguments <- paste(photoDir, outputDir, diskDiam, sep="*")
+	outputDirCoord <- file.path(projectDir, "imageJ_coordinates", fileDir, "")
+	IJarguments <- paste(photoDir, outputDir, outputDirCoord, diskDiam, sep="*")
 
 	if(length(dir(outputDir)) > 0){
 		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? [y/n] ", sep=""))
@@ -62,6 +63,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	}
 
 	dir.create(file.path(outputDir), showWarnings= FALSE)
+	dir.create(file.path(outputDirCoord), showWarnings= FALSE)
 	dir.create(file.path(projectDir, "figures"), showWarnings=FALSE)
 	dir.create(file.path(projectDir, "figures", fileDir), showWarnings=FALSE)
 	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)
