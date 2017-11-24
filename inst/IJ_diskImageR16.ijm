@@ -101,7 +101,7 @@ for (i=0; i<fileList.length; i++){
 	filename = substring(getTitle, 0, lengthOf(getTitle)-4);
 	name = getTitle;
 
-	run("Set Measurements...", "area mean centroid center perimeter redirect=None decimal=0");
+	run("Set Measurements...", "area mean centroid perimeter redirect=None decimal=0");
   run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	findDisk(getTitle);
