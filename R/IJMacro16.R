@@ -222,15 +222,15 @@ function(filename) {
    d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "-")[[1]][1]))
    photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 	 cat("Assigned drug coordinates maps to ")
-	 for(i in photoNames){
+	 for(m in photoNames){
      fileFolder <- projectName
     mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
      map <- read.csv(file.path(mapDir, paste0(i, "_ResultsTable.txt")), sep="\t")
      map$XYpos <- c(order(map[1:4, "X" ]), order(map[5:8, "X"])+4, order(map[9:12, "X" ])+8, order(map[13:16, "X" ])+12)
      map$drugs <- drugs[map$XYpos]
      write.table(map, file.path(mapDir, paste0(i, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
-		 assign(paste(i, "map", sep="."), map, inherits=TRUE)
-		 cat(paste0("\n", paste(i, map, sep=",")))
+		 assign(paste(m, "map", sep="."), map, inherits=TRUE)
+		 cat(paste0("\n", paste(m, "map", sep=",")))
      }
    }
 
