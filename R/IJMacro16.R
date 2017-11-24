@@ -221,7 +221,7 @@ function(filename) {
    d <- data.frame()
    d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "-")[[1]][1]))
    photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-	 cat("Assigned drug coordinates maps to "
+	 cat("Assigned drug coordinates maps to ")
 	 for(i in photoNames){
      fileFolder <- projectName
     mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
