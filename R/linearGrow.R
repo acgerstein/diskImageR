@@ -37,7 +37,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-inhibGrowPts <- function(projectName, diskDiam = 12.7, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, plotPts="all", popUp = TRUE, nameVector=TRUE, overwrite = TRUE, savePDF= TRUE){
+linearGrow <- function(projectName, diskDiam = 12.7, maxDist=30, ymax=125, xplots = 5, height = 8,  width = 8, plotPts="all", popUp = TRUE, nameVector=TRUE, overwrite = TRUE, savePDF= TRUE){
 # FoG=20, plotFoG = TRUE,  needML = TRUE,
 	options(warn=-1)
 
@@ -97,28 +97,29 @@ whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, 
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
 slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity5, z = whichMaxIntensity), digits=2)
-
-#use this, change whereMaxIntensity in the param data frame to be corrected for diskDiam
-#distance2Max <- whereMaxIntensity-diskDiam/2
-
-#Find the cutoff intensity values and distance for post-max growth points of resource limitation
-min2_90 <- maxIntensity*0.9
-min2_75 <- maxIntensity*0.75
-min2_50 <- maxIntensity*0.5
-min2_25 <- maxIntensity*0.25
-min2_10 <- maxIntensity*0.1
-
-#note that these are all distances past the point of maximal growth
-dist2_90 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_90))
-dist2_75 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_75))
-dist2_50 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_50))
-dist2_25 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_25))
-dist2_10 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_10))
-
-
 distance2Max <- whereMaxIntensity-diskDiam/2
 
-param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = whichMaxIntensity, whereMinIntensity = round(whereMinIntensity, 2), minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
+#This is to calculate distances when there is no reduction in growth, just a linear(ish) increase
+#note that these are all distances past the point of minimal growth
+whichMinIntensity10 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.10))}, x = data, y = minIntensity))
+whereMinIntensity10 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity10))
+whichMinIntensity25 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.25))}, x = data, y = minIntensity))
+whereMinIntensity25 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity25))
+whichMinIntensity50 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.50))}, x = data, y = minIntensity))
+whereMinIntensity50 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity50))
+whichMinIntensity75 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.75))}, x = data, y = minIntensity))
+whereMinIntensity75 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity75))
+whichMinIntensity90 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.90))}, x = data, y = minIntensity))
+whereMinIntensity90 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity90))
+
+param <- data.frame(whereMinIntensity = round(whereMinIntensity, 2)-diskDiam/2, minIntensity = round(minIntensity, 2), whichMinIntensity = whichMinIntensity,  whereMinIntensity5 = round(whereMinIntensity5, 2)-diskDiam/2, whereMinIntensity10 = round(whereMinIntensity10, 2)-diskDiam/2, whereMinIntensity25 = round(whereMinIntensity25, 2)-diskDiam/2, whereMinIntensity50 = round(whereMinIntensity50, 2)-diskDiam/2, whereMinIntensity75 = round(whereMinIntensity75, 2)-diskDiam/2, whereMinIntensity90 = round(whereMinIntensity90, 2)-diskDiam/2, slope2Max = slope2Max,  whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2))
+
+param$whereMinIntensity5[param$whereMinIntensity5+diskDiam/2>maxDist] <- NA
+param$whereMinIntensity10[param$whereMinIntensity10+diskDiam/2>maxDist] <- NA
+param$whereMinIntensity25[param$whereMinIntensity25+diskDiam/2>maxDist] <- NA
+param$whereMinIntensity50[param$whereMinIntensity50+diskDiam/2>maxDist] <- NA
+param$whereMinIntensity75[param$whereMinIntensity75+diskDiam/2>maxDist] <- NA
+param$whereMinIntensity90[param$whereMinIntensity90+diskDiam/2>maxDist] <- NA
 
 if (is.logical(nameVector)){
 	if (nameVector){
@@ -147,3 +148,33 @@ cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 # assign(dfName, df, envir=globalenv())
 assign(dfName, df, inherits=TRUE)
 }
+
+plotParamLin <- function(projectName, x, diskDiam, xmax = 40, colour= "black", ymax = 260, ymin=0, plotType = "dot", pt.cex=1, showMinGR = FALSE, showMinGRLabel = FALSE, showMaxGR = FALSE, showMaxGRLabel = FALSE, showCutoffs = FALSE, showCutoffLables = FALSE, showSlope = FALSE, showLimText=FALSE){
+	data <- eval(parse(text=projectName))
+	df <- eval(parse(text=paste(projectName, ".df", sep="")))
+	dotEdge <- diskDiam/2
+	if(plotType == "dot") plot(data[[x]][,1], data[[x]][,2], xlab="", ylab="", xaxt="n", yaxt="n", xlim=c(0, xmax), ylim=c(ymin, ymax), col=colour, cex=pt.cex)
+	if(plotType == "line") plot(data[[x]][,1], data[[x]][,2], xlab="", ylab="", xaxt="n", yaxt="n", xlim=c(0, xmax), ylim=c(ymin, ymax), type="l", lwd=2, col=colour)
+	if(showMaxGR) arrows(df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+80, df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+20, length=0.1)
+	if(showMaxGRLabel) text(df[x, "whereMaxIntensity"]+dotEdge, df[x, "maxIntensity"]+df[x, "minIntensity"]+85, "maxGR", cex=0.6)
+	if(showMinGR) arrows(df[x, "whereMinIntensity"]+dotEdge, df[x, "minIntensity"]+80, df[x, "whereMinIntensity"]+dotEdge, df[x, "minIntensity"]+20, length=0.1)
+	if(showMinGRLabel) text(df[x, "whereMinIntensity"]+dotEdge, df[x, "minIntensity"]+85, "minGR", cex=0.6)
+	if(showCutoffs){
+		arrows(df[x, "whereMinIntensity5"]+dotEdge, df[x, "minIntensity"]*1.05+60, df[x, "whereMinIntensity5"]+dotEdge, df[x, "minIntensity"]*1.05+20, length=0.05, col="grey")
+		arrows(df[x, "whereMinIntensity10"]+dotEdge, df[x, "minIntensity"]*1.15+60, df[x, "whereMinIntensity10"]+dotEdge, df[x, "minIntensity"]*1.15+20, length=0.05, col="grey")
+		arrows(df[x, "whereMinIntensity25"]+dotEdge, df[x, "minIntensity"]*1.25+60, df[x, "whereMinIntensity25"]+dotEdge, df[x, "minIntensity"]*1.25+20, length=0.05, col="grey")
+		arrows(df[x, "whereMinIntensity50"]+dotEdge, df[x, "minIntensity"]*1.5+60, df[x, "whereMinIntensity50"]+dotEdge, df[x, "minIntensity"]*1.50+20, length=0.05, col="grey")
+		arrows(df[x, "whereMinIntensity75"]+dotEdge, df[x, "minIntensity"]*1.75+60, df[x, "whereMinIntensity75"]+dotEdge, df[x, "minIntensity"]*1.75+20, length=0.05, col="grey")
+		arrows(df[x, "whereMinIntensity90"]+dotEdge, df[x, "minIntensity"]*1.90+60, df[x, "whereMinIntensity90"]+dotEdge, df[x, "minIntensity"]*1.90+20, length=0.05, col="grey")
+	}
+	# if(showCutoffLables){
+	#  	text(df[x, "whereMaxIntensity"]+df[x, "dist2_90"]-2, x[x, "min2_90"]+df[x, "minIntensity"]+80, "90%", cex=0.5, pos=4)
+	#  	text(df[x, "whereMaxIntensity"]+df[x, "dist2_75"]-2, x[x, "min2_75"]+df[x, "minIntensity"]+70, "75%", cex=0.5, pos=4)
+	#  	text(df[x, "whereMaxIntensity"]+df[x, "dist2_50"]-2, x[x, "min2_50"]+df[x, "minIntensity"]+60, "50%", cex=0.5, pos=4)
+	# 	text(df[x, "whereMaxIntensity"]+df[x, "dist2_25"]-2, x[x, "min2_25"]+df[x, "minIntensity"]+50, "25%", cex=0.5, pos=4)
+	# }
+if(showSlope){
+	abline(lm(data[[x]][,2]~lm(data[[x]][,1], col="red")))
+}
+ # 	segments(df[x, "whereMinIntensity"]+12.7/2, lm(data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 2]~ data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 1])$fitted.values[1], df[x, "whereMinIntensity"]+12.7/2, lm(data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 2]~ data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 1])$fitted.values[length(lm(data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 2]~ data[[x]][df[x, "whichMinIntensity"]:min(which(data[[1]][,1]>maxDist)), 1])$fitted.values)], col="red", lwd=2)
+	}

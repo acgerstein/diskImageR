@@ -92,12 +92,8 @@ data <- datas
 
 #where is the maximum intensity? This is also the point of growth maximum
 maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)), 3])}))
-print(maxIntensity)
 whichMaxIntensity <- mapply(function(x, y) {which(x[,3]==y)}, x = data, y = maxIntensity)
-whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y),1]}, x = data, y = maxIntensity)
-
-print(whichMaxIntensity)
-print(whereMaxIntensity)
+whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, y = maxIntensity)
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
 slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity5, z = whichMaxIntensity), digits=2)
@@ -122,7 +118,7 @@ dist2_10 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(
 
 distance2Max <- whereMaxIntensity-diskDiam/2
 
-param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = whichMaxIntensity, whereMinIntensity = round(whereMinIntensity, 2), minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
+param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = whichMaxIntensity, whereMinIntensity = round(whereMinIntensity, 2)-diskDiam/2, minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5-diskDiam/2, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
 
 if (is.logical(nameVector)){
 	if (nameVector){
