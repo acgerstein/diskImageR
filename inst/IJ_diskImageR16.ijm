@@ -85,6 +85,7 @@ knownDiam = parts[3];
 
 print("Input directory: "+dir1);
 print("Output directory: "+dir2);
+print("Disk coordinates directory: "+dir3);
 print("Disk diameter: "+knownDiam);
 diam10 = 10/knownDiam;
 fileList = getFileList(dir1);
