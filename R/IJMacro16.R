@@ -219,7 +219,7 @@ function(filename) {
  .getCoordinates <- function(projectName, drugs=c("CIP5", "S10", "CTX30", "AMC30", "CT10", "JPM10", "NA30", "CAZ30", "F300", "TE30", "FOX30", "C30", "SXT25", "CPD10", "AM10", "ATM30")){
    data <- eval(parse(text=projectName))
    d <- data.frame()
-   d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "-")[[1]][1]))
+   d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "_")[[1]][2]))
    photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 	 cat("Assigned drug coordinates maps to ")
 	 for(m in photoNames){
