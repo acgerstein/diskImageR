@@ -226,8 +226,8 @@ function(filename) {
      fileFolder <- projectName
     mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
      map <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
-     map$XYpos <- c(order(map[1:4, "Y" ]), order(map[5:8, "Y"])+4, order(map[9:12, "Y" ])+8, order(map[13:16, "Y" ])+12)
-     map$drugs <- drugs[map$XYpos]
+		 map$XYpos <- order(map[, "Y" ])
+		 map$drugs <- drugs[map$XYpos]
      write.table(map, file.path(mapDir, paste0(m, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
 		 assign(paste(m, "map", sep="."), map, inherits=TRUE)
 		 cat(paste0("\t", paste(m, "map", sep=".")))
