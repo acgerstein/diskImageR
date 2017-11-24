@@ -229,7 +229,7 @@ function(filename) {
      map$XYpos <- c(order(map[1:4, "X" ]), order(map[5:8, "X"])+4, order(map[9:12, "X" ])+8, order(map[13:16, "X" ])+12)
      map$drugs <- drugs[map$XYpos]
      write.table(map, file.path(mapDir, paste0(i, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
-		 assign(map, paste(i, map, sep="."), inherits=TRUE)
+		 assign(paste(i, "map", sep="."), map, inherits=TRUE)
 		 cat(paste0("\n", paste(i, map, sep=",")))
      }
    }
