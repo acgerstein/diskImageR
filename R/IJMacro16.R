@@ -120,7 +120,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	{
 	  count_wait<-count_wait+1.0
 	}
-	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
+	#cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
 	# cat(paste("\nElements in list '", projectName, "': \n", sep=""))
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	if(!length(dir(photoDir))*16 == length(temp)){
@@ -130,7 +130,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 #	assign(projectName, temp, envir=globalenv())
 #	assign(projectName, temp, envir=	diskImageREnv)
 	assign(projectName, temp, inherits=TRUE)
-
+cat("Assigning drug to disk coordinates")
+.getCoordinates(projectName)
+cat("coordinates set")
 	# dfNA <- .saveAveLine(temp)
 	# cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	# write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
@@ -213,6 +215,23 @@ function(filename) {
    names(d) <- c("count", "distance","x")
    d
  }
+
+ .getCoordinates <- function(projectName, drugs=c("CIP5", "S10", "CTX30", "AMC30", "CT10", "JPM10", "NA30", "CAZ30", "F300", "TE30", "FOX30", "C30", "SXT25", "CPD10", "AM10", "ATM30")){
+   data <- eval(parse(text=projectName))
+   d <- data.frame()
+   d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "-")[[1]][1]))
+   photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+   for(i in photoNames){
+     fileFolder <- projectName
+   	mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
+     map <- read.csv(file.path(mapDir, paste0(i, "_ResultsTable.txt")), sep="\t")
+		 print(map)
+     map$XYpos <- c(order(map[1:4, "X" ]), order(map[5:8, "X"])+4, order(map[9:12, "X" ])+8, order(map[13:16, "X" ])+12)
+     map$drugs <- drugs[map$XYpos]
+     print(map)
+     write.csv(map, file.path(mapDir, paste0(i, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
+     }
+   }
 
 #  lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 #  names(lines) <- c("x", "distance")
