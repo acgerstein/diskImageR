@@ -172,7 +172,7 @@ function(workingDir, folderLoc, experAbbr){
 	tList
 	}
 
-.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 20) {
+.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 40) {
 	currDir <- getwd()
 	# print(currDir)
 	getData <- function(i, newList, names) {
@@ -193,7 +193,7 @@ function(workingDir, folderLoc, experAbbr){
 		  }
 		 names(newd)[3:180] <- paste0("L",2:179)
 
-		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(170-numTop):170]))
+		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
 			#the 25 comes from the IJ16 macro
 			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*30/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
