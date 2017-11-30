@@ -24,7 +24,7 @@
 
 #' @return A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 
-#' @examples 
+#' @examples
 #' \dontrun{
 #' plotRaw("myProject")
 #' plotRaw("myProject", ymin = 50, ymax = 300, xplots=2, height=3, width=4, plotStandardLoc=FALSE)
@@ -48,15 +48,25 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			}
 		}
 	data <- eval(parse(text=projectName))
-	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]})) 		
-	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))	
+ mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+drugPos <- c()
+ for(m in photoNames){
+		drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
+	}
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 	convert <- unlist(lapply(data, function(x) 40/length(x[,1])))
 	if (is.logical(nameVector)){
-		if (nameVector){label <- names(data)}		
+		if (nameVector){label <- names(data)}
 		else {label <- rep("", length(data))}
 		}
-	else {label <- nameVector}
-
+		else{
+			if(nameVector=="addDrug"){
+				label <- paste(names(data), drugPos, sep="-")
+			}
+			else {label <- nameVector}
+		}
 	if (xplots > length(data)){
 		xplots <- length(data)
 		}
@@ -85,7 +95,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			if (i >= 2*xplots*yplots-xplots+1){
 				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))
 			}
-		}				
+		}
 		if(numpages == 3){
 			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){
 				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))
@@ -96,7 +106,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			if (i >= (length(data)-xplots)){
 				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))
 			}
-		}				
+		}
 		k <- 1
 		while (k <= numpages){
 		if (i %in% seq(1, k*yplots*xplots, by=xplots)) {axis(2, cex.axis=cexY, las=2)}
