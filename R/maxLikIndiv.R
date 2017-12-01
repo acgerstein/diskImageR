@@ -53,13 +53,13 @@
 
 maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
-	if(!(hasArg(clearHalo))){
-		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
-		clearHalo <- as.numeric(cont)
-	}
-	if(!FoG %in% c(80, 50, 20)){
-		stop("Current suppported FoG values = 80, 50, 20, 5")
-		}
+	# if(!(hasArg(clearHalo))){
+	# 	cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
+	# 	clearHalo <- as.numeric(cont)
+	# }
+	# if(!FoG %in% c(80, 50, 20)){
+	# 	stop("Current suppported FoG values = 80, 50, 20, 5")
+	# 	}
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
 		}
@@ -74,14 +74,14 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		}
 	else {label <- nameVector}
 
-	if (!is.logical(standardLoc)){
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-		}
-	else{
-		stand <- rep(0, length(data))
-		}
-
+	# if (!is.logical(standardLoc)){
+	# 	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+	# 	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+	# 	}
+	# else{
+	# 	stand <- rep(0, length(data))
+	# 	}
+  #
 	dotedge <- diskDiam/2+0.4
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
@@ -104,16 +104,19 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
-	if(plotParam){
-		clearHaloData <- data[[clearHalo]]
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
-		clearHaloStand <- clearHaloData[1,2]
+	# if(plotParam){
+	#   # clearHaloData <- data[[clearHalo]]
+	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
+	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
+	# 	stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
+	# 	clearHaloData <- clearHaloData[startX:stopX, 1:2]
+	# 	clearHaloData$x <- clearHaloData$x + stand[clearHalo]
+	# 	clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
+	# 	clearHaloStand <- clearHaloData[1,2]
 
-		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+		# .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+
+		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp,  savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
 }
@@ -124,13 +127,13 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+	startX <- which(data[[i]][,1] > dotedge+ 0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	#changed this!
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)  #only fits when it goes down to 0
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+	# data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
@@ -172,7 +175,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	#changed this
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)  #the micel only fits when it goes down to 0
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+	# data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
@@ -223,12 +226,15 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-.singleFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
+.singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+	#changed
+	# data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
+	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+	# data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5) #why is this here?
+
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
 	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
@@ -243,7 +249,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	axis(2, labels=FALSE)
 	yyplot <- (yy+min(data[[i]]$x))
 	yyplot[yyplot < 0] <- 0
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)
+	points(exp(xx), yyplot, type="l", col="red", lwd=3)
 
 	useAsym <- "TRUE"
   yy95halo <- yyplot[which.max(yyplot> asym * 0.05)]
@@ -292,9 +298,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	if (slope >1){
 		xx2 <- c(xx[1], xx, xx[length(xx)])
 		yy2 <- c(0, yy, 0)
-		if(plotFoG){
-			polygon(xx2, yy2, density=15, col="red")
-			}
+		# if(plotFoG){
+			# polygon(xx2, yy2, density=15, col="red")
+			# }
 		points(xx, yy, type="l", col="black", lwd=2)
 		if(RAD ==5){
 				points(xx5, yy5halo, col="deepskyblue", cex=2, pch=19)
@@ -312,26 +318,28 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 				points(xx95, yy95halo, col="deepskyblue", cex=2, pch=19)
 				}
 		if(RAD=="all"){
+			points(xx95, yy80halo, col="navyblue", cex=1.75, pch=19)
 			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
+			points(xx5, yy20halo, col="cadetblue1", cex=1.75, pch=19)
 			}
-		if(plotCompon){
-			xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-			yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-			yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
-			yy1plot <- (yy2.1 +min(data[[i]]$x))
-			yy1plot[yy1plot <0] <-0
-			yy2plot <- (yy2.2 +min(data[[i]]$x))
-			yy2plot[yy2plot <0] <-0
-			points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)
-			points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)
-			}
+		# if(plotCompon){
+			# xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+			# yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
+			# yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
+			# yy1plot <- (yy2.1 +min(data[[i]]$x))
+			# yy1plot[yy1plot <0] <-0
+			# yy2plot <- (yy2.2 +min(data[[i]]$x))
+			# yy2plot[yy2plot <0] <-0
+			# points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)
+			# points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)
+			# }
 		}
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, plotFoG = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
+.plotParam <- function(projectName, ML , ML2, ymax=60, dotedge = 3.4, maxDist= 30, xplots = 4, height = 5, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)
@@ -368,7 +376,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	# }
 	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
 	for (k in plotSub){
-			.singleFoG(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
+			.singlePlot(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
 		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
