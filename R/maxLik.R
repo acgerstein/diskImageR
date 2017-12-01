@@ -81,6 +81,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	else{
 		stand <- rep(0, length(data))
 		}
+
 	dotedge <- diskDiam/2+0.4
 	if(needML){
 		cat("\nStatus of single logistic ML: ")

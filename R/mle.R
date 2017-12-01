@@ -8,7 +8,7 @@
 ##   'nlm'
 ## These now have a similar interface, though not identical.
 
-#' @export mle.R
+#' @export
 
 find.mle <- function(func, x.init, method, ...) {
   UseMethod("find.mle")
@@ -28,9 +28,7 @@ do.mle.search <- function(func, x.init, method, fail.value=-Inf,
                           control=list(), lower=-Inf, upper=Inf,
                           hessian=FALSE, verbose=0, keep.func=TRUE,
                           ...) {
-  method <- match.arg(method, c("optim", "subplex", "nlminb", "nlm",
-                                "minqa", "optimize", "int1d",
-                                "mixed", "subplexR"))
+  method <- match.arg(method, c("optim", "subplex", "nlminb", "nlm","minqa", "optimize", "int1d","mixed", "subplexR"))
 
   control$y.init <- y.init <- func(x.init, ...)
   if ( inherits(y.init, "try-error") )
