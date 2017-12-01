@@ -8,7 +8,7 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
   xplots = 6, height = 4, width = 8, cexPt = 0.6, cexX = 0.8,
   cexY = 0.8, standardLoc = 2.5, nameVector = TRUE,
   plotStandardLoc = TRUE, showNum = FALSE, popUp = TRUE,
-  overwrite = TRUE, savePDF = TRUE)
+  overwrite = TRUE, savePDF = TRUE, needMap = FALSE)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}
