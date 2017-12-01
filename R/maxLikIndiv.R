@@ -315,7 +315,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotParam <- function(projectName, ML , ML2, ymax=ymax, dotedge = dotedge, maxDist= maxDist, xplots = 4, height = 5, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
+.plotParam <- function(projectName, ML , ML2, ymax=ymax, dotedge = dotedge, maxDist= maxDist, xplots = 4, height = 5, width=7,  RAD=50, overwrite = TRUE, popUp = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)
@@ -323,15 +323,15 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	t <- file.path("figures", projectName , paste(projectName, "_FoG.pdf", sep=""))
+	t <- file.path("figures", projectName , paste(projectName, "_ZOIfit.pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
-			t <- file.path("figures", projectName , paste(projectName, "_FoG_2_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
+			t <- file.path("figures", projectName , paste(projectName, "_ZOIfit_2.pdf", sep=""))
 			if (file.exists(t)){
 				k <- 2
 				while(file.exists(t)){
 					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_FoG_", k, "_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
+					t <- file.path("figures", projectName, paste(projectName, "_ZOIfit_", k, ".pdf", sep=""))
 					}
 				}
 			}
