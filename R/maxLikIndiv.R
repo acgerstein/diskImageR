@@ -104,7 +104,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
-	# if(plotParam){
+	if(plotParam){
 	#   # clearHaloData <- data[[clearHalo]]
 	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
 	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
@@ -114,7 +114,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	# 	clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 	# 	clearHaloStand <- clearHaloData[1,2]
 
-		# .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+		 # .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 
 		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp,  savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
