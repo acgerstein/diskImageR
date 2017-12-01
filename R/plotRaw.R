@@ -14,7 +14,7 @@
 #' @param cexX a numeric value indicating the size of x-axis text
 #' @param cexY a numeric value indicating the size of y-axis text
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.
-#' @param standardLoc a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. 
+#' @param standardLoc a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately.
 #' @param plotStandardLoc a logical value indicating whether to draw a dashed vertical line at the standardization point that is used in \code{maxLik} and \code{createDataframe}
 
 #' @param showNum a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.
@@ -33,7 +33,7 @@
 #' @export
 
 plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots = 6, height =4, width = 8, cexPt = 0.6, cexX = 0.8, cexY = 0.8, standardLoc = 2.5, nameVector = TRUE , plotStandardLoc=TRUE, showNum=FALSE, popUp = TRUE, overwrite=TRUE, savePDF= TRUE){
-	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
+	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE, needMap = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_raw.pdf", sep=""))
 	if (!overwrite){
 		if (file.exists(t)){
@@ -48,11 +48,13 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			}
 		}
 	data <- eval(parse(text=projectName))
- mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-drugPos <- c()
- for(m in photoNames){
-		drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
+	photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+	if(needMap){
+		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 drugPos <- c()
+ 	 		for(m in photoNames){
+					drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
+					}
 	}
 	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
