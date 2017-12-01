@@ -8,6 +8,8 @@
 ##   'nlm'
 ## These now have a similar interface, though not identical.
 
+#' @export mle.R
+
 find.mle <- function(func, x.init, method, ...) {
   UseMethod("find.mle")
 }
@@ -51,7 +53,7 @@ do.mle.search <- function(func, x.init, method, fail.value=-Inf,
 
   ## Protect the function, and combine in the function arguments:
   func2 <- protect(function(x) func(x, ...), fail.value)
-  
+
   ## Add in verbosity, if needed:
   control$verbose <- verbose > 0
   # if ( control$verbose )
@@ -130,20 +132,20 @@ extractAIC.fit.mle <- function(fit, scale, k=2, ...)
   c(length(coef(fit)), AIC(fit))
 
 ## Code based on MASS:::anova.negbin and ape:::anova.ace
-## 
+##
 ## There are two ways that I am interested in seeing models come into
 ## here, and within that, a couple of different possibilities:
 ##
 ## 1. A series of comparisons against a single model.  This will
 ##    *always* be the first model in the list.
-## 
+##
 ##    a. Focal model has most parameters (full) and subsequent models
 ##       are reduced versions nested within it.
 ##
 ##    b. Focal model has least parameters (minimal) and subsequent
 ##       models are generalisations of it.
 ##
-## 2. A sequential series of comparisons (i.e., 
+## 2. A sequential series of comparisons (i.e.,
 anova.fit.mle <- function(object, ..., sequential=FALSE) {
   mlist <- c(list(object), list(...))
   if ( length(mlist) == 1L )
@@ -156,7 +158,7 @@ anova.fit.mle <- function(object, ..., sequential=FALSE) {
   if ( is.null(names(mlist)) )
     names(mlist) <-
       c("", model=sprintf("model %d", seq_len(length(mlist)-1)))
-  
+
   ## Next, extract the log-likelihoods and degrees of freedom from
   ## each model.
   ll <- lapply(mlist, logLik)
@@ -176,7 +178,7 @@ anova.fit.mle <- function(object, ..., sequential=FALSE) {
     }
   }
 
-  if ( sequential ) { 
+  if ( sequential ) {
     chisq <- c(NA, 2*diff(ll.val))
     ddf <- c(NA, diff(df))
     if ( all(ddf[-1] > 0) ) {
@@ -226,7 +228,7 @@ anova.fit.mle <- function(object, ..., sequential=FALSE) {
                     "Pr(>|Chi|)"=1 - pchisq(chisq, ddf),
                     check.names=FALSE)
   rownames(out) <- names(mlist)
-    
+
   class(out) <- c("anova", "data.frame")
   out
 }
@@ -284,7 +286,7 @@ is.constrained <- function(x)
 
 ## First up, consider the one-shot case: don't worry about incremental
 ## updates.
-## 
+##
 ## For the first case, everything is OK on the lhs and rhs
 ## For subsequent cases:
 ##   lhs cannot contain things that are
@@ -306,7 +308,7 @@ constrain <- function(f, ..., formulae=NULL, names=argnames(f),
   formulae <- c(formulae, list(...))
   names.lhs <- names.rhs <- names
   rels <- list()
-  
+
   for ( formula in formulae ) {
     res <- constrain.parse(formula, names.lhs, names.rhs, extra)
     if ( attr(res, "lhs.is.target") ) {
@@ -326,7 +328,7 @@ constrain <- function(f, ..., formulae=NULL, names=argnames(f),
         stop(sprintf("lhs (%s) is in an expression and can't be constrained",
                      lhs.txt))
     }
-    
+
     names.lhs <- setdiff(names.lhs, unlist(lapply(res, all.vars)))
     names.rhs <- setdiff(names.rhs, as.character(res[[1]]))
     rels <- c(rels, structure(res[2], names=as.character(res[[1]])))
@@ -342,7 +344,7 @@ constrain <- function(f, ..., formulae=NULL, names=argnames(f),
   free.i <- match(free, names) # index in full variables
   free.j <- match(free, final) # index in given variables.
 
-  ## Targets are processed in the same order as given by formulae. 
+  ## Targets are processed in the same order as given by formulae.
   target.i <- match(names(rels), names)
 
   pars.out <- rep(NA, length(names))
@@ -389,7 +391,7 @@ constrain <- function(f, ..., formulae=NULL, names=argnames(f),
 ## How do I use this to allow recasting to alternative bases?
 ## Forward definitions for just the diversification rate are
 ##   foo(f, r0 ~ lambda0 - mu0, r1 ~ lambda1 - mu1)
-## and for both diversification and relative extinction    
+## and for both diversification and relative extinction
 ##   foo(f,
 ##       r0 ~ lambda0 - mu0, r1 ~ lambda1 - mu1,
 ##       e0 ~ mu0 / lambda0, e1 ~ mu1 / lambda1)
@@ -481,7 +483,7 @@ constrain.i <- function(f, p, i.free) {
 do.constrain <- function(lik, trans, argnames) {
   if ( inherits(lik, "constrained") )
     stop("Cannot use do.constrain() with a constrained function")
-  
+
   ret <- function(pars, ..., pars.only=FALSE) {
     if ( pars.only )
       trans(pars)
@@ -502,7 +504,7 @@ constrain.i2 <- function(f, p, i.free) {
     argnames.constrained <- argnames <- NULL
   } else {
     argnames.constrained <- argnames[i.free]
-  
+
     if ( length(p) != length(argnames) )
       stop(sprintf("Incorrect parameter length: expected %d, got %d",
                    length(argnames), length(p)))
@@ -565,9 +567,9 @@ do.mle.search.optim <- function(func, x.init, control, lower, upper) {
 
   ans <- optim(x.init, func, method=optim.method,
                control=control.optim, lower=lower, upper=upper)
-  names(ans)[names(ans) == "value"] <- "lnLik"  
+  names(ans)[names(ans) == "value"] <- "lnLik"
   ans$optim.method <- optim.method
-  
+
   if ( ans$convergence != 0 )
     warning("Convergence problems in find.mle (optim): ",
             tolower(ans$message))
@@ -594,7 +596,7 @@ do.mle.search.subplex <- function(func, x.init, control, lower, upper) {
   if ( ans$convergence != 0 )
     warning("Convergence problems in find.mle (subplex): ",
             tolower(ans$message))
-  
+
   ans
 }
 
