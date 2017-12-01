@@ -51,7 +51,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=60, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	# if(!(hasArg(clearHalo))){
 	# 	cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
@@ -305,7 +305,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 			# }
 		# points(xx, yy, type="l", col="black", lwd=2)
 		if(RAD ==5){
-				points(xx5, yy5halo, col="deepskyblue", cex=2, pch=19)
+				points(xx5, yy5halo, col="navyblue", cex=2, pch=19)
 				}
 		if(RAD == 20){
 			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
@@ -317,14 +317,14 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
 			}
 		if(RAD ==95){
-				points(xx95, yy95halo, col="deepskyblue", cex=2, pch=19)
+				points(xx95, yy95halo, col="cadetblue1", cex=2, pch=19)
 				}
 		if(RAD=="all"){
-			points(xx95, yy80halo, col="navyblue", cex=1.75, pch=19)
+			points(xx95, yy95halo, col="navyblue", cex=1.75, pch=19)
 			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
-			points(xx5, yy20halo, col="cadetblue1", cex=1.75, pch=19)
+			points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
 			}
 		# if(plotCompon){
 			# xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
