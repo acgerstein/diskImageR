@@ -51,7 +51,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=60, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	# if(!(hasArg(clearHalo))){
 	# 	cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
@@ -227,7 +227,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-.singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 60, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
+.singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
 	temp0 <- data[[i]]
 	startX <- which(temp0[,1] > dotedge+0.5)[1]
 	stopX <- which(temp0[,1] > maxDist - 0.5)[1]
@@ -248,7 +248,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	ic50 <- ML[[i]]$par[2]
 	#changed
 	asym <- ML[[i]]$par[1]
-	plot(data[[i]][1:min(which(data[[i]][,1]>maxDist))]$distance, c(data[[i]][1:min(which(data[[i]][,1]>maxDist))]$x-min(data[[i]][1:min(which(data[[i]][,1]>maxDist))]$x)), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
 	yyplot <- yy
 	yyplot[yyplot < 0] <- 0
@@ -315,7 +315,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mtext(label, side=3, cex=0.6)
 }
 
-.plotParam <- function(projectName, ML , ML2, ymax=60, dotedge = 3.4, maxDist= 30, xplots = 4, height = 5, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
+.plotParam <- function(projectName, ML , ML2, ymax=ymax, dotedge = dotedge, maxDist= maxDist, xplots = 4, height = 5, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
 	data <- eval(parse(text=projectName))
 	if(is.na(plotSub[1])){
 		plotSub <- 1:length(data)
