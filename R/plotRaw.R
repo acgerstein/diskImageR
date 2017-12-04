@@ -51,7 +51,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 	photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 	if(needMap){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-		 map <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
+		 map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
 		 drugPos <- c()
  	 		for(m in photoNames){
 					drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
