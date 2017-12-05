@@ -68,7 +68,6 @@ if(standType=="one"){
 	ML2 <- eval(parse(text=ML2))
 
 	if(standType == "one"){
-		print("here")
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 		clearHaloData <- data[[clearHalo]]
@@ -178,7 +177,7 @@ if(standType == "indiv"){
 
 #Determine the slope
 
-.findSlope <- function(data, ML, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35){
+.findSlope <- function(data, ML, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -268,7 +267,7 @@ if(standType == "indiv"){
 	 return(param)
 	}
 
-	.findRAD <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
+	.findRAD <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
 		startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
