@@ -305,11 +305,11 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 				points(xx95, yy95halo, col="cadetblue1", cex=2, pch=19)
 				}
 		if(RAD=="all"){
-			points(xx95, yy95halo, col="navyblue", cex=1.75, pch=19)
+			# points(xx95, yy95halo, col="navyblue", cex=1.75, pch=19)
 			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
 			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
-			points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
+			# points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
 			}
 		}
 	mtext(label, side=3, cex=0.6)
