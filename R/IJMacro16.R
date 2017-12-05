@@ -172,7 +172,7 @@ function(workingDir, folderLoc, experAbbr){
 	tList
 	}
 
-.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 40) {
+.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 60) {
 	currDir <- getwd()
 	# print(currDir)
 	getData <- function(i, newList, names) {
