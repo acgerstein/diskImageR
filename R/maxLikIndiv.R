@@ -22,6 +22,7 @@
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
+#' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
 #' single logistic ('ML'):
@@ -51,7 +52,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE){
 	options(warn=-1)
 	# if(!(hasArg(clearHalo))){
 	# 	cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
