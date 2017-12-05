@@ -159,14 +159,13 @@ for (i=0; i<fileList.length; i++){
 	setMinAndMax(50, 250);
 
 	area = getResult("Area", 0);
-	print(area);
 //	area = List.get("area");
 	discDiam = 2*sqrt(area/3.1412);
 	//the next line is just for debugging
      //	knownDiam = 6;
 	//	print(discDiam);
 	convert = discDiam/knownDiam;
-	print(convert);
+
 	
 //walk through each of the 16 disks
 

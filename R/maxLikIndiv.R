@@ -68,11 +68,25 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 
 	data <- eval(parse(text=projectName))
+	if(needMap){
+		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		#will need to add a loop here to pull up the different maps if there are multiple photos
+		mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
+		 nameVector <- "addDrug"
+	}
+
+
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
 		else {label <- rep("", length(data))}
 		}
-	else {label <- nameVector}
+	else {
+		if(needMap){
+			label <- paste(names(data), map$drugs[c(1, 10:16, 2:9)], sep="-")
+		}
+		else label <- nameVector
+	}
 
 	# if (!is.logical(standardLoc)){
 	# 	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
