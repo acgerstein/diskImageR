@@ -32,10 +32,13 @@
 
 
 createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", standType = "one"){
+if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
 		clearHalo <- as.numeric(cont)
+		}
 	}
+
 	data <- eval(parse(text=projectName))
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
@@ -63,7 +66,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	ML2 <- paste(projectName, ".ML2", sep="")
 	ML <- eval(parse(text=ML))
 	ML2 <- eval(parse(text=ML2))
-	
+
 	if(standType == "one"){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
