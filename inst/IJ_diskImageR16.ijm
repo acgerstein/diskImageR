@@ -158,7 +158,7 @@ for (i=0; i<fileList.length; i++){
 	run("8-bit");
 	setMinAndMax(50, 250);
 
-	area = List.set("area", getResult("Area", 0));
+	area = getResult("Area", 0);
 	print(area);
 //	area = List.get("area");
 	discDiam = 2*sqrt(area/3.1412);
