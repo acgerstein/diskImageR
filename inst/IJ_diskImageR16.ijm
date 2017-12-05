@@ -102,7 +102,7 @@ for (i=0; i<fileList.length; i++){
 	name = getTitle;
 
 	run("Set Measurements...", "area mean centroid redirect=None decimal=0");
-  run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
+     run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	findDisk(getTitle);
 	selectWindow(getTitle);
@@ -158,12 +158,15 @@ for (i=0; i<fileList.length; i++){
 	run("8-bit");
 	setMinAndMax(50, 250);
 
-	area = List.get("area");
+	area = List.set("area", getResult("Area", 0));
+	print(area);
+//	area = List.get("area");
 	discDiam = 2*sqrt(area/3.1412);
 	//the next line is just for debugging
-//	knownDiam = 6;
+     //	knownDiam = 6;
 	//	print(discDiam);
 	convert = discDiam/knownDiam;
+	print(convert);
 	
 //walk through each of the 16 disks
 
