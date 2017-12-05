@@ -44,11 +44,8 @@ if(standType=="one"){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
 		 print(mapDir)
 		 map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-		 drugPos <- c()
- 	 		for(m in photoNames){
-					drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
-					}
-		nameVector <- "addDrug"
+		 print(map)
+		 nameVector <- "addDrug"
 	}
 
 
