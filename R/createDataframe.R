@@ -39,17 +39,14 @@ if(standType=="one"){
 		clearHalo <- as.numeric(cont)
 		}
 	}
+	data <- eval(parse(text=projectName))
 	if(needMap){
 		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-		 print(mapDir)
-		 map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-		 print(map)
+		#will need to add a loop here to pull up the different maps if there are multiple photos
+		mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
 		 nameVector <- "addDrug"
 	}
-
-
-	data <- eval(parse(text=projectName))
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
 	newdir <- file.path(getwd(), "parameter_files")
