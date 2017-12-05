@@ -143,7 +143,6 @@ if(standType == "indiv"){
 	if (!is.logical(nameVector)){
 		if(needMap){
 			#figure this out
-			line <- paste(names(data), drugPos, sep="-")
 			df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
 			}
 			else{
