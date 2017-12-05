@@ -182,7 +182,7 @@ if(standType == "indiv"){
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(temp0$x)
+	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
