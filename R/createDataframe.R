@@ -63,7 +63,8 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	ML2 <- paste(projectName, ".ML2", sep="")
 	ML <- eval(parse(text=ML))
 	ML2 <- eval(parse(text=ML2))
-	if(standType = "one"){
+	
+	if(standType == "one"){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 		clearHaloData <- data[[clearHalo]]
@@ -103,7 +104,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, 
 	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(slope, digits=1))
 }
 
-if(standType = "indiv"){
+if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
@@ -146,7 +147,7 @@ if(standType = "indiv"){
 
 	names(df)[3] <- typeName
 
-	if(standType = "one"){
+	if(standType == "one"){
 	df <- df[order(df$line),]
 	df$FoG80[df$FoG80 >1] <- 1
 	df$FoG50[df$FoG50 >1] <- 1
@@ -177,8 +178,8 @@ if(standType = "indiv"){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	if(standType = "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	if(standType = "indiv") data[[i]]$x <- data[[i]]$x -min(temp0$x)
+	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
+	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(temp0$x)
 
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
