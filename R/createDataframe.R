@@ -68,6 +68,7 @@ if(standType=="one"){
 	ML2 <- eval(parse(text=ML2))
 
 	if(standType == "one"){
+		print("here")
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 		clearHaloData <- data[[clearHalo]]
