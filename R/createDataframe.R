@@ -9,6 +9,7 @@
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
 #' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
+#' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE"
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -31,13 +32,24 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", standType = "one"){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one"){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
 		clearHalo <- as.numeric(cont)
 		}
 	}
+	if(needMap){
+		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
+		 drugPos <- c()
+ 	 		for(m in photoNames){
+					drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
+					}
+		nameVector <- "addDrug"
+	}
+
 
 	data <- eval(parse(text=projectName))
 	df <- data.frame()
@@ -134,10 +146,16 @@ if(standType == "indiv"){
 		}
 	}
 	if (!is.logical(nameVector)){
-		line <- nameVector
-		names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
-		df <- data.frame(names=names, line=line, df)
-		}
+		if(nameVector=="addDrug"){
+			line <- paste(names(data), drugPos, sep="-")
+			df <- data.frame(names=names, line=line, df)
+			}
+			else{
+				line <- nameVector
+				names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
+				df <- data.frame(names=names, line=line, df)
+			}
+	}
 
 	if (typeVector){
 			type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
