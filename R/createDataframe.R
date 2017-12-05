@@ -40,9 +40,9 @@ if(standType=="one"){
 		}
 	}
 	if(needMap){
-		print("here")
 		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 print(mapDir)
 		 map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
 		 drugPos <- c()
  	 		for(m in photoNames){
