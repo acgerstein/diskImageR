@@ -172,7 +172,7 @@ function(workingDir, folderLoc, experAbbr){
 	tList
 	}
 
-.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 60) {
+.readInTop <-function(directoryPath, newList = list(), numDig=30, numTop = 20) {
 	currDir <- getwd()
 	# print(currDir)
 	getData <- function(i, newList, names) {
@@ -186,15 +186,15 @@ function(workingDir, folderLoc, experAbbr){
 			lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 			names(lines) <- c("x", "distance")
 			numPts <- length(lines$distance)/180
-			newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts+1])
+			newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts])
 		  start <- seq(1, length(lines$distance), by=length(lines$distance)/180)
 		  for(j in 2:179){
 		 	 newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
 		  }
 		 names(newd)[3:180] <- paste0("L",2:179)
 
-		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(150-numTop):150]))
-			#the 25 comes from the IJ16 macro
+		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
+			#the 30 comes from the IJ16 macro
 			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*30/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
 			temp <- dir(directoryPath)[i]
@@ -208,6 +208,32 @@ function(workingDir, folderLoc, experAbbr){
 	findMin <- c()
 	getData(i, newList, names)
 }
+
+#testing what lines to keep (take out eventually)
+lines <- read.table("imageJ_out/disk16/ATCC25922_2.txt", sep="\t", header=TRUE, row.names=1)
+names(lines) <- c("distance", "x")
+numPts <- length(lines$distance)/180
+newd <- data.frame(x = unique(lines$distance), L1 = lines$x[1:numPts])
+start <- seq(1, length(lines$distance), by=length(lines$distance)/180)
+for(j in 2:179){
+ newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
+}
+names(newd)[3:180] <- paste0("L",2:179)
+
+par(mfrow=c(4, 2), mar=c(1, 1, 1, 1), oma=c(3, 3, 1, 1))
+for(numTop in c(10, 20, 30, 40, 50, 60, 70, 80)){
+	aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
+	plot(newd[,1], aveSorted, xaxt="n", yaxt="n", ylim=c(0, 250), main = paste0("numTop = ", numTop))
+	abline(v=80)
+	# plot(newd[,1]/7.9667, aveSorted, xaxt="n", yaxt="n", ylim=c(0, 250), main = paste0("numTop = ", numTop))
+	if(numTop %in% c(10, 30, 50, 70)) axis(2, las=2)
+	else axis(2, labels=FALSE)
+	if(numTop > 60) axis(1)
+	else axis(1, labels=FALSE)
+}
+
+sort(newd[80, 2:180])
+hist(newd[80, 2:180])
 
 .load.data <-
 function(filename) {
