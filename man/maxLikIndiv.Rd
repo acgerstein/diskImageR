@@ -5,7 +5,7 @@
 \title{Maximum Likelihood Inference}
 \usage{
 maxLikIndiv(projectName, clearHalo, diskDiam = 6, maxDist = 30,
-  standardLoc = 2.5, ymax = 125, xplots = 5, height = 8, width = 8,
+  standardLoc = 2.5, ymax = 200, xplots = 5, height = 8, width = 8,
   FoG = 20, RAD = "all", needML = TRUE, popUp = TRUE,
   nameVector = TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE,
   savePDF = TRUE, plotSub = NA, plotCompon = FALSE)
