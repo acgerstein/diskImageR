@@ -24,7 +24,7 @@
 #' @export
 
 IJMacro16 <-
-function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
+function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("CIP5", "S10", "FOX30", "NA30", "CT10", "IPM10", "AMC30", "CTX30", "F300", "TE30", "CAZ30", "C30", "SXT25", "CPD10", "AM10", "ATM30")){
 	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
@@ -131,7 +131,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 #	assign(projectName, temp, envir=	diskImageREnv)
 	assign(projectName, temp, inherits=TRUE)
 # cat("Assigning drug to disk coordinates")
-.getCoordinates(projectName)
+.getCoordinates(projectName, drugs=drugs)
 # cat("coordinates set")
 	# dfNA <- .saveAveLine(temp)
 	 cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
