@@ -250,7 +250,8 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	#changed
 	# data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	temp0$x <- temp0$x -min(temp0$x)
-	# data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5) #why is this here?
+	print(min(temp0$x))
+
 
 	xx <- seq(log(temp0$distance[1]), log(max(temp0[,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
