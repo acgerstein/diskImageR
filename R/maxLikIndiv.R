@@ -62,7 +62,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 
 	data <- eval(parse(text=projectName))
-	fullData <- data
+
 	if(needMap){
 		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		#will need to add a loop here to pull up the different maps if there are multiple photos
@@ -214,17 +214,12 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 }
 
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
-	
+
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+	minD <- min(data[[i]][startX:stopX, "x")
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
-
-
-	startXD <- which(fullData[[i]][,1] > dotedge+0.5)[1]
-	stopXD <- which(fullData[[i]][,1] > maxDist - 0.5)[1]
-	minD <- min(fullData[[i]][startXD:stopXD, "x"])
-	print(minD)
 
 	xx <- seq(log(data[[i]]$distance[1]), log(max(temp0[,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
@@ -237,9 +232,10 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	ic50 <- ML[[i]]$par[2]
 	#changed
 	asym <- ML[[i]]$par[1]
-	plot(fullData[[i]][1:stopX, "distance"], c(fullData[[i]][1:stopX, "x"] - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 
-	# plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
+
+ # plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
 	yyplot <- yy
 	yyplot[yyplot < 0] <- 0
