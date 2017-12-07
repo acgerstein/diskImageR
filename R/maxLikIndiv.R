@@ -54,13 +54,6 @@
 
 maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE){
 	options(warn=-1)
-	# if(!(hasArg(clearHalo))){
-	# 	cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
-	# 	clearHalo <- as.numeric(cont)
-	# }
-	# if(!FoG %in% c(80, 50, 20)){
-	# 	stop("Current suppported FoG values = 80, 50, 20, 5")
-	# 	}
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
 		}
@@ -69,6 +62,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 
 	data <- eval(parse(text=projectName))
+	fullData <- data
 	if(needMap){
 		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		#will need to add a loop here to pull up the different maps if there are multiple photos
@@ -76,7 +70,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
 		 nameVector <- "addDrug"
 	}
-
 
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
@@ -89,14 +82,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		else label <- nameVector
 	}
 
-	# if (!is.logical(standardLoc)){
-	# 	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-	# 	stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-	# 	}
-	# else{
-	# 	stand <- rep(0, length(data))
-	# 	}
-  #
 	dotedge <- diskDiam/2+0.4
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
@@ -107,7 +92,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
 		cat("\nStatus of double logistic ML: ")
 		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=20)
-		# assign(paste(projectName, ".ML2", sep=""), ML2, envir=globalenv())
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 	}
@@ -120,17 +104,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		}
 
 	if(plotParam){
-	#   # clearHaloData <- data[[clearHalo]]
-	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-	# 	startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-	# 	stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
-	# 	clearHaloData <- clearHaloData[startX:stopX, 1:2]
-	# 	clearHaloData$x <- clearHaloData$x + stand[clearHalo]
-	# 	clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
-	# 	clearHaloStand <- clearHaloData[1,2]
-
-		 # .plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
-
 		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp,  savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
@@ -188,9 +161,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
-	#changed this
-	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)  #the micel only fits when it goes down to 0
-	# data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
@@ -243,17 +214,19 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 }
 
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
-	temp0 <- data[[i]]
-	startX <- which(temp0[,1] > dotedge+0.5)[1]
-	stopX <- which(temp0[,1] > maxDist - 0.5)[1]
-	temp0 <- temp0[startX:stopX, 1:2]
-	#changed
-	# data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	temp0$x <- temp0$x -min(temp0$x)
-	print(min(temp0$x))
+	print(min(data[[i]]$x))
+	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+	data[[i]] <- data[[i]][startX:stopX, 1:2]
+	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
 
-	xx <- seq(log(temp0$distance[1]), log(max(temp0[,1])), length=200)
+	startXD <- which(fullData[[i]][,1] > dotedge+0.5)[1]
+	stopXD <- which(fullData[[i]][,1] > maxDist - 0.5)[1]
+	minD <- min(fullData[[i]][startXD:stopXD, "x"])
+	print(minD)
+
+	xx <- seq(log(data[[i]]$distance[1]), log(max(temp0[,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
 	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
@@ -264,7 +237,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	ic50 <- ML[[i]]$par[2]
 	#changed
 	asym <- ML[[i]]$par[1]
-	plot(data[[i]][1:stopX, "distance"], c(data[[i]][1:stopX, "x"] - min(temp0$x)), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(fullData[[i]][1:stopX, "distance"], c(fullData[[i]][1:stopX, "x"] - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 
 	# plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
