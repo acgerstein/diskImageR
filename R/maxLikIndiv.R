@@ -217,7 +217,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
-	minD <- min(data[[i]][startX:stopX, "x")
+	minD <- min(data[[i]][startX:stopX, "x"])
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
