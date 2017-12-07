@@ -221,7 +221,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
-	xx <- seq(log(data[[i]]$distance[1]), log(max(temp0[,1])), length=200)
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
 	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
@@ -252,7 +252,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		useAsym <- "FALSE"
 	}
 
-	xx <- seq(log(temp0$distance[1]), log(max(temp0[,1])), length=200)
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	xx95 <- exp(xx[which.max(yyplot> asym * 0.05)])
 	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])
 	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])
@@ -263,7 +263,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	}
 
 	if(length(xx)<1){
-		xx <- seq(log(temp0$distance[1]), log(max(temp0[,1])), length=200)
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	}
 
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
