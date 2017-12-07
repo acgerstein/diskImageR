@@ -214,6 +214,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 }
 
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
+  temp0 <- data[[i]]
 
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -233,7 +234,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	#changed
 	asym <- ML[[i]]$par[1]
 
-	plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
+	plot(temp0$distance, c(temp0$x - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 
  # plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
