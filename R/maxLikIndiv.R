@@ -64,12 +64,24 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	data <- eval(parse(text=projectName))
 
 	if(needMap){
-		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-		#will need to add a loop here to pull up the different maps if there are multiple photos
-		mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-		map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-		 nameVector <- "addDrug"
-	}
+		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
+		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		 drugPos <- c()
+			for(m in photoNames){
+				temp <- subset(map, photoName == m)
+				drugPos <- append(drugPos, temp$drug[as.numeric(sort(as.character(temp$XYpos)))])
+			}
+ 		nameVector <- "addDrug"
+		}
+  #
+	# if(needMap){
+	# 	photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+	# 	#will need to add a loop here to pull up the different maps if there are multiple photos
+	# 	mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+	# 	map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
+  #
+	# }
 
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
@@ -77,7 +89,8 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		}
 	else {
 		if(needMap){
-			label <- paste(names(data), map$drugs[c(1, 10:16, 2:9)], sep="-")
+			# label <- paste(names(data), map$drugs[c(1, 10:16, 2:9)], sep="-")
+			label <- paste(names(data), drugPos, sep="-")
 		}
 		else label <- nameVector
 	}
