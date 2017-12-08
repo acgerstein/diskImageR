@@ -57,23 +57,8 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 				temp <- subset(map, photoName == m)
 				drugPos <- append(drugPos, temp$drug[as.numeric(sort(as.character(temp$XYpos)))])
 			}
+ 		}
 
-				# drugPos <- append(drugPos, mapList[[i]]$drugs[as.numeric(sort(as.character(mapList[[i]]$XYpos)))])
- 			}
-			# 			readMaps(mapList, i+1)
-			# 		}
-			# }
-			# i <- 1
-			# maps <- readMaps(mapList, i)
-     #
-		 # else{
-			#  photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-			# mapList <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-		 # 	drugPos <- c()
- 	 		# for(m in photoNames){
-			# 		drugPos <- append(drugPos, map$drugs[as.numeric(sort(as.character(map$XYpos)))])
-			# 		}
-	# }
 	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 	standards <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 	convert <- unlist(lapply(data, function(x) 40/length(x[,1])))

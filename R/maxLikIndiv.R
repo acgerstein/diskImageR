@@ -270,13 +270,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
 	# yy <- (yy+min(data[[i]]$x))
 	yy[yy < 0] <- 0
-	if (slope >1){
+	# if (slope >1){
 		xx2 <- c(xx[1], xx, xx[length(xx)])
 		yy2 <- c(0, yy, 0)
-		# if(plotFoG){
-			# polygon(xx2, yy2, density=15, col="red")
-			# }
-		# points(xx, yy, type="l", col="black", lwd=2)
 		if(RAD ==5){
 				points(xx5, yy5halo, col="navyblue", cex=2, pch=19)
 				}
@@ -299,7 +295,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
 			# points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
 			}
-		}
+		# }
 	mtext(label, side=3, cex=0.6)
 }
 
