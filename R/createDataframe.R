@@ -215,15 +215,18 @@ else{
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
 	xxmid <- which.max(exp(xx) > xcross)
 	print(i)
-	if (maxY<20 | (xxmid -10)  < 1){
+	if(is.na(maxY)) slope <- 0
+	else{
+		if (maxY<20 | (xxmid -10)  < 1){
 			xxSlope <- data[[i]]$distance[(maxY-5):maxY]
 			yySlope <- data[[i]]$x[(maxY-5):maxY]
 		}
-	if ((xxmid-10) > 1){
+	else{
 		xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		yySlope <- yy[(xxmid-10):(xxmid+10)]
 		}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+}
 	return(slope)
 }
 
