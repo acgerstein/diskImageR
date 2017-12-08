@@ -242,22 +242,28 @@ function(filename) {
    d
  }
 
- .getCoordinates <- function(projectName, drugs=c("CIP5", "S10", "CTX30", "AMC30", "CT10", "JPM10", "NA30", "CAZ30", "F300", "TE30", "FOX30", "C30", "SXT25", "CPD10", "AM10", "ATM30")){
+ .getCoordinates <- function(projectName, ...){
    data <- eval(parse(text=projectName))
    d <- data.frame()
    d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "_")[[1]][2]))
    photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 	 cat("Assigned drug coordinates maps to ")
-	 for(m in photoNames){
-     fileFolder <- projectName
+    fileFolder <- projectName
     mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
-     map <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
-     XYpos <- c(order(map[1:4, "X"]), order(map[5:8, "X"])+4, order(map[9:12, "X" ])+8, order(map[13:16, "X" ])+12)
-		 temp <- data.frame(XYpos, drugs)
-     map <- data.frame(map, temp[order(temp$XYpos),])
-     write.table(map, file.path(mapDir, paste0(m, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
-		 assign(paste(m, "map", sep="."), map, inherits=TRUE)
-		 cat(paste0("\t", paste(m, "map", sep=".")))
+		mapList <- list()
+		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		i <- 0
+		for (m in photoNames){
+			i <- i +1
+			mapList[[i]] <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
+			mapList[[i]]$XYpos <- c(order(mapList[[i]][1:4, "X"]), order(mapList[[i]][5:8, "X"])+4, order(mapList[[i]][9:12, "X" ])+8, order(mapList[[i]][13:16, "X" ])+12)
+			mapList[[i]]$drug <- drug
+			mapList[[i]] <- mapList[[i]][order(mapList[[i]]$XYpos),])
+		}
+		 map <- do.call(c, unlist(mapList, recursive=FALSE))
+     write.table(map, file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
+		 assign(paste(projectName, "map", sep="."), map, inherits=TRUE)
+		 cat(paste0("\t", paste(projectName, "map", sep=".")))
      }
    }
 
