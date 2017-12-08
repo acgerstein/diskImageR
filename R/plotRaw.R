@@ -109,7 +109,7 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			}
 		}
 		if(numpages == 2){
-			if (i >= xplots*yplots-xplots+1 | i < xplots*yplots+1){
+			if (i >= xplots*yplots-xplots+1 & i < xplots*yplots+1){
 				axis(1, cex.axis=cexX, at=c(0, 10, 20, 30, 40), labels=c(0, 10, 20, 30, 40))
 			}
 			if (i >= 2*xplots*yplots-xplots+1){
