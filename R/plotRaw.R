@@ -48,24 +48,18 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 			}
 		}
 	data <- eval(parse(text=projectName))
-
 	if(needMap){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-			mapList <- list()
-			# readMaps <- function(mapList, i){
-			# 	 if(i > length(dir(mapDir))){
-			# 		 names(mapList) <- names(data)
-			# 		 return(mapList)
-			# 	 }
-			# 	 else{
-			photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-			for (m in photoNames) mapList[[m]] <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
-			drugPos <- c()
+		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
+		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		 drugPos <- c()
 			i <- 0
 			for(m in photoNames){
 				i <- i+1
-				drugPos <- append(drugPos, mapList[[i]]$drugs)
+				temp <- subset(map, photoName == m)
+				drugPos <- append(drugPos, temp$drugs[as.numeric(sort(as.character(temp$XYpos)))])
 			}
+
 				# drugPos <- append(drugPos, mapList[[i]]$drugs[as.numeric(sort(as.character(mapList[[i]]$XYpos)))])
  			}
 			# 			readMaps(mapList, i+1)

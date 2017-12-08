@@ -128,12 +128,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 		}
 	cat("\a")
 	assign(projectName, temp, inherits=TRUE)
-cat("Assigning drug to disk coordinates")
+# cat("Assigning drug to disk coordinates")
 .getCoordinates(projectName, drugs=drugs)
-print(map)
 	 cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
-	# write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
-	# return(get(projectName, envir=diskImageREnv))
 	}
 
 .saveAveLine <- function(L){
@@ -240,7 +237,6 @@ function(filename) {
  }
 
  .getCoordinates <- function(projectName, drugs){
-	 print(drugs)
    data <- eval(parse(text=projectName))
    d <- data.frame()
    d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "_")[[1]][2]))
@@ -254,6 +250,7 @@ function(filename) {
 		for (m in photoNames){
 			i <- i +1
 			mapList[[i]] <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
+			mapList[[i]]$photoName <- rep(m, 16)
 			mapList[[i]]$XYpos <- c(order(mapList[[i]][1:4, "X"]), order(mapList[[i]][5:8, "X"])+4, order(mapList[[i]][9:12, "X" ])+8, order(mapList[[i]][13:16, "X" ])+12)
 			mapList[[i]]$drug <- drugs
 			mapList[[i]] <- mapList[[i]][order(mapList[[i]]$XYpos),]
@@ -261,7 +258,7 @@ function(filename) {
 		 map <- do.call(rbind.data.frame, mapList)
      write.table(map, file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
 		 assign(paste(projectName, "map", sep="."), map, inherits=TRUE)
-		 cat(paste0("\t", paste(projectName, "map", sep=".")))
+		 cat(paste0(" ", paste(projectName, "map", sep=".")))
      }
 
 
