@@ -41,12 +41,16 @@ if(standType=="one"){
 	}
 	data <- eval(parse(text=projectName))
 	if(needMap){
-		photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-		#will need to add a loop here to pull up the different maps if there are multiple photos
-		mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-		map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-		 nameVector <- "addDrug"
-	}
+		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
+		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
+		 drugPos <- c()
+			for(m in photoNames){
+				temp <- subset(map, photoName == m)
+				drugPos <- append(drugPos, temp$drug[as.numeric(sort(as.character(temp$XYpos)))])
+			}
+ 		}
+
 	df <- data.frame()
 	dotedge <- diskDiam/2 + 0.4
 	newdir <- file.path(getwd(), "parameter_files")
@@ -142,7 +146,9 @@ if(standType == "indiv"){
 	}
 	if (!is.logical(nameVector)){
 		if(needMap){
-			df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
+			label <- paste(names(data), drugPos, sep="-")
+			# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
+			df <- data.frame(line=paste(names(data)), drug = drugPos, df)
 			}
 			else{
 				line <- nameVector
