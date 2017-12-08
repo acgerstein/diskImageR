@@ -14,6 +14,8 @@ function makeLineE(centerX, centerY, length, angle) {
 
 function findDisk(file){
 	run("Clear Results");
+	selectWindow(getTitle);
+	alterImageSize(getTitle);
 	run("8-bit");
 	setThreshold(181, 255);
 	run("Convert to Mask");
@@ -24,6 +26,7 @@ function findDisk(file){
 	run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults !=16){
 		print("Trying parameter set 2");
+		run("Clear Results");
 		close();
 		selectWindow(getTitle);
 		run("Revert");
@@ -38,6 +41,7 @@ function findDisk(file){
 	}
 	if (nResults !=16){
 		print("Trying parameter set 3");
+		run("Clear Results");
 		close();
 		selectWindow(getTitle);
 		run("Revert");
@@ -49,6 +53,7 @@ function findDisk(file){
 	}
 	if (nResults !=16){
 		print("Trying parameter set 4");
+		run("Clear Results");
 		close();
 		selectWindow(getTitle);
 		run("Revert");
