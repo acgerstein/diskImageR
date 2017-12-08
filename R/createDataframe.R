@@ -178,9 +178,9 @@ if(standType == "indiv"){
 }
 
 	if(addZOI){
-		df$ZOI20 <- RAD20*2
-		df$ZOI50 <- RAD50*2
-		df$ZOI80 <- RAD80*2
+		df$ZOI20 <- df$RAD20*2
+		df$ZOI50 <- df$RAD50*2
+		df$ZOI80 <- df$RAD80*2
 		df$ZOI20[df$RAD20 ==1] <- 6
 		df$ZOI50[df$RAD50 ==1] <- 6
 		df$ZOI80[df$RAD80 ==1] <- 6
