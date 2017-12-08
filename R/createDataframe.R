@@ -226,7 +226,7 @@ else{
 		yySlope <- data[[i]]$x[(maxY-10):maxY]
 		# xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		# yySlope <- yy[(xxmid-10):(xxmid+10)]
-		# }
+		}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 }
 	return(slope)
