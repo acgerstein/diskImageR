@@ -133,6 +133,12 @@ if(standType == "indiv"){
 	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), slope=round(slope, digits=1))
 }
 
+if(needMap){
+	label <- paste(names(data), drugPos, sep="-")
+	# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
+	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df)
+	}
+else{
 	if (is.logical(nameVector)){
 		if (nameVector){
 			line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
@@ -145,12 +151,6 @@ if(standType == "indiv"){
 		}
 	}
 	if (!is.logical(nameVector)){
-		if(needMap){
-			label <- paste(names(data), drugPos, sep="-")
-			# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
-			df <- data.frame(photo=paste(names(data)), drug = drugPos, df)
-			}
-			else{
 				line <- nameVector
 				names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
 				df <- data.frame(names=names, line=line, df)
@@ -158,11 +158,6 @@ if(standType == "indiv"){
 	}
 
 	if (typeVector){
-			if(needMap){
-				pos <-unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
-				df <- data.frame(df, pos, param)
-			}
-			else{
 				type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
 				df <- data.frame(df, type, param)
 			}
@@ -171,9 +166,8 @@ if(standType == "indiv"){
 			df$type <- 1
 			df <- data.frame(df, param)
 		}
-
 	names(df)[3] <- typeName
-
+}
 	if(standType == "one"){
 	df <- df[order(df$line),]
 	df$FoG80[df$FoG80 >1] <- 1
