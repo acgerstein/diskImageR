@@ -137,7 +137,7 @@ if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
 	# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
 	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
-	print(df)
+	df <- df[order(df$photo, as.numeric(df$pos)),]
 	}
 else{
 	if (is.logical(nameVector)){
@@ -188,9 +188,9 @@ else{
 		df$ZOI20[df$RAD20 ==1] <- 6
 		df$ZOI50[df$RAD50 ==1] <- 6
 		df$ZOI80[df$RAD80 ==1] <- 6
-		df$ZOI20[df$slope < 15] <- 6
-		df$ZOI50[df$slope < 15] <- 6
-		df$ZOI80[df$slope < 15] <- 6
+		df$ZOI20[df$slope < 16] <- 6
+		df$ZOI50[df$slope < 16] <- 6
+		df$ZOI80[df$slope < 16] <- 6
 	}
 	write.csv(df, file=filename, row.names=FALSE)
 

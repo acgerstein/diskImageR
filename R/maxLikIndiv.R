@@ -73,22 +73,12 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 			}
  		nameVector <- "addDrug"
 		}
-  #
-	# if(needMap){
-	# 	photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-	# 	#will need to add a loop here to pull up the different maps if there are multiple photos
-	# 	mapDir <- file.path(getwd(), "disk_coordinates", projectName)
-	# 	map <- read.csv(file.path(mapDir, paste0(photoNames, "_ResultsTable.txt")), sep="\t")
-  #
-	# }
-
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
 		else {label <- rep("", length(data))}
 		}
 	else {
 		if(needMap){
-			# label <- paste(names(data), map$drugs[c(1, 10:16, 2:9)], sep="-")
 			label <- paste(names(data), drugPos, sep="-")
 		}
 		else label <- nameVector
@@ -127,7 +117,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
-	startX <- which(data[[i]][,1] > dotedge+ 0.5)[1]
+	startX <- which(data[[i]][,1] > dotedge+ 0.25)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
@@ -169,7 +159,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 .getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+	startX <- which(data[[i]][,1] > dotedge+0.25)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
@@ -228,7 +218,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
   temp0 <- data[[i]]
 
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+	startX <- which(data[[i]][,1] > dotedge+0.25)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	minD <- min(data[[i]][startX:stopX, "x"])
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
