@@ -53,11 +53,9 @@ plotRaw <- function(projectName, ymin = 0, ymax=250, xmin = 0, xmax = 40, xplots
 		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
 		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		 drugPos <- c()
-			i <- 0
 			for(m in photoNames){
-				i <- i+1
 				temp <- subset(map, photoName == m)
-				drugPos <- append(drugPos, temp$drugs[as.numeric(sort(as.character(temp$XYpos)))])
+				drugPos <- append(drugPos, temp$drug[as.numeric(sort(as.character(temp$XYpos)))])
 			}
 
 				# drugPos <- append(drugPos, mapList[[i]]$drugs[as.numeric(sort(as.character(mapList[[i]]$XYpos)))])
