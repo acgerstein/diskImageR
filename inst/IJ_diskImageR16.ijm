@@ -20,8 +20,9 @@ function findDisk(file){
 	roiManager("reset");
 	roiManager("Show All with labels");
 	roiManager("Show All");
+	print("Trying parameter set 1");
 	run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
-	if (nResults ==0){
+	if (nResults !=16){
 		print("Trying parameter set 2");
 		close();
 		selectWindow(getTitle);
@@ -35,7 +36,7 @@ function findDisk(file){
 		roiManager("Show All");
 		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
-	if (nResults ==0){
+	if (nResults !=16){
 		print("Trying parameter set 3");
 		close();
 		selectWindow(getTitle);
@@ -46,7 +47,7 @@ function findDisk(file){
 		run("Convert to Mask");
 		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
-	if (nResults ==0){
+	if (nResults !=16){
 		print("Trying parameter set 4");
 		close();
 		selectWindow(getTitle);
@@ -61,14 +62,14 @@ function findDisk(file){
 		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
-		print("Disk not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at gerst035@umn.edu for assistance");
+		print("Disks not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at acgerstein@gmail.com for assistance.");
 	}
 	if (nResults ==16){
 		print("All 16 disks successfully identified");
 	}
 
 	if (nResults != 16){
-		print("Unable to identify 16 disks.");
+		print("Unable to identify 16 disks, macro needs to be updated to account for photograph specifics. Email Aleeza at acgerstein@gmail.com for assistance.");
 	}
 }
 
