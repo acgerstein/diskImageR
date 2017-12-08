@@ -209,19 +209,20 @@ else{
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
+
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy<- .curve(ML[[i]]['par'][1]$par[1], ML[[i]]['par'][1]$par[2], ML[[i]]['par'][1]$par[3],xx)
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
 	xxmid <- which.max(exp(xx) > xcross)
+	print(i)
+	if (maxY<20 | (xxmid -10)  < 1){
+			xxSlope <- data[[i]]$distance[(maxY-5):maxY]
+			yySlope <- data[[i]]$x[(maxY-5):maxY]
+		}
 	if ((xxmid-10) > 1){
 		xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		yySlope <- yy[(xxmid-10):(xxmid+10)]
 		}
-if (maxY<20 | (xxmid -10)  < 1){
-		maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
-		xxSlope <- data[[i]]$distance[(maxY-5):maxY]
-		yySlope <- data[[i]]$x[(maxY-5):maxY]
-	}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 	return(slope)
 }
