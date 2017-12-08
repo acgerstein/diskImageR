@@ -137,6 +137,7 @@ if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
 	# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
 	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df)
+	print(df)
 	}
 else{
 	if (is.logical(nameVector)){
@@ -164,7 +165,6 @@ else{
 		}
 	names(df)[3] <- typeName
 }
-
 
 	if(standType == "one"){
 	df <- df[order(df$line),]
