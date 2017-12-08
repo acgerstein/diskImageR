@@ -215,7 +215,7 @@ else{
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
 	xxmid <- which.max(exp(xx) > xcross)
 	print(i)
-	if(is.na(maxY)) slope <- 0
+	if(is.na(maxY) | maxY < 5) slope <- 0
 	else{
 		if (maxY<20 | (xxmid -10)  < 1){
 			xxSlope <- data[[i]]$distance[(maxY-5):maxY]
