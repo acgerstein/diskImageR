@@ -202,7 +202,7 @@ else{
 	}
 
 #Determine the slope
-
+data <- disk16multi
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -210,10 +210,10 @@ else{
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
+	maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
+	abline(v=data[[i]][maxY, 1])
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	# xx <- seq(data[[i]]$distance[1], max(data[[i]][,1]), length=200)
 	yy<- .curve(ML[[i]]['par'][1]$par[1], ML[[i]]['par'][1]$par[2], ML[[i]]['par'][1]$par[3],xx)
-	# yycor <- (yy+min(data[[i]]$x))
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
 	xxmid <- which.max(exp(xx) > xcross)
 	if ((xxmid-10) > 1){
@@ -222,8 +222,8 @@ else{
 		}
 if ((xxmid-10) < 1){
 		maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
-		xxSlope <- data[[i]]$distance[1:maxY]
-		yySlope <- data[[i]]$x[1:maxY]
+		xxSlope <- data[[i]]$distance[(maxY-5):maxY]
+		yySlope <- data[[i]]$x[(maxY-5):maxY]
 	}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 	return(slope)
@@ -314,35 +314,6 @@ if ((xxmid-10) < 1){
 		x20 <- xx[which.max(yy> asym * 0.8)]
 		if (x20 < x50) x20 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
 
-		# if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
-		# else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-    #
-		# if(exp(x50)>1) xx50 <- seq(log(data[[i]]$distance[1]), log(round(exp(x50))), length=200)
-		# else xx50 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-    #
-		# if(exp(x20)>1) xx20 <- seq(log(data[[i]]$distance[1]), log(round(exp(x20))), length=200)
-		# else xx20 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-    #
-		# yy <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-		# yy80 <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx80)
-		# yy50<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx50)
-		# yy20<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx20)
-    #
-		# yy <- (yy+min(data[[i]]$x))
-		# yy[yy < 0] <- 0.1
-		# yy80 <- (yy80+min(data[[i]]$x))
-		# yy80[yy80 < 0] <- 0.1
-		# yy50 <- (yy50+min(data[[i]]$x))
-		# yy50[yy50 < 0] <- 0.1
-		# yy20 <- (yy20+min(data[[i]]$x))
-		# yy20[yy20 < 0] <- 0.1
-    #
-		# id <- order(xx)
-		# id80 <- order(xx80)
-		# id50 <- order(xx50)
-		# id20 <- order(xx20)
-    #
-    #
 		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0))
 
 		 if (exp(param$x80)<1) 	param$x80 <- 1
