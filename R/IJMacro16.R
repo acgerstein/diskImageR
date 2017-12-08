@@ -258,7 +258,7 @@ function(filename) {
 			mapList[[i]]$drug <- drugs
 			mapList[[i]] <- mapList[[i]][order(mapList[[i]]$XYpos),]
 		}
-		 map <- do.call(c, unlist(mapList, recursive=FALSE))
+		 map <- do.call(rbind.data.frame, mapList)
      write.table(map, file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
 		 assign(paste(projectName, "map", sep="."), map, inherits=TRUE)
 		 cat(paste0("\t", paste(projectName, "map", sep=".")))
