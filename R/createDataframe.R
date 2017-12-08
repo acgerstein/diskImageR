@@ -144,7 +144,6 @@ else{
 			line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
 			df <- data.frame(name = names(data), line)
 			}
-
 		if (!nameVector){
 			line <- seq(1, length(data))
 			df <- data.frame(name = names(data), line, df)
@@ -155,8 +154,6 @@ else{
 				names <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
 				df <- data.frame(names=names, line=line, df)
 			}
-	}
-
 	if (typeVector){
 				type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
 				df <- data.frame(df, type, param)
@@ -167,6 +164,8 @@ else{
 		}
 	names(df)[3] <- typeName
 }
+
+
 	if(standType == "one"){
 	df <- df[order(df$line),]
 	df$FoG80[df$FoG80 >1] <- 1
