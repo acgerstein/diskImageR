@@ -62,9 +62,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
 
 	data <- eval(parse(text=projectName))
-
 	if(needMap){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
+		 print(mapDir)
 		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
 		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		 drugPos <- c()
