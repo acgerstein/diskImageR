@@ -254,7 +254,7 @@ function(filename) {
 			i <- i +1
 			mapList[[i]] <- read.csv(file.path(mapDir, paste0(m, "_ResultsTable.txt")), sep="\t")
 			mapList[[i]]$XYpos <- c(order(mapList[[i]][1:4, "X"]), order(mapList[[i]][5:8, "X"])+4, order(mapList[[i]][9:12, "X" ])+8, order(mapList[[i]][13:16, "X" ])+12)
-			mapList[[i]]$drug <- drug
+			mapList[[i]]$drug <- drugs
 			mapList[[i]] <- mapList[[i]][order(mapList[[i]]$XYpos),])
 		}
 		 map <- do.call(c, unlist(mapList, recursive=FALSE))
