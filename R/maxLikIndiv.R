@@ -213,14 +213,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-for(i in 1:16){
-	dotedge <- 4.5
-	maxDist <- 25
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
-	maxOD[i] <- max(data[[i]][1:startX, "x"])
-	startOD[i] <- data[[i]][startX:(startX+10), "x"]
-}
-
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
   temp0 <- data[[i]]
 
