@@ -136,7 +136,7 @@ if(standType == "indiv"){
 if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
 	# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
-	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df)
+	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
 	print(df)
 	}
 else{
@@ -167,18 +167,18 @@ else{
 }
 
 	if(standType == "one"){
-	df <- df[order(df$line),]
-	df$FoG80[df$FoG80 >1] <- 1
-	df$FoG50[df$FoG50 >1] <- 1
-	df$FoG20[df$FoG20 >1] <- 1
-	df$FoG80[df$RAD80 == 0] <- NA
-	df$FoG50[df$RAD50 == 0] <- NA
-	df$FoG20[df$RAD20 == 0] <- NA
-	df$FoG80[df$RAD80 == 1] <- NA
-	df$FoG50[df$RAD50 == 1] <- NA
-	df$FoG20[df$RAD20 == 1] <- NA
+		df <- df[order(df$line),]
+		df$FoG80[df$FoG80 >1] <- 1
+		df$FoG50[df$FoG50 >1] <- 1
+		df$FoG20[df$FoG20 >1] <- 1
+		df$FoG80[df$RAD80 == 0] <- NA
+		df$FoG50[df$RAD50 == 0] <- NA
+		df$FoG20[df$RAD20 == 0] <- NA
+		df$FoG80[df$RAD80 == 1] <- NA
+		df$FoG50[df$RAD50 == 1] <- NA
+		df$FoG20[df$RAD20 == 1] <- NA
 
-	if (removeClear)	df <- df[-clearHalo,]
+		if (removeClear)	df <- df[-clearHalo,]
 }
 
 	if(addZOI){
