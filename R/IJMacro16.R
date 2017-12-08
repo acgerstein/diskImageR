@@ -239,7 +239,7 @@ function(filename) {
    d
  }
 
- .getCoordinates <- function(projectName, ...){
+ .getCoordinates <- function(projectName, drugs){
 	 print(drugs)
    data <- eval(parse(text=projectName))
    d <- data.frame()
