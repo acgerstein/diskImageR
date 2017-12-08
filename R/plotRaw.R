@@ -16,11 +16,11 @@
 #' @param nameVector either a logial value indicating whether to plot the photograph names above the plot; a vector the same length as the number of photographs containing the desired names. Defaults to TRUE.
 #' @param standardLoc a numberic value indicating the location (on the disk) to use to standardize intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The defaul value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately.
 #' @param plotStandardLoc a logical value indicating whether to draw a dashed vertical line at the standardization point that is used in \code{maxLik} and \code{createDataframe}
-
 #' @param showNum a logical value indicating whether to annotate each plot with the photograph number (determined alphabetically from the photograph names). This can be helpful for later functions that require the numerical place of a photograph with a clear halo.
 #' @param popUp a logical value indicating whether to pop up the figure after it has been created
 #' @param overwrite a logical value indicating whether to overwrite existing figures created on the same day for the same project name
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).
+#' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
 
 #' @return A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses
 

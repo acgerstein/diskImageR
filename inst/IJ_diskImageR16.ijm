@@ -23,7 +23,7 @@ function findDisk(file){
 	roiManager("Show All with labels");
 	roiManager("Show All");
 	print("Trying parameter set 1");
-	run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
+	run("Analyze Particles...", "size=700-3200 circularity=0.50-1.00 show=Outlines display exclude add");
 	if (nResults !=16){
 		print("Trying parameter set 2");
 		run("Clear Results");
@@ -37,7 +37,7 @@ function findDisk(file){
 		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
-		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=700-3200 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults !=16){
 		print("Trying parameter set 3");
@@ -49,7 +49,7 @@ function findDisk(file){
 		run("8-bit");
 		setThreshold(81, 255);
 		run("Convert to Mask");
-		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=700-3200 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults !=16){
 		print("Trying parameter set 4");
@@ -64,7 +64,7 @@ function findDisk(file){
 		roiManager("reset");
 		roiManager("Show All with labels");
 		roiManager("Show All");
-		run("Analyze Particles...", "size=700-2500 circularity=0.50-1.00 show=Outlines display exclude add");
+		run("Analyze Particles...", "size=700-3200 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
 		print("Disks not identified, macro needs to be updated to account for photograph specifics.  Email Aleeza at acgerstein@gmail.com for assistance.");
