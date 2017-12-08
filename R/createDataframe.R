@@ -52,7 +52,7 @@ if(standType=="one"){
  		}
 
 	df <- data.frame()
-	dotedge <- diskDiam/2 + 0.4
+	dotedge <- diskDiam/2 + 0.7
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
@@ -126,9 +126,9 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 
-	x80[slope < 5] <- 1
-	x50[slope < 5] <- 1
-	x20[slope < 5] <- 1
+	# x80[slope < 5] <- 1
+	# x50[slope < 5] <- 1
+	# x20[slope < 5] <- 1
 
 	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), slope=round(slope, digits=1))
 }
@@ -204,26 +204,28 @@ else{
 
 #Determine the slope
 
-.findSlope <- function(data, ML, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+.findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
+	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+	data[[i]]$distance <- data[[i]]$distance - dotedge
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+	# xx <- seq(data[[i]]$distance[1], max(data[[i]][,1]), length=200)
 	yy<- .curve(ML[[i]]['par'][1]$par[1], ML[[i]]['par'][1]$par[2], ML[[i]]['par'][1]$par[3],xx)
-	yycor <- (yy+min(data[[i]]$x))
+	# yycor <- (yy+min(data[[i]]$x))
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
 	xxmid <- which.max(exp(xx) > xcross)
 	if ((xxmid-10) > 1){
 		xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		yySlope <- yy[(xxmid-10):(xxmid+10)]
 		}
-	else {
-		xxSlope <- xx[1:(xxmid+10)]
-		yySlope <- yy[1:(xxmid+10)]
+if ((xxmid-10) < 1){
+		maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
+		xxSlope <- data[[i]]$distance[1:maxY]
+		yySlope <- data[[i]]$x[1:maxY]
 	}
 	slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 	return(slope)
