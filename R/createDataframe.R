@@ -161,7 +161,6 @@ else{
 				type <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][typePlace]))
 				df <- data.frame(df, type, param)
 			}
-		}
 	else {
 			df$type <- 1
 			df <- data.frame(df, param)
