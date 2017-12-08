@@ -219,7 +219,7 @@ else{
 		xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		yySlope <- yy[(xxmid-10):(xxmid+10)]
 		}
-if ((xxmid-10) < 1){
+if (maxY<20 | (xxmid -10)  < 1){
 		maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
 		xxSlope <- data[[i]]$distance[(maxY-5):maxY]
 		yySlope <- data[[i]]$x[(maxY-5):maxY]
