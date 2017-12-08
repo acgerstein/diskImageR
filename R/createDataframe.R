@@ -40,6 +40,7 @@ if(standType=="one"){
 		}
 	}
 	data <- eval(parse(text=projectName))
+	print("before map")
 	if(needMap){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
 		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
@@ -88,7 +89,6 @@ if(standType=="one"){
 		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
-		print("here")
 		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
 		FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge,  maxDist = maxDist, clearHaloStand = clearHaloStand, standardLoc = standardLoc)
@@ -119,7 +119,7 @@ if(standType=="one"){
 }
 
 if(standType == "indiv"){
-	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
