@@ -88,8 +88,8 @@ if(standType=="one"){
 		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
-
-		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
+		print("here")
+		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
 		FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge,  maxDist = maxDist, clearHaloStand = clearHaloStand, standardLoc = standardLoc)
 
@@ -135,7 +135,6 @@ if(standType == "indiv"){
 
 if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
-	# df <- data.frame(line=paste(names(data)), drug = map$drugs[c(1, 10:16, 2:9)], df)
 	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
 	df <- df[order(df$photo, as.numeric(df$pos)),]
 	}
@@ -210,7 +209,6 @@ else{
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
-
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	# xx <- seq(data[[i]]$distance[1], max(data[[i]][,1]), length=200)
