@@ -263,7 +263,7 @@ function(filename) {
 		 assign(paste(projectName, "map", sep="."), map, inherits=TRUE)
 		 cat(paste0("\t", paste(projectName, "map", sep=".")))
      }
-   }
+   
 
 #  lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 #  names(lines) <- c("x", "distance")
