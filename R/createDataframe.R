@@ -202,7 +202,6 @@ else{
 	}
 
 #Determine the slope
-data <- disk16multi
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
