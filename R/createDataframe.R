@@ -52,7 +52,7 @@ if(standType=="one"){
  		}
 
 	df <- data.frame()
-	dotedge <- diskDiam/2 + 0.7
+	dotedge <- diskDiam/2 + 0.4
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
