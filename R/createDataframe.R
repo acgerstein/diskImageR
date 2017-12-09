@@ -208,8 +208,8 @@ else{
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
-	maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
-
+	# maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
+	maxY <- which(data[[i]][,2] > (ML[[i]]$par[1]))[1]
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy<- .curve(ML[[i]]['par'][1]$par[1], ML[[i]]['par'][1]$par[2], ML[[i]]['par'][1]$par[3],xx)
 	xcross <- exp(ML[[i]]['par'][1]$par[2])
