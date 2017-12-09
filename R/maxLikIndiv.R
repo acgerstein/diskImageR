@@ -243,7 +243,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	yyplot <- yy
 	yyplot[yyplot < 0] <- 0
 	points(exp(xx), yyplot, type="l", col="red", lwd=3)
-
+	abline(h=ML2[[i]]$par[2]+ML2[[i]]$par[5])
 	useAsym <- "TRUE"
   	yy95halo <- yyplot[which.max(yyplot> asym * 0.05)]
 		yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]
