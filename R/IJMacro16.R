@@ -122,6 +122,8 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	}
 	#cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
 	# cat(paste("\nElements in list '", projectName, "': \n", sep=""))
+	cat("\n")
+	cat("\n Processing data to determine which lines to use: ")
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	if(!length(dir(photoDir))*16 == length(temp)){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
@@ -130,6 +132,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	assign(projectName, temp, inherits=TRUE)
 # cat("Assigning drug to disk coordinates")
 .getCoordinates(projectName, drugs=drugs)
+	cat("\n")
 	 cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	}
 
@@ -177,6 +180,7 @@ function(workingDir, folderLoc, experAbbr){
 			return (newList)
 			}
 		else {
+			cat(".")
 			lines <-  data.frame(.load.data(dir()[i])$x,  .load.data(dir()[i])["distance"])
 			names(lines) <- c("x", "distance")
 			numPts <- length(lines$distance)/180
@@ -241,7 +245,6 @@ function(filename) {
    d <- data.frame()
    d$line <- unlist(lapply(as.character(d$name), function(x) strsplit(x, "_")[[1]][2]))
    photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
-	 cat("Assigned drug coordinates maps to ")
     fileFolder <- projectName
     mapDir <- file.path(getwd(), "disk_coordinates", fileFolder)
 		mapList <- list()
@@ -258,7 +261,10 @@ function(filename) {
 		 map <- do.call(rbind.data.frame, mapList)
      write.table(map, file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), row.names=FALSE, sep="\t")
 		 assign(paste(projectName, "map", sep="."), map, inherits=TRUE)
-		 cat(paste0(" ", paste(projectName, "map", sep=".")))
+		 cat("\n")
+		 cat(paste0("\n Drug coordinates map saved to: ", mapDir, projectName, "_ResultsTable.txt"))
+		 cat(paste0("\n", projectName, ".map has been written to the global environment\n"))
+
      }
 
 
