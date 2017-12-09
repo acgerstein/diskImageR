@@ -87,14 +87,14 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dotedge <- diskDiam/2+0.7
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=20)
+		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100)
 		names(ML) <- names(data)
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
 		cat("\nStatus of double logistic ML: ")
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=20)
+		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100)
 		names(ML2) <- names(data)
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
@@ -212,7 +212,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint
 	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint
 	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
-	print(paste(i, ": ",  mlpoint$par[1]+mlpoint$par[5], sep=""))
 	mlpoint
 }
 
