@@ -134,8 +134,8 @@ if(standType == "indiv"){
 
 if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
-	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), pos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
-	df <- df[order(df$photo, as.numeric(df$pos)),]
+	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), dfPos = 1:length(data), photoPos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
+	df <- df[order(df$photo, as.numeric(df$drug)),]
 	}
 else{
 	if (is.logical(nameVector)){

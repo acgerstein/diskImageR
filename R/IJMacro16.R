@@ -123,7 +123,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	#cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
 	# cat(paste("\nElements in list '", projectName, "': \n", sep=""))
 	cat("\n")
-	cat("\n Processing data to determine which lines to use: ")
+	cat("\n Processing data to determine which lines to use: \n")
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	if(!length(dir(photoDir))*16 == length(temp)){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
@@ -132,8 +132,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	assign(projectName, temp, inherits=TRUE)
 # cat("Assigning drug to disk coordinates")
 .getCoordinates(projectName, drugs=drugs)
-	cat("\n")
-	 cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
+	 cat(paste("\nThe average line from each phogograph has been saved to: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	}
 
 .saveAveLine <- function(L){
@@ -264,7 +263,6 @@ function(filename) {
 		 cat("\n")
 		 cat(paste0("\n Drug coordinates map saved to: ", mapDir, projectName, "_ResultsTable.txt"))
 		 cat(paste0("\n", projectName, ".map has been written to the global environment\n"))
-
      }
 
 
