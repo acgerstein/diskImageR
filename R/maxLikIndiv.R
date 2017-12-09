@@ -84,7 +84,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		else label <- nameVector
 	}
 
-	dotedge <- diskDiam/2+0.4
+	dotedge <- diskDiam/2+0.7
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
 		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=20)
