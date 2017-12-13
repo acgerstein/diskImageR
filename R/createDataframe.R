@@ -125,10 +125,6 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 
-	# x80[slope < 5] <- 1
-	# x50[slope < 5] <- 1
-	# x20[slope < 5] <- 1
-
 	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), slope=round(slope, digits=1))
 }
 
@@ -186,9 +182,9 @@ else{
 		df$ZOI20[df$RAD20 ==1] <- 6
 		df$ZOI50[df$RAD50 ==1] <- 6
 		df$ZOI80[df$RAD80 ==1] <- 6
-		df$ZOI20[df$slope < 16] <- 6
-		df$ZOI50[df$slope < 16] <- 6
-		df$ZOI80[df$slope < 16] <- 6
+		df$ZOI20[df$slope < 1] <- 6
+		df$ZOI50[df$slope < 1] <- 6
+		df$ZOI80[df$slope < 1] <- 6
 	}
 	df <- df[order(df$photo, df$drug),]
 	write.csv(df, file=filename, row.names=FALSE)
