@@ -309,22 +309,25 @@ else{
 		# if(standType == "one") yy <- yy+minD #is this necessary?? I don't think so ...
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 			if(whichX80[1] == 1){
-					if(whichX80[2] == 2) x80 <- 0
-					else x80 <- data[[i]]$distance[whichX80[2]]
+					stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
+					notDisk <- which.max(stillDisk != 1:length(stillDisk))
+					x80 <- data[[i]]$distance[whichX80[notDisk]]
 				}
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 
 		whichX50 <- which(data[[i]]$x > asym * 0.5)
 			if(whichX50[1] == 1){
-					if(whichX50[2] == 2) x50 <- 0
-					else x50 <- data[[i]]$distance[whichX50[2]]
+				stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
+				notDisk <- which.max(stillDisk != 1:length(stillDisk))
+				x50 <- data[[i]]$distance[whichX50[notDisk]]
 				}
 		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
 
 		whichX20 <- which(data[[i]]$x > asym * 0.2)
 			if(whichX20[1] == 1){
-					if(whichX20[2] == 2) x20 <- 0
-					else x20 <- data[[i]]$distance[whichX20[2]]
+				stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
+				notDisk <- which.max(stillDisk != 1:length(stillDisk))
+				x20 <- data[[i]]$distance[whichX20[notDisk]]
 				}
 		if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
 
