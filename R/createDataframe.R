@@ -334,8 +334,8 @@ else{
 
 		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2))
 
-		 # if (param$x80)<1) 	param$x80 <- 0
-		 # if (exp(param$x50)<1)	param$x50 <- 0
-		 # if (exp(param$x20)<1)	param$x20 <- 0
+		 if (param$x80<1 | is.na(param$x80)) 	param$x80 <- 0
+		 if (param$x50<1 | is.na(param$x50))	param$x50 <- 0
+		 if (param$x20<1 | is.na(param$x20))	param$x20 <- 0
 		 return(param)
 		}
