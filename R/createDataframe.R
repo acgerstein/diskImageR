@@ -291,9 +291,9 @@ else{
 
 	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
 
-	 if (exp(param$x80)<1) 	param$x80 <- 1
-	 if (exp(param$x50)<1)	param$x50 <- 1
-	 if (exp(param$x20)<1)	param$x20 <- 1
+	 if (exp(param$x80)<1) 	param$x80 <- 0
+	 if (exp(param$x50)<1)	param$x50 <- 0
+	 if (exp(param$x20)<1)	param$x20 <- 0
 	 return(param)
 	}
 
@@ -307,7 +307,7 @@ else{
 		yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
 		ploty <- data[[i]]$x
 		ploty[ploty < 0] <-0
-		asym <- ML[[i]]$par[1]
+		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 		yy <- (yy+min(data[[i]]$x))
@@ -319,8 +319,8 @@ else{
 
 		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0))
 
-		 if (exp(param$x80)<1) 	param$x80 <- 1
-		 if (exp(param$x50)<1)	param$x50 <- 1
-		 if (exp(param$x20)<1)	param$x20 <- 1
+		 if (exp(param$x80)<1) 	param$x80 <- 0
+		 if (exp(param$x50)<1)	param$x50 <- 0
+		 if (exp(param$x20)<1)	param$x20 <- 0
 		 return(param)
 		}
