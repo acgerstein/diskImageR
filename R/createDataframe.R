@@ -52,7 +52,7 @@ if(standType=="one"){
  		}
 
 	df <- data.frame()
-	dotedge <- diskDiam/2 + 0.4
+	dotedge <- diskDiam/2 + 0.7
 	newdir <- file.path(getwd(), "parameter_files")
 	newdir2 <- file.path(getwd(), "parameter_files", projectName)
 	newdir3 <- file.path(getwd(), "figures", projectName)
@@ -247,10 +247,10 @@ else{
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy <- (yy+min(data[[i]]$x))
 	yy[yy < 0] <- 0
-	x80 <- xx[which.max(yy> asym * 0.2)]
+	x80 <- xx[which.max(yy> asym * 0.8)]
 	x50 <- xx[which.max(yy> asym * 0.5)]
-	x20 <- xx[which.max(yy> asym * 0.8)]
-	if (x20 < x50) x20 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+	x20 <- xx[which.max(yy> asym * 0.2)]
+	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
 
 	if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
 	else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
@@ -297,25 +297,37 @@ else{
 	 return(param)
 	}
 
-	.findRAD <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
-		startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+	.findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
+		startX <- which(data[[i]][,1] > dotedge)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
+		minD <- min(data[[i]][startX:stopX, "x"])
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
-		data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-		yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-		ploty <- data[[i]]$x
-		ploty[ploty < 0] <-0
+		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-		yy <- (yy+min(data[[i]]$x))
-		yy[yy < 0] <- 0
-		x80 <- xx[which.max(yy> asym * 0.2)]
-		x50 <- xx[which.max(yy> asym * 0.5)]
-		x20 <- xx[which.max(yy> asym * 0.8)]
-		if (x20 < x50) x20 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+		# if(standType == "one") yy <- yy+minD #is this necessary?? I don't think so ...
+		whichX80 <- which(data[[i]]$x > asym * 0.8)
+			if(whichX80[1] == 1){
+					if(whichX80[2] == 2) x80 <- 0
+					else x80 <- data[[i]]$distance[whichX80[2]]
+				}
+		if(whichX80[1] != 1) x80 <- data[[i]]$x[whichX80[1]]
+
+		whichX50 <- which(data[[i]]$x > asym * 0.5)
+			if(whichX50[1] == 1){
+					if(whichX50[2] == 2) x50 <- 0
+					else x50 <- data[[i]]$distance[whichX50[2]]
+				}
+		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
+
+		whichX20 <- which(data[[i]]$x > asym * 0.2)
+			if(whichX20[1] == 1){
+					if(whichX20[2] == 2) x20 <- 0
+					else x20 <- data[[i]]$distance[whichX20[2]]
+				}
+		if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
+
 
 		 param <- data.frame(x80 = round(exp(x80), digits=2), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=2))
 
