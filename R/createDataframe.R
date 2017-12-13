@@ -179,9 +179,9 @@ else{
 		df$ZOI20 <- df$RAD20*2
 		df$ZOI50 <- df$RAD50*2
 		df$ZOI80 <- df$RAD80*2
-		df$ZOI20[df$RAD20 ==1] <- 6
-		df$ZOI50[df$RAD50 ==1] <- 6
-		df$ZOI80[df$RAD80 ==1] <- 6
+		df$ZOI20[df$RAD20 ==0] <- 6
+		df$ZOI50[df$RAD50 ==0] <- 6
+		df$ZOI80[df$RAD80 ==0] <- 6
 		df$ZOI20[df$slope < 1] <- 6
 		df$ZOI50[df$slope < 1] <- 6
 		df$ZOI80[df$slope < 1] <- 6
