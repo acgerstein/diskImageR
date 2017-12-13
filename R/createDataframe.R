@@ -190,6 +190,7 @@ else{
 		df$ZOI50[df$slope < 16] <- 6
 		df$ZOI80[df$slope < 16] <- 6
 	}
+	df <- df[order(df$photo, df$drug),]
 	write.csv(df, file=filename, row.names=FALSE)
 
 	dfName <- paste(projectName, ".df", sep="")
@@ -208,22 +209,25 @@ else{
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
-	# maxY <- which(data[[i]][,2] > (ML2[[i]]$par[1]+ML2[[i]]$par[5]))[1]
-	maxY <- which(data[[i]][,2] > (ML[[i]]$par[1]))[1]
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	yy<- .curve(ML[[i]]['par'][1]$par[1], ML[[i]]['par'][1]$par[2], ML[[i]]['par'][1]$par[3],xx)
-	xcross <- exp(ML[[i]]['par'][1]$par[2])
-	xxmid <- which.max(exp(xx) > xcross)
-	print(i)
-	if(is.na(maxY) | maxY < 5) slope <- 0
-	else{
-		if (maxY<20 | (xxmid -10)  < 1){
-			xxSlope <- data[[i]]$distance[(maxY-5):maxY]
-			yySlope <- data[[i]]$x[(maxY-5):maxY]
+	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
+	maxYplace <- which(data[[i]][,2] > maxY)[1]
+	xxmid <- which(data[[i]]$x > maxY/2)
+
+	if(xxmid[1] == 1){
+		if(xxmid[5] == 5) midslope <- 5
+		else midslope <-  xxmid[5]
+	}
+	if(xxmid[1] != 1) midslope <- xxmid[1]
+
+	if(is.na(maxYplace) | maxYplace < 5) slope <- 0
+	if(!is.na(maxYplace) & maxYplace > 5){
+		if (maxY<20 | (midslope -10)  < 1){
+			xxSlope <- data[[i]]$distance[1:10]
+			yySlope <- data[[i]]$x[1:10]
 		}
 	else{
-		xxSlope <- data[[i]]$distance[(maxY-10):maxY]
-		yySlope <- data[[i]]$x[(maxY-10):maxY]
+		xxSlope <- data[[i]]$distance[(midslope-5):(midslope+5)]
+		yySlope <- data[[i]]$x[(midslope-5):(midslope+5)]
 		# xxSlope <- xx[(xxmid-10):(xxmid+10)]
 		# yySlope <- yy[(xxmid-10):(xxmid+10)]
 		}
