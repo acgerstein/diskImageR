@@ -119,7 +119,6 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	}
 	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
 	cat(paste("\nElements in list '", projectName, "': \n", sep=""))
-	print("before readin_dir")
 	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
 	if(!length(dir(photoDir)) == length(temp)){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
@@ -170,7 +169,7 @@ function(workingDir, folderLoc, experAbbr){
 
 .readIn <-function(directoryPath, newList = list(), numDig=30) {
 	currDir <- getwd()
-	# print(currDir)
+	print(currDir)
 	getData <- function(i, newList, names) {
 		if (i > length(dir())){
 			names(newList) <- names
