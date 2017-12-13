@@ -176,9 +176,9 @@ else{
 }
 
 	if(addZOI){
-		df$ZOI20 <- df$RAD20*2+diskDiam
-		df$ZOI50 <- df$RAD50*2+diskDiam
-		df$ZOI80 <- df$RAD80*2+diskDiam
+		df$ZOI20 <- round(df$RAD20*2+diskDiam, 0)
+		df$ZOI50 <- round(df$RAD50*2+diskDiam, 0)
+		df$ZOI80 <- round(df$RAD80*2+diskDiam, 0)
 		df$ZOI20[df$RAD20 ==0] <- 6
 		df$ZOI50[df$RAD50 ==0] <- 6
 		df$ZOI80[df$RAD80 ==0] <- 6
