@@ -125,7 +125,7 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 
-	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), slope=round(slope, digits=1))
+	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope=round(slope, digits=1))
 }
 
 if(needMap){
@@ -312,7 +312,7 @@ else{
 					if(whichX80[2] == 2) x80 <- 0
 					else x80 <- data[[i]]$distance[whichX80[2]]
 				}
-		if(whichX80[1] != 1) x80 <- data[[i]]$x[whichX80[1]]
+		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 
 		whichX50 <- which(data[[i]]$x > asym * 0.5)
 			if(whichX50[1] == 1){
@@ -331,8 +331,8 @@ else{
 
 		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2))
 
-		 if (exp(param$x80)<1) 	param$x80 <- 0
-		 if (exp(param$x50)<1)	param$x50 <- 0
-		 if (exp(param$x20)<1)	param$x20 <- 0
+		 # if (param$x80)<1) 	param$x80 <- 0
+		 # if (exp(param$x50)<1)	param$x50 <- 0
+		 # if (exp(param$x20)<1)	param$x20 <- 0
 		 return(param)
 		}
