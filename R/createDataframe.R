@@ -176,9 +176,9 @@ else{
 }
 
 	if(addZOI){
-		df$ZOI20 <- df$RAD20*2
-		df$ZOI50 <- df$RAD50*2
-		df$ZOI80 <- df$RAD80*2
+		df$ZOI20 <- df$RAD20*2+diskDiam
+		df$ZOI50 <- df$RAD50*2+diskDiam
+		df$ZOI80 <- df$RAD80*2+diskDiam
 		df$ZOI20[df$RAD20 ==0] <- 6
 		df$ZOI50[df$RAD50 ==0] <- 6
 		df$ZOI80[df$RAD80 ==0] <- 6
@@ -317,7 +317,7 @@ else{
 		x20 <- xx[which.max(yy> asym * 0.8)]
 		if (x20 < x50) x20 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
 
-		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0))
+		 param <- data.frame(x80 = round(exp(x80), digits=2), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=2))
 
 		 if (exp(param$x80)<1) 	param$x80 <- 0
 		 if (exp(param$x50)<1)	param$x50 <- 0
