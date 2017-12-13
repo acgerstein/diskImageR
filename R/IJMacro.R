@@ -118,17 +118,17 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	  count_wait<-count_wait+1.0
 	}
 	cat(paste("\nOutput of imageJ analyses saved in directory: \n", outputDir, "\n", sep=""))
-	cat(paste("\nElements in list '", projectName, "': \n", sep=""))
-	temp <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
-	if(!length(dir(photoDir)) == length(temp)){
+	# cat(paste("\nElements in list '", projectName, "': \n", sep=""))
+	findAveL <- .ReadIn_DirCreate(projectDir, outputDir, projectName)
+	if(!length(dir(photoDir)) == length(findAveL)){
 		stop("Mismatch between the number of files in the photograph directory and the number of images analyzed. This likely indicates a non-photograph file is located in this directory. Please remove and rerun before continuing.")
 		}
 	cat("\a")
 #	assign(projectName, temp, envir=globalenv())
 #	assign(projectName, temp, envir=	diskImageREnv)
-	assign(projectName, temp, inherits=TRUE)
+	assign(projectName, findAveL, inherits=TRUE)
 
-	dfNA <- .saveAveLine(temp)
+	dfNA <- .saveAveLine(findAveL)
 	cat(paste("\nThe average line from each phogograph has been saved: \n", file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), "\n", sep=""))
 	write.csv(dfNA, file.path(getwd(), "parameter_files", projectName, paste("averageLines.csv", sep="")), row.names=FALSE)
 	# return(get(projectName, envir=diskImageREnv))
@@ -150,8 +150,6 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
    names(df) <- paste(c("distance", "instensity"), rep(names(L), each=2), sep=".")
    df
 }
-
-
 
 .ReadIn_DirCreate <-
 function(workingDir, folderLoc, experAbbr){
@@ -189,7 +187,7 @@ function(workingDir, folderLoc, experAbbr){
 	i <-1
 	names <- c()
 	findMin <- c()
-	print("starting averaging")
+	# print("starting averaging")
 	getData(i, newList, names)
 }
 
