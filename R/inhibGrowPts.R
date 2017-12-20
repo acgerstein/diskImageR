@@ -75,33 +75,39 @@ inhibGrowPts <- function(projectName, diskDiam = 12.7, maxDist=30, ymax=125, xpl
 #standard dot edge calculation - takes awhile to get down to dark so diskDiam/2-1
 dotedge <- diskDiam/2+0.7
 
-#where is the minimum intensity - can use for later calculations
-minIntensity <- c(sapply(data, function(x) {min(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)),2])}))
-
-whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
-whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
-whichMinIntensity5 <- c(mapply(function(x, y) {max(which(x[,2] < minIntensity*1.05))}, x = data, y = minIntensity))
-whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))
-
 #subtract the minimum intensity from each intensity value
 dataCor <- lapply(data, function(x) {x[,2] - min(x[,2])})
-
 #add the "corrected data" vector to the data list
 datas <- Map(cbind, data, dataCor)
 data <- datas
 
+#where is the minimum intensity - can use for later calculations
+minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<maxDist)),2])}))
+whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
+whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
+whichMinIntensity5 <- c(mapply(function(x, y) {min(which(x[whichMinIntensity:length(x),2] < minIntensity*1.05))}, x = data, y = minIntensity))
+whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))+whereMinIntensity
+
 #where is the maximum intensity? This is also the point of growth maximum
+#I may have broken this.
 maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(which(x[,1]<maxDist)), 3])}))
 whichMaxIntensity <- mapply(function(x, y) {which(x[,3]==y)[1]}, x = data, y = maxIntensity)
 whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, y = maxIntensity)
+whichMaxIntensity95up <- c(mapply(function(x, y) {min(which(x[,3] < maxIntensity*0.95))}, x = data, y = maxIntensity))
+whereMaxIntensity95up <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95))
+
+whichMaxIntensity95down <- c(mapply(function(x, y) {min(which(x[whichMaxIntensity:length(whichMaxIntensity),3] < maxIntensity*0.95))}, x = data, y = maxIntensity))+whichMaxIntensity
+whereMaxIntensity95down <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95down))
+
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
-slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity5, z = whichMaxIntensity), digits=2)
+slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity, z = whichMaxIntensity), digits=2)
 
 #use this, change whereMaxIntensity in the param data frame to be corrected for diskDiam
 #distance2Max <- whereMaxIntensity-diskDiam/2
 
 #Find the cutoff intensity values and distance for post-max growth points of resource limitation
+
 min2_90 <- maxIntensity*0.9
 min2_75 <- maxIntensity*0.75
 min2_50 <- maxIntensity*0.5
@@ -148,7 +154,7 @@ cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
 assign(dfName, df, inherits=TRUE)
 }
 
-plotParam3 <- function(projectName, x, diskDiam, xmax = 40, ymax = 260, plotType = "dot", showMaxGR = FALSE, showMaxGRLabel = FALSE, showCutoffs = FALSE, showCutoffLables = FALSE, showSlope = FALSE, showLimText=FALSE){
+plotParam3 <- function(projectName, x, diskDiam, xmax = 30, ymax = 260, plotType = "dot", showMaxGR = FALSE, showMaxGRLabel = FALSE, showCutoffs = FALSE, showCutoffLables = FALSE, showSlope = FALSE, showLimText=FALSE){
 	data <- eval(parse(text=projectName))
 	df <- eval(parse(text=paste(projectName, ".df", sep="")))
 	dotEdge <- diskDiam/2
