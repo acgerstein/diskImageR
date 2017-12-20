@@ -216,7 +216,7 @@ else{
 	if(xxmid[1] != 1) midslope <- xxmid[1]
 
 	if(is.na(maxYplace)) slope <- 0
-	if(!is.na(maxYplace) & midslope > 5){
+	if(!is.na(maxYplace) & midslope >= 5){
 		if (maxY<20 | (midslope -10)  < 1){
 			xxSlope <- data[[i]]$distance[1:10]
 			yySlope <- data[[i]]$x[1:10]

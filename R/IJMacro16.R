@@ -28,6 +28,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
+	#get R version and use appropriate tcltk
 	if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		if(is.na(projectDir)) stop("")
