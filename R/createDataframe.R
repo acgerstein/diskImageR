@@ -206,11 +206,12 @@ else{
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-	maxYplace <- which(data[[i]][,2] > maxY)[1]
-	xxmid <- which(data[[i]]$x > maxY/2)
+	notDisk <- min(which(data[[i]]$x == 0))
+	maxYplace <- which(data[[i]][notDisk:length(data[[i]]$x),2] > maxY)[1]+notDisk
+	xxmid <- which(data[[i]]$x[notDisk:length(data[[i]]$x)] > maxY/2)+notDisk
 
 	if(xxmid[1] == 1){
-		if(xxmid[5] == 5) midslope <- 5
+		if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
 		else midslope <-  xxmid[5]
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
@@ -311,10 +312,7 @@ return(slope)
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 			if(whichX80[1] == 1){
-					# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
-					# notDisk <- which.max(stillDisk != 1:length(stillDisk))
-					# x80 <- data[[i]]$distance[whichX80[notDisk]]
-					x80 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.8)[1]+notDisk]
+							x80 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.8)[1]+notDisk]
 				}
 
 		whichX50 <- which(data[[i]]$x > asym * 0.5)
