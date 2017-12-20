@@ -120,8 +120,6 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-RAD.df <-  sapply(2, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
-
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
@@ -309,16 +307,15 @@ return(slope)
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		notDisk <- which(data[[i]]$x == 0)
-		
+
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 			if(whichX80[1] == 1){
 					# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
 					# notDisk <- which.max(stillDisk != 1:length(stillDisk))
 					# x80 <- data[[i]]$distance[whichX80[notDisk]]
-					x80 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.8)[1]]
+					x80 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.8)[1]+notDisk]
 				}
-
 
 		whichX50 <- which(data[[i]]$x > asym * 0.5)
 		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
@@ -326,7 +323,7 @@ return(slope)
 				# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
 				# notDisk <- which.max(stillDisk != 1:length(stillDisk))
 				# x50 <- data[[i]]$distance[whichX50[notDisk]]
-				x50 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.5)[1]]
+				x50 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.5)[1]+notDisk]
 				}
 
 		whichX20 <- which(data[[i]]$x > asym * 0.2)
@@ -334,15 +331,14 @@ return(slope)
 			if(whichX20[1] == 1){
 				# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
 				# notDisk <- which.max(stillDisk != 1:length(stillDisk))
-				x20 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.2)[1]]
+				x20 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.2)[1]+notDisk]
 				}
 
-
+				if (x80<1 | is.na(x80)) x80 <- 0
+				if (x50<1 | is.na(x50))	x50 <- 0
+				if (x20<1 | is.na(x20))	x20 <- 0
 
 		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2))
 
-		 if (param$x80<1 | is.na(param$x80)) 	param$x80 <- 0
-		 if (param$x50<1 | is.na(param$x50))	param$x50 <- 0
-		 if (param$x20<1 | is.na(param$x20))	param$x20 <- 0
 		 return(param)
 		}
