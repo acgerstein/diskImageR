@@ -306,7 +306,7 @@ return(slope)
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-		notDisk <- which(data[[i]]$x == 0)
+		notDisk <- min(which(data[[i]]$x == 0))
 
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
