@@ -194,8 +194,8 @@ function(workingDir, folderLoc, experAbbr){
 			sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.5): length(x)]))
 
 
-			close <- which(sum1 > quantile(sum1, 0.4) & sum1 < quantile(sum1, 0.6))
-			far <- which(sum2 > quantile(sum2, 0.4) & sum2 < quantile(sum2, 0.6))
+			close <- which(sum1 > quantile(sum1, 0.55) & sum1 < quantile(sum1, 0.75))
+			far <- which(sum2 > quantile(sum2, 0.55) & sum2 < quantile(sum2, 0.75))
 			aveSorted_close <- apply(newd[1:(length(newd[,1])/2.5), close], 1, function(x) mean(x))
 			aveSorted_far <- apply(newd[(length(newd[,1])/2.5):length(newd[,1]), far], 1, function(x) mean(x))
 			# aveSorted <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
