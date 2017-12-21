@@ -187,8 +187,9 @@ function(workingDir, folderLoc, experAbbr){
 		 	 newd <- cbind(newd, lines$x[start[j]:(start[j+1]-1)])
 		  }
 		 names(newd)[3:180] <- paste0("L",2:179)
-
-		  aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
+		  # aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
+			aveSorted <- apply(newd, 1, function(x) median(x))
+			
 			#the 28 comes from the IJ16 macro
 			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")

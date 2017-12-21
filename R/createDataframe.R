@@ -10,6 +10,7 @@
 #' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
 #' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
+#' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -32,7 +33,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = FALSE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -124,8 +125,9 @@ if(standType == "indiv"){
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
+	asym <- unlist(RAD.df[4,])
 
-	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope=round(slope, digits=1))
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope=round(slope, digits=1))
 }
 
 if(needMap){
@@ -336,7 +338,7 @@ return(slope)
 				if (x50<1 | is.na(x50))	x50 <- 0
 				if (x20<1 | is.na(x20))	x20 <- 0
 
-		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2))
+		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2))
 
 		 return(param)
 		}
