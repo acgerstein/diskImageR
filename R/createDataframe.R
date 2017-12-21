@@ -91,6 +91,8 @@ if(standType=="one"){
 		clearHaloStand <- clearHaloData[1,2]
 		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
+		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
+
 		FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge,  maxDist = maxDist, clearHaloStand = clearHaloStand, standardLoc = standardLoc)
 
 		x80 <- unlist(FoG.df[1,])
@@ -120,6 +122,9 @@ if(standType=="one"){
 
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+
+	slope <- sapply(c(6:6), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
@@ -208,9 +213,10 @@ else{
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-	notDisk <- min(which(data[[i]]$x == 0))
-	maxYplace <- which(data[[i]][notDisk:length(data[[i]]$x),2] > maxY)[1]+notDisk
-	xxmid <- which(data[[i]]$x[notDisk:length(data[[i]]$x)] > maxY/2)+notDisk
+	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
+	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
+	xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > maxY/2)+disk
+
 
 	if(xxmid[1] == 1){
 		if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
@@ -309,29 +315,24 @@ return(slope)
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-		notDisk <- min(which(data[[i]]$x == 0))
+		disk <- min(which(data[[i]]$x[1:20] == 0))
 
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 			if(whichX80[1] == 1){
-							x80 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.8)[1]+notDisk]
+							x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
 				}
 
 		whichX50 <- which(data[[i]]$x > asym * 0.5)
 		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
 			if(whichX50[1] == 1){
-				# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
-				# notDisk <- which.max(stillDisk != 1:length(stillDisk))
-				# x50 <- data[[i]]$distance[whichX50[notDisk]]
-				x50 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.5)[1]+notDisk]
+				x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
 				}
 
 		whichX20 <- which(data[[i]]$x > asym * 0.2)
 		if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
 			if(whichX20[1] == 1){
-				# stillDisk <- which(data[[i]]$x > data[[i]]$x[length(data[[i]]$x)])
-				# notDisk <- which.max(stillDisk != 1:length(stillDisk))
-				x20 <- data[[i]]$distance[which(data[[i]]$x[notDisk+1:length(data[[i]][,1])] > asym * 0.2)[1]+notDisk]
+				x20 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.2)[1]+disk]
 				}
 
 				if (x80<1 | is.na(x80)) x80 <- 0
