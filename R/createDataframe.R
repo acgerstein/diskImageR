@@ -214,7 +214,6 @@ else{
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
 	xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > maxY/2)+disk
 
-
 	if(xxmid[1] == 1){
 		if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
 		else midslope <-  xxmid[5]
