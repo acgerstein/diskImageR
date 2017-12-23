@@ -312,7 +312,7 @@ else{
 return(slope)
 }
 
-	.findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
+.findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
 		startX <- which(data[[i]][,1] > dotedge)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -346,7 +346,7 @@ return(slope)
 				if (x20<1 | is.na(x20))	x20 <- 0
 
 		 slopeML <- ML[[i]]$par[3]
-		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2), round(slopeML, digits=2))
+		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2), slopeML = round(slopeML, digits=2))
 
 		 return(param)
 		}
