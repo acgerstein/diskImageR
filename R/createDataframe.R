@@ -121,7 +121,7 @@ if(standType=="one"){
 }
 
 if(standType == "indiv"){
-	slopes <- lapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	print(slopes)
 
