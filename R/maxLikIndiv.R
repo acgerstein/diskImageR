@@ -161,7 +161,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-.getstats2Log <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
+.getstats2Log <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=300){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
