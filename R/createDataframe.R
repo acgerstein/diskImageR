@@ -122,6 +122,7 @@ if(standType=="one"){
 
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+
 	print(slope)
 	# slope <- sapply(26, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
@@ -275,7 +276,7 @@ else{
 		}
 
 #Determine the slope
-.findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
+.findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = dotedge,  maxDist = maxDist, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
