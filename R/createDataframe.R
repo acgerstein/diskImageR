@@ -133,7 +133,7 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
 	slopeML <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(slopes, digits=1), slopeML=round(slopeML, digits=1))
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = slopes, slopeML= slopeML)
 }
 
 if(needMap){
@@ -299,16 +299,12 @@ else{
 			xxSlope <- data[[i]]$distance[1:20]
 			yySlope <- data[[i]]$x[1:20]
 			slope <- lm(yySlope ~ xxSlope)$coefficients[2]
-			print("here")
-			print(slope)
 		}
 else{
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
-		print("other")
-		print(slope)
 		}
 }
 return(slope)
@@ -349,6 +345,5 @@ return(slope)
 
 		 slopeML <- ML[[i]]$par[3]
 		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2), slopeML = round(slopeML, digits=2))
-
 		 return(param)
 		}
