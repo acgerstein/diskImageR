@@ -124,13 +124,8 @@ if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	print(slope)
-	# slope <- sapply(26, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
-
-# slope <- sapply(1:10, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
-
-# RAD.df <-  sapply(c(5), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
@@ -312,7 +307,6 @@ else{
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		}
 }
-print(slope)
 return(slope)
 }
 
