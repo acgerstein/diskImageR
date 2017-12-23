@@ -122,7 +122,7 @@ if(standType=="one"){
 
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
-
+	print(slope)
 	# slope <- sapply(26, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 # slope <- sapply(1:10, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
@@ -300,15 +300,14 @@ else{
 	if(is.na(maxYplace)) slope <- 0
 	if(!is.na(maxYplace) & midslope >= 5){
 		if (maxY< 10 | (midslope -10)  < 1){
-			xxSlope <- data[[i]]$distance[1:10]
-			yySlope <- data[[i]]$x[1:10]
+			xxSlope <- data[[i]]$distance[1:20]
+			yySlope <- data[[i]]$x[1:20]
 			slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		}
 	else{
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
-
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		}
 }
