@@ -124,6 +124,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
+	data[[i]]$x[data[[i]]$x < 0] <- 0
+	startX2 <- which(data[[i]]$x == 0)[1] #new here
+	data[[i]] <- data[[i]][startX2:length(data[[i]]$x), 1:2]#new here
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
@@ -157,7 +160,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-.getstats2Log <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
+.getstats2Log <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -165,6 +168,8 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 	data[[i]]$x[data[[i]]$x < 0] <- 0
+	startX2 <- which(data[[i]]$x == 0)[1] #new here
+	data[[i]] <- data[[i]][startX2:length(data[[i]]$x), 1:2]#new here
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
