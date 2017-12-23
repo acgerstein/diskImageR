@@ -123,11 +123,14 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	# slope <- sapply(10:20, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	slope <- sapply(5, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 # RAD.df <-  sapply(25, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
+
+RAD.df <-  sapply(c(5), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
+
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
@@ -278,6 +281,7 @@ else{
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
+	data[[i]]$x[data[[i]]$x < 0] <- 0
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
