@@ -133,7 +133,7 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
 	slopeML <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = slopes, slopeML= slopeML)
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = slopes)
 }
 
 if(needMap){
@@ -343,7 +343,7 @@ return(slope)
 				if (x50<1 | is.na(x50))	x50 <- 0
 				if (x20<1 | is.na(x20))	x20 <- 0
 
-		 slopeML <- ML[[i]]$par[3]
-		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2), slopeML = round(slopeML, digits=2))
+		 # slopeML <- ML[[i]]$par[3]
+		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2))
 		 return(param)
 		}
