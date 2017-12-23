@@ -123,7 +123,7 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	slope <- sapply(5, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	# slope <- sapply(5, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 # RAD.df <-  sapply(25, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
@@ -321,6 +321,7 @@ return(slope)
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
 		minD <- min(data[[i]][startX:stopX, "x"])
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
+		data[[i]]$x[data[[i]]$x < 0] <- 0
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))
