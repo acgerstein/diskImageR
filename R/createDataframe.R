@@ -121,9 +121,9 @@ if(standType=="one"){
 }
 
 if(standType == "indiv"){
-	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	slopes <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	print(slope)
+	print(slopes)
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
@@ -133,7 +133,7 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
 	slopeML <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(slope, digits=1), slopeML=round(slopeML, digits=1))
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(slopes, digits=1), slopeML=round(slopeML, digits=1))
 }
 
 if(needMap){
