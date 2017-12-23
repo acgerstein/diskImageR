@@ -137,7 +137,7 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
 	slopeML <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slopeML=round(slopeML, digits=1))
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(slope, digits=1), slopeML=round(slopeML, digits=1))
 }
 
 if(needMap){
