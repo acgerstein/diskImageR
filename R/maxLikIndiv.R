@@ -123,7 +123,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
-	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]
@@ -163,7 +163,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
-	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
 		asym<-theta[[1]]

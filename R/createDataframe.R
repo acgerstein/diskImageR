@@ -123,6 +123,10 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
+	# slope <- sapply(c(25), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+
+# RAD.df <-  sapply(25, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
+
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
@@ -180,6 +184,7 @@ else{
 }
 
 	if(addZOI){
+		print(df)
 		df$ZOI20 <- round(df$RAD20*2+diskDiam, 0)
 		df$ZOI50 <- round(df$RAD50*2+diskDiam, 0)
 		df$ZOI80 <- round(df$RAD80*2+diskDiam, 0)
@@ -207,12 +212,12 @@ else{
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
-	xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > maxY/2)+disk
+	xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
 
 	if(xxmid[1] == 1){
 		if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
@@ -228,10 +233,10 @@ else{
 			slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		}
 	else{
-		xxSlope <- data[[i]]$distance[(midslope-5):(midslope+5)]
-		yySlope <- data[[i]]$x[(midslope-5):(midslope+5)]
-		# xxSlope <- xx[(xxmid-10):(xxmid+10)]
-		# yySlope <- yy[(xxmid-10):(xxmid+10)]
+		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
+		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
+		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
+
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		}
 }
@@ -308,7 +313,7 @@ return(slope)
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
 		minD <- min(data[[i]][startX:stopX, "x"])
-		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))
