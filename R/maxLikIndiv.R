@@ -188,6 +188,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 #changed
 	lowOD <- 0
 	highOD <- quantile(data[[i]]$x, 0.99)
+	if(highOD == 0) highOD <- 0.1
 	lower <- c(0, 0, 0,0, 0, 0, 0)
 	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)
 
