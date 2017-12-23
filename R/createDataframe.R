@@ -125,11 +125,9 @@ if(standType == "indiv"){
 
 	# slope <- sapply(5, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-# RAD.df <-  sapply(25, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
-
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
-RAD.df <-  sapply(c(5), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
+# RAD.df <-  sapply(c(5), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
