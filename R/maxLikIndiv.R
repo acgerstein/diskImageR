@@ -117,7 +117,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 .curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))}
 
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
+.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -138,8 +138,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		res <- dnorm(y, (asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))), sigma, log= T)
 		sum(res)
 	}
-	lowOD <- min(data[[i]]$x)
+	lowOD <- 0
 	highOD <- quantile(data[[i]]$x, 0.99)
+	if(highOD == 0) highOD <- 0.1
 	lower <- c(highOD*0.8, 0, 0,0)
 	upper <- c(highOD, max(data[[i]]$distance), maxSlope,maxSlope)
 
