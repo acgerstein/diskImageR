@@ -123,7 +123,7 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	# slope <- sapply(c(25), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	# slope <- sapply(10:20, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 # RAD.df <-  sapply(25, .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
@@ -206,6 +206,71 @@ else{
 	assign(dfName, df, inherits=TRUE)
 	}
 
+	.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
+		startX <- which(data[[i]][,1] > dotedge+0.5)[1]
+		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+		data[[i]] <- data[[i]][startX:stopX, 1:2]
+		data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
+		data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+		yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
+		ploty <- data[[i]]$x
+		ploty[ploty < 0] <-0
+		asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
+
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+		yy <- (yy+min(data[[i]]$x))
+		yy[yy < 0] <- 0
+		x80 <- xx[which.max(yy> asym * 0.8)]
+		x50 <- xx[which.max(yy> asym * 0.5)]
+		x20 <- xx[which.max(yy> asym * 0.2)]
+		if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+
+		if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
+		else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
+
+		if(exp(x50)>1) xx50 <- seq(log(data[[i]]$distance[1]), log(round(exp(x50))), length=200)
+		else xx50 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
+
+		if(exp(x20)>1) xx20 <- seq(log(data[[i]]$distance[1]), log(round(exp(x20))), length=200)
+		else xx20 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
+
+		yy <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
+		yy80 <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx80)
+		yy50<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx50)
+		yy20<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx20)
+
+		yy <- (yy+min(data[[i]]$x))
+		yy[yy < 0] <- 0.1
+		yy80 <- (yy80+min(data[[i]]$x))
+		yy80[yy80 < 0] <- 0.1
+		yy50 <- (yy50+min(data[[i]]$x))
+		yy50[yy50 < 0] <- 0.1
+		yy20 <- (yy20+min(data[[i]]$x))
+		yy20[yy20 < 0] <- 0.1
+
+		id <- order(xx)
+		id80 <- order(xx80)
+		id50 <- order(xx50)
+		id20 <- order(xx20)
+
+		maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))
+		maxFoG80 <- exp(x80)*max(yy80)
+		maxFoG50 <- exp(x50)*max(yy50)
+		maxFoG20 <- exp(x20)*max(yy20)
+
+		FoG80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))
+		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
+		FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
+
+		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
+
+		 if (exp(param$x80)<1) 	param$x80 <- 0
+		 if (exp(param$x50)<1)	param$x50 <- 0
+		 if (exp(param$x20)<1)	param$x20 <- 0
+		 return(param)
+		}
+
 #Determine the slope
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = 3.4,  maxDist = 35, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge)[1]
@@ -217,10 +282,13 @@ else{
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
-	xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
+	if(!is.na(maxYplace[1])){
+		 xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
+	 }
+	if (is.na(maxYplace[1])) xxmid <- 1:10
 
 	if(xxmid[1] == 1){
-		if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
+		 if(xxmid[5] == 5) midslope <- 5 #changed from [5] == 5
 		else midslope <-  xxmid[5]
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
@@ -242,71 +310,6 @@ else{
 }
 return(slope)
 }
-
-.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
-	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-	ploty <- data[[i]]$x
-	ploty[ploty < 0] <-0
-	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
-
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	yy <- (yy+min(data[[i]]$x))
-	yy[yy < 0] <- 0
-	x80 <- xx[which.max(yy> asym * 0.8)]
-	x50 <- xx[which.max(yy> asym * 0.5)]
-	x20 <- xx[which.max(yy> asym * 0.2)]
-	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
-
-	if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
-	else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-
-	if(exp(x50)>1) xx50 <- seq(log(data[[i]]$distance[1]), log(round(exp(x50))), length=200)
-	else xx50 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-
-	if(exp(x20)>1) xx20 <- seq(log(data[[i]]$distance[1]), log(round(exp(x20))), length=200)
-	else xx20 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
-
-	yy <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-	yy80 <- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx80)
-	yy50<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx50)
-	yy20<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx20)
-
-	yy <- (yy+min(data[[i]]$x))
-	yy[yy < 0] <- 0.1
-	yy80 <- (yy80+min(data[[i]]$x))
-	yy80[yy80 < 0] <- 0.1
-	yy50 <- (yy50+min(data[[i]]$x))
-	yy50[yy50 < 0] <- 0.1
-	yy20 <- (yy20+min(data[[i]]$x))
-	yy20[yy20 < 0] <- 0.1
-
-	id <- order(xx)
-	id80 <- order(xx80)
-	id50 <- order(xx50)
-	id20 <- order(xx20)
-
-	maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))
-	maxFoG80 <- exp(x80)*max(yy80)
-	maxFoG50 <- exp(x50)*max(yy50)
-	maxFoG20 <- exp(x20)*max(yy20)
-
-	FoG80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))
-	FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
-	FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
-
-	 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
-
-	 if (exp(param$x80)<1) 	param$x80 <- 0
-	 if (exp(param$x50)<1)	param$x50 <- 0
-	 if (exp(param$x20)<1)	param$x20 <- 0
-	 return(param)
-	}
 
 	.findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
 		startX <- which(data[[i]][,1] > dotedge)[1]
