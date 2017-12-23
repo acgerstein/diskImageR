@@ -272,7 +272,6 @@ else{
 
 #Determine the slope
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = dotedge,  maxDist = maxDist, standType = standType){
-	slope <- c()
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -300,15 +299,18 @@ else{
 			xxSlope <- data[[i]]$distance[1:20]
 			yySlope <- data[[i]]$x[1:20]
 			slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+			print("here")
+			print(slope)
 		}
-	else{
+else{
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+		print("other")
+		print(slope)
 		}
 }
-print(slope)
 return(slope)
 }
 
