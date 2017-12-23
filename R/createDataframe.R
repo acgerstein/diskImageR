@@ -168,7 +168,7 @@ else{
 		}
 	names(df)[3] <- typeName
 }
-
+ print(df)
 	if(standType == "one"){
 		df <- df[order(df$line),]
 		df$FoG80[df$FoG80 >1] <- 1
