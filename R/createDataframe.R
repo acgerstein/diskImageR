@@ -123,7 +123,7 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	slope <- sapply(26, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	# slope <- sapply(26, .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
@@ -185,7 +185,6 @@ else{
 }
 
 	if(addZOI){
-		print(df)
 		df$ZOI20 <- round(df$RAD20*2+diskDiam, 0)
 		df$ZOI50 <- round(df$RAD50*2+diskDiam, 0)
 		df$ZOI80 <- round(df$RAD80*2+diskDiam, 0)
