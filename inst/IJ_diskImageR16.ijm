@@ -162,7 +162,8 @@ for (i=0; i<fileList.length; i++){
 	picHeight = getHeight();
 	run("Size...", "width=1000 constrain interpolation=None");
 	run("8-bit");
-	setMinAndMax(50, 250);
+	setMinAndMax(25, 500);
+	run("Subtract Background...", "rolling=10000 sliding");
 
 	area = getResult("Area", 0);
 //	area = List.get("area");
