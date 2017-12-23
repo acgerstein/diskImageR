@@ -123,7 +123,6 @@ if(standType=="one"){
 if(standType == "indiv"){
 	slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 
-	print(slopes)
 
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
@@ -131,7 +130,7 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-	slopeML <- unlist(RAD.df[5,])
+	# slopeML <- unlist(RAD.df[5,])
 
 	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = slopes)
 }
@@ -282,6 +281,7 @@ else{
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
+
 	if(!is.na(maxYplace[1])){
 		 xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
 	 }
