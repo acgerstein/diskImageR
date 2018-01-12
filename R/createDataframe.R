@@ -132,7 +132,7 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
 	# slopeML <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = slopes)
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
 }
 
 if(needMap){
@@ -303,7 +303,7 @@ else{
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		return(slope)
 	}
-	if(midslope > 10){
+	if(midslope >= 10){
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
@@ -321,7 +321,7 @@ else{
 		data[[i]]$x[data[[i]]$x < 0] <- 0
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-		disk <- min(which(data[[i]]$x[1:20] == 0))
+		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
