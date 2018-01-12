@@ -190,14 +190,6 @@ function(workingDir, folderLoc, experAbbr){
 		  # aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
 			# aveSorted <- apply(newd, 1, function(x) median(x))
 
-			sum1 <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)/2.75]))
-			sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.75): length(x)]))
-
-			close <- which(sum1 > quantile(sum1, 0.55) & sum1 < quantile(sum1, 0.75))
-			far <- which(sum2 > quantile(sum2, 0.75) & sum2 < quantile(sum2, 0.85))
-			aveSorted_close <- apply(newd[1:(length(newd[,1])/2.75), close], 1, function(x) mean(x))
-			aveSorted_far <- apply(newd[(length(newd[,1])/2.75):length(newd[,1]), far], 1, function(x) mean(x))
-
 			# sum1 <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)/2.5]))
 			# sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.5): length(x)]))
       #
@@ -205,44 +197,17 @@ function(workingDir, folderLoc, experAbbr){
 			# far <- which(sum2 > quantile(sum2, 0.75) & sum2 < quantile(sum2, 0.85))
 			# aveSorted_close <- apply(newd[1:(length(newd[,1])/2.5), close], 1, function(x) mean(x))
 			# aveSorted_far <- apply(newd[(length(newd[,1])/2.5):length(newd[,1]), far], 1, function(x) mean(x))
-			temp <- data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
+			# temp <- data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
 
-			# aveSorted <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
-
-			# ls0.8_close <- which(sum1 > quantile(sum1, 0.75) & sum1 < quantile(sum1, 0.85))
-			# ls0.8_far <- which(sum2 > quantile(sum2, 0.75) & sum2 < quantile(sum2, 0.95))
-			# aveSorted0.8_close <- apply(newd[1:(length(newd[,1])/2), ls0.8_close], 1, function(x) mean(x))
-			# aveSorted0.8_far <- apply(newd[(length(newd[,1])/2+1):length(newd[,1]), ls0.8_far], 1, function(x) mean(x))
-			# temp0.8b<-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted0.8_close, aveSorted0.8_far))
-
-			# ls0.8 <- which(sum > quantile(sum, 0.7) & sum < quantile(sum, 0.9))
-			# aveSorted0.8 <- apply(newd[, ls0.8], 1, function(x) mean(x))
-			# temp0.8 <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted0.8)
-			# plot(temp0.8, ylim=c(0, 250), type="l", col="red")
-			# points(temp0.8b, type="l")
-      #
-			# ls0.5_close <- which(sum1 > quantile(sum1, 0.4) & sum1 < quantile(sum1, 0.6))
-			# ls0.5_far <- which(sum2 > quantile(sum2, 0.4) & sum2 < quantile(sum2, 0.6))
-			# aveSorted0.5_close <- apply(newd[1:(length(newd[,1])/2), ls0.5_close], 1, function(x) mean(x))
-			# aveSorted0.5_far <- apply(newd[(length(newd[,1])/2+1):length(newd[,1]), ls0.5_far], 1, function(x) mean(x))
-			# temp0.5b<-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted0.5_close, aveSorted0.5_far))
-      #
-			# ls0.5 <- which(sum > quantile(sum, 0.4) & sum < quantile(sum, 0.6)) #35 lines
-			# aveSorted0.5 <- apply(newd[, ls0.5], 1, function(x) mean(x))
-			# temp0.5 <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted0.5)
-			# points(temp0.5, type="l", col="red")
-			# points(temp0.5b, type="l", col="red")
-      #
-			# ls0.3 <- which(sum > quantile(sum, 0.2) & sum < quantile(sum, 0.3))
-			# aveSorted0.3 <- apply(newd[, ls0.3], 1, function(x) mean(x))
-			# temp0.3 <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted0.3)
-			# points(temp0.3)
-
-
+			sum <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)]))
+			ls <- which(sum > quantile(sum, 0.55) & sum < quantile(sum, 0.75))
+			aveSorted <- apply(newd[, ls], 1, function(x) mean(x))
+			temp <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted)
+			plot(temp)
 
 			#the 28 comes from the IJ16 macro
-			newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
-			# newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted)
+			# newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
+			 newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted)
 			# temp <- paste(substr(basename(dir()[i]),1,numDig), "", sep="")
 			temp <- dir(directoryPath)[i]
 			names[i] <- strsplit(temp,".txt")[[1]][1]
