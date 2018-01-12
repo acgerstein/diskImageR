@@ -190,14 +190,21 @@ function(workingDir, folderLoc, experAbbr){
 		  # aveSorted <- apply(newd, 1, function(x) mean(sort(x)[(180-numTop):180]))
 			# aveSorted <- apply(newd, 1, function(x) median(x))
 
-			sum1 <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)/2.5]))
-			sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.5): length(x)]))
-
+			sum1 <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)/2.75]))
+			sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.75): length(x)]))
 
 			close <- which(sum1 > quantile(sum1, 0.55) & sum1 < quantile(sum1, 0.75))
 			far <- which(sum2 > quantile(sum2, 0.75) & sum2 < quantile(sum2, 0.85))
-			aveSorted_close <- apply(newd[1:(length(newd[,1])/2.5), close], 1, function(x) mean(x))
-			aveSorted_far <- apply(newd[(length(newd[,1])/2.5):length(newd[,1]), far], 1, function(x) mean(x))
+			aveSorted_close <- apply(newd[1:(length(newd[,1])/2.75), close], 1, function(x) mean(x))
+			aveSorted_far <- apply(newd[(length(newd[,1])/2.75):length(newd[,1]), far], 1, function(x) mean(x))
+
+			# sum1 <- apply(newd[2:180], 2, function(x) sum(x[1:length(x)/2.5]))
+			# sum2 <- apply(newd[2:180], 2, function(x) sum(x[(length(x)/2.5): length(x)]))
+      #
+			# close <- which(sum1 > quantile(sum1, 0.55) & sum1 < quantile(sum1, 0.75))
+			# far <- which(sum2 > quantile(sum2, 0.75) & sum2 < quantile(sum2, 0.85))
+			# aveSorted_close <- apply(newd[1:(length(newd[,1])/2.5), close], 1, function(x) mean(x))
+			# aveSorted_far <- apply(newd[(length(newd[,1])/2.5):length(newd[,1]), far], 1, function(x) mean(x))
 			temp <- data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
 
 			# aveSorted <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
