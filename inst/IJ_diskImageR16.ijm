@@ -164,8 +164,8 @@ for (i=0; i<fileList.length; i++){
 	run("Size...", "width=1000 constrain interpolation=None");
 	run("8-bit");
 //	setMinAndMax(25, 500);
-	run("Subtract Background...", "rolling=50000 sliding");
-	setMinAndMax(35, 200);
+	run("Subtract Background...", "rolling=10000 sliding");
+	setMinAndMax(35, 250);
 //	run("Subtract Background...", "rolling=10000 sliding");
 
 	area = getResult("Area", 0);
