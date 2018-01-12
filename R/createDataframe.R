@@ -89,7 +89,7 @@ if(standType=="one"){
 		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
-		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
+		# slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
 		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
@@ -293,21 +293,23 @@ else{
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
 
-	if(is.na(maxYplace)) slope <- 0
-	if(!is.na(maxYplace) & midslope >= 10){
-		if (maxY< 10 | (midslope -10)  < 1){
-			xxSlope <- data[[i]]$distance[1:20]
-			yySlope <- data[[i]]$x[1:20]
-			slope <- lm(yySlope ~ xxSlope)$coefficients[2]
-		}
-else{
+	if(is.na(maxYplace)){
+		 slope <- 0
+		 return(slope)
+	 }
+	if(midslope < 10){
+		xxSlope <- data[[i]]$distance[1:20]
+		yySlope <- data[[i]]$x[1:20]
+		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+		return(slope)
+	}
+	if(midslope > 10){
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+		return(slope)
 		}
-}
-return(slope)
 }
 
 .findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
