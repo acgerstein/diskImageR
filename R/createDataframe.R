@@ -189,9 +189,9 @@ else{
 		df$ZOI20[df$RAD20 ==0] <- 6
 		df$ZOI50[df$RAD50 ==0] <- 6
 		df$ZOI80[df$RAD80 ==0] <- 6
-		df$ZOI20[df$slope < 0.2] <- 6
-		df$ZOI50[df$slope < 0.2] <- 6
-		df$ZOI80[df$slope < 0.2] <- 6
+		df$ZOI20[df$slope < 1] <- 6
+		df$ZOI50[df$slope < 1] <- 6
+		df$ZOI80[df$slope < 1] <- 6
 	}
 	df <- df[order(df$photo, df$drug),]
 	write.csv(df, file=filename, row.names=FALSE)
