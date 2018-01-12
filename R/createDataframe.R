@@ -130,9 +130,9 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-	# slopeML <- unlist(RAD.df[5,])
+	lenRise <- unlist(RAD.df[5,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
+	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes), lenRise)
 }
 
 if(needMap){
@@ -294,7 +294,7 @@ else{
 	if(xxmid[1] != 1) midslope <- xxmid[1]
 
 	if(is.na(maxYplace)){
-		 slope <- 0
+		 slope <- 0.1
 		 return(slope)
 	 }
 	if(midslope < 10){
@@ -323,6 +323,8 @@ else{
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 
+		lenRise <- length(which(data[[i]]$x>asym*0.01 & data[[i]]$x<asym*0.9))
+
 		whichX80 <- which(data[[i]]$x > asym * 0.8)
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 			if(whichX80[1] == 1){
@@ -346,7 +348,7 @@ else{
 				if (x20<1 | is.na(x20))	x20 <- 0
 
 		 # slopeML <- ML[[i]]$par[3]
-		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2))
+		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2), lenRise)
 		 return(param)
 		}
 
