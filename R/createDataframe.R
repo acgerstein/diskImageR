@@ -288,8 +288,8 @@ else{
 	if (is.na(maxYplace[1])) xxmid <- 1:10
 
 	if(xxmid[1] == 1){
-		 if(xxmid[5] == 5) midslope <- 10 #changed from [10] == 10 and below, back to 5
-		else midslope <-  xxmid[5]
+		 if(xxmid[10] == 10) midslope <- 10 #changed from [5] == 5
+		else midslope <-  xxmid[10]
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
 
@@ -297,15 +297,15 @@ else{
 		 slope <- 0
 		 return(slope)
 	 }
-	if(midslope < 5){
-		xxSlope <- data[[i]]$distance[1:10]
-		yySlope <- data[[i]]$x[1:10]
+	if(midslope < 10){
+		xxSlope <- data[[i]]$distance[1:20]
+		yySlope <- data[[i]]$x[1:20]
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		return(slope)
 	}
-	if(midslope >= 5){
-		xxSlope <- data[[i]]$distance[(midslope-5):(midslope+5)]
-		yySlope <- data[[i]]$x[(midslope-5):(midslope+5)]
+	if(midslope >= 10){
+		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
+		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		return(slope)
@@ -351,4 +351,4 @@ else{
 		}
 
 # plot(data[[36]])
-# plot(data[[48]])
+#plot(data[[48]])
