@@ -279,7 +279,7 @@ else{
 	data[[i]]$x[data[[i]]$x < 0] <- 0
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))
+	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))[1]
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
 
 	if(!is.na(maxYplace[1])){
