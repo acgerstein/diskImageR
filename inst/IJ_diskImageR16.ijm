@@ -163,9 +163,10 @@ for (i=0; i<fileList.length; i++){
 	run("Revert");
 	run("Size...", "width=1000 constrain interpolation=None");
 	run("8-bit");
-//	setMinAndMax(25, 500);
-	run("Subtract Background...", "rolling=10000 sliding");
-	setMinAndMax(35, 250);
+//	setMinAndMax(25, 300);
+//	setMinAndMax(40, 400);
+	run("Subtract Background...", "rolling=25000 sliding");
+	run("Enhance Contrast...", "saturated=0.4");	
 //	run("Subtract Background...", "rolling=10000 sliding");
 
 	area = getResult("Area", 0);
