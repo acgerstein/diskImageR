@@ -315,7 +315,7 @@ else{
 		startX <- which(data[[i]][,1] > dotedge)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
-		minD <- min(data[[i]][startX:stopX, "x"])
+		# minD <- min(data[[i]][startX:stopX, "x"])
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 		data[[i]]$x[data[[i]]$x < 0] <- 0
 		data[[i]]$distance <- data[[i]]$distance - dotedge
@@ -340,9 +340,13 @@ else{
 				x20 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.2)[1]+disk]
 				}
 
-				if (x80<1 | is.na(x80)) x80 <- 0
-				if (x50<1 | is.na(x50))	x50 <- 0
-				if (x20<1 | is.na(x20))	x20 <- 0
+				# if (x80<1 | is.na(x80)) x80 <- 0
+				# if (x50<1 | is.na(x50))	x50 <- 0
+				# if (x20<1 | is.na(x20))	x20 <- 0
+
+				if ( is.na(x80)) x80 <- 0
+				if ( is.na(x50))	x50 <- 0
+				if ( is.na(x20))	x20 <- 0
 
 		 # slopeML <- ML[[i]]$par[3]
 		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2))
