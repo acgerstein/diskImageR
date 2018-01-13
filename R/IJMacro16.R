@@ -203,7 +203,7 @@ function(workingDir, folderLoc, experAbbr){
 			ls <- which(sum > quantile(sum, 0.55) & sum < quantile(sum, 0.75))
 			aveSorted <- apply(newd[, ls], 1, function(x) mean(x))
 			temp <-  data.frame(distance = newd$x*28/length(newd$x), x= aveSorted)
-			plot(temp)
+			# plot(temp)
 
 			#the 28 comes from the IJ16 macro
 			# newList[[length(newList)+1L]] <-  data.frame(distance = newd$x*28/length(newd$x), x= c(aveSorted_close, aveSorted_far))
