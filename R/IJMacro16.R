@@ -1,12 +1,13 @@
-#' Run an imageJ analysis macro on the folder that contains the photograph to be analyzed
+#' Run an imageJ analysis macro on the folder that contains the photograph of the plate with 16 disks on it to be analyzed.
 
-#' @description \code{IJMacro} is used to run the imageJ analysis component of diskImageR and then load in the acquired output from imageJ into R.
+#' @description \code{IJMacro16} is used to run the imageJ analysis component of diskImageR and then load in the acquired output from imageJ into R.
 
 #' @param projectName the short name you want use for the project
 #' @param projectDir the path to the project directory where all analyses will be saved. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)
 #' @param photoDir the path to the directory where the photographs are to be analyzed. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param imageJLoc the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.
+#' @param drugs a vector that indicates the order of drug disks from top left to bottom right. Defaults to c("CIP5", "S10", "FOX30", "NA30", "CT10", "IPM10", "AMC30", "CTX30", "F300", "TE30", "CAZ30", "C30", "SXT25", "CPD10", "AM10", "ATM30")
 
 #' @details Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines for each photograph and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
 
@@ -18,7 +19,7 @@
 
 #' @examples
 #' \dontrun{
-#' IJMacro("myProject")
+#' IJMacro16("myProject")
 #' }
 
 #' @export
