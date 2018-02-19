@@ -153,10 +153,6 @@ for (i=0; i<fileList.length; i++){
 	List.set("area", getResult("Area", 0));
      list = List.getList();
 
-
-//
-//	alterImageSize(getTitle);
-//
 	selectWindow(getTitle);
 	picWidth = getWidth();
 	picHeight = getHeight();
@@ -164,12 +160,8 @@ for (i=0; i<fileList.length; i++){
 	run("Size...", "width=1000 constrain interpolation=None");
 	run("8-bit");
 	setMinAndMax(40, 400);
-//	setMinAndMax(25, 200);
-	run("Subtract Background...", "rolling=25000 sliding");	run("Enhance Contrast...", "saturated=0.5");
-
-//	
-		
-//	run("Subtract Background...", "rolling=10000 sliding");
+	run("Subtract Background...", "rolling=25000 sliding");
+	run("Enhance Contrast...", "saturated=0.5");
 
 	area = getResult("Area", 0);
 //	area = List.get("area");
@@ -179,7 +171,7 @@ for (i=0; i<fileList.length; i++){
 	//	print(discDiam);
 	convert = discDiam/knownDiam;
 
-	
+
 //walk through each of the 16 disks
 
 //
@@ -194,7 +186,7 @@ for (i=0; i<fileList.length; i++){
 		placeY = "Y"+m;
 		centerX = List.get(placeX);
 		centerY = List.get(placeY);
-	
+
 //		print(convert);
 		makePoint(centerX, centerY);
 

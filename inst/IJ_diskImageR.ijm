@@ -3,12 +3,6 @@ function alterImageSize(file) {
 	picWidth = getWidth();
 	picHeight = getHeight();
 	run("Size...", "width=1000 constrain interpolation=None");
-//	if (picWidth > picHeight)
-			run("Size...", "width=1000 constrain interpolation=None");
-//	if (picWidth < picHeight)
-			run("Size...", "height=1000 constrain interpolation=None");
-//	if (picWidth == picHeight)
-			run("Size...", "width=1000 height=0 constrain interpolation=None");
 	}
 
 function makeLineE(centerX, centerY, length, angle) {
@@ -188,7 +182,7 @@ function findDiskLarge(file){
 	print("Trying large disk parameter set 1");
 	selectWindow(getTitle);
 	run("Revert");
-	alterImageSize(getTitle);	
+	alterImageSize(getTitle);
 	run("8-bit");
 	setThreshold(181, 255);
 	run("Convert to Mask");
