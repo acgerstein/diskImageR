@@ -165,7 +165,7 @@ else{
 		}
 	names(df)[3] <- typeName
 }
- print(df)
+
 	if(standType == "one"){
 		df <- df[order(df$line),]
 		df$FoG80[df$FoG80 >1] <- 1
@@ -205,9 +205,11 @@ if(addSIR){
 	}
 	print(drugCutoffs)
 	for(i in 1:length(df$drug)){
-		if(df$ZOI >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant) category[i] <- "R"
+		if(df$ZOI[i] >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant){
+			 category[i] <- "R"
+		 }
 		else{
-			if(df$ZOI <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) category[i] <- "S"
+			if(df$ZOI[i] <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) category[i] <- "S"
 			else category[i] <- "I"
 		}
 	}
