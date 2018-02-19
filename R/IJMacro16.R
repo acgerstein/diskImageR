@@ -25,7 +25,7 @@
 #' @export
 
 IJMacro16 <-
-function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("ATM30", "C30", "CAS30", "AMC30", "AM10", "FOX30", "NA30", "CTX30", "CPD10", "TET30", "IPM10", "S10", "SXT25", "F300", "AZM15", "CIP5")){
+function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("ATM30", "C30", "CAZ30", "AMC30", "AM10", "FOX30", "NA30", "CTX30", "CPD10", "TET30", "IPM10", "S10", "SXT25", "F300", "AZM15", "CIP5")){
 	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
@@ -64,7 +64,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 		}
 	}
 
-		cat(paste0("Order of disks: ", drugs))
+		cat(paste0("Order of disks: ", collapse(drugs, sep=", ")))
 		cat("\n")
 
 
