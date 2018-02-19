@@ -189,7 +189,6 @@ else{
 	df <- df[order(df$photo, df$drug),]
 
 if(addSIR){
-	print(df)
 	if(.Platform$OS.type=="windows"){
 	  drugFile <- file.path(.libPaths(), "diskImageR", "drugCutoffs.csv")[1]
 		drugFile <- gsub("Program Files", "progra~1", drugFile)
