@@ -131,7 +131,8 @@ if(standType == "indiv"){
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
 
-	param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
+	# param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
+	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
 }
 
 if(needMap){
@@ -182,8 +183,8 @@ else{
 }
 
 	if(addZOI){
-		df$ZOI <- round(df$RAD50*2+diskDiam, 0)
-		df$ZOI[df$RAD50 ==0] <- 6
+		df$ZOI <- round(df$RAD80*2+diskDiam, 0)
+		df$ZOI[df$RAD80 ==0] <- 6
 		df$ZOI[df$slope < 0 ] <- 6
 	}
 	df <- df[order(df$photo, df$drug),]
