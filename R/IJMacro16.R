@@ -25,7 +25,7 @@
 #' @export
 
 IJMacro16 <-
-function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("CIP5", "S10", "FOX30", "NA30", "CT10", "IPM10", "AMC30", "CTX30", "F300", "TE30", "CAZ30", "C30", "SXT25", "CPD10", "AM10", "ATM30")){
+function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("ATM30", "C30", "CAS30", "AMC30", "AM10", "FOX30", "NA30", "CTX30", "CPD10", "TET30", "IPM10", "S10", "SXT25", "F300", "AZM15", "CIP5")){
 	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
@@ -45,7 +45,6 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 		}
 	}
 	setwd(photoDir)
-	cat(paste0("Order of disks: ", drugs))
 	if (TRUE %in% file.info(dir())[,2]) {
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
 		}
@@ -64,6 +63,10 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 			unlink(outputDir, recursive = TRUE)
 		}
 	}
+
+		cat(paste0("Order of disks: ", drugs))
+		cat("\n")
+
 
 	dir.create(file.path(outputDir), showWarnings= FALSE)
 	dir.create(file.path(outputDirCoord), showWarnings= FALSE)
