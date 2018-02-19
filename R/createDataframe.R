@@ -200,11 +200,11 @@ if(addSIR){
 	print(drugCutoffs)
 	for(i in 1:length(df$drug)){
 		if(df$ZOI[i] >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant){
-			 category[i] <- "R"
+			 df$category[i] <- "R"
 		 }
 		else{
-			if(df$ZOI[i] <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) category[i] <- "S"
-			else category[i] <- "I"
+			if(df$ZOI[i] <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) df$category[i] <- "S"
+			else df$category[i] <- "I"
 		}
 	}
 }
