@@ -33,7 +33,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=TRUE){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -193,6 +193,26 @@ else{
 		df$ZOI80[df$slope < 0 ] <- 6
 	}
 	df <- df[order(df$photo, df$drug),]
+
+if(addSIR){
+	if(.Platform$OS.type=="windows"){
+	  drugFile <- file.path(.libPaths(), "diskImageR", "drugCutoffs.csv")[1]
+		drugFile <- gsub("Program Files", "progra~1", drugFile)
+		drugCutoffs <- read.csv(drugFile)
+	}
+	else{
+		drugCutoffs <- read.csv(file.path(.libPaths(), "diskImageR", "drugCutoffs.csv"))
+	}
+	print(drugCutoffs)
+	for(i in 1:length(df$drug)){
+		if(df$ZOI >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant)) category[i] <- "R"
+		else{
+			if(df$ZOI <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible)) category[i] <- "S"
+			else category[i] <- "I"
+		}
+	}
+}
+
 	write.csv(df, file=filename, row.names=FALSE)
 
 	dfName <- paste(projectName, ".df", sep="")
