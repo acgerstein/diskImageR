@@ -199,13 +199,16 @@ if(addSIR){
 		drugCutoffs <- read.csv(file.path(.libPaths(), "diskImageR", "drugCutoffs.csv"))
 	}
 	for(i in 1:length(df$drug)){
-		if(df$ZOI[i] <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant){
-			 df$category[i] <- "R"
-		 }
-		else{
-			if(df$ZOI[i] >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) df$category[i] <- "S"
-			else df$category[i] <- "I"
+		if(df$drug[i] %in% drugCutoffs$Drug_abbrev){
+			if(df$ZOI[i] <= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Resistant){
+				 df$category[i] <- "R"
+			 }
+			else{
+				if(df$ZOI[i] >= subset(drugCutoffs, Drug_abbrev == df$drug[i])$Susceptible) df$category[i] <- "S"
+				else df$category[i] <- "I"
+			}
 		}
+	else df$category[i] <- NA
 	}
 }
 
