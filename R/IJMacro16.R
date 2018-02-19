@@ -43,9 +43,9 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 			cat("The photograph directory can not be used for the main project directory. Please select a different folder for the main project directory.")
 			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		}
-
 	}
 	setwd(photoDir)
+	cat(paste0("Order of disks: ", drugs))
 	if (TRUE %in% file.info(dir())[,2]) {
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
 		}
