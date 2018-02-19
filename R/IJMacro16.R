@@ -64,7 +64,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 		}
 	}
 
-		cat(paste0("Order of disks: ", collapse(drugs, sep=", ")))
+		cat(paste0("Order of disks: ", paste0(drugs, collapse=", ")))
 		cat("\n")
 
 

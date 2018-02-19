@@ -167,7 +167,6 @@ function(workingDir, folderLoc, experAbbr){
 
 .readIn <-function(directoryPath, newList = list(), numDig=30) {
 	currDir <- getwd()
-	print(currDir)
 	getData <- function(i, newList, names) {
 		if (i > length(dir())){
 			names(newList) <- names
@@ -187,7 +186,6 @@ function(workingDir, folderLoc, experAbbr){
 	i <-1
 	names <- c()
 	findMin <- c()
-	# print("starting averaging")
 	getData(i, newList, names)
 }
 
