@@ -82,11 +82,11 @@ datas <- Map(cbind, data, dataCor)
 data <- datas
 
 #where is the minimum intensity - can use for later calculations
-# minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<maxDist)),2])}))
-# whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
-# whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
-# whichMinIntensity5 <- c(mapply(function(x, y) {min(which(x[whichMinIntensity:length(x),2] < minIntensity*1.05))}, x = data, y = minIntensity))
-# whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))+whereMinIntensity
+minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<maxDist)),2])}))
+whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
+whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
+whichMinIntensity5 <- c(mapply(function(x, y) {min(which(x[whichMinIntensity:length(x),2] < minIntensity*1.05))}, x = data, y = minIntensity))
+whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))+whereMinIntensity
 
 #where is the maximum intensity? This is also the point of growth maximum
 #I may have broken this.
