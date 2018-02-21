@@ -98,8 +98,16 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	if(!needML){
 		MLt <- paste(projectName, ".ML", sep="")
 		MLt2 <- paste(projectName, ".ML2", sep="")
-		ML <- eval(parse(text=MLt))
-		ML2 <- eval(parse(text=MLt2))
+		if(MLt %in% ls()) ML <- eval(parse(text=MLt))
+		else{
+		  filename.ML <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML", sep=""))
+		  ML <- readRDS(filename.ML)
+		}
+		if(MLt2 %in% ls()) ML2 <- eval(parse(text=MLt2))
+		else {
+		  filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
+		  ML2 <- readRDS(filename.ML2)
+		}
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
