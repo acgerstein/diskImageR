@@ -94,7 +94,7 @@ maxIntensity <- c(sapply(data, function(x) {max(x[min(which(x[,1]>dotedge)):max(
 whichMaxIntensity <- mapply(function(x, y) {which(x[,3]==y)[1]}, x = data, y = maxIntensity)
 whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, y = maxIntensity)
 whichMaxIntensity95up <- c(mapply(function(x, y) {min(which(x[,3] < maxIntensity*0.95))}, x = data, y = maxIntensity))
-whereMaxIntensity95up <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95))
+whereMaxIntensity95up <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95up))
 
 whichMaxIntensity95down <- c(mapply(function(x, y) {min(which(x[whichMaxIntensity:length(whichMaxIntensity),3] < maxIntensity*0.95))}, x = data, y = maxIntensity))+whichMaxIntensity
 whereMaxIntensity95down <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95down))
