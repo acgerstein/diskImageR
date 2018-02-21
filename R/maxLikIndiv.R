@@ -92,18 +92,36 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
+		
+		filename.ML <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML", sep=""))
+		saveRDS(ML, file=filename.ML)
+		cat(paste0("\n", projectName, ".ML has been saved to ", filename.ML))
+		
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
 		cat("\nStatus of double logistic ML: ")
 		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100)
 		names(ML2) <- names(data)
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
+		
+		filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
+		saveRDS(ML2, file=filename.ML)
+		cat(paste0("\n", projectName, ".ML2 has been saved to ", filename.ML2))
+		
 	}
 	if(!needML){
 		MLt <- paste(projectName, ".ML", sep="")
 		MLt2 <- paste(projectName, ".ML2", sep="")
-		ML <- eval(parse(text=MLt))
-		ML2 <- eval(parse(text=MLt2))
+		if(MLt %in% ls()) ML <- eval(parse(text=MLt))
+		else{
+		  filename.ML <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML", sep=""))
+		  ML <- readRDS(filename.ML)
+		}
+		if(MLt2 %in% ls()) ML2 <- eval(parse(text=MLt2))
+		else {
+		  filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
+		  ML2 <- readRDS(filename.ML2)
+		}
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
