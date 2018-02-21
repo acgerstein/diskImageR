@@ -23,6 +23,7 @@
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE
 #' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
+#' @param testInhib Optional argument to test for tipping point (which will then rerun the maxLik analysis with a more constrained data set). Defaults to FALSE
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
 #' single logistic ('ML'):
@@ -135,7 +136,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 
 .curve2 <- function(asym, od50, scal, asymB, od50B, scalB, x) { asym*exp(scal*(x-od50))/(1+exp(scal*(x-od50)))+asymB*exp(scalB*(x-od50B))/(1+exp(scalB*(x-od50B)))}
 
-.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300){
+.getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -206,7 +207,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint
 }
 
-.getstats2Log <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=300){
+.getstats2Log <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
