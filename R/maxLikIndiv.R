@@ -52,7 +52,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE){
 	options(warn=-1)
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
@@ -87,7 +87,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	dotedge <- diskDiam/2+0.7
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100)
+		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100, testInhib=testInhib)
 		names(ML) <- names(data)
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
@@ -99,7 +99,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
 		cat("\nStatus of double logistic ML: ")
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100)
+		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100, testInhib=testInhib)
 		names(ML2) <- names(data)
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
@@ -176,6 +176,32 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
 	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
 	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint
+	
+	if(testInhib){
+    maxIntensity <- max(data[[i]][,2])
+    if(mlpoint$par[1] < maxIntensity*0.9){
+      	data[[i]] <- data[[i]][startX2:which(data[[i]]$x==maxIntensity), 1:2]#new here
+        lowOD <- 0
+      	highOD <- quantile(data[[i]]$x, 0.99)
+      	if(highOD == 0) highOD <- 0.1
+      	lower <- c(highOD*0.8, 0, 0,0)
+      	upper <- c(highOD, max(data[[i]]$distance), maxSlope,maxSlope)
+      
+      	par.tryA <-c(asym = 0.9*highOD, ic50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2)
+      	par.tryB<-c(asym = 0.9*highOD, ic50 = log(maxDist)/4, scal = maxSlope*0.1, sigma = 0.2)
+      	par.tryC<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1)
+      	par.tryD<-c(asym = 0.9*highOD, ic50 = log(maxDist)/2, scal = maxSlope*0.1, sigma = 0.1)
+      
+      	mlpoint<-c()
+      	mlpointA<-find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower,control=list(maxit=50000))
+      	mlpointB<-find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+      	mlpointC<-find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+      	mlpointD<-find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+      
+      	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
+      	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
+      	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint
+    }
 	mlpoint
 }
 
@@ -238,6 +264,47 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint
 	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint
 	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
+	
+		if(testInhib){
+    maxIntensity <- max(data[[i]][,2])
+    if(mlpoint$par[1] < maxIntensity*0.9){
+      	data[[i]] <- data[[i]][startX2:which(data[[i]]$x==maxIntensity), 1:2]#new here
+
+        	lowOD <- 0
+        	highOD <- quantile(data[[i]]$x, 0.99)
+        	if(highOD == 0) highOD <- 0.1
+        	lower <- c(0, 0, 0,0, 0, 0, 0)
+        	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)
+        
+        	#This is conservative, keeping them symmetric
+        	par.tryA <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.01)
+        	par.tryB <-c(asym = 0.9*highOD, od50 = log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.9*highOD, od50B = log(maxDist)/4, scalB = maxSlope*0.1)
+        	par.tryC<-c(asym = 0.9*highOD, od50 = log(maxDist)/2, scal =  maxSlope*0.01, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scal =  maxSlope*0.01)
+        	par.tryD<-c(asym = 0.9*highOD, od50 = log(maxDist)/2, scal =  maxSlope*0.1, sigma = 0.1, asymB = 0.9*highOD,od50B = log(maxDist)/2, scalB =  maxSlope*0.1)
+        	#Change asym and od50
+        	par.tryE <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
+        	par.tryF <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
+        	par.tryG <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.1, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.1)
+        	par.tryH <-c(asym = 0.5*highOD, od50 =  log(maxDist)/4, scal = maxSlope*0.01, sigma =  0.2, asymB = 0.7*highOD, od50B =  log(maxDist)/2, scalB = maxSlope*0.01)
+        
+        	mlpoint<-c()
+        	mlpointA<-find.mle(sumsquares.fit,par.tryA, method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointB<-find.mle(sumsquares.fit,par.tryB,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointC<-find.mle(sumsquares.fit,par.tryC,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointD<-find.mle(sumsquares.fit,par.tryD,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointE<-find.mle(sumsquares.fit,par.tryE,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointF<-find.mle(sumsquares.fit,par.tryF,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        	mlpointG<-find.mle(sumsquares.fit,par.tryG,method="subplex",upper=upper,lower=lower,control=list(maxit=50000))
+        	mlpointH<-find.mle(sumsquares.fit,par.tryH,method="subplex",upper=upper,lower=lower, control=list(maxit=50000))
+        
+        	mlpoint <- if (mlpointA$lnLik>mlpointB$lnLik) mlpointA else mlpointB
+        	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
+        	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint
+        	mlpoint <- if (mlpointE$lnLik>mlpoint$lnLik) mlpointE else mlpoint
+        	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint
+        	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint
+        	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
+    }
 	mlpoint
 }
 
