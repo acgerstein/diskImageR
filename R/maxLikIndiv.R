@@ -202,6 +202,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
       	mlpoint <- if (mlpointC$lnLik>mlpoint$lnLik) mlpointC else mlpoint
       	mlpoint <- if (mlpointD$lnLik>mlpoint$lnLik) mlpointD else mlpoint
     }
+	}
 	mlpoint
 }
 
@@ -304,7 +305,9 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
         	mlpoint <- if (mlpointF$lnLik>mlpoint$lnLik) mlpointF else mlpoint
         	mlpoint <- if (mlpointG$lnLik>mlpoint$lnLik) mlpointG else mlpoint
         	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
-    }
+    
+      }
+		}
 	mlpoint
 }
 
