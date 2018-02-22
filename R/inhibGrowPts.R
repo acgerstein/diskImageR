@@ -154,7 +154,7 @@ write.csv(df, file=filename, row.names=FALSE)
 dfName <- paste(projectName, ".df", sep="")
 cat(paste("\n", dfName, " has been written to the global environment", sep=""))
 cat(paste("\nSaving file: ", filename,  sep=""))
-cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
+cat(paste("\n", projectName, "_inhib_df.csv can be opened in MS Excel.",  sep=""))
 # assign(dfName, df, envir=globalenv())
 assign(dfName, df, inherits=TRUE)
 }
