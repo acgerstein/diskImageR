@@ -106,7 +106,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 		
 		filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
-		saveRDS(ML2, file=filename.ML)
+		saveRDS(ML2, file=filename.ML2)
 		cat(paste0("\n", projectName, ".ML2 has been saved to ", filename.ML2))
 		
 	}
