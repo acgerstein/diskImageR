@@ -184,8 +184,8 @@ else{
 
 	if(addZOI){
 		df$ZOI <- round(df$RAD80*2+diskDiam, 0)
-		df$ZOI[df$RAD80 ==0] <- 6
-		df$ZOI[df$slope < 0 ] <- 6
+		df$ZOI[df$RAD80 ==0] <- diskDiam
+		df$ZOI[df$slope < 0 ] <- diskDiam
 	}
 
 if(addSIR){
@@ -291,16 +291,20 @@ if(addSIR){
 #Determine the slope
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = dotedge,  maxDist = maxDist, standType = standType){
 	startX <- which(data[[i]][,1] > dotedge)[1]
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+  stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 	if(standType == "indiv") data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
 	data[[i]]$x[data[[i]]$x < 0] <- 0
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
+	if(maxY > max(data[[i]]$x)){
+	  slope <- summary(lm(data[[i]]$x~data[[i]]$distance))$coefficients[2]
+	  return(slope)
+	}
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))[1]
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
-
+  
 	if(!is.na(maxYplace[1])){
 		 xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
 	 }
@@ -311,7 +315,7 @@ if(addSIR){
 		else midslope <-  xxmid[10]
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
-
+	
 	if(is.na(maxYplace)){
 		 slope <- 0.1
 		 return(slope)
