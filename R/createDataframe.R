@@ -187,15 +187,16 @@ else{
 		df$ZOI[df$RAD80 ==0] <- 6
 		df$ZOI[df$slope < 0 ] <- 6
 	}
-	df <- df[order(df$photo, df$drug),]
 
 if(addSIR){
 	if(.Platform$OS.type=="windows"){
+	  df <- df[order(df$photo, df$drug),]
 	  drugFile <- file.path(.libPaths(), "diskImageR", "drugCutoffs.csv")[1]
 		drugFile <- gsub("Program Files", "progra~1", drugFile)
 		drugCutoffs <- read.csv(drugFile)
 	}
 	else{
+	  df <- df[order(df$photo, df$drug),]
 		drugCutoffs <- read.csv(file.path(.libPaths(), "diskImageR", "drugCutoffs.csv"))
 	}
 	for(i in 1:length(df$drug)){
