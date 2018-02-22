@@ -298,10 +298,7 @@ if(addSIR){
 	data[[i]]$x[data[[i]]$x < 0] <- 0
 	data[[i]]$distance <- data[[i]]$distance - dotedge
 	maxY <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
-	if(maxY > max(data[[i]]$x)){
-	  slope <- summary(lm(data[[i]]$x~data[[i]]$distance))$coefficients[2]
-	  return(slope)
-	}
+	allSlope <- summary(lm(data[[i]]$x~data[[i]]$distance))$coefficients[2]
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))[1]
 	maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
   
@@ -318,12 +315,14 @@ if(addSIR){
 	
 	if(is.na(maxYplace)){
 		 slope <- 0.1
+		 if(allSlope > slope) slope <- allSlope
 		 return(slope)
 	 }
 	if(midslope < 10){
 		xxSlope <- data[[i]]$distance[1:20]
 		yySlope <- data[[i]]$x[1:20]
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+		if(allSlope > slope) slope <- allSlope
 		return(slope)
 	}
 	if(midslope >= 10){
@@ -331,6 +330,7 @@ if(addSIR){
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
+		if(allSlope > slope) slope <- allSlope
 		return(slope)
 		}
 }
