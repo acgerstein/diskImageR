@@ -69,7 +69,7 @@ inhibGrowPts <- function(projectName, diskDiam = 12.7, maxDist=30, ymax=125, xpl
 		cat(paste("\nCreating new directory: ", newdir3), sep="")
 		}
 
-	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_df.csv", sep=""))
+	filename <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_inhib_df.csv", sep=""))
 	df <- data.frame(row.names = seq(1, length(data)))
 
 #standard dot edge calculation - takes awhile to get down to dark so diskDiam/2-1
