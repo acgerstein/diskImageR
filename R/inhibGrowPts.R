@@ -151,7 +151,7 @@ if (!is.logical(nameVector)){
 df <- df[order(df$line),]
 write.csv(df, file=filename, row.names=FALSE)
 
-dfName <- paste(projectName, ".df", sep="")
+dfName <- paste(projectName, "_inhib.df", sep="")
 cat(paste("\n", dfName, " has been written to the global environment", sep=""))
 cat(paste("\nSaving file: ", filename,  sep=""))
 cat(paste("\n", projectName, "_inhib_df.csv can be opened in MS Excel.",  sep=""))
