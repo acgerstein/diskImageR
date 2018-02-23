@@ -129,25 +129,22 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-  print(slopes)
-	# param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
+  
 	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
 	
 	if(needFoG){
-	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2, stand = rep(0, length(data)), dotedge = dotedge,  maxDist = maxDist, clearHaloStand = min(data[[i]][,2]), standardLoc = standardLoc)	
-	  
-	  x80 <- unlist(FoG.df[1,])
-		x50 <- unlist(FoG.df[2,])
-		x20 <- unlist(FoG.df[3,])
-		FoG80 <- unlist(FoG.df[4,])
-		FoG50 <- unlist(FoG.df[5,])
-		FoG20 <- unlist(FoG.df[6,])
-		maxFoG <- unlist(FoG.df[7,])
-		maxFoG80 <- unlist(FoG.df[8,])
-		maxFoG50 <- unlist(FoG.df[9,])
-		maxFoG20 <- unlist(FoG.df[10,])
-
-	  	
+	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2,  dotedge = dotedge,  maxDist = maxDist)	
+  	  x80 <- unlist(FoG.df[1,])
+  		x50 <- unlist(FoG.df[2,])
+  		x20 <- unlist(FoG.df[3,])
+  		FoG80 <- unlist(FoG.df[4,])
+  		FoG50 <- unlist(FoG.df[5,])
+  		FoG20 <- unlist(FoG.df[6,])
+  		maxFoG <- unlist(FoG.df[7,])
+  		maxFoG80 <- unlist(FoG.df[8,])
+  		maxFoG50 <- unlist(FoG.df[9,])
+  		maxFoG20 <- unlist(FoG.df[10,])
+  
 	  	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
 	}
 }
