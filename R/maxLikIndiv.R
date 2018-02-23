@@ -117,11 +117,13 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standa
 		else{
 		  filename.ML <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML", sep=""))
 		  ML <- readRDS(filename.ML)
+		  assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
 		}
 		if(MLt2 %in% ls()) ML2 <- eval(parse(text=MLt2))
 		else {
 		  filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
 		  ML2 <- readRDS(filename.ML2)
+		  assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		}
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
