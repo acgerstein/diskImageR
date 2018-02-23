@@ -130,7 +130,7 @@ if(standType == "indiv"){
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-
+  print(slopes)
 	# param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
 	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
 }
@@ -316,6 +316,8 @@ if(addSIR){
 	if(is.na(maxYplace)){
 		 slope <- 0.1
 		 if(allSlope > slope) slope <- allSlope
+		 print("here")
+		 print(slope)
 		 return(slope)
 	 }
 	if(midslope < 10){
@@ -323,6 +325,8 @@ if(addSIR){
 		yySlope <- data[[i]]$x[1:20]
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		if(allSlope > slope) slope <- allSlope
+		print("here2")
+		print(slope)
 		return(slope)
 	}
 	if(midslope >= 10){
@@ -331,6 +335,8 @@ if(addSIR){
 		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		if(allSlope > slope) slope <- allSlope
+		print("here3")
+		print(slope)
 		return(slope)
 		}
 }
