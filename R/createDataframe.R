@@ -392,7 +392,7 @@ if(addSIR){
   
 	if(!is.na(maxYplace[1])){
 		 xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk ###here###
-		 if(length(xxmid==0)){
+		 if(length(xxmid)==0){
 		   xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxYplace/2))+disk 
 		 }
 	 }
