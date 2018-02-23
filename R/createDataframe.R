@@ -399,6 +399,9 @@ if(addSIR){
 	if (is.na(maxYplace[1])) xxmid <- 1:10
 	if(length(xxmid)==0){
 		      xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxYplace/2))+disk 
+	}
+	if(length(xxmid)==0){
+		      xxmid <- 1:10
 		    }
 	print(paste(i, maxYplace[1], xxmid[1], sep="-"))
   if(xxmid[1] == 1){
