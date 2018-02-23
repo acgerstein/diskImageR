@@ -134,7 +134,7 @@ if(standType == "indiv"){
 	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
 	
 	if(needFoG){
-	  	FoG.df <-  sapply(c(1:length(data)), .findFoGIndiv, data=data, ML=ML, ML2 = ML2, stand = rep(0, length(data)), dotedge = dotedge,  maxDist = maxDist, clearHaloStand = min(data[[i]][,2]), standardLoc = standardLoc)	
+	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2, stand = rep(0, length(data)), dotedge = dotedge,  maxDist = maxDist, clearHaloStand = min(data[[i]][,2]), standardLoc = standardLoc)	
 	  
 	  x80 <- unlist(FoG.df[1,])
 		x50 <- unlist(FoG.df[2,])
