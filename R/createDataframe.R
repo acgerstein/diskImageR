@@ -317,7 +317,8 @@ if(addSIR){
 		 slope <- 0.1
 		 if(allSlope > slope) slope <- allSlope
 		 print("here")
-		 print(slope)
+		 print(allSlope)
+		
 		 return(slope)
 	 }
 	if(midslope < 10){
