@@ -394,7 +394,7 @@ if(addSIR){
 		 xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxY/2))+disk
 	 }
 	if (is.na(maxYplace[1])) xxmid <- 1:10
-	if(maxYplace[1]==1)) xxmid <-1:10
+	if(maxYplace[1]==1) xxmid <-1:10
 	
   if(xxmid[1] == 1){
 		 if(xxmid[10] == 10) midslope <- 10 #changed from [5] == 5
