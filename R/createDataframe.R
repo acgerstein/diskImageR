@@ -11,7 +11,7 @@
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
 #' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
-#' @param needZOI For invidiual standType, calculate FoG? Defaults to "FALSE".
+#' @param needZOI For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -34,7 +34,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE, needFoG=FALSE){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
