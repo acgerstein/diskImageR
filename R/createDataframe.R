@@ -11,6 +11,7 @@
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
 #' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
+#' @param needZOI For invidiual standType, calculate FoG? Defaults to "FALSE".
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -33,7 +34,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -89,7 +90,6 @@ if(standType=="one"){
 		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
-		# slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
 		slope <- sapply(c(1:length(data)), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, clearHaloStand = clearHaloStand, standType = "one")
 
@@ -122,8 +122,7 @@ if(standType=="one"){
 
 if(standType == "indiv"){
 	slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
-
-
+	
 	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
 	x80 <- unlist(RAD.df[1,])
@@ -132,7 +131,13 @@ if(standType == "indiv"){
 	asym <- unlist(RAD.df[4,])
   print(slopes)
 	# param <- data.frame(maxY = asym, RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
-	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = unlist(slopes))
+	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
+	
+	if(needFoG){
+	  	FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = rep(0, length(data)), dotedge = dotedge,  maxDist = maxDist, clearHaloStand = min(data[[i]][,2]), standardLoc = standardLoc)	
+	  
+	  	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
+	}
 }
 
 if(needMap){
@@ -229,6 +234,7 @@ if(addSIR){
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
 		data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
 		data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
+
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 		yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
 		ploty <- data[[i]]$x
@@ -238,10 +244,18 @@ if(addSIR){
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 		yy <- (yy+min(data[[i]]$x))
 		yy[yy < 0] <- 0
-		x80 <- xx[which.max(yy> asym * 0.8)]
-		x50 <- xx[which.max(yy> asym * 0.5)]
-		x20 <- xx[which.max(yy> asym * 0.2)]
-		if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+		if(max(yy) < asym*0.8){
+  		x80 <- xx[which.max(yy> max(yy) * 0.8)]
+  		x50 <- xx[which.max(yy> max(yy) * 0.5)]
+  		x20 <- xx[which.max(yy> max(yy) * 0.2)]
+		}
+		  
+		else{ 
+  		x80 <- xx[which.max(yy> asym * 0.8)]
+  		x50 <- xx[which.max(yy> asym * 0.5)]
+  		x20 <- xx[which.max(yy> asym * 0.2)]
+		}
+  	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
 
 		if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
 		else xx80 <- seq(log(data[[i]]$distance[1]), log(data[[i]]$distance[2]), length=200)
