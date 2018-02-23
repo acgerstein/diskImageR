@@ -261,7 +261,7 @@ if(addSIR){
 #     		x20 <- xx[which.max(yy> asym * 0.2)]
 #   		}
 #   	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
-    dat <- data.frame(xx, yy)
+     # dat <- data.frame(xx, yy)
     
     xx80 <- xx[xx<x80]
 		yy80 <- yy[xx<x80]
@@ -278,7 +278,7 @@ if(addSIR){
 		maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))
 		maxFoG80 <- exp(x80)*max(yy80)-min(exp(xx80))*max(yy80)
 		maxFoG50 <- exp(x50)*max(yy50)-min(exp(xx50))*max(yy50)
-		maxFoG20 <- exp(x20)*max(yy20)-min(exp(dat$xx))*max(yy20)
+		maxFoG20 <- exp(x20)*max(yy20)-min(exp(xx20))*max(yy20)
 
 		FoG80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))
 		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
