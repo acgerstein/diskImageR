@@ -425,7 +425,7 @@ if(addSIR){
 		data[[i]]$distance <- data[[i]]$distance - dotedge
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
-		whichX80 <- which(data[[i]]$x > asym * 0.8)
+		whichX80 <- which(data[[i]]$x > (asym * 0.8))
 		print(paste(i, whichX80[1], sep="-"))
 		
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
@@ -433,13 +433,13 @@ if(addSIR){
 							x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
 				}
 
-		whichX50 <- which(data[[i]]$x > asym * 0.5)
+		whichX50 <- which(data[[i]]$x > (asym * 0.5))
 		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
 			if(whichX50[1] == 1){
 				x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
 				}
 
-		whichX20 <- which(data[[i]]$x > asym * 0.2)
+		whichX20 <- which(data[[i]]$x > (asym * 0.2))
 		if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
 			if(whichX20[1] == 1){
 				x20 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.2)[1]+disk]
