@@ -250,17 +250,17 @@ if(addSIR){
 	  	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
   		yy <- (yy+min(data[[i]]$x))
 	  	yy[yy < 0] <- 0
-		  if(max(yy) < asym*0.8){
+		  # if(max(yy) < asym*0.8){
     		x80 <- xx[which.max(yy> max(yy) * 0.8)]
     		x50 <- xx[which.max(yy> max(yy) * 0.5)]
     		x20 <- xx[which.max(yy> max(yy) * 0.2)]
-  		}
-		  if(max(yy) > asym*0.8){ 
-    		x80 <- xx[which.max(yy> asym * 0.8)]
-    		x50 <- xx[which.max(yy> asym * 0.5)]
-    		x20 <- xx[which.max(yy> asym * 0.2)]
-  		}
-  	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+#   		}
+# 		  if(max(yy) > asym*0.8){ 
+#     		x80 <- xx[which.max(yy> asym * 0.8)]
+#     		x50 <- xx[which.max(yy> asym * 0.5)]
+#     		x20 <- xx[which.max(yy> asym * 0.2)]
+#   		}
+#   	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
     dat <- data.frame(xx, yy)
     
     xx80 <- xx[xx<x80]
