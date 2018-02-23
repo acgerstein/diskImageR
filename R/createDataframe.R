@@ -136,6 +136,18 @@ if(standType == "indiv"){
 	if(needFoG){
 	  	FoG.df <-  sapply(c(1:length(data)), .findFoG, data=data, ML=ML, ML2 = ML2, stand = rep(0, length(data)), dotedge = dotedge,  maxDist = maxDist, clearHaloStand = min(data[[i]][,2]), standardLoc = standardLoc)	
 	  
+	  x80 <- unlist(FoG.df[1,])
+		x50 <- unlist(FoG.df[2,])
+		x20 <- unlist(FoG.df[3,])
+		FoG80 <- unlist(FoG.df[4,])
+		FoG50 <- unlist(FoG.df[5,])
+		FoG20 <- unlist(FoG.df[6,])
+		maxFoG <- unlist(FoG.df[7,])
+		maxFoG80 <- unlist(FoG.df[8,])
+		maxFoG50 <- unlist(FoG.df[9,])
+		maxFoG20 <- unlist(FoG.df[10,])
+
+	  	
 	  	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
 	}
 }
@@ -228,6 +240,62 @@ if(addSIR){
 	assign(dfName, df, inherits=TRUE)
 	}
 
+  .findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
+  		startX <- which(data[[i]][,1] > dotedge)[1]
+	    stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+	    minD <- min(data[[i]][startX:stopX, "x"])
+	    data[[i]] <- data[[i]][startX:stopX, 1:2]
+	    data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+
+	    xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+	    yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
+	  
+	  	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+  		yy <- (yy+min(data[[i]]$x))
+	  	yy[yy < 0] <- 0
+		  if(max(yy) < asym*0.8){
+    		x80 <- xx[which.max(yy> max(yy) * 0.8)]
+    		x50 <- xx[which.max(yy> max(yy) * 0.5)]
+    		x20 <- xx[which.max(yy> max(yy) * 0.2)]
+  		}
+		  if(max(yy) > asym*0.8){ 
+    		x80 <- xx[which.max(yy> asym * 0.8)]
+    		x50 <- xx[which.max(yy> asym * 0.5)]
+    		x20 <- xx[which.max(yy> asym * 0.2)]
+  		}
+  	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
+    dat <- data.frame(xx, yy)
+    
+    xx80 <- xx[xx<x80]
+		yy80 <- yy[xx<x80]
+		xx50 <- xx[xx<x50]
+		yy50 <- yy[xx<x50]
+		xx20 <- xx[xx<x20]
+		yy20 <- yy[xx<x20]
+		
+		id <- order(xx)
+		id80 <- order(xx80)
+		id50 <- order(xx50)
+		id20 <- order(xx20)
+
+		maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))
+		maxFoG80 <- exp(x80)*max(yy80)-min(exp(xx80))*max(yy80)
+		maxFoG50 <- exp(x50)*max(yy50)-min(exp(xx50))*max(yy50)
+		maxFoG20 <- exp(x20)*max(yy20)-min(exp(dat$xx))*max(yy20)
+
+		FoG80 <- sum(diff(exp(xx80[id80]))*zoo::rollmean(yy80[id80], 2))
+		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
+		FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
+
+		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
+
+		 if (exp(param$x80)<1) 	param$x80 <- 0
+		 if (exp(param$x50)<1)	param$x50 <- 0
+		 if (exp(param$x20)<1)	param$x20 <- 0
+		 return(param)
+		}
+
+
 	.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
 		startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
@@ -244,17 +312,17 @@ if(addSIR){
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 		yy <- (yy+min(data[[i]]$x))
 		yy[yy < 0] <- 0
-		if(max(yy) < asym*0.8){
+	   if(max(yy) < asym*0.8){
   		x80 <- xx[which.max(yy> max(yy) * 0.8)]
   		x50 <- xx[which.max(yy> max(yy) * 0.5)]
   		x20 <- xx[which.max(yy> max(yy) * 0.2)]
-		}
+		 }
 		  
-		else{ 
-  		x80 <- xx[which.max(yy> asym * 0.8)]
-  		x50 <- xx[which.max(yy> asym * 0.5)]
-  		x20 <- xx[which.max(yy> asym * 0.2)]
-		}
+ 		else{ 
+   		x80 <- xx[which.max(yy> asym * 0.8)]
+   		x50 <- xx[which.max(yy> asym * 0.5)]
+   		x20 <- xx[which.max(yy> asym * 0.2)]
+ 		}
   	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
 
 		if(exp(x80)>1) xx80 <- seq(log(data[[i]]$distance[1]), log(round(exp(x80))), length=200)
