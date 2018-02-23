@@ -238,7 +238,6 @@ if(addSIR){
 	}
 
 .findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
-  	print(i)	
     startX <- which(data[[i]][,1] > dotedge)[1]
 	    stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	    minD <- min(data[[i]][startX:stopX, "x"])
@@ -435,7 +434,6 @@ if(addSIR){
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 		whichX80 <- which(data[[i]]$x > (asym * 0.8))
-		print(paste(i, whichX80[1], sep="-"))
 		
 		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 			if(whichX80[1] == 1){
