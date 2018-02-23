@@ -237,8 +237,9 @@ if(addSIR){
 	assign(dfName, df, inherits=TRUE)
 	}
 
-  .findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
-  		startX <- which(data[[i]][,1] > dotedge)[1]
+.findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
+  	print(i)	
+    startX <- which(data[[i]][,1] > dotedge)[1]
 	    stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	    minD <- min(data[[i]][startX:stopX, "x"])
 	    data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -267,8 +268,16 @@ if(addSIR){
 		yy80 <- yy[xx<x80]
 		xx50 <- xx[xx<x50]
 		yy50 <- yy[xx<x50]
+		if(length(xx50) == 0){
+		  xx50 <- xx[1:2]
+		  yy50 <- yy[1:2]
+		}
 		xx20 <- xx[xx<x20]
 		yy20 <- yy[xx<x20]
+		if(length(xx20) == 0){
+		  xx20 <- xx[1:2]
+		  yy20 <- yy[1:2]
+		}
 		
 		id <- order(xx)
 		id80 <- order(xx80)
