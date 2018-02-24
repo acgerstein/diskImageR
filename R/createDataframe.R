@@ -238,50 +238,51 @@ if(addSIR){
 	}
 
 .findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
-    startX <- which(data[[i]][,1] > dotedge)[1]
-	    stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
-	    minD <- min(data[[i]][startX:stopX, "x"])
-	    data[[i]] <- data[[i]][startX:stopX, 1:2]
-	    data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
+  print(i)
+  startX <- which(data[[i]][,1] > dotedge)[1]
+	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
+  minD <- min(data[[i]][startX:stopX, "x"])
+  data[[i]] <- data[[i]][startX:stopX, 1:2]
+  data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
-	    xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	    yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-	  
-	  	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-  		yy <- (yy+min(data[[i]]$x))
-	  	yy[yy < 0] <- 0
-		  # if(max(yy) < asym*0.8){
-    		x80 <- xx[which.max(yy> max(yy) * 0.8)]
-    		x50 <- xx[which.max(yy> max(yy) * 0.5)]
-    		x20 <- xx[which.max(yy> max(yy) * 0.2)]
-#   		}
-# 		  if(max(yy) > asym*0.8){ 
-#     		x80 <- xx[which.max(yy> asym * 0.8)]
-#     		x50 <- xx[which.max(yy> asym * 0.5)]
-#     		x20 <- xx[which.max(yy> asym * 0.2)]
-#   		}
+  xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+  yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
+
+	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+	yy <- (yy+min(data[[i]]$x))
+	yy[yy < 0] <- 0
+  # if(max(yy) < asym*0.8){
+	x80 <- xx[which.max(yy> max(yy) * 0.8)]
+	x50 <- xx[which.max(yy> max(yy) * 0.5)]
+	x20 <- xx[which.max(yy> max(yy) * 0.2)]
+#		}
+# if(max(yy) > asym*0.8){ 
+#   x80 <- xx[which.max(yy> asym * 0.8)]
+#   x50 <- xx[which.max(yy> asym * 0.5)]
+# 	x20 <- xx[which.max(yy> asym * 0.2)]
+#		}
 #   	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
-     # dat <- data.frame(xx, yy)
+ # dat <- data.frame(xx, yy)
     
-    xx80 <- xx[xx<x80]
-		yy80 <- yy[xx<x80]
-		xx50 <- xx[xx<x50]
-		yy50 <- yy[xx<x50]
-		if(length(xx50) == 0){
-		  xx50 <- xx[1:2]
-		  yy50 <- yy[1:2]
-		}
-		xx20 <- xx[xx<x20]
-		yy20 <- yy[xx<x20]
-		if(length(xx20) == 0){
-		  xx20 <- xx[1:2]
-		  yy20 <- yy[1:2]
-		}
-		
-		id <- order(xx)
-		id80 <- order(xx80)
-		id50 <- order(xx50)
-		id20 <- order(xx20)
+  xx80 <- xx[xx<x80]
+	yy80 <- yy[xx<x80]
+	xx50 <- xx[xx<x50]
+	yy50 <- yy[xx<x50]
+	if(length(xx50) == 0){
+	  xx50 <- xx[1:2]
+	  yy50 <- yy[1:2]
+	}
+	xx20 <- xx[xx<x20]
+	yy20 <- yy[xx<x20]
+	if(length(xx20) == 0){
+	  xx20 <- xx[1:2]
+	  yy20 <- yy[1:2]
+	}
+	
+	id <- order(xx)
+	id80 <- order(xx80)
+	id50 <- order(xx50)
+	id20 <- order(xx20)
 
 		maxFoG <- sum(diff(xx[id])*zoo::rollmean(yy[id], 2))
 		maxFoG80 <- exp(x80)*max(yy80)-min(exp(xx80))*max(yy80)
