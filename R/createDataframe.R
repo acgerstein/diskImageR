@@ -443,7 +443,7 @@ if(addSIR){
 		asym <- min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5]))
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 		whichX80 <- which(data[[i]]$x > (asym * 0.8))
-    print(paste(i, whichX80, sep="-"))
+
     if(length(whichX80) == 0) x80 <- data[[i]]$distance[1]
     if(length(whichX80) > 0){
 		  if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
