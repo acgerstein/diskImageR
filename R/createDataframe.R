@@ -300,8 +300,7 @@ if(addSIR){
 		 return(param)
 		}
 
-
-	.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
+.findFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, i){
 		startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -455,7 +454,7 @@ if(addSIR){
     if(length(whichX50) > 0){
 		  if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
 			if(whichX50[1] == 1) x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
-				
+    }		
 
 		whichX20 <- which(data[[i]]$x > (asym * 0.2))
 		if(length(whichX20) == 0) x20 <- data[[i]]$distance[1]
@@ -477,5 +476,3 @@ if(addSIR){
 		 return(param)
 		}
 
-# plot(data[[36]])
-#plot(data[[48]])
