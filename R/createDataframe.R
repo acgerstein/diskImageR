@@ -444,8 +444,8 @@ if(addSIR){
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 		whichX80 <- which(data[[i]]$x > (asym * 0.8))
     print(paste(i, whichX80, sep="-"))
-				if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
-			if(whichX80[1] == 1){
+		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
+		if(whichX80[1] == 1){
 							x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
 				}
 
