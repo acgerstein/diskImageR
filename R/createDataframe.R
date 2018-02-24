@@ -444,22 +444,25 @@ if(addSIR){
 		disk <- min(which(data[[i]]$x[1:20] == 0))[1]
 		whichX80 <- which(data[[i]]$x > (asym * 0.8))
     print(paste(i, whichX80, sep="-"))
-		if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
-		if(whichX80[1] == 1){
-							x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
-				}
-
-		whichX50 <- which(data[[i]]$x > (asym * 0.5))
-		if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
-			if(whichX50[1] == 1){
-				x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
-				}
+    if(length(whichX80) == 0) x80 <- data[[i]]$distance[1]
+    if(length(whichX80) > 0){
+		  if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
+		  if(whichX80[1] == 1) x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
+    }
+    
+    whichX50 <- which(data[[i]]$x > (asym * 0.5))
+    if(length(whichX50) == 0) x50 <- data[[i]]$distance[1]
+    if(length(whichX50) > 0){
+		  if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
+			if(whichX50[1] == 1) x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
+				
 
 		whichX20 <- which(data[[i]]$x > (asym * 0.2))
-		if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
-			if(whichX20[1] == 1){
-				x20 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.2)[1]+disk]
-				}
+		if(length(whichX20) == 0) x20 <- data[[i]]$distance[1]
+		if(length(whichX20) > 0){
+		  if(whichX20[1] != 1) x20 <- data[[i]]$distance[whichX20[1]]
+			if(whichX20[1] == 1) x20 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.2)[1]+disk]
+		}
 
 				# if (x80<1 | is.na(x80)) x80 <- 0
 				# if (x50<1 | is.na(x50))	x50 <- 0
