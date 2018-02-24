@@ -266,6 +266,10 @@ if(addSIR){
     
   xx80 <- xx[xx<x80]
 	yy80 <- yy[xx<x80]
+	if(length(xx80) == 0){
+	  xx80 <- xx[1:2]
+	  yy80 <- yy[1:2]
+	}
 	xx50 <- xx[xx<x50]
 	yy50 <- yy[xx<x50]
 	if(length(xx50) == 0){
