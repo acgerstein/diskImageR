@@ -441,10 +441,9 @@ if(addSIR){
 }
 
 .findRAD <- function(data, ML, ML2, dotedge, maxDist, i){
-  print(paste(i, startX, stopX, sep="-"))
 		startX <- which(data[[i]][,1] > dotedge)[1]
 		stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
-
+    print(paste(i, startX, stopX, sep="-"))
 		data[[i]] <- data[[i]][startX:stopX, 1:2]
 		# minD <- min(data[[i]][startX:stopX, "x"])
 		data[[i]]$x <- data[[i]]$x -min(data[[i]]$x[1:20])
