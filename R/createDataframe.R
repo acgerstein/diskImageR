@@ -34,7 +34,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE, needFoG=FALSE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE, needFoG=FALSE, needSlope = TRUE){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -121,16 +121,20 @@ if(standType=="one"){
 }
 
 if(standType == "indiv"){
-	slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
 	
-	RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
+  RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-  
-	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
+	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20)
+	
+	
+	if(needSlope){
+    slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	  param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
+    }
 	
 	if(needFoG){
 	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2,  dotedge = dotedge,  maxDist = maxDist)	
@@ -238,7 +242,6 @@ if(addSIR){
 	}
 
 .findFogIndiv <- function(data, ML, ML2, dotedge = 3.4, maxDist = 35, i){
-  print(i)
   startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
   minD <- min(data[[i]][startX:stopX, "x"])
@@ -381,7 +384,8 @@ if(addSIR){
 
 #Determine the slope
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = dotedge,  maxDist = maxDist, standType = standType){
-	startX <- which(data[[i]][,1] > dotedge)[1]
+	 print(i)
+  startX <- which(data[[i]][,1] > dotedge)[1]
   stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	if(standType == "one") data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
