@@ -384,7 +384,6 @@ if(addSIR){
 
 #Determine the slope
 .findSlope <- function(data, ML, ML2, i, stand, clearHaloStand, dotedge = dotedge,  maxDist = maxDist, standType = standType){
-	 print(i)
   startX <- which(data[[i]][,1] > dotedge)[1]
   stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
