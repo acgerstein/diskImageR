@@ -134,6 +134,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
   		cat(paste0("\n", projectName, ".ML2 has been saved to ", filename.ML2))
   		
   	}
+  }
     
     
 	if(!needML){
