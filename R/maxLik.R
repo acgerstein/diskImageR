@@ -63,7 +63,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, maxSlope = 
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20")
 	}
-  
+  print("test")
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
