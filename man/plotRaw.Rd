@@ -46,6 +46,8 @@ plotRaw(projectName, ymin = 0, ymax = 250, xmin = 0, xmax = 40,
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name}
 
 \item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz window. Defaults to TRUE (saves a pdf file).}
+
+\item{needMap}{Is there a coordinates map to use to assign drug names. Defaults to "FALSE".}
 }
 \value{
 A pdf file with one plot for each photograph is saved to visualize the results of imageJ analyses

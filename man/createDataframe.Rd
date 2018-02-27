@@ -6,8 +6,9 @@
 \usage{
 createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
   standardLoc = 2.5, removeClear = FALSE, nameVector = TRUE,
-  typeVector = TRUE, typePlace = 2, typeName = "type",
-  standType = "one")
+  typeVector = TRUE, typePlace = 2, typeName = "type", needMap = FALSE,
+  standType = "one", addZOI = TRUE, addSIR = FALSE,
+  addIntensity = FALSE, needFoG = FALSE, needSlope = TRUE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -30,7 +31,13 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type".}
 
+\item{needMap}{Is there a coordinates map to use to assign drug names. Defaults to "FALSE".}
+
 \item{standType}{either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.}
+
+\item{addZOI}{Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".}
+
+\item{needZOI}{For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.}
 }
 \value{
 A dataframe "projectName.df" is saved to the global environment and a .csv file "projectName_df.csv" is exported to the "parameter_files" directory.
