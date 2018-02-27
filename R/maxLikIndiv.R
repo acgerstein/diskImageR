@@ -280,7 +280,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 	mlpoint
 }
 
-
 .getstatsLogIndiv <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
@@ -625,7 +624,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 		}
 	}
 }
-
 
 .singleFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
