@@ -66,7 +66,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-
+  print(projectName)
 	data <- eval(parse(text=projectName))
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
