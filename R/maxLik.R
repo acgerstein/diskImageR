@@ -131,8 +131,8 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
+  print("here")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
-	print("here")
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
