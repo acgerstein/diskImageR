@@ -25,7 +25,7 @@
 #' @export
 
 IJMacro16 <-
-function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("ATM30", "C30", "CAZ30", "AMC30", "AM10", "FOX30", "NA30", "CTX30", "CPD10", "TET30", "IPM10", "S10", "SXT25", "F300", "AZM15", "CIP5")){
+function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("AMC30", "CTX30", "S10", "CIP5", "CAZ30", "NA30", "IPM10", "AZM15", "C30", "FOX30", "TET30", "F300", "ATM30", "AM10", "CPD10", "SZT25")){
 	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
