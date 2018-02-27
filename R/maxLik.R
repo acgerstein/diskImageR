@@ -180,6 +180,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
+  print("here. FUcking again")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
