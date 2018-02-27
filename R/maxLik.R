@@ -73,7 +73,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		else {label <- rep("", length(data))}
 		}
 	else {label <- nameVector}
-
+  print(head(data[[1]]))
 	if (!is.logical(standardLoc)){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
 		standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
