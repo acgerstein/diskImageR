@@ -53,72 +53,7 @@
 
 maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, maxSlope = 100, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
-	if(!(hasArg(clearHalo))){
-		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
-		clearHalo <- as.numeric(cont)
-	}
-	if(!FoG %in% c(80, 50, 20)){
-		stop("Current suppported FoG values = 80, 50, 20")
-		}
-	if(!RAD %in% c(80, 50, 20, "all")){
-		stop("Current suppported RAD values = 'all', 80, 50, 20")
-	}
-  
-	fileFolder <- projectName
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	data <- eval(parse(text=projectName))
-	if (is.logical(nameVector)){
-		if (nameVector){label <- names(data)}
-		else {label <- rep("", length(data))}
-		}
-	else {label <- nameVector}
-	
-	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-	standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-	
-	dotedge <- diskDiam/2+0.4
-	
-	if(needML){
-		cat("\nStatus of single logistic ML: ")
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
-		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
-		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
-		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
-		cat("\nStatus of double logistic ML: ")
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
-		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
-		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
-	}
-	
-	if(!needML){
-		MLt <- paste(projectName, ".ML", sep="")
-		MLt2 <- paste(projectName, ".ML2", sep="")
-		if(MLt %in% ls()) ML <- eval(parse(text=MLt))
-		else{
-		  filename.ML <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML", sep=""))
-		  ML <- readRDS(filename.ML)
-		}
-		if(MLt2 %in% ls()) ML2 <- eval(parse(text=MLt2))
-		else {
-		  filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
-		  ML2 <- readRDS(filename.ML2)
-		}
-		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
-		}
-
-	if(plotParam){
-		clearHaloData <- data[[clearHalo]]
-		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
-		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-		clearHaloData$x <- clearHaloData$x + standard[clearHalo]
-		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
-		clearHaloStand <- clearHaloData[1,2]
-
-		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = standard, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
-	}
-	alarm()
+	print("okay")
 }
 
 .curve <-  function(asym, ic50,scal, x) {asym*exp(scal*(x-ic50))/(1+exp(scal*(x-ic50)))}
