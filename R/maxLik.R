@@ -51,18 +51,19 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, maxSlope = 100, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, maxSlope = 100, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
 		clearHalo <- as.numeric(cont)
 	}
 	if(!FoG %in% c(80, 50, 20)){
-		stop("Current suppported FoG values = 80, 50, 20, 5")
+		stop("Current suppported FoG values = 80, 50, 20")
 		}
 	if(!RAD %in% c(80, 50, 20, "all")){
-		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
-		}
+		stop("Current suppported RAD values = 'all', 80, 50, 20")
+	}
+  
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
@@ -72,14 +73,12 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		else {label <- rep("", length(data))}
 		}
 	else {label <- nameVector}
-	if (!is.logical(standardLoc)){
-		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-		standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-		}
-	else{
-		standard <- rep(0, length(data))
-		}
+	
+	dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+	standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+	
 	dotedge <- diskDiam/2+0.4
+	
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
 		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
