@@ -198,7 +198,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 		sum(res)
 	}
 	lowOD <- min(data[[i]]$x)
-	highOD <- quantile(data[[i]]$x, 0.99)
+	highOD <- quantile(data[[i]]$x, 0.99, na.rm=TRUE)
 	lower <- c(highOD*0.8, 0, 0,0)
 	upper <- c(highOD, max(data[[i]]$distance), maxSlope,maxSlope)
 
@@ -242,7 +242,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 		sum(res)
 	}
 	lowOD <- min(data[[i]]$x)
-	highOD <- quantile(data[[i]]$x, 0.99)
+	highOD <- quantile(data[[i]]$x, 0.99, na.rm=TRUE)
 	lower <- c(0, 0, 0,0, 0, 0, 0)
 	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)
 

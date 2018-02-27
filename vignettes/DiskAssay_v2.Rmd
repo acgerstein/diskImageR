@@ -23,7 +23,6 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```{r, echo=FALSE}
 library(devtools)
 install_github("acgerstein/diskImageR", build_vignettes = FALSE)
-install_git("git://github.com/acgerstein/diskImageR", build_vignettes = FALSE)
 library("diskImageR")
 ```
 
@@ -138,7 +137,7 @@ From these functions the plate background intensity is substracted off the inten
 The output of `maxLik()` is a list that is saved to the R environment and a PDF file with one plot per photograph that shows the results of the model fitting (saved to the *figures* directory). Many aspects of this figure can be specified including the maximum y axis (`ymax`) the number of plots on the x axis (`xplots`), the height and width of the PDF file (`height`, `width`), the values of RAD to be plotted (one of `80`, `50`, `20`, or `all`) and FoG cutoff value to plot (one of `80`, `50`, or `20`). Once `maxLik()` has been run once (in a given R session), it does not need to be rerun to made adjustments to the PDF file; to make a new figure use the argument `needML = FALSE`. The default is to save only a single PDF file (i.e., to repeatedly overwrite the same file with different figure iterations), this can be supressed with the argument `overwrite = FALSE`. 
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik2("newProject", clearHalo=1, standardLoc=2.5, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
+maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, stand="indiv")
 ```
 
 <b>[OPTIONAL] Save the maximum likelihood results</b>
