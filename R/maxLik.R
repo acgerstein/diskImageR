@@ -51,7 +51,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
+maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc = 2.5, maxSlope = 100, ymax=125, xplots = 5, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE){
 	options(warn=-1)
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
@@ -76,16 +76,16 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 
 	if (!is.logical(standardLoc)){
 		dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-		stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+		standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
 		}
 	else{
-		stand <- rep(0, length(data))
+		standard <- rep(0, length(data))
 		}
 
 	dotedge <- diskDiam/2+0.4
 	if(needML){
 		cat("\nStatus of single logistic ML: ")
-		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
+		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
 		# assign(paste(projectName, ".ML", sep=""), ML, envir=globalenv())
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
