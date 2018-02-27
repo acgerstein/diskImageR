@@ -81,8 +81,9 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	else{
 		standard <- rep(0, length(data))
 		}
-
+  print(standard)
 	dotedge <- diskDiam/2+0.4
+	print(dotedge)
 		  print("here first!")
 	if(needML){
 	  print("here!!")
