@@ -54,8 +54,7 @@
 
 maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE, stand="indiv"){
 	options(warn=-1)
-	
-  if(!RAD %in% c(80, 50, 20, "all")){
+	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
 		}
 	fileFolder <- projectName
@@ -89,26 +88,26 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 
 	dotedge <- diskDiam/2+0.7
   
-# 	if(stand=="one"){	
-# 		if(!(hasArg(clearHalo))){
-# 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
-# 		clearHalo <- as.numeric(cont)
-# 	}
-#     dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
-# 	  standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
-# 	  
-#     if(needML){
-#   		cat("\nStatus of single logistic ML: ")
-#   		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
-#   		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
-#   		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
-#   		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
-#   		cat("\nStatus of double logistic ML: ")
-#   		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
-#   		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
-#   		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
-#   	}
-# 	}
+	if(stand=="one"){	
+		if(!(hasArg(clearHalo))){
+		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
+		clearHalo <- as.numeric(cont)
+	}
+    dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
+	  standard <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
+	  
+    if(needML){
+  		cat("\nStatus of single logistic ML: ")
+  		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
+  		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
+  		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
+  		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
+  		cat("\nStatus of double logistic ML: ")
+  		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
+  		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
+  		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
+  	}
+	}
 	
   if(stand=="indiv"){	
   	if(needML){
@@ -132,9 +131,8 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
   		filename.ML2 <- file.path(getwd(), "parameter_files", projectName, paste(projectName, "_ML2", sep=""))
   		saveRDS(ML2, file=filename.ML2)
   		cat(paste0("\n", projectName, ".ML2 has been saved to ", filename.ML2))
-  		
+  	}	
   	}
-  }
     
     
 	if(!needML){
@@ -155,19 +153,19 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
-    # if(stand=="one"){
-    #   if(plotParam){
-    # 		clearHaloData <- data[[clearHalo]]
-    # 		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
-    # 		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
-    # 		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-    # 		clearHaloData$x <- clearHaloData$x + standard[clearHalo]
-    # 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
-    # 		clearHaloStand <- clearHaloData[1,2]
-    # 
-    # 		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = standard, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
-    #   }
-    # }
+    if(stand=="one"){
+      if(plotParam){
+    		clearHaloData <- data[[clearHalo]]
+    		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
+    		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
+    		clearHaloData <- clearHaloData[startX:stopX, 1:2]
+    		clearHaloData$x <- clearHaloData$x + standard[clearHalo]
+    		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
+    		clearHaloStand <- clearHaloData[1,2]
+    
+    		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = standard, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+      }
+    }
     
     if(stand=="indiv"){
       if(plotParam){
@@ -279,6 +277,7 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 	mlpoint <- if (mlpointH$lnLik>mlpoint$lnLik) mlpointH else mlpoint
 	mlpoint
 }
+
 
 .getstatsLogIndiv <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
 	cat(".")
@@ -583,195 +582,6 @@ maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, ymax=2
 			.singlePlot(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
 		if(numpages == 1){
 			# if (k >= xplots*yplots-xplots+1){
-			if (k >= xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else {axis(1, cex.axis=1, labels= FALSE)}
-			}
-		if(numpages == 2){
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1){
-				axis(1, cex.axis=1)
-				}
-			if (k >= 2*xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else {axis(1, cex.axis=1, labels= FALSE)}
-			}
-		if(numpages == 3){
-			if (k >= xplots*yplots-xplots+1 & k < xplots*yplots+1 | k >= 2*xplots*yplots-xplots+1 & k < 2*xplots*yplots+1 | k >= 3*xplots*yplots-xplots+1){
-				axis(1, cex.axis=1)
-				}
-			else{axis(1, labels=FALSE)}
-			}
-		axis(1, labels=FALSE)
-		j <- 1
-		while (j <= numpages){
-			if (k %in% seq(1, j*yplots*xplots, by=xplots)) {axis(2, cex.axis=1, las=2)}
-			j <- j+1
-		}
-	}
-
-	mtext("Distance (mm)", outer=TRUE, side=1, line=2, cex=1.2)
-	mtext("Pixel intensity", outer=TRUE, side=2, line=2, cex=1.2)
-
-	if(savePDF){
-		dev.off()
-		cat(paste("\nFigure saved: ", t, sep=""))
-
-		if(popUp){
-			tt <- paste("open", t)
-			system(tt)
-		}
-	}
-}
-
-.singleFoG <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 40, ymax = 200, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
-	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
-	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
-	data[[i]] <- data[[i]][startX:stopX, 1:2]
-	data[[i]]$x <- data[[i]]$x + stand[i] - clearHaloStand
-	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-	#RAD
-	ploty <- data[[i]]$x
-	ploty[ploty < 0] <-0
-	slope <- ML[[i]]$par[3]
-	ic50 <- ML[[i]]$par[2]
-	asym <- (ML[[i]]$par[1]+min(data[[i]]$x))
-	plot(data[[i]]$distance, ploty, cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist -dotedge), xaxt="n", yaxt="n", xlab="", ylab="")
-	axis(2, labels=FALSE)
-	yyplot <- (yy+min(data[[i]]$x))
-	yyplot[yyplot < 0] <- 0
-	points(exp(xx), yyplot, type="l", col="black", lwd=3)
-
-	useAsym <- "TRUE"
-  yy95halo <- yyplot[which.max(yyplot> asym * 0.05)]
-	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]
-	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]
-	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]
-	yy5halo <- yyplot[which.max(yyplot> asym * 0.95)]
-	if(yy20halo < yy50halo){
-		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]
-		useAsym <- "FALSE"
-	}
-
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	xx95 <- exp(xx[which.max(yyplot> asym * 0.05)])
-	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])
-	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])
-	xx20 <- exp(xx[which.max(yyplot> asym * 0.8)])
-	xx5 <- exp(xx[which.max(yyplot> asym * 0.95)])
-	if(useAsym == "FALSE"){
-		 xx20 <- exp(xx[which.max(yyplot> yyplot[length(yyplot)] * 0.8)])
-	}
-
-	if(FoG==95){
-		xx <- exp(xx[1:which.max(exp(xx) > xx95)-1])
-		}
-	if(FoG==80){
-		xx <- exp(xx[1:which.max(exp(xx) > xx80)-1])
-		}
-	if(FoG==50){
-		xx <- exp(xx[1:which.max(exp(xx) > xx50)-1])
-		}
-	if(FoG==20){
-		xx <- exp(xx[1:which.max(exp(xx) > xx20)-1])
-		}
-	if(FoG==5){
-			xx <- exp(xx[1:which.max(exp(xx) > xx5)-1])
-			}
-
-	if(length(xx)<1){
-		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	}
-
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
-	yy <- (yy+min(data[[i]]$x))
-	yy[yy < 0] <- 0
-	if (slope >1){
-		xx2 <- c(xx[1], xx, xx[length(xx)])
-		yy2 <- c(0, yy, 0)
-		if(plotFoG){
-			polygon(xx2, yy2, density=15, col="red")
-			}
-		points(xx, yy, type="l", col="black", lwd=2)
-		if(RAD ==5){
-				points(xx5, yy5halo, col="deepskyblue", cex=2, pch=19)
-				}
-		if(RAD == 20){
-			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
-			}
-		if(RAD ==50){
-			points(xx50, yy50halo, col="blue", cex=2, pch=19)
-			}
-		if(RAD ==80){
-			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
-			}
-		if(RAD ==95){
-				points(xx95, yy95halo, col="deepskyblue", cex=2, pch=19)
-				}
-		if(RAD=="all"){
-			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
-			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
-			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
-			}
-		if(plotCompon){
-			xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-			yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-			yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
-			yy1plot <- (yy2.1 +min(data[[i]]$x))
-			yy1plot[yy1plot <0] <-0
-			yy2plot <- (yy2.2 +min(data[[i]]$x))
-			yy2plot[yy2plot <0] <-0
-			points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)
-			points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)
-			}
-		}
-	mtext(label, side=3, cex=0.6)
-}
-
-.plotParam <- function(projectName, ML , ML2, stand,  clearHaloStand, standardLoc = 2.5, ymax=200, dotedge = 3.4, maxDist= 40, xplots = 4, height = 10, width=7,  FoG=50, RAD=50, overwrite = TRUE, popUp = TRUE, plotFoG = TRUE, label=label, savePDF = TRUE, plotSub = plotSub, plotCompon=plotCompon){
-	data <- eval(parse(text=projectName))
-	if(is.na(plotSub[1])){
-		plotSub <- 1:length(data)
-		}
-	fileFolder <- projectName
-	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
-	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-	t <- file.path("figures", projectName , paste(projectName, "_FoG.pdf", sep=""))
-	if (!overwrite){
-		if (file.exists(t)){
-			t <- file.path("figures", projectName , paste(projectName, "_FoG_2_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
-			if (file.exists(t)){
-				k <- 2
-				while(file.exists(t)){
-					k <- k+1
-					t <- file.path("figures", projectName, paste(projectName, "_FoG_", k, "_FoG", FoG, "_RAD", RAD, ".pdf", sep=""))
-					}
-				}
-			}
-		}
-
-	if(xplots > length(plotSub)){
-		xplots <- length(plotSub)
-	}
-	if (ceiling(length(plotSub)/xplots) < 6) {
-		yplots<- ceiling(length(plotSub)/xplots)}
-	else {yplots<- 6}
-	numpages <- ceiling(length(plotSub)/(xplots*yplots))
-	if(savePDF){
-		pdf(t, width=width, height=height)
-	}
-	# if(!savePDF){
-		# quartz(width=width, height=height)
-	# }
-	par(mfrow=c(yplots , xplots), mar=c(1,1,1,1), oma=c(4,5,1,1))
-	for (k in plotSub){
-			.singleFoG(data = data, ML = ML, ML2 = ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, stand = stand, i = k,FoG=FoG, RAD = RAD, clearHaloStand = clearHaloStand, label=label[k], plotFoG = plotFoG, plotCompon=plotCompon)
-		if(numpages == 1){
 			if (k >= xplots*yplots-xplots+1){
 				axis(1, cex.axis=1)
 				}
