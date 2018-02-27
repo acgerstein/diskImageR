@@ -1,6 +1,6 @@
 #' Used to read in existing imageJ analyses
 
-#' @description This function can be used to read in existing imageJ analyses following \code{\link{IJMacro}}. Running this function will prompt the user to select the main project folder and to select the directory that contains
+#' @description This function can be used to read in existing imageJ analyses following \code{\link{IJMacro}}. Running this function will prompt the user to select the main project folder and to select the directory that contains. This function depends on the tcltk package.
 
 #' @param projectName the name to be used for project. This name should be short, and can be different than what was used originally for the imageJ analysis step.
 #' @param newList dummy variable
