@@ -1,6 +1,6 @@
 #' Maximum Likelihood Inference
 
-#' @description \code{maxLik}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
+#' @description \code{maxLikIndiv}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
 
 #' @param projectName the short name in use for the project.
 #' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).
@@ -52,7 +52,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE, stand="indiv"){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE, stand="indiv"){
 	options(warn=-1)
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
@@ -180,7 +180,6 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 
 .getstatsLog <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=100){
 	cat(".")
-  print("here. FUcking again")
 	startX <- which(data[[i]][,1] > dotedge+0.5)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
@@ -199,7 +198,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 		sum(res)
 	}
 	lowOD <- min(data[[i]]$x)
-	highOD <- quantile(data[[i]]$x, 0.99, na.rm=TRUE)
+	highOD <- quantile(data[[i]]$x, 0.99)
 	lower <- c(highOD*0.8, 0, 0,0)
 	upper <- c(highOD, max(data[[i]]$distance), maxSlope,maxSlope)
 
@@ -243,7 +242,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 		sum(res)
 	}
 	lowOD <- min(data[[i]]$x)
-	highOD <- quantile(data[[i]]$x, 0.99, na.rm=TRUE)
+	highOD <- quantile(data[[i]]$x, 0.99)
 	lower <- c(0, 0, 0,0, 0, 0, 0)
 	upper <- c(highOD, log(maxDist), maxSlope, 10, highOD,  log(maxDist), maxSlope)
 
