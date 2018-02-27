@@ -66,7 +66,6 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
 	dir.create(file.path(getwd(), "figures", fileFolder), showWarnings= FALSE)
-  print(projectName)
 	data <- eval(parse(text=projectName))
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
@@ -83,10 +82,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		}
   print(standard)
 	dotedge <- diskDiam/2+0.4
-	print(dotedge)
-		  print("here first!")
 	if(needML){
-	  print("here!!")
 		cat("\nStatus of single logistic ML: ")
 		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
 		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
