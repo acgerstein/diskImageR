@@ -52,10 +52,10 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE, stand="indiv"){
+maxLikIndiv <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE, stand="indiv"){
 	options(warn=-1)
 	if(!RAD %in% c(80, 50, 20, "all")){
-		stop("Current suppported RAD values = 'all', 80, 50, 20")
+		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
 		}
 	fileFolder <- projectName
 	dir.create(file.path(getwd(), "figures"), showWarnings= FALSE)
