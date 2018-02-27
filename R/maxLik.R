@@ -90,7 +90,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
 		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
 		cat("\nStatus of double logistic ML: ")
-		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=stand, maxSlope=20)
+		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
 		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
 		cat(paste("\n", projectName, ".ML2 has been written to the global environment\n", sep=""))
 	}
@@ -116,11 +116,11 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, maxDist=30, standardLoc
 		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
 		stopX <- which(clearHaloData[,1] > maxDist - 0.5)[1]
 		clearHaloData <- clearHaloData[startX:stopX, 1:2]
-		clearHaloData$x <- clearHaloData$x + stand[clearHalo]
+		clearHaloData$x <- clearHaloData$x + standard[clearHalo]
 		clearHaloData$distance <- clearHaloData$distance - (dotedge+0.5)
 		clearHaloStand <- clearHaloData[1,2]
 
-		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = stand, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
+		.plotParam(projectName, ML=ML, ML2=ML2, dotedge = dotedge, stand = standard, standardLoc = standardLoc, maxDist = maxDist, ymax = ymax, clearHaloStand = clearHaloStand, FoG=FoG, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp, plotFoG = plotFoG, savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
 	}
 	alarm()
 }
