@@ -9,9 +9,11 @@
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
 #' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
-#' @param needMap Is there a coordinates map to use to assign drug names. Defaults to "FALSE".
+#' @param needMap Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}. Defaults to "FALSE".
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
 #' @param needZOI For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.
+#'@param RADcrit What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).
+#'@param addSIR Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run.
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
@@ -34,7 +36,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE, addIntensity=FALSE, needFoG=FALSE, needSlope = TRUE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 30, RADcrit = "20%", standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE,  needFoG=FALSE, RADcrit = "20%"){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -121,23 +123,19 @@ if(standType=="one"){
 }
 
 if(standType == "indiv"){
-	
-  RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 
+  RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
 	x50 <- unlist(RAD.df[2,])
 	x20 <- unlist(RAD.df[3,])
 	asym <- unlist(RAD.df[4,])
-	param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20)
-	
-	
-	if(needSlope){
-    slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
-	  param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
-    }
-	
+
+  slopes <- sapply(1:length(data), .findSlope, data=data, ML=ML, ML2 = ML2, stand = stand, dotedge = dotedge, maxDist = maxDist, standType = "indiv")
+	 param <- data.frame(RAD80 = x80, RAD50 = x50, RAD20 = x20, slope = round(unlist(slopes), digits=1))
+
+
 	if(needFoG){
-	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2,  dotedge = dotedge,  maxDist = maxDist)	
+	  	FoG.df <-  sapply(c(1:length(data)), .findFogIndiv, data=data, ML=ML, ML2 = ML2,  dotedge = dotedge,  maxDist = maxDist)
   	  x80 <- unlist(FoG.df[1,])
   		x50 <- unlist(FoG.df[2,])
   		x20 <- unlist(FoG.df[3,])
@@ -148,7 +146,7 @@ if(standType == "indiv"){
   		maxFoG80 <- unlist(FoG.df[8,])
   		maxFoG50 <- unlist(FoG.df[9,])
   		maxFoG20 <- unlist(FoG.df[10,])
-  
+
 	  	param <- data.frame(RAD80 =round(x80, digits=3), RAD50 = round(x50, digits=3), RAD20 = round(x20, digits=3), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
 	}
 }
@@ -201,8 +199,18 @@ else{
 }
 
 	if(addZOI){
-		df$ZOI <- round(df$RAD80*2+diskDiam, 0)
-		df$ZOI[df$RAD80 ==0] <- diskDiam
+		if(RADcrit = "20%")
+			df$ZOI <- round(df$RAD80*2+diskDiam, 0)
+			df$ZOI[df$RAD80 ==0] <- diskDiam
+		}
+		if(RADcrit = "50%")
+			df$ZOI <- round(df$RAD50*2+diskDiam, 0)
+			df$ZOI[df$RAD80 ==0] <- diskDiam
+		}
+		if(RADcrit = "80%")
+			df$ZOI <- round(df$RAD20*2+diskDiam, 0)
+			df$ZOI[df$RAD80 ==0] <- diskDiam
+		}
 		df$ZOI[df$slope < 0 ] <- diskDiam
 	}
 
@@ -276,7 +284,7 @@ if(addSIR){
 	  xx20 <- xx[1:2]
 	  yy20 <- yy[1:2]
 	}
-	
+
 	id <- order(xx)
 	id80 <- order(xx80)
 	id50 <- order(xx50)
@@ -320,8 +328,8 @@ if(addSIR){
   		x50 <- xx[which.max(yy> max(yy) * 0.5)]
   		x20 <- xx[which.max(yy> max(yy) * 0.2)]
 		 }
-		  
- 		else{ 
+
+ 		else{
    		x80 <- xx[which.max(yy> asym * 0.8)]
    		x50 <- xx[which.max(yy> asym * 0.5)]
    		x20 <- xx[which.max(yy> asym * 0.2)]
@@ -387,7 +395,7 @@ if(addSIR){
 	disk <- which(data[[i]]$x == min(data[[i]]$x[1:20]))[1]
 	#maxYplace <- which(data[[i]][disk:length(data[[i]]$x),2] > maxY)[1]+disk
 	maxYplace <- which.max(data[[i]][,2])
-  
+
 	if(!is.na(maxYplace[1])){
 	   if(maxYplace[1]==1) xxmid <-1:10
 	    if(maxYplace[1]!=1){
@@ -396,7 +404,7 @@ if(addSIR){
 	  }
 	if (is.na(maxYplace[1])) xxmid <- 1:10
 	if(length(xxmid)==0){
-		      xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxYplace/2))+disk 
+		      xxmid <- which(data[[i]]$x[disk:length(data[[i]]$x)] > (maxYplace/2))+disk
 	}
 	if(length(xxmid)==0){
 		      xxmid <- 1:10
@@ -407,7 +415,7 @@ if(addSIR){
 		else midslope <-  xxmid[10]
 	}
 	if(xxmid[1] != 1) midslope <- xxmid[1]
-	
+
 	if(is.na(maxYplace)){
 		 slope <- 0.1
 		 if(allSlope > slope) slope <- allSlope
@@ -423,7 +431,7 @@ if(addSIR){
 	if(midslope >= 10){
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
-		yySlope[yySlope<0] <- 0 
+		yySlope[yySlope<0] <- 0
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		if(allSlope > slope) slope <- allSlope
 		return(slope)
@@ -447,13 +455,13 @@ if(addSIR){
 		  if(whichX80[1] != 1) x80 <- data[[i]]$distance[whichX80[1]]
 		  if(whichX80[1] == 1) x80 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.8)[1]+disk]
     }
-    
+
     whichX50 <- which(data[[i]]$x > (asym * 0.5))
     if(length(whichX50) == 0) x50 <- data[[i]]$distance[1]
     if(length(whichX50) > 0){
 		  if(whichX50[1] != 1) x50 <- data[[i]]$distance[whichX50[1]]
 			if(whichX50[1] == 1) x50 <- data[[i]]$distance[which(data[[i]]$x[disk+1:length(data[[i]][,1])] > asym * 0.5)[1]+disk]
-    }		
+    }
 
 		whichX20 <- which(data[[i]]$x > (asym * 0.2))
 		if(length(whichX20) == 0) x20 <- data[[i]]$distance[1]
@@ -474,4 +482,3 @@ if(addSIR){
 		 param <- data.frame(x80 = round(x80, digits=3), x50 = round(x50, digits=3), x20 = round(x20, digits=3), asym = round(asym, digits=2))
 		 return(param)
 		}
-
