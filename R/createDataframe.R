@@ -117,7 +117,7 @@ if(standType=="one"){
 		aveFoG50 <- FoG50/x50
 		aveFoG20 <- FoG20/x20
 
-	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(slope, digits=1))
+	param <- data.frame(RAD80 =round(x80, digits=3), RAD50 = round(x50, digits=3), RAD20 = round(x20, digits=3), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(slope, digits=1))
 }
 
 if(standType == "indiv"){
