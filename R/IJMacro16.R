@@ -43,7 +43,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 			}
 	}
 	if(is.na(projectDir)){
-		cont <- readline(paste("Is 6mm the correct order of the disk on your plates? [y/n] ", sep=""))
+		cont <- readline(paste("Is 6mm the correct disk size on your plates? [y/n] ", sep=""))
 		if(cont=="n"){
 			prompt <- "Enter the correct size of the disk on your plates: \n"
 			diskDiam <- as.numeric(readline(prompt))

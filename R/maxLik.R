@@ -3,6 +3,7 @@
 #' @description \code{maxLik}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
 
 #' @param projectName the short name in use for the project.
+#' @param standType either `one` to specify that a single photoraph will be used for standardization purposes or `indiv` to use each phograph independently. Defaults to `one`.
 #' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
 #' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.
@@ -88,7 +89,7 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 	
 	dotedge <- diskDiam/2+0.7
   
-	if(stand=="one"){	
+	if(standType=="one"){	
 		if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo: ", sep=""))
 		clearHalo <- as.numeric(cont)
