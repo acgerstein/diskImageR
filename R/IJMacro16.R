@@ -30,7 +30,8 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	fileDir <- projectName
 	#get R version and use appropriate tcltk
 	if(is.na(projectDir)){
-	  corDrugs <- readline(paste("Is ", drugs, "the correct order of drugs on your plate? [y/n] ", sep=""))
+	  drugOrder <- paste(drugs, collapse=", ")
+	  cont <- readline(paste("Is ", drugOrder, " the correct order of drugs on your plate? [y/n] ", sep=""))
 		if(cont=="n"){
 			prompt <- "Enter the correct drug names from top left to bottom right (comma-separated list) \n"
 	    x <- readline(prompt)
