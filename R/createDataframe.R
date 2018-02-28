@@ -149,7 +149,7 @@ if(standType == "indiv"){
   		maxFoG50 <- unlist(FoG.df[9,])
   		maxFoG20 <- unlist(FoG.df[10,])
   
-	  	param <- data.frame(RAD80 =round(x80, digits=0), RAD50 = round(x50, digits=0), RAD20 = round(x20, digits=0), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
+	  	param <- data.frame(RAD80 =round(x80, digits=3), RAD50 = round(x50, digits=3), RAD20 = round(x20, digits=3), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(unlist(slopes), digits=1))
 	}
 }
 
@@ -237,7 +237,6 @@ if(addSIR){
 	cat(paste("\n", dfName, " has been written to the global environment", sep=""))
 	cat(paste("\nSaving file: ", filename,  sep=""))
 	cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.",  sep=""))
-	# assign(dfName, df, envir=globalenv())
 	assign(dfName, df, inherits=TRUE)
 	}
 
@@ -254,19 +253,11 @@ if(addSIR){
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	yy <- (yy+min(data[[i]]$x))
 	yy[yy < 0] <- 0
-  # if(max(yy) < asym*0.8){
+
 	x80 <- xx[which.max(yy> max(yy) * 0.8)]
 	x50 <- xx[which.max(yy> max(yy) * 0.5)]
 	x20 <- xx[which.max(yy> max(yy) * 0.2)]
-#		}
-# if(max(yy) > asym*0.8){ 
-#   x80 <- xx[which.max(yy> asym * 0.8)]
-#   x50 <- xx[which.max(yy> asym * 0.5)]
-# 	x20 <- xx[which.max(yy> asym * 0.2)]
-#		}
-#   	if (x80 < x50) x80 <- xx[which.max(yy> yy[length(yy)] * 0.8)]
- # dat <- data.frame(xx, yy)
-    
+
   xx80 <- xx[xx<x80]
 	yy80 <- yy[xx<x80]
 	if(length(xx80) == 0){
@@ -300,7 +291,7 @@ if(addSIR){
 		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
 		FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
 
-		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
+		 param <- data.frame(x80 = round(exp(x80), digits=3, x50 = round(exp(x50), digits=3), x20 = round(exp(x20), digits=3) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
 
 		 if (exp(param$x80)<1) 	param$x80 <- 0
 		 if (exp(param$x50)<1)	param$x50 <- 0
@@ -374,7 +365,7 @@ if(addSIR){
 		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
 		FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
 
-		 param <- data.frame(x80 = round(exp(x80), digits=0), x50 = round(exp(x50), digits=2), x20 = round(exp(x20), digits=0) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
+		 param <- data.frame(x80 = round(exp(x80), digits=3), x50 = round(exp(x50), digits=3), x20 = round(exp(x20), digits=3) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
 
 		 if (exp(param$x80)<1) 	param$x80 <- 0
 		 if (exp(param$x50)<1)	param$x50 <- 0
@@ -480,7 +471,7 @@ if(addSIR){
 				if ( is.na(x20))	x20 <- 0
 
 		 # slopeML <- ML[[i]]$par[3]
-		 param <- data.frame(x80 = round(x80, digits=2), x50 = round(x50, digits=2), x20 = round(x20, digits=2), asym = round(asym, digits=2))
+		 param <- data.frame(x80 = round(x80, digits=3), x50 = round(x50, digits=3), x20 = round(x20, digits=3), asym = round(asym, digits=2))
 		 return(param)
 		}
 
