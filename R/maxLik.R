@@ -52,7 +52,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=25, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE){
+maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=25, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE){
 	options(warn=-1)
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
@@ -110,7 +110,7 @@ maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLo
   	}
 	}
 	
-  if(stand=="indiv"){	
+  if(standType=="indiv"){	
   	if(needML){
   		cat("\nStatus of single logistic ML: ")
   		ML <-lapply(c(1:length(data)), .getstatsLogIndiv, data=data, dotedge=dotedge, maxDist=maxDist, maxSlope=100, testInhib=testInhib)
@@ -153,7 +153,7 @@ maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLo
 		cat(paste("\nUsing existing ML results ", MLt, " & ", MLt2, sep=""))
 		}
 
-    if(stand=="one"){
+    if(standType=="one"){
       if(plotParam){
     		clearHaloData <- data[[clearHalo]]
     		startX <- which(clearHaloData[,1] > dotedge+0.5)[1]
@@ -167,7 +167,7 @@ maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLo
       }
     }
     
-    if(stand=="indiv"){
+    if(standType=="indiv"){
       if(plotParam){
   		 .plotParamIndiv(projectName, ML=ML, ML2=ML2, dotedge = dotedge, maxDist = maxDist, ymax = ymax, RAD=RAD, height = height, width=width, xplots = xplots,label=label, overwrite = overwrite, popUp = popUp,  savePDF = savePDF, plotSub = plotSub, plotCompon=plotCompon)
       }
