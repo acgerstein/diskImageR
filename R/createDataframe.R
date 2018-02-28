@@ -13,7 +13,7 @@
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
 #' @param needZOI For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.
 #'@param RADcrit What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).
-#'@param addSIR Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run.
+#'@param addSIR Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run).
 
 #' @details A dataframe with 11 columns:
 #' \itemize{
