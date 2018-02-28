@@ -85,7 +85,7 @@ maxLik <- function(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5, maxD
 		}
 		else label <- nameVector
 	}
-
+	print("test")
 	dotedge <- diskDiam/2+0.7
   
 	if(stand=="one"){	
