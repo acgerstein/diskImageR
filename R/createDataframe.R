@@ -432,7 +432,7 @@ if(addSIR){
 	if(midslope >= 10){
 		xxSlope <- data[[i]]$distance[(midslope-10):(midslope+10)]
 		yySlope <- data[[i]]$x[(midslope-10):(midslope+10)]
-		yySlope[yySlope<0] <- 0 #this should almost never need to be used, but seems reasonable to add in here, otherwise end up with negative slope because of negative numbers
+		yySlope[yySlope<0] <- 0 
 		slope <- lm(yySlope ~ xxSlope)$coefficients[2]
 		if(allSlope > slope) slope <- allSlope
 		return(slope)
