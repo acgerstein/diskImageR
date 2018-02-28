@@ -34,13 +34,20 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	  cont <- readline(paste("Is [", drugOrder, "] the correct order of drugs on your plate? [y/n] ", sep=""))
 		if(cont=="n"){
 			prompt <- "Enter the correct drug names from top left to bottom right (comma-separated list) \n"
-      drugs <- strsplit(readline(prompt), ",")[[1]]	
+      drugs <- strsplit(readline(prompt), ",")[[1]]
       while(length(drugs) != 16){
           prompt <- "Enter the 16 correct drug names from top left to bottom right (comma-separated list) \n"
-          drugs <- strsplit(readline(prompt), ",")[[1]]	
+          drugs <- strsplit(readline(prompt), ",")[[1]]
           print(length(drugs))
         }
 			}
+	}
+	if(is.na(projectDir)){
+		cont <- readline(paste("Is 6mm the correct order of the disk on your plates? [y/n] ", sep=""))
+		if(cont=="n"){
+			prompt <- "Enter the correct size of the disk on your plates: \n"
+			diskDiam <- as.numeric(readline(prompt))
+		}
 	}
 		if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
@@ -57,7 +64,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 		}
 	}
 
-  
+
 	setwd(photoDir)
 	if (TRUE %in% file.info(dir())[,2]) {
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
