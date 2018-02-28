@@ -22,7 +22,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ```{r, echo=FALSE}
 library(devtools)
-install_github("acgerstein/diskImageR", build_vignettes = FALSE)
+devtools::install_github("acgerstein/diskImageR", build_vignettes = FALSE)
 library("diskImageR")
 ```
 
@@ -33,25 +33,25 @@ library("diskImageR")
 ###Introduction to <i>diskImageR</i>
 The R package `diskImageR` provides a pipeline to analyze photographs of disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. Furthermore, diskImageR removes potential researcher bias, by quantitative assessment of drug resistance as the zone diameter at multiple cutoff values of growth inhibition. This method also extends the disk diffusion assay by measuring drug tolerance (in addition to drug resistance) as the fraction of the subpopulation that is able to grow above the resistance point ("FoG"), and drug sensitivity as the rate of change from no growth to full growth ("slope").
 
-
 <center>
 <img src="pictures/p1_30_a.JPG"  style="width: 35%; height: 35%" style="float:left," alt="" /> <img src="pictures/p2_30_a.jpg"  style="width: 35%; height: 35%" style="float:left," alt="" /> 
 </center> 
 
-###<i>diskImageR</i> function overview (in the typical order of use)
+###<i>diskImageR</i> function overview
 * `IJMacro`: runs an ImageJ macro on the folder that contains the photograph to be analyzed [required]
-* `readInExistingIJ`: used to read in existing ImageJ analyses [optional]
-* `plotRaw`: used to plot the results of ImageJ analysis [optional]
-* `maxLik`: maxmimum likelihood inference to fit logistic models to the data [required]
-* `saveMLParam`: save the output of maximum likelihood analysis [optional]
-* `createDataframe`: dataframe creation of all parameter estimates [required]
-* `addType`: add a factor column to parameter estimate dataframe [optional]
-* `aggregateData`: averages data from photographs of the same strain & type [optional]
-* `calcMIC`: calculate the MIC from RAD values [optional]
-* `readExistingDF`: read in an existing dataframe using a pop-up box [optional]
-* `oneParamPlot`: plot a single resistance or tolerance parameter [optional]
-* `twoParamplot`: plot resistance (RAD) and tolerance (FoG) at a specified cutoff value [optional]
-* `threeParamplot`: plot resistance (RAD), tolerance (FoG), and sensitivity (slope) [optional]
+* `readInExistingIJ`: used to read in existing ImageJ analyses 
+* `plotRaw`: used to plot the results of ImageJ analysis 
+* `maxLik`: maxmimum likelihood inference to fit logistic models to the data 
+* `saveMLParam`: save the output of maximum likelihood analysis to a .csv file 
+* `createDataframe`: dataframe creation of all parameter from growth inhibition estimates using maxLik [RAD, ZOI, FoG]
+* `inhibGrow' : dataframe creation of parameter estimates using global maximum [maxIntensity, resource limitation points]
+* `addType`: add a factor column to parameter estimate dataframe 
+* `aggregateData`: averages data from photographs of the same strain & type
+* `calcMIC`: calculate the MIC from RAD values 
+* `readExistingDF`: read in an existing dataframe using a pop-up box 
+* `oneParamPlot`: plot a single resistance or tolerance parameter 
+* `twoParamplot`: plot resistance (RAD) and tolerance (FoG) at a specified cutoff value 
+* `threeParamplot`: plot resistance (RAD), tolerance (FoG), and sensitivity (slope) 
 
 See the end of this document for the skeleton walkthrough of package use, or the document "walkthrough.R" is available in the diskImageR library directory and as a supplementary file.
 
@@ -109,6 +109,15 @@ To access the output of the ImageJ analysis in a later R session use the functio
 readInExistingIJ("betterName") 
 ```
 
+###Run the ImageJ macro on the set of 16 disk photographs 
+
+<center>
+<img src="pictures/disk16.jpg"  style="width: 40%; height: 40%" style="float:center," alt="" />
+</center> 
+
+`diskImageR` is now able to analzye disk diffusion plates with 16 disks on them. For these photographs the first function of the package to run is `IJMacro16()`. From each photograph, an ImageJ macro that is included in `diskImageR` will automatically open each photograph from the specified directory, determine where the disk is located on the plate, find the center of the disk, and draw 40mm radial lines out from the center of the disk every 2 degrees. For each line, the pixel intensity will be determined at many points along the line using the built-in `plot profile` macro from ImageJ. This data will be stored in the folder *ImageJ_out* on your computer, with one file for each photograph. Unlike in the stardard execution for single disk plates, lines are drawn every 2 degrees out from the center of the disk, yielding data from 180 lines. This is to correct for additional complications from mulit-disk plates. Disks on the outside of the plates (particularly those in the corners) will have fewer lines with full profiles that are not influenced by the edges. There is also the strong potential influence of drug interactions, yielding lower intensity areas. To correct for these factors, rather than averaging across all lines, the average pixel intensity is determined from the 0.55 o 0.75 quantile intensities across the 180 lines. These cutoffs were chosen to eliminate extraneous high intensities due to spurious lighting, and lower intensity points caused by drug interactions.
+
+
 ###Plot the output of ImageJ analysis
 The optional function `plotRaw()` will create a PDF file of plots saved to the *figures* directory that show the average pixel intensity across all 72 lines from each photograph (i.e., the data that can be found in the "averageLines.csv" file). This function is a good check to see whether the analysis proceeded properly and in and of itself may be useful to visualize differences between different strains or experimental factors.
 
@@ -137,7 +146,7 @@ From these functions the plate background intensity is substracted off the inten
 The output of `maxLik()` is a list that is saved to the R environment and a PDF file with one plot per photograph that shows the results of the model fitting (saved to the *figures* directory). Many aspects of this figure can be specified including the maximum y axis (`ymax`) the number of plots on the x axis (`xplots`), the height and width of the PDF file (`height`, `width`), the values of RAD to be plotted (one of `80`, `50`, `20`, or `all`) and FoG cutoff value to plot (one of `80`, `50`, or `20`). Once `maxLik()` has been run once (in a given R session), it does not need to be rerun to made adjustments to the PDF file; to make a new figure use the argument `needML = FALSE`. The default is to save only a single PDF file (i.e., to repeatedly overwrite the same file with different figure iterations), this can be supressed with the argument `overwrite = FALSE`. 
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, stand="indiv")
+maxLikIndiv("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, stand="indiv")
 ```
 
 <b>[OPTIONAL] Save the maximum likelihood results</b>

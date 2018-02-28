@@ -1,4 +1,4 @@
-"line","type","ZOI80","ZOI50","ZOI20","fAUC80","fAUC50","fAUC20","slope","se.ZOI80","se.ZOI50","se.ZOI20","se.fAUC80","se.fAUC50","se.fAUC20","se.slope"
+"line","type","RAD80","RAD50","RAD20","FoG80","FoG50","FoG20","slope","se.RAD80","se.RAD50","se.RAD20","se.FoG80","se.FoG50","se.FoG20","se.slope"
 "A12","levelA",0,1,10,0.93,0.65,0.79,18,0.08,0.18,1.22,NA,NA,0.0235,1.98
 "A13","levelA",13,18,21,0.71,0.36,0.31,181,0.62,0.37,0.46,0.0498,0.0204,0.0095,6.52
 "A14","levelA",9,14,19,0.56,0.39,0.38,130,0.4,0.28,0.42,0.0626,0.0204,0.0123,3.08
