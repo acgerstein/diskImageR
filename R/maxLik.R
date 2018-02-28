@@ -5,7 +5,7 @@
 #' @param projectName the short name in use for the project.
 #' @param clearHalo numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).
 #' @param diskDiam the diameter of the diffusion disk in mm, defaults to 6.
-#' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.
+#' @param maxDist a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.
 #' @param xplots a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting
 #' @param ymax a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting
 #' @param height a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting
@@ -52,7 +52,7 @@
 #' maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 #' }
 
-maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=30, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE){
+maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLoc = 2.5, maxDist=25, ymax=200, xplots = 4, height = 8,  width = 8, FoG=20,  RAD="all", needML = TRUE, popUp = TRUE, nameVector=TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE, savePDF= TRUE, plotSub = NA, plotCompon=FALSE, needMap= FALSE, testInhib = FALSE){
 	options(warn=-1)
 	if(!RAD %in% c(80, 50, 20, "all")){
 		stop("Current suppported RAD values = 'all', 80, 50, 20, 5")
@@ -101,7 +101,8 @@ maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLo
   		ML <-lapply(c(1:length(data)), .getstatsLog, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
   		assign(paste(projectName, ".ML", sep=""), ML, inherits=TRUE)
   		cat(paste("\n", projectName, ".ML has been written to the global environment\n", sep=""))
-  		cat("\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
+  	
+  			cat("\n\nPlease note the following step may take up to an hour depending on the number of photographs being analyzed. Don't panic.\n")
   		cat("\nStatus of double logistic ML: ")
   		ML2 <- lapply(c(1:length(data)), .getstats2Log, data=data, dotedge=dotedge, maxDist=maxDist, stand=standard, maxSlope=20)
   		assign(paste(projectName, ".ML2", sep=""), ML2, inherits=TRUE)
@@ -278,7 +279,7 @@ maxLik <- function(projectName, stand="one", clearHalo, diskDiam = 6, standardLo
 }
 
 
-.getstatsLogIndiv <- function(i, data, stand, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
+.getstatsLogIndiv <- function(i, data, dotedge=dotedge, maxDist=maxDist, maxSlope=300, testInhib = testInhib){
 	cat(".")
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
