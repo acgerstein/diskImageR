@@ -199,15 +199,15 @@ else{
 }
 
 	if(addZOI){
-		if(RADcrit == "20%")
+		if(RADcrit == "20%"){
 			df$ZOI <- round(df$RAD80*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
-		if(RADcrit == "50%")
+		if(RADcrit == "50%"){
 			df$ZOI <- round(df$RAD50*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
-		if(RADcrit == "80%")
+		if(RADcrit == "80%"){
 			df$ZOI <- round(df$RAD20*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
