@@ -26,7 +26,6 @@
 
 IJMacro16 <-
 function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, drugs = c("AMC30", "CTX30", "S10", "CIP5", "CAZ30", "NA30", "IPM10", "AZM15", "C30", "FOX30", "TET30", "F300", "ATM30", "AM10", "CPD10", "SXT25")){
-	# if(!is.char(projectName))
 	diskImageREnv <- new.env()
 	fileDir <- projectName
 	#get R version and use appropriate tcltk
@@ -44,6 +43,15 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		}
 	}
+	if(is.na(photoDir)){
+	  corDrugs <- readline(paste("Is ", drugs, "the correct order of drugs on your plate? [y/n] ", sep=""))
+		if(cont=="n"){
+			prompt <- "Enter the correct drug names from top left to bottom right (comma-separated list) \n"
+	    x <- readline(prompt)
+      drugs <- strsplit(readline(prompt), ",")[[1]]	
+			}
+	}
+  
 	setwd(photoDir)
 	if (TRUE %in% file.info(dir())[,2]) {
 		stop("There is a folder located in your photograph directory. Please remove before continuing.")
