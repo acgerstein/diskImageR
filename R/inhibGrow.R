@@ -21,7 +21,7 @@
 #' maxLik("myProject", diskDiam = 12, maxDist = 25)
 #' }
 
-inhibGrow <- function(projectName, diskDiam = 12.7, maxDist=30){
+inhibGrow <- function(projectName, diskDiam = 12.7, maxDist=30, nameVector = TRUE){
 	data <- eval(parse(text=projectName))
 	if (is.logical(nameVector)){
 		if (nameVector){label <- names(data)}
