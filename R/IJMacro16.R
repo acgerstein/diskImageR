@@ -30,6 +30,14 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 	fileDir <- projectName
 	#get R version and use appropriate tcltk
 	if(is.na(projectDir)){
+	  corDrugs <- readline(paste("Is ", drugs, "the correct order of drugs on your plate? [y/n] ", sep=""))
+		if(cont=="n"){
+			prompt <- "Enter the correct drug names from top left to bottom right (comma-separated list) \n"
+	    x <- readline(prompt)
+      drugs <- strsplit(readline(prompt), ",")[[1]]	
+			}
+	}
+		if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		if(is.na(projectDir)) stop("")
 		}
@@ -43,14 +51,7 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
 			projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		}
 	}
-	if(is.na(photoDir)){
-	  corDrugs <- readline(paste("Is ", drugs, "the correct order of drugs on your plate? [y/n] ", sep=""))
-		if(cont=="n"){
-			prompt <- "Enter the correct drug names from top left to bottom right (comma-separated list) \n"
-	    x <- readline(prompt)
-      drugs <- strsplit(readline(prompt), ",")[[1]]	
-			}
-	}
+
   
 	setwd(photoDir)
 	if (TRUE %in% file.info(dir())[,2]) {
