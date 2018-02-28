@@ -77,7 +77,7 @@ inhibGrow <- function(projectName, diskDiam = 12.7, maxDist=30){
 
   #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
   slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity, z = whichMaxIntensity), digits=2)
-  slopeFromMax <- round(mapply(function(x, y, z) {coefficients(lm(x[y:which(x[,1]<maxDist, 2]~ x[y:which(x[,1]<maxDist, 1]))[2]}, x = data, y = whichMaxIntensity), digits=2)
+  slopeFromMax <- round(mapply(function(x, y, z) {coefficients(lm(x[y:which(x[,1]<maxDist, 2])~ x[y:which(x[,1]<maxDist, 1]))[2]}, x = data, y = whichMaxIntensity), digits=2)
   
   #Find the cutoff intensity values and distance for post-max growth points of resource limitation
   min2_90 <- maxIntensity*0.9
