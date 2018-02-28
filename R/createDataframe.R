@@ -291,7 +291,7 @@ if(addSIR){
 		FoG50 <- sum(diff(exp(xx50[id50]))*zoo::rollmean(yy50[id50], 2))
 		FoG20 <- sum(diff(exp(xx20[id20]))*zoo::rollmean(yy20[id20], 2))
 
-		 param <- data.frame(x80 = round(exp(x80), digits=3, x50 = round(exp(x50), digits=3), x20 = round(exp(x20), digits=3) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
+		 param <- data.frame(x80 = round(exp(x80), digits=3), x50 = round(exp(x50), digits=3), x20 = round(exp(x20), digits=3) , FoG80 = round(FoG80, digits=0), FoG50= round(FoG50, digits=0), FoG20= round(FoG20, digits=0), maxFoG = round(maxFoG, digits=0), maxFoG80 = round(maxFoG80, digits=0), maxFoG50 = round(maxFoG50, digits=0), maxFoG20 = round(maxFoG20, digits=0))
 
 		 # if (exp(param$x80)<1) 	param$x80 <- 0
 		 # if (exp(param$x50)<1)	param$x50 <- 0
