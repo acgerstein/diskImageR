@@ -122,7 +122,7 @@ if(standType=="one"){
 	param <- data.frame(RAD80 =round(x80, digits=3), RAD50 = round(x50, digits=3), RAD20 = round(x20, digits=3), FoG80 = round(FoG80/maxFoG80, digits=2), FoG50 = round(FoG50/maxFoG50, digits=2), FoG20 = round(FoG20/maxFoG20, digits=2), slope=round(slope, digits=1))
 }
 
-if(standType == "indiv"){
+  if(standType == "indiv"){
 
   RAD.df <-  sapply(c(1:length(data)), .findRAD, data=data, ML=ML, ML2 = ML2, dotedge = dotedge,  maxDist = maxDist)
 	x80 <- unlist(RAD.df[1,])
@@ -151,12 +151,12 @@ if(standType == "indiv"){
 	}
 }
 
-if(needMap){
+  if(needMap){
 	label <- paste(names(data), drugPos, sep="-")
 	df <- data.frame(name = names(data), photo=unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])), dfPos = 1:length(data), photoPos = unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][2])), drug = drugPos, df, param)
 	df <- df[order(df$photo, as.numeric(df$drug)),]
 	}
-else{
+  else{
 	if (is.logical(nameVector)){
 		if (nameVector){
 			line <- unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1]))
@@ -214,7 +214,7 @@ else{
 		df$ZOI[df$slope < 0 ] <- diskDiam
 	}
 
-if(addSIR){
+  if(addSIR){
 	if(.Platform$OS.type=="windows"){
 	  df <- df[order(df$photo, df$drug),]
 	  drugFile <- file.path(.libPaths(), "diskImageR", "drugCutoffs.csv")[1]
