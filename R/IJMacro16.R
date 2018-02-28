@@ -37,8 +37,8 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6, dr
       drugs <- strsplit(readline(prompt), ",")[[1]]	
       while(length(drugs) != 16){
           prompt <- "Enter the 16 correct drug names from top left to bottom right (comma-separated list) \n"
-	        x <- readline(prompt)
           drugs <- strsplit(readline(prompt), ",")[[1]]	
+          print(length(drugs))
         }
 			}
 	}
