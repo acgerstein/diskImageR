@@ -4,11 +4,11 @@
 \alias{createDataframe}
 \title{Dataframe creation}
 \usage{
-createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
-  standardLoc = 2.5, removeClear = FALSE, nameVector = TRUE,
-  typeVector = TRUE, typePlace = 2, typeName = "type", needMap = FALSE,
-  standType = "one", addZOI = TRUE, addSIR = FALSE,
-  addIntensity = FALSE, needFoG = FALSE, needSlope = TRUE)
+createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
+  RADcrit = "20\%", standardLoc = 2.5, removeClear = FALSE,
+  nameVector = TRUE, typeVector = TRUE, typePlace = 2,
+  typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE,
+  addSIR = FALSE, needFoG = FALSE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -17,7 +17,9 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
-\item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.}
+\item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
+
+\item{RADcrit}{What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).}
 
 \item{removeClear}{a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.}
 
@@ -34,6 +36,8 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 30,
 \item{standType}{either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.}
 
 \item{addZOI}{Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".}
+
+\item{addSIR}{Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run.}
 
 \item{needZOI}{For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.}
 }

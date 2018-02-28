@@ -4,21 +4,23 @@
 \alias{maxLik}
 \title{Maximum Likelihood Inference}
 \usage{
-maxLik(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5,
-  maxDist = 30, ymax = 200, xplots = 4, height = 8, width = 8,
-  FoG = 20, RAD = "all", needML = TRUE, popUp = TRUE,
+maxLik(projectName, standType = "one", clearHalo, diskDiam = 6,
+  standardLoc = 2.5, maxDist = 25, ymax = 200, xplots = 4, height = 8,
+  width = 8, FoG = 20, RAD = "all", needML = TRUE, popUp = TRUE,
   nameVector = TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE,
   savePDF = TRUE, plotSub = NA, plotCompon = FALSE, needMap = FALSE,
-  testInhib = FALSE, stand = "indiv")
+  testInhib = FALSE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
+
+\item{standType}{either `one` to specify that a single photoraph will be used for standardization purposes or `indiv` to use each phograph independently. Defaults to `one`.}
 
 \item{clearHalo}{numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
-\item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 30mm.}
+\item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
 
 \item{ymax}{a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting}
 
@@ -52,7 +54,7 @@ maxLik(projectName, clearHalo, diskDiam = 6, standardLoc = 2.5,
 
 \item{needMap}{Is there a coordinates map to use to assign drug names. Defaults to "FALSE".}
 
-\item{testInhib}{Optional argument to test for tipping point (which will then rerun the maxLik analysis with a more constrained data set). Defaults to FALSE}
+\item{testInhib}{Optional argument to rerun the maximum likelihood anlysis with a constrained asymptote. This is useful for compounds that both inhibit growth yet are also utilized. In comparison to "typical" drug profiles, the growth profile for these compounds don't reach an asymptote, but rather are characterized by inhibition, followed by a point of maximum growth and then a growth reduction. When \code{testIhib} = "TRUE" a second set of maximum likelihood analyses are run on a constrained data set that only examines the portion of the line up to the maximum intensity point. This results in asymptote estimates that are closer to this maximum point and hence more accurate fitting for these types of growth profiles.}
 }
 \value{
 Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).

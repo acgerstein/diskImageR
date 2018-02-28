@@ -63,7 +63,9 @@ The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ
 The primary output of `diskImageR` is CSV files that can be opened and used in any approprate program (e.g., Microsoft Excel) and a series of PDF figures that can be customized within the package functions. 
 
 ###Prepare plates and photographs
-The analysis done by `diskImageR` will only be as good as the photographs taken of the disk assay plates. We use the Bencher Copymate II camera mounting system. In this setup there are two fluorescent lights on either side of the disk, oriented to minimize shadows on the plate in an otherwise dark room. We use the Canon Rebel T3i camera with an ISO 800, white balance "white fluorescent light", time 1/100s, picture stype "neutral", centre focused. Any camera of reasonably high quality should suffice, though the camera should always be set in manual rather than automatic mode, as the goal is to take photographs as consistently as possible. We also use the 2s timer to avoid potentially jostling the camera while taking images and/or having a hand/arm shadow in the picture. Plates should be photographed on a dark surface (we use black velvet) and plate labels are written on the side rather than the bottom of the plate. We have also used `diskImageR`  with the XXX scanner on XXX settings. 
+<b> The importance of these prepatory steps can not be overstated. The analysis done by `diskImageR` will only be as good as the photographs taken of the disk assay plates.</b> 
+
+We use the Bencher Copymate II camera mounting system. In this setup there are two fluorescent lights on either side of the disk, oriented to minimize shadows on the plate in an otherwise dark room. We use the Canon Rebel T3i camera with an ISO 800, white balance "white fluorescent light", time 1/100s, picture stype "neutral", centre focused. Any camera of reasonably high quality should suffice, though the camera should always be set in manual rather than automatic mode, as the goal is to take photographs as consistently as possible. We also use the 2s timer to avoid potentially jostling the camera while taking images and/or having a hand/arm shadow in the picture. Plates should be photographed on a dark surface (we use black velvet) and plate labels are written on the side rather than the bottom of the plate. 
 
 Prior to analysis, images should be cropped close to the plate (as above). Because the analysis program automatically detects the disk based on size, it is important that no other similar-sized circles be present in the image (e.g., from letters in labels).
 
@@ -97,6 +99,11 @@ IJMacro("newProject", projectDir= "/path/to/projectDir", photoDir = "/path/to/pr
 IJMacro("newProject", projectDir= getwd(), photoDir = file.path(getwd(), "pictures", ""))
 ```
 
+```{r, echo=FALSE}
+IJMacro("inhibGrowth", diskDiam = 12, projectDir= getwd(), photoDir = file.path(getwd(), "picturesInhib", ""))
+```
+
+
 If `IJMacro()` is unable to locate ImageJ a red error will pop-up with a message like <span style="color:red">/bin/sh: /Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub: No such file or directory</span>. The easiest solution is to move ImageJ to the default location or to specify the path to ImageJ with argument `ImageJLoc = "/path/to/ImageJ"`. 
 
 <b> Important! </b> `IJMacro()` must run completely, without error, for everything downstream. In our experience this is the most likely step for errors to occur. Errors will be indicated in the R console should they arise, and will hopefully give you clues as to what the problem is if they are different than those described above. 
@@ -109,13 +116,38 @@ To access the output of the ImageJ analysis in a later R session use the functio
 readInExistingIJ("betterName") 
 ```
 
-###Run the ImageJ macro on the set of 16 disk photographs 
+###Run the ImageJ macro on 16 disk photographs 
 
 <center>
-<img src="pictures/disk16.jpg"  style="width: 40%; height: 40%" style="float:center," alt="" />
+<img src="pictures16/disk16.jpg"  style="width: 40%; height: 40%" style="float:center," alt="" />
 </center> 
 
-`diskImageR` is now able to analzye disk diffusion plates with 16 disks on them. For these photographs the first function of the package to run is `IJMacro16()`. From each photograph, an ImageJ macro that is included in `diskImageR` will automatically open each photograph from the specified directory, determine where the disk is located on the plate, find the center of the disk, and draw 40mm radial lines out from the center of the disk every 2 degrees. For each line, the pixel intensity will be determined at many points along the line using the built-in `plot profile` macro from ImageJ. This data will be stored in the folder *ImageJ_out* on your computer, with one file for each photograph. Unlike in the stardard execution for single disk plates, lines are drawn every 2 degrees out from the center of the disk, yielding data from 180 lines. This is to correct for additional complications from mulit-disk plates. Disks on the outside of the plates (particularly those in the corners) will have fewer lines with full profiles that are not influenced by the edges. There is also the strong potential influence of drug interactions, yielding lower intensity areas. To correct for these factors, rather than averaging across all lines, the average pixel intensity is determined from the 0.55 o 0.75 quantile intensities across the 180 lines. These cutoffs were chosen to eliminate extraneous high intensities due to spurious lighting, and lower intensity points caused by drug interactions.
+`diskImageR` is now able to analzye disk diffusion plates with 16 disks on them. The same plate and photograph preparatory steps should be taken. For these square plates it will also be helpful to ensure that the photographs are taken to ensure easy (square) cropping, as you will want to crop the sizes of the plate out as much as possible (as above).
+
+For these photographs the first function of the package to run is `IJMacro16()`. From each photograph, an ImageJ macro that is included in `diskImageR` will automatically open each photograph from the specified directory, determine where the 16 disks are located on the plate, find the center of each disk, and draw 40mm radial lines out from the center of each disk every 2 degrees. 
+
+For each line, the pixel intensity will be determined at many points along the line using the built-in `plot profile` macro from ImageJ. This data will be stored in the folder *ImageJ_out* on your computer, with one file for each photograph. Unlike in the stardard execution for single disk plates, lines are drawn every 2 degrees (instead of every 5 degrees) from the center of the disk, yielding data from 180 lines. This is to correct for additional complications from mulit-disk plates. Disks on the outside of the plates (particularly those in the corners) will have fewer lines with full profiles that are not influenced by the edges. There is also the strong potential influence of drug interactions, yielding lower intensity areas (as can be seen above for NA30 and IPM10. To correct for these complications, rather than averaging across all lines, the average pixel intensity is determined from the data at each point that corresponds to within the 0.55 and 0.75 quantile intensities. 
+
+The order of disks will need to be specified when running `IJMacro16()` using the "drugs" flag. if you run the ImageJ macro through the user-interface with pop-up boxes you will be prompted whether your disk order matches the built-in default. Otherwise (if it doesn't) you will have to specify it manually.
+
+The default disk order is: AMC30, CTX30, S10, CIP5, CAZ30, NA30, IPM10, AZM15, C30, FOX30, TET30, F300, ATM30, AM10, CPD10, SXT25
+
+The majority of functions from this point are similar, with only minor flag adjustments (specified when necessary).
+
+To run the ImageJ16 macro through a user-interface with pop-up boxes: 
+
+```r
+IJMacro16("newProject")
+```
+
+If you would prefer to avoid pop-up boxes you can directly specify the main project, photograph directory locations and disk order (if your disk order matches the default, you can leave this blank):
+```r
+IJMacro16("newProject", projectDir= "/path/to/projectDir", photoDir = "/path/to/projectDir/photographs/", drugs = c("drugA", "drugB", "drugC", "drugD", "drugE", "drugF", "drugG", "drugH", "drugI", "drugJ", "drugK", "drugL", "drugM", "drugN", "drugO", "drugP"))
+```
+
+```{r, echo=FALSE}
+IJMacro16("newProject16", projectDir= getwd(), photoDir = file.path(getwd(), "pictures16", ""))
+```
 
 
 ###Plot the output of ImageJ analysis
@@ -128,7 +160,7 @@ plotRaw("newProject", showNum = TRUE, popUp = FALSE, savePDF = FALSE)
 Many different arguments can be specified to influence the plots and the PDF that is generated, including the minimum and maximum x and y values (`xmin`, `xmax`, `ymin`, `ymax`), the number of plots in each row (`xplots`), the height and width of the PDF file (`height`, `width`), the point size (`cexPt`), and the size of the x- and y-axis font (`cexX`, `cexY`). As with all functions, you can type `?plotRaw` into the R console for all options and to see default values.
 
 ###Run the maximum likelihood analysis 
-The next step is the function `maxLik()`, which uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the ImageJ output data. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4. The midpoint from the single logistic is used to determine sensitivity.
+The next step is typically the function `maxLik()`, which uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the ImageJ output data. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4. The midpoint from the single logistic is used to determine sensitivity.
 $$
 y = \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
 $$
@@ -141,13 +173,22 @@ $$
 
 Depending on the number of photographs to be analyzed, `maxLik()` can take a fair amount of time, upwards of an hour or more. This is due to the maximum likelihood fitting procedures, which determine the best fit parameters from multiple different starting values. The status is indicated by a series of dots (".") in the R console, with one dot per photograph. This procedure is the find.mle routine from the <a href="https://github.com/richfitz/diversitree">diversitree</a> package written by Richard Fitzjohn. If for some reason the procedure gets halted in the middle of `maxLik()` (e.g., computer is shut down) as long as R remains open it should resume where it left off when the computer is reactivated.
 
-From these functions the plate background intensity is substracted off the intensity from all values; this should be common across all pictures taken at the same time. If you are using plates with different coloured base medium their photographs should be analzyed separately, as there will be a different background intensity from different plates. The background intensity is determined from the observed pixel intensity right beside the disk on a plate where there are no colonies in this area (e.g., the photograph on the left above). This must be specified by the user through the argument `clearHalo = X`, where X is the numbered location of the appropriate photograph. Photographs are always analyzed and organized in alphabetical order; the order can be determined by typing `names(newProject)` (no quotation marks around the project name) in the R console. In our experiments we tend to have at least one appropriate photograph with a clear halo beside the disk. A good practice, however, would be to always take a photograph of a blank plate with just the disk in the center to use for this purpose (and save it with a name like "a" so that it is always the first photograph in the list (i.e., `clearHalo = 1`). The (non)results from this photograph can be removed in the function `createDataframe()` below.
+From these functions the plate background intensity is substracted off the intensity from all values. This can either be common across all pictures taken at the same time (`stand = "one"`; this is the default) or it can be done individually for each disk (`stand = "indiv"`). If you are using plates with different coloured base medium their photographs should be analzyed individually, as there will be a different background intensity from different plates. The background intensity is determined from the observed pixel intensity right beside the disk on a plate where there are no colonies in this area (e.g., the photograph on the left at the top). This must be specified by the user through the argument `clearHalo = X`, where X is the numbered location of the appropriate photograph. Photographs are always analyzed and organized in alphabetical order; the order can be determined by typing `names(newProject)` (no quotation marks around the project name) in the R console. In our experiments we tend to have at least one appropriate photograph with a clear halo beside the disk. A good practice, however, would be to always take a photograph of a blank plate with just the disk in the center to use for this purpose (and save it with a name like "a" so that it is always the first photograph in the list (i.e., `clearHalo = 1`). The (non)results from this photograph can be removed in the function `createDataframe()` below.
 
 The output of `maxLik()` is a list that is saved to the R environment and a PDF file with one plot per photograph that shows the results of the model fitting (saved to the *figures* directory). Many aspects of this figure can be specified including the maximum y axis (`ymax`) the number of plots on the x axis (`xplots`), the height and width of the PDF file (`height`, `width`), the values of RAD to be plotted (one of `80`, `50`, `20`, or `all`) and FoG cutoff value to plot (one of `80`, `50`, or `20`). Once `maxLik()` has been run once (in a given R session), it does not need to be rerun to made adjustments to the PDF file; to make a new figure use the argument `needML = FALSE`. The default is to save only a single PDF file (i.e., to repeatedly overwrite the same file with different figure iterations), this can be supressed with the argument `overwrite = FALSE`. 
 
+Note: plotting FoG has not been implemented when individual plate standards are used.
+
 ```{r,  fig.width=5, fig.height=4}
-maxLikIndiv("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, stand="indiv")
+maxLik("newProject", stand="one", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
 ```
+
+If you are working with 16 disk plates, you need to set the flag `needMap= TRUE`. This will tell `maxLik()` to load the disk coordinates map that was saved from `IJMacro16()` to assign the correct data to each disk.
+
+```{r,  fig.width=5, fig.height=4}
+maxLik("newProject16",  stand="indiv", maxDist = 25, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, needMap = TRUE)
+```
+
 
 <b>[OPTIONAL] Save the maximum likelihood results</b>
 If you are intersted in the nuts and bolts of the maximum likelihood parameters it is possible to save these results using the `saveMLParam()` function, which will save a CSV file into the *paramter_files* directory that contains parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
@@ -156,8 +197,8 @@ If you are intersted in the nuts and bolts of the maximum likelihood parameters 
 saveMLParam("newProject")
 ```
  
-###Create and save a dataframe of parameter estimates
-The last required step is to run the function `createDataframe()` to create and save a dataframe with the drug response parameter estimates, using the best fit parameters from the logistic equations:
+###Create and save a dataframe of parameter estimates using maxLik
+The last required step is typically to determine the parameter estimates. The standard workflow will run the function `createDataframe()` to create and save a dataframe with the drug response parameter estimates, using the best fit parameters from the logistic equations
 
 * <b>Resistance (<i>RAD</i>)</b>
 	: asymA+asymB are added together to determine the maximum level of intensity achieved on each plate (= cell density). The level of resistance (radius of inhibition, RAD), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occured (corresponding to *RAD80*, *RAD50*, and *RAD20*)
@@ -168,11 +209,13 @@ The last required step is to run the function `createDataframe()` to create and 
 	
 If you have included a blank photograph to use for the background subtraction step in `maxLik()` this can be removed from the dataframe with the argument `removeClear = TRUE`. A CSV file is written to the *parameter_files* directory which can be opened in Microsoft Excel or any program that opens text files. The dataframe is also written and saved to the R console, should you wish to conduct further analyses in R.
 
+
 ```{r}
 createDataframe("newProject", clearHalo = 1, typeName="Temp")
 newProject.df
 ```
 If you want to access this dataframe in a later R session you can do so with the function `readExistingDF("betterName")`. Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., `new.df <- read.csv(file)`) though if you intend to use the functions below, you need to save it with a name that ends with ".df".
+
 
 <b>[OPTIONAL] Add additional factor columns</b>
 If your photograph names contain more than one factor that is important (i.e, if your files names look like: line_factor1_factor2...") you can add extra factors into the dataframe using the function `addType()`. 
@@ -219,6 +262,28 @@ twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 ```{r, fig.width=5, fig.height=4, tidy=TRUE}
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
+
+### An alternative workflow is provided to characterize growth for compounds that both inhibit growth yet are also utilized
+
+<center>
+<img src="picturesInhib/picInhib.JPG"  style="width: 40%; height: 40%" style="float:center," alt="" />
+</center> 
+
+In comparison to typical drugs, the growth profile for these compounds don't reach an asymptote, but rather are characterized by inhibition, followed by a point of maximum growth and then a growth reduction.
+
+```{r, echo=FALSE}
+plotRaw("inhibGrowth", showNum = FALSE, popUp = FALSE, savePDF = FALSE, xmax=30, plotStandardLoc = FALSE, nameVector = FALSE)
+```
+
+These compounds can still be analyzed in the traditional workflow with `maxLik()` (typically with the flag `testInhib = TRUE`, which will force the asymptote to be near the point of maximum pixel intensity). 
+
+The fuction `inhibGrow()` can also be used to determine the grwoth maximum (distance from disk as well as pixel intensity) as well as various inhibition points beyond the growth maximum. Slopes are also calculated from the minimum intensity to the point of maximum intensity ('slope2Max') and the point of maximum intensity to the edge of the plate ('slopeFromMax').
+
+```{r, echo=FALSE}
+inhibGrow("inhibGrowth", diskDiam =12.7)
+inhibGrowth_inhib.df
+```
+
 
 ###Walkthrough of typical diskImageR use
 

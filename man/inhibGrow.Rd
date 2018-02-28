@@ -4,7 +4,7 @@
 \alias{inhibGrow}
 \title{Find the points of inhibition, maximum growth and resource limitations}
 \usage{
-inhibGrow(projectName, diskDiam = 12.7, maxDist = 30)
+inhibGrow(projectName, diskDiam = 12.7, maxDist = 30, nameVector = TRUE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
