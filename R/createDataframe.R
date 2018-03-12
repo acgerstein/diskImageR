@@ -47,10 +47,12 @@ if(standType=="one"){
 	if(needMap){
 		 mapDir <- file.path(getwd(), "disk_coordinates", projectName)
 		 map <- read.csv(file.path(mapDir, paste0(projectName, "_ResultsTable.txt")), sep="\t")
+		 if(length(map[,1]) < 1) print("Drug map file did not open")
 		 photoNames <- unique(unlist(lapply(names(data), function(x) strsplit(x, "_")[[1]][1])))
 		 drugPos <- c()
 			for(m in photoNames){
 				temp <- subset(map, photoName == m)
+				if(length(temp[,1]) < 1) print(paste0("No match for ", m))
 				drugPos <- append(drugPos, temp$drug[as.numeric(sort(as.character(temp$XYpos)))])
 			}
  		}
