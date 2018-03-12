@@ -211,7 +211,7 @@ if(standType=="one"){
 			df$ZOI <- round(df$RAD20*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
-		df$ZOI[df$slope < 0 ] <- diskDiam
+		df$ZOI[df$slope =< 0 ] <- diskDiam
 	}
 
   if(addSIR){
