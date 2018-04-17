@@ -103,7 +103,11 @@ whereMaxIntensity95down <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whic
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
 slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity, z = whichMaxIntensity), digits=2)
-slopeFromMax <- round(mapply(function(x, y) {coefficients(lm(x[y:which(x[,1]<maxDist, 2])~ x[y:which(x[,1]<maxDist, 1]))[2]}, x = data, y = whichMaxIntensity), digits=2)
+# slopeFromMax <- round(mapply(function(x, y) {coefficients(lm(x[y:which.min(x[,1]<maxDist), 2]~ x[y:which.min(x[,1]<maxDist), 1]))[2]}, x = data, y = whichMaxIntensity), digits=2)
+
+#20 is somewhat arbitrary but seems to work, at least on the D1 training set
+slopeFromMax <- round(mapply(function(x, y) {ifelse (which.min(x[,1]<maxDist) - y > 20, coefficients(lm(x[y:which.min(x[,1]<maxDist), 2]~ x[y:which.min(x[,1]<maxDist), 1]))[2], NA)}, x = data, y = whichMaxIntensity), digits=2)
+
 
 #use this, change whereMaxIntensity in the param data frame to be corrected for diskDiam
 #distance2Max <- whereMaxIntensity-diskDiam/2
