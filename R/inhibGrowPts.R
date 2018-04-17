@@ -134,6 +134,7 @@ whereSlopeFromMaxEnd[whereSlopeFromMaxEnd == "-Inf"] <- 0
 whichSlopeFromMaxEnd <- mapply(function(x, y) {which.min(x[,1] < y)}, x = data, y = whereSlopeFromMaxEnd)
 
 slopeFromMax <- round(mapply(function(x, y, z){ifelse(z > 1, coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2], NA)}, x = data, y = whichMaxIntensity, z = whichSlopeFromMaxEnd), digits=2)
+ slopeFromMax[slopeFromMax > 0] <- NA
 
 #Legacy First pass
 # slopeFromMax <- round(mapply(function(x, y) {ifelse (which.min(x[,1]<maxDist) - y > 20, coefficients(lm(x[y:which.min(x[,1]<maxDist), 2]~ x[y:which.min(x[,1]<maxDist), 1]))[2], NA)}, x = data, y = whichMaxIntensity), digits=2)
