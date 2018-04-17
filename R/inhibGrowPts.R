@@ -107,6 +107,8 @@ slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1
 
 #20 is somewhat arbitrary but seems to work, at least on the D1 training set
 slopeFromMax <- round(mapply(function(x, y) {ifelse (which.min(x[,1]<maxDist) - y > 20, coefficients(lm(x[y:which.min(x[,1]<maxDist), 2]~ x[y:which.min(x[,1]<maxDist), 1]))[2], NA)}, x = data, y = whichMaxIntensity), digits=2)
+slopeFromMax[slopeFromMax > 0] <- NA
+
 
 
 #use this, change whereMaxIntensity in the param data frame to be corrected for diskDiam
