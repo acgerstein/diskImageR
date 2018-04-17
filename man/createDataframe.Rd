@@ -37,7 +37,7 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
 
 \item{addZOI}{Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".}
 
-\item{addSIR}{Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run.}
+\item{addSIR}{Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run).}
 
 \item{needZOI}{For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.}
 }

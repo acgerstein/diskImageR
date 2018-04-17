@@ -56,7 +56,23 @@ The R package `diskImageR` provides a pipeline to analyze photographs of disk di
 See the end of this document for the skeleton walkthrough of package use, or the document "walkthrough.R" is available in the diskImageR library directory and as a supplementary file.
 
 ###Required software
-If you do not have R (or R Studio) installed on your computer, that is step one. The use of `diskImageR` does not require prior knowledge of R and it is the goal of this tutorial to walk through everything that is necessary to analyze photographs of disk diffusion assays. Once the package has been loaded into R, support for all built-in function can be found by typing `?functionName` in the R console.
+If you do not have R (or R Studio) installed on your computer, that is step one. The use of `diskImageR` does not require prior knowledge of R and it is the goal of this tutorial to walk through everything that is necessary to analyze photographs of disk diffusion assays. 
+
+To load the stable version of the package from CRAN (The Comprehensive R Archive Nework):
+```r
+install.packages("diskImageR")  #only required the first time
+library("diskImageR")
+```
+
+To load the most current version of the package that is hosted on github:
+```r
+install.packages("devtools") #only required the first time
+library(devtools)
+install_github("acgerstein/diskImageR", build_vignettes = FALSE)
+library(diskImageR)
+```
+
+Once the package has been loaded into R through either CRAN or github, support for all built-in function can be found by typing `?functionName` in the R console.
 
 The first step of `diskImageR` analyzes the disk diffusion photographs in ImageJ, a free, public domain image processing program available for download (http://rsb.info.nih.gov/ij/download.html). If possible ImageJ should be installed to the default location (Applications folder on a Mac, Program Files folder on a PC). If it is installed in a different location you will need to specify the path to ImageJ (see `?IJMacro` after package install). On a Mac, if you do not already have Xcode you will need to download it from the Apple Developer tools (https://developer.apple.com/xcode/download/). You may be prompted to download and install other additional programs in the R console if any are required (depends on what is already on your computer). 
 
@@ -119,7 +135,7 @@ readInExistingIJ("betterName")
 ###Run the ImageJ macro on 16 disk photographs 
 
 <center>
-<img src="pictures16/disk16.jpg"  style="width: 40%; height: 40%" style="float:center," alt="" />
+<img src="pictures16/disk16.jpg"  style="width: 60%; height: 60%" style="float:center," alt="" />
 </center> 
 
 `diskImageR` is now able to analzye disk diffusion plates with 16 disks on them. The same plate and photograph preparatory steps should be taken. For these square plates it will also be helpful to ensure that the photographs are taken to ensure easy (square) cropping, as you will want to crop the sizes of the plate out as much as possible (as above).
@@ -180,13 +196,13 @@ The output of `maxLik()` is a list that is saved to the R environment and a PDF 
 Note: plotting FoG has not been implemented when individual plate standards are used.
 
 ```{r,  fig.width=5, fig.height=4}
-maxLik("newProject", stand="one", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
+maxLik("newProject", standType="one", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
 ```
 
 If you are working with 16 disk plates, you need to set the flag `needMap= TRUE`. This will tell `maxLik()` to load the disk coordinates map that was saved from `IJMacro16()` to assign the correct data to each disk.
 
-```{r,  fig.width=5, fig.height=4}
-maxLik("newProject16",  stand="indiv", maxDist = 25, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, needMap = TRUE)
+```{r,  fig.width=7, fig.height=6}
+maxLik("newProject16",  standType="indiv", maxDist = 25, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, needMap = TRUE)
 ```
 
 
