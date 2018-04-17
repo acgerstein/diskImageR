@@ -29,6 +29,13 @@ function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	diskImageREnv <- new.env()
 	fileDir <- projectName
 	if(is.na(projectDir)){
+		cont <- readline(paste("Is 6mm the correct order of the disk on your plates? [y/n] ", sep=""))
+		if(cont=="n"){
+			prompt <- "Enter the correct size of the disk on your plates: \n"
+			diskDiam <- as.numeric(readline(prompt))
+		}
+	}
+	if(is.na(projectDir)){
 		projectDir <- tcltk::tk_choose.dir(caption = "Select main project directory")
 		if(is.na(projectDir)) stop("")
 		}
