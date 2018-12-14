@@ -81,13 +81,6 @@ dataCor <- lapply(data, function(x) {x[,2] - min(x[,2])})
 datas <- Map(cbind, data, dataCor)
 data <- datas
 
-#where is the minimum intensity - can use for later calculations
-minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<maxDist)),2])}))
-whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
-whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
-whichMinIntensity5 <- c(mapply(function(x, y) {min(which(x[whichMinIntensity:length(x),2] < minIntensity*1.05))}, x = data, y = minIntensity))
-whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))+whereMinIntensity
-
 #where is the maximum intensity? This is also the point of growth maximum
 #I may have broken this.
 
@@ -96,10 +89,17 @@ whichMaxIntensity <- mapply(function(x, y) {which(x[,3]==y)[1]}, x = data, y = m
 whereMaxIntensity <- mapply(function(x, y) {x[which(x[,3]==y)[1],1]}, x = data, y = maxIntensity)
 whichMaxIntensity95up <- c(mapply(function(x, y) {min(which(x[,3] < maxIntensity*0.95))}, x = data, y = maxIntensity))
 whereMaxIntensity95up <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95up))
-
 whichMaxIntensity95down <- c(mapply(function(x, y) {min(which(x[whichMaxIntensity:length(whichMaxIntensity),3] < maxIntensity*0.95))}, x = data, y = maxIntensity))+whichMaxIntensity
 whereMaxIntensity95down <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMaxIntensity95down))
 
+#where is the minimum intensity - can use for later calculations
+#constrain to be to the left of maxIntenssity
+minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<maxDist)),2])}))
+minIntensity <- c(sapply(data, function(x) {min(x[1:max(which(x[,1]<whereMaxIntensity)),2])}))
+whichMinIntensity <- unlist(c(mapply(function(x, y) {which(x[,2]==y)[1]}, x = data, y = minIntensity)))
+whereMinIntensity <- unlist(c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity)))
+whichMinIntensity5 <- c(mapply(function(x, y) {min(which(x[whichMinIntensity:length(x),2] < minIntensity*1.05))}, x = data, y = minIntensity))
+whereMinIntensity5 <- c(mapply(function(x, y) {x[y, 1]}, x = data, y = whichMinIntensity5))+whereMinIntensity
 
 #what is the slope between minimum intensity (*1.05) and maximum intensity = how sharp is the transition between inhibition and growth?
 slope2Max <- round(mapply(function(x, y, z) {coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2]}, x = data, y = whichMinIntensity, z = whichMaxIntensity), digits=2)
@@ -124,16 +124,18 @@ dist2_25 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(
 dist2_10 <- c(mapply(function(x, y, z) {x[min(which(x[which(x[,3]==y):max(which(x[,1]<maxDist)), 3] < z)),1]}, x = data, y = maxIntensity, z = min2_10))
 
 
-distance2Max <- whereMaxIntensity-diskDiam/2
+#distance2Max <- whereMaxIntensity-diskDiam/2
+distance2Max <- whereMaxIntensity-dotedge
 
-param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = unlist(whichMaxIntensity), whereMinIntensity = round(whereMinIntensity, 2)-diskDiam/2, minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5-diskDiam/2, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max, dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
+param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = unlist(whichMaxIntensity), whereMinIntensity = round(whereMinIntensity, 2)-dotedge, minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5-dotedge, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max, dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
 
-whereSlopeFromMaxEnd <- apply(param, 1, function(x) max(x[9:13], na.rm=TRUE))
-whereSlopeFromMaxEnd <-whereSlopeFromMaxEnd+ param$whereMaxIntensity+dotedge
-whereSlopeFromMaxEnd[whereSlopeFromMaxEnd == "-Inf"] <- 0
-whichSlopeFromMaxEnd <- mapply(function(x, y) {which.min(x[,1] < y)}, x = data, y = whereSlopeFromMaxEnd)
+whereSlopeFromMaxEnd <- apply(param, 1, function(x) max(x[9:13], na.rm=TRUE))+dotedge
+whereSlopeFromMax <-whereSlopeFromMaxEnd+ param$whereMaxIntensity+dotedge
+whereSlopeFromMax <-whereSlopeFromMaxEnd+dotedge
+whereSlopeFromMax[whereSlopeFromMax == "-Inf"] <- 0
+whichSlopeFromMax <- mapply(function(x, y) {which.min(x[,1] < y)}, x = data, y = whereSlopeFromMax)
 
-slopeFromMax <- round(mapply(function(x, y, z){ifelse(z > 1, coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2], NA)}, x = data, y = whichMaxIntensity, z = whichSlopeFromMaxEnd), digits=2)
+slopeFromMax <- round(mapply(function(x, y, z){ifelse(z > 1, coefficients(lm(x[y:z, 2]~ x[y:z, 1]))[2], NA)}, x = data, y = whichMaxIntensity, z = whichSlopeFromMax), digits=2)
  slopeFromMax[slopeFromMax > 0] <- NA
 
 #Legacy First pass
@@ -146,8 +148,8 @@ slopeFromMax <- round(mapply(function(x, y, z){ifelse(z > 1, coefficients(lm(x[y
 
 #paramKeep <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2), slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
 
-paramKeep <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2), slope2Max = slope2Max,  slopeFromMax = slopeFromMax, dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
-
+paramKeep <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2), slope2Max = slope2Max,  slopeFromMax = slopeFromMax, dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2))
+#min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2)
 
 if (is.logical(nameVector)){
 	if (nameVector){
