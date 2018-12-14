@@ -129,9 +129,8 @@ distance2Max <- whereMaxIntensity-dotedge
 
 param <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2),  whichMaxIntensity = unlist(whichMaxIntensity), whereMinIntensity = round(whereMinIntensity, 2)-dotedge, minIntensity = round(minIntensity, 2), whereMinIntensity5 = whereMinIntensity5-dotedge, whichMinIntensity5 = whichMinIntensity5,  slope2Max = slope2Max, dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
 
-whereSlopeFromMaxEnd <- apply(param, 1, function(x) max(x[9:13], na.rm=TRUE))+dotedge
-whereSlopeFromMax <-whereSlopeFromMaxEnd+ param$whereMaxIntensity+dotedge
-whereSlopeFromMax <-whereSlopeFromMaxEnd+dotedge
+#slope from the max to the 50% --- could revisit but a lot see to get much more shallow after that point
+whereSlopeFromMax <- apply(param, 1, function(x) max(x[9:11], na.rm=TRUE))+dotedge
 whereSlopeFromMax[whereSlopeFromMax == "-Inf"] <- 0
 whichSlopeFromMax <- mapply(function(x, y) {which.min(x[,1] < y)}, x = data, y = whereSlopeFromMax)
 
@@ -144,7 +143,6 @@ slopeFromMax <- round(mapply(function(x, y, z){ifelse(z > 1, coefficients(lm(x[y
 
 # slopeFromMax <- round(mapply(function(x, y) {ifelse (which.min(x[,1]<maxDist) - y > 20, coefficients(lm(x[y:which.min(x[,1]<maxDist), 2]~ x[y:which.min(x[,1]<maxDist), 1]))[2], NA)}, x = data, y = whichMaxIntensity), digits=2)
 # slopeFromMax[slopeFromMax > 0] <- NA
-
 
 #paramKeep <- data.frame(whereMaxIntensity =round(distance2Max, digits=2), maxIntensity = round(maxIntensity, digits=2), slope2Max = slope2Max,  dist2_90 = distance2Max+round(dist2_90, digits=2), dist2_75 = distance2Max+round(dist2_75, digits=2), dist2_50 = distance2Max+round(dist2_50, digits=2), dist2_25 = distance2Max+round(dist2_25, digits=2), dist2_10 = distance2Max+round(dist2_10, digits=2), min2_90 = round(min2_90, 2), min2_75 = round(min2_75, 2), min2_50 = round(min2_50, 2), min2_25 = round(min2_25, 2), min2_10 = round(min2_10, 2))
 
