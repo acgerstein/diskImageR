@@ -36,7 +36,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, RADcrit = "20%", standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE,  needFoG=FALSE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, RADcrit = "20%", standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE,  needFoG=FALSE,  slopeCutoff = 5){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -110,12 +110,12 @@ if(standType=="one"){
 		maxFoG50 <- unlist(FoG.df[9,])
 		maxFoG20 <- unlist(FoG.df[10,])
 
-		FoG80[slope < 5] <- NA
-		FoG50[slope < 5] <- NA
-		FoG20[slope < 5] <- NA
-		x80[slope < 5] <- 1
-		x50[slope < 5] <- 1
-		x20[slope < 5] <- 1
+		FoG80[slope < slopeCutoff] <- NA
+		FoG50[slope < slopeCutoff] <- NA
+		FoG20[slope < slopeCutoff] <- NA
+		x80[slope < slopeCutoff] <- 1
+		x50[slope < slopeCutoff] <- 1
+		x20[slope < slopeCutoff] <- 1
 
 		aveFoG80 <- FoG80/x80
 		aveFoG50 <- FoG50/x50
