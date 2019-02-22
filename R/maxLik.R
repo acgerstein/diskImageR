@@ -227,7 +227,7 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	data[[i]] <- data[[i]][startX:stopX, 1:2]
 	data[[i]] <- subset(data[[i]], data[[i]]$x != "NA")
-	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the micel only fits when it goes down to 0
+	data[[i]]$x <- data[[i]]$x+ stand[i] -min(data[[i]]$x+stand[i])  #the model only fits when it goes down to 0
 	data[[i]]$distance <- data[[i]]$distance - (dotedge+0.5)
 	data[[i]]$distance <- log(data[[i]]$distance)
 	sumsquares.fit <- function(theta){
@@ -458,7 +458,6 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 
 .singlePlot <- function(data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = maxDist, ymax = ymax, FoG=50, RAD=50, i, label, plotFoG = TRUE, showIC = TRUE, plotCompon=FALSE){
   temp0 <- data[[i]]
-
 	startX <- which(data[[i]][,1] > dotedge)[1]
 	stopX <- which(data[[i]][,1] > maxDist - 0.5)[1]
 	minD <- min(data[[i]][startX:stopX, "x"])
@@ -466,20 +465,15 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 	data[[i]]$x <- data[[i]]$x -min(data[[i]]$x)
 
 	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
-	yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
-	yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
+	# yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
+	# yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
 	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], xx)
-	#RAD
-	# ploty <- data[[i]]$x
-	# ploty[ploty < 0] <-0
 	slope <- ML[[i]]$par[3]
 	ic50 <- ML[[i]]$par[2]
-	#changed
 	asym <- ML[[i]]$par[1]
 
 	plot(temp0$distance, c(temp0$x - minD), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 
- # plot(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "distance"], c(data[[i]][1:min(which(data[[i]][,1]>maxDist+5)), "x"] - min(data[[i]][1:min(which(data[[i]][,1]>maxDist)), "x"])), cex=0.7, col=grey(0.7), type="p", ylim=c(0, ymax), xlim=c(0, maxDist), xaxt="n", yaxt="n", xlab="", ylab="")
 	axis(2, labels=FALSE)
 	yyplot <- yy
 	yyplot[yyplot < 0] <- 0
@@ -488,16 +482,16 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 	abline(h=min(ML[[i]]$par[1], (ML2[[i]]$par[1]+ML2[[i]]$par[5])))
 	useAsym <- "TRUE"
   	yy95halo <- yyplot[which.max(yyplot> asym * 0.05)]
-		yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]
-		yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]
-		yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]
-		yy5halo <- yyplot[which.max(yyplot> asym * 0.95)]
+	yy80halo <- yyplot[which.max(yyplot> asym * 0.2)]
+	yy50halo <- yyplot[which.max(yyplot> asym * 0.5)]
+	yy20halo <- yyplot[which.max(yyplot> asym * 0.8)]
+	yy5halo <- yyplot[which.max(yyplot> asym * 0.95)]
 	if(yy20halo < yy50halo){
-		 yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]
+		yy20halo <- yyplot[which.max(yyplot> yyplot[length(yyplot)] * 0.8)]
 		useAsym <- "FALSE"
 	}
 
-	xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+	# xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	xx95 <- exp(xx[which.max(yyplot> asym * 0.05)])
 	xx80 <- exp(xx[which.max(yyplot> asym * 0.2)])
 	xx50 <- exp(xx[which.max(yyplot> asym * 0.5)])
@@ -511,35 +505,46 @@ maxLik <- function(projectName, standType ="one", clearHalo, diskDiam = 6, stand
 		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
 	}
 
-	yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
-	# yy <- (yy+min(data[[i]]$x))
+	# yy<- .curve2(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3], ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7], log(xx))
 	yy[yy < 0] <- 0
-	# if (slope >1){
-		xx2 <- c(xx[1], xx, xx[length(xx)])
-		yy2 <- c(0, yy, 0)
-		if(RAD ==5){
-				points(xx5, yy5halo, col="navyblue", cex=2, pch=19)
-				}
-		if(RAD == 20){
-			points(xx20, yy20halo, col="blue4", cex=2, pch=19)
-			}
-		if(RAD ==50){
-			points(xx50, yy50halo, col="blue", cex=2, pch=19)
-			}
-		if(RAD ==80){
-			points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
-			}
-		if(RAD ==95){
-				points(xx95, yy95halo, col="cadetblue1", cex=2, pch=19)
-				}
-		if(RAD=="all"){
-			# points(xx95, yy95halo, col="navyblue", cex=1.75, pch=19)
-			points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
-			points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
-			points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
-			# points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
-			}
-		# }
+	xx2 <- c(xx[1], xx, xx[length(xx)])
+	yy2 <- c(0, yy, 0)
+	if(RAD ==5){
+		points(xx5, yy5halo, col="navyblue", cex=2, pch=19)
+	}
+	if(RAD == 20){
+		points(xx20, yy20halo, col="blue4", cex=2, pch=19)
+	}
+	if(RAD ==50){
+		points(xx50, yy50halo, col="blue", cex=2, pch=19)
+	}
+	if(RAD ==80){
+		points(xx80, yy80halo, col="deepskyblue", cex=2, pch=19)
+	}
+	if(RAD ==95){
+		points(xx95, yy95halo, col="cadetblue1", cex=2, pch=19)
+	}
+	if(RAD=="all"){
+		# points(xx95, yy95halo, col="navyblue", cex=1.75, pch=19)
+		points(xx80, yy80halo, col="blue4", cex=1.75, pch=19)
+		points(xx50, yy50halo, col="blue", cex=1.75, pch=19)
+		points(xx20, yy20halo, col="deepskyblue", cex=1.75, pch=19)
+		# points(xx5, yy5halo, col="cadetblue1", cex=1.75, pch=19)
+	}
+# }
+		
+	if(plotCompon){
+		xx <- seq(log(data[[i]]$distance[1]), log(max(data[[i]][,1])), length=200)
+		yy2.1<- .curve(ML2[[i]]$par[1], ML2[[i]]$par[2], ML2[[i]]$par[3],xx)
+		yy2.2<- .curve(ML2[[i]]$par[5], ML2[[i]]$par[6], ML2[[i]]$par[7],xx)
+		yy1plot <- (yy2.1 +min(data[[i]]$x))
+		yy1plot[yy1plot <0] <-0
+		yy2plot <- (yy2.2 +min(data[[i]]$x))
+		yy2plot[yy2plot <0] <-0
+		points(exp(xx), yy1plot , type="l", col="orange", lwd=2, lty=2)
+		points(exp(xx), yy2plot, type="l", col="orange", lwd=2, lty=2)
+		}
+				
 	mtext(label, side=3, cex=0.6)
 }
 
