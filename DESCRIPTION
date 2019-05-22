@@ -15,3 +15,4 @@ Imports: zoo,
     methods
 Suggests: knitr
 RoxygenNote: 6.1.1
+Encoding: UTF-8

@@ -9,7 +9,7 @@
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
 #' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.
-#' @param needMap Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}. Defaults to "FALSE".
+#' @param needMap Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}}. Defaults to "FALSE".
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
 #' @param needZOI For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.
 #'@param RADcrit What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).

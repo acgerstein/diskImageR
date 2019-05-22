@@ -31,7 +31,7 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type".}
 
-\item{needMap}{Is there a coordinates map to use to assign drug names. Defaults to "FALSE".}
+\item{needMap}{Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}}. Defaults to "FALSE".}
 
 \item{standType}{either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.}
 
