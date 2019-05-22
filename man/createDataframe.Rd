@@ -5,7 +5,7 @@
 \title{Dataframe creation}
 \usage{
 createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
-  RADcrit = "20\%", standardLoc = 2.5, removeClear = FALSE,
+  RADcrit = "20", standardLoc = 2.5, removeClear = FALSE,
   nameVector = TRUE, typeVector = TRUE, typePlace = 2,
   typeName = "type", needMap = FALSE, standType = "one",
   addZOI = TRUE, addSIR = FALSE, needFoG = FALSE, slopeCutoff = 5)
@@ -19,7 +19,7 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
 
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
 
-\item{RADcrit}{What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).}
+\item{RADcrit}{What is the critical inhibition point to use to calculate the ZOI? Defaults to 20 (RAD80, i.e., 20 percent reduction), other acceptable values are 50 (RAD50) or 80 (RAD20).}
 
 \item{removeClear}{a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.}
 
