@@ -12,7 +12,7 @@
 #' @param needMap Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}}. Defaults to "FALSE".
 #' @param addZOI Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".
 #' @param needZOI For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.
-#'@param RADcrit What is the critical inhibition point to use to calculate the ZOI? Defaults to 20% (RAD80), other acceptable values are 50% (RAD50) or 80% (RAD20).
+#'@param RADcrit What is the critical inhibition point to use to calculate the ZOI? Defaults to 20 (RAD80, i.e., 20 percent reduction), other acceptable values are 50 (RAD50) or 80 (RAD20).
 #'@param addSIR Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run).
 
 #' @details A dataframe with 11 columns:
@@ -36,7 +36,7 @@
 #' @export
 
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, RADcrit = "20%", standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE,  needFoG=FALSE,  slopeCutoff = 5){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, RADcrit = "20", standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE, addSIR=FALSE,  needFoG=FALSE,  slopeCutoff = 5){
 if(standType=="one"){
 	if(!(hasArg(clearHalo))){
 		cont <- readline(paste("Please specify photograph number with a clear halo ", sep=""))
@@ -201,15 +201,15 @@ if(standType=="one"){
 }
 
 	if(addZOI){
-		if(RADcrit == "20%"){
+		if(RADcrit == "20"){
 			df$ZOI <- round(df$RAD80*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
-		if(RADcrit == "50%"){
+		if(RADcrit == "50"){
 			df$ZOI <- round(df$RAD50*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}
-		if(RADcrit == "80%"){
+		if(RADcrit == "80"){
 			df$ZOI <- round(df$RAD20*2+diskDiam, 0)
 			df$ZOI[df$RAD80 ==0] <- diskDiam
 		}

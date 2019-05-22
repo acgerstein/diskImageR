@@ -14,6 +14,9 @@ function makeLineE(centerX, centerY, length, angle) {
 
 function findDisk(file){
 	run("Clear Results");
+	selectWindow(getTitle);
+	run("Revert");
+	alterImageSize(getTitle);
 	run("8-bit");
 	setThreshold(181, 255);
 	run("Convert to Mask");
