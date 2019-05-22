@@ -5,11 +5,11 @@
 \title{Maximum Likelihood Inference}
 \usage{
 maxLik(projectName, standType = "one", clearHalo, diskDiam = 6,
-  standardLoc = 2.5, maxDist = 25, ymax = 200, xplots = 4, height = 8,
-  width = 8, FoG = 20, RAD = "all", needML = TRUE, popUp = TRUE,
-  nameVector = TRUE, overwrite = TRUE, plotParam = TRUE, plotFoG = TRUE,
-  savePDF = TRUE, plotSub = NA, plotCompon = FALSE, needMap = FALSE,
-  testInhib = FALSE)
+  standardLoc = 2.5, maxDist = 25, ymax = 200, xplots = 4,
+  height = 8, width = 8, FoG = 20, RAD = "all", needML = TRUE,
+  popUp = TRUE, nameVector = TRUE, overwrite = TRUE,
+  plotParam = TRUE, plotFoG = TRUE, savePDF = TRUE, plotSub = NA,
+  plotCompon = FALSE, needMap = FALSE, testInhib = FALSE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}

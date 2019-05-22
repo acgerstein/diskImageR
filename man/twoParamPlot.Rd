@@ -4,10 +4,11 @@
 \alias{twoParamPlot}
 \title{Used to plot the RAD and FoG results}
 \usage{
-twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20", RADmin = 30,
-  tolMax = 100, width = 6, height = 4, xlabels = "line",
-  xlabAngle = NA, order = NA, orderFactor = "line", overwrite = TRUE,
-  savePDF = TRUE, popUp = TRUE, barplot = TRUE)
+twoParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
+  RADmin = 30, tolMax = 100, width = 6, height = 4,
+  xlabels = "line", xlabAngle = NA, order = NA,
+  orderFactor = "line", overwrite = TRUE, savePDF = TRUE,
+  popUp = TRUE, barplot = TRUE)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}

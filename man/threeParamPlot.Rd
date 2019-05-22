@@ -5,9 +5,10 @@
 \title{Used to plot the RAD, slope and FoG parameter results}
 \usage{
 threeParamPlot(projectName, type, RAD = "RAD20", FoG = "FoG20",
-  RADmin = 30, slopeMax = 160, tolMax = 100, width = 6, height = 4,
-  xlabels = "line", xlabAngle = NA, order = NA, orderFactor = "line",
-  overwrite = TRUE, savePDF = TRUE, popUp = TRUE)
+  RADmin = 30, slopeMax = 160, tolMax = 100, width = 6,
+  height = 4, xlabels = "line", xlabAngle = NA, order = NA,
+  orderFactor = "line", overwrite = TRUE, savePDF = TRUE,
+  popUp = TRUE)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}

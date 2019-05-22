@@ -4,10 +4,10 @@
 \alias{IJMacro16}
 \title{Run an imageJ analysis macro on the folder that contains the photograph of the plate with 16 disks on it to be analyzed.}
 \usage{
-IJMacro16(projectName, projectDir = NA, photoDir = NA, imageJLoc = NA,
-  diskDiam = 6, drugs = c("AMC30", "CTX30", "S10", "CIP5", "CAZ30", "NA30",
-  "IPM10", "AZM15", "C30", "FOX30", "TET30", "F300", "ATM30", "AM10", "CPD10",
-  "SXT25"))
+IJMacro16(projectName, projectDir = NA, photoDir = NA,
+  imageJLoc = NA, diskDiam = 6, drugs = c("AMC30", "CTX30", "S10",
+  "CIP5", "CAZ30", "NA30", "IPM10", "AZM15", "C30", "FOX30", "TET30",
+  "F300", "ATM30", "AM10", "CPD10", "SXT25"))
 }
 \arguments{
 \item{projectName}{the short name you want use for the project}

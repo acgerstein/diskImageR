@@ -14,7 +14,7 @@ IJMacro(projectName, projectDir = NA, photoDir = NA, imageJLoc = NA,
 
 \item{photoDir}{the path to the directory where the photographs are to be analyzed. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)}
 
-\item{imageJLoc}{the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.}
+\item{imageJLoc}{the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path. 18/12/13 New MacOS users (I think Sierra and beyond): the new Mac OS breaks the former path configuration. Please set \code{imageJLoc="newMac"} in the IJMacro function call. If you are still having issues, please contact me.}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 }

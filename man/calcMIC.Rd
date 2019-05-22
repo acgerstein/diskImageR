@@ -4,8 +4,8 @@
 \alias{calcMIC}
 \title{Convert RAD to MIC based on built-in or provided parameters or datasets}
 \usage{
-calcMIC(projectName, type = "df", RAD = "20", height = 4, width = 6,
-  addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE)
+calcMIC(projectName, type = "df", RAD = "20", height = 4,
+  width = 6, addBreakpoints = TRUE, savePDF = TRUE, popUp = TRUE)
 }
 \arguments{
 \item{projectName}{the short name you have been using for the project.}

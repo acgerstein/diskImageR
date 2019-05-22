@@ -7,8 +7,8 @@
 createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
   RADcrit = "20\%", standardLoc = 2.5, removeClear = FALSE,
   nameVector = TRUE, typeVector = TRUE, typePlace = 2,
-  typeName = "type", needMap = FALSE, standType = "one", addZOI = TRUE,
-  addSIR = FALSE, needFoG = FALSE)
+  typeName = "type", needMap = FALSE, standType = "one",
+  addZOI = TRUE, addSIR = FALSE, needFoG = FALSE, slopeCutoff = 5)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}

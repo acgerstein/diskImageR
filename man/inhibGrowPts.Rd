@@ -5,8 +5,9 @@
 \title{Find the points of inhibition, maximum growth and resource limitations}
 \usage{
 inhibGrowPts(projectName, diskDiam = 12.7, maxDist = 30, ymax = 125,
-  xplots = 5, height = 8, width = 8, plotPts = "all", popUp = TRUE,
-  nameVector = TRUE, overwrite = TRUE, savePDF = TRUE)
+  xplots = 5, height = 8, width = 8, plotPts = "all",
+  popUp = TRUE, nameVector = TRUE, overwrite = TRUE,
+  savePDF = TRUE)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
