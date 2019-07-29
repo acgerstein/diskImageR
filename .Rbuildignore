@@ -9,3 +9,5 @@ src/GNUmakefile
 .git/*
 
 
+^.*\.Rproj$
+^\.Rproj\.user$
