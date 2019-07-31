@@ -26,8 +26,6 @@
 IJMacro <-
 function(projectName, projectDir=NA, photoDir=NA, imageJLoc=NA, diskDiam = 6){
 	# if(!is.char(projectName))
-	message <- "***Please note that the new MacOS versions (I think Sierra and beyond) broke the previous path structure. Please set imageJLoc = \"newMac\" in the function call***"
-cat(message)
 	diskImageREnv <- new.env()
 	fileDir <- projectName
 	if(is.na(projectDir)){
@@ -58,7 +56,6 @@ cat(message)
 		}
 	dir.create(file.path(projectDir, "imageJ_out"), showWarnings=FALSE)
 	outputDir <- file.path(projectDir, "imageJ_out", fileDir, "")
-	IJarguments <- paste(photoDir, outputDir, diskDiam, sep="*")
 
 	if(length(dir(outputDir)) > 0){
 		cont <- readline(paste("Output files exist in directory ", outputDir, "\nOverwrite? [y/n] ", sep=""))
@@ -76,64 +73,20 @@ cat(message)
 	dir.create(file.path(projectDir, "parameter_files"), showWarnings=FALSE)
 	dir.create(file.path(projectDir, "parameter_files", fileDir), showWarnings=FALSE)
 
-	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")[1]
-	if(.Platform$OS.type=="windows"){
-		IJarguments <- paste(paste(photoDir,  "", sep="\\"), paste(outputDir, "", sep="\\"), diskDiam, sep="*")
-		script <- gsub("Program Files", "progra~1", script)
-		knownIJLoc <- FALSE
-		if("ImageJ.exe" %in% dir("C:\\progra~1\\ImageJ\\")){
-		  	cmd <- "C:\\progra~1\\ImageJ\\ImageJ.exe"
-		  	knownIJLoc <- TRUE
-		  	}
-		if("ImageJ.exe" %in% dir("C:\\Program Files (x86)\\ImageJ\\")){
-			cmd <- '"C:\\Program Files (x86)\\ImageJ\\ImageJ.exe"'
-			knownIJLoc <- TRUE
-			}
-		if("ImageJ.exe" %in% imageJLoc){
-			cmd <- paste(imageJLoc, "ImageJ.exe", sep="")
-			knownIJLoc <- TRUE
-			}
-		if(knownIJLoc == FALSE){
-			stop("ImageJ is not in expected location. Please move ImageJ to the Program Files directory, or specify the path to its location using the argument 'imageJLoc'")
-		}
-		args <- paste("-batch", script, IJarguments)
-		args <- gsub("/", "\\\\", args)
-		shell(paste(cmd, args), wait=TRUE,intern=TRUE)
+	script <- file.path(.libPaths(), "diskImageR", "IJ_diskImageR.ijm")
+	IJarguments <- paste(photoDir, outputDir, diskDiam, sep="*")
+	
+	#Create new imageJInterface object
+	ij <- imageJInterface(filePath = "ImageJ", memoryAllocation = 1024)
+	#Run the imageJ processing script
+	ijOutput <- ij$runScript(paste(script, IJarguments))
+	#Check for error messages
+	if(length(ijOutput) > 0) {
+	  message("An error occurred and the imageJ script could not run:")
+	  message(ijOutput)
+	} else {
+	  message(paste("The imageJ script executed successfully", ijOutput))
 	}
-	else{
-		if(imageJLoc  == "newMac"){
-			call <- paste("/Applications/ImageJ/jre/bin/java -Xmx1024m -jar /Applications/ImageJ/ImageJ.app/Contents/Java/ij.jar -ijpath /Applications/ImageJ -batch", script, IJarguments, sep=" ")
-				knownIJLoc <- TRUE
-				}
-	# if(!is.na(imageJLoc)){
-		# if("ImageJ" %in% dir(imageJLoc)){
-	# #				print(imageJLoc)
-			# cmd <- paste(imageJLoc, " -batch", sep="")
-			# call <- paste(cmd, script, IJarguments, sep=" " )
-	# #				print(cmd)
-			# knownIJLoc <- TRUE
-		# }
-	# }					
-		else{
-			if ("ImageJ.app" %in% dir("/Applications/")){
-				call <- paste("/Applications/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")
-				knownIJLoc <- TRUE
-				}
-			if (knownIJLoc == FALSE & "ImageJ.app" %in% dir("/Applications/ImageJ/")){
-				call <- paste("/Applications/ImageJ/ImageJ.app/Contents/MacOS/JavaApplicationStub -batch", script, IJarguments, sep=" ")
-				knownIJLoc <- TRUE
-				}
-			if (knownIJLoc == FALSE & "ImageJ.app" %in% imageJLoc){
-					call <- paste(imageJLoc,  "-batch", script, IJarguments, sep=" ")
-					knownIJLoc <- TRUE
-					}
-		}
-		if(knownIJLoc == FALSE){
-			stop("ImageJ is not in expected location. Please move ImageJ to the Applications directory, or specify the path to its location using the argument 'imageJLoc'")
-				}
-		print(call)
-		system(call)
-		}
 
 	count_wait<-0.0;
 	while(length(dir(outputDir))<length(dir(photoDir)) && count_wait<1e12)
