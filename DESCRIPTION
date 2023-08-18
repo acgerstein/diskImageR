@@ -1,10 +1,13 @@
 Package: diskImageR
 Title: A Pipeline to Analyze Resistance and Tolerance from Drug Disk Diffusion Assays
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(
-	person("Aleeza", "Gerstein", email="gerst035@umn.edu", role=c("aut", "cre")),
+	person("Aleeza", "Gerstein", email="aleeza.gerstein@umanitoba.ca", role=c("aut", "cre")),
+	person("Sonja", "Friesen", email="fries382@myumanitoba.ca", role=c("aut")),	
+	person("Nazli", "Tahmasebi", email="tahmasef@myumanitoba.ca", role=c("aut")),	
 	person("Inbal", "Hecht", email="inbal.hecht@gmail.com", role="ctb"))
-Description: A pipeline to analyze photographs of drug disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. Furthermore, diskImageR removes potential researcher bias, by quantitative assessment of drug resistance as the zone diameter at multiple cutoff values of growth inhibition. This method also extends the disk diffusion assay by measuring drug tolerance (in addition to drug resistance) as the fraction of the subpopulation that is able to grow above the resistance point ("FoG"), and drug sensitivity as the rate of change from no growth to full growth ("slope").
+	
+Description: A pipeline to analyze photographs of drug disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. Furthermore, diskImageR removes potential researcher bias, by quantitative assessment of drug resistance as the zone diameter at multiple cutoff values of growth inhibition. This method also extends the disk diffusion assay by measuring drug tolerance (in addition to drug resistance) as the fraction of the subpopulation that is able to grow above the resistance point ("FoG").
 Depends: R (>= 3.0.3)
 SystemRequirements: ImageJ (all OS), Xcode (Mac)
 License: GPL-3 
