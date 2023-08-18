@@ -4,17 +4,35 @@
 \alias{maxLik}
 \title{Maximum Likelihood Inference}
 \usage{
-maxLik(projectName, standType = "one", clearHalo, diskDiam = 6,
-  standardLoc = 2.5, maxDist = 25, ymax = 200, xplots = 4,
-  height = 8, width = 8, FoG = 20, RAD = "all", needML = TRUE,
-  popUp = TRUE, nameVector = TRUE, overwrite = TRUE,
-  plotParam = TRUE, plotFoG = TRUE, savePDF = TRUE, plotSub = NA,
-  plotCompon = FALSE, needMap = FALSE, testInhib = FALSE)
+maxLik(
+  projectName,
+  standType = "one",
+  clearHalo,
+  diskDiam = 6,
+  standardLoc = 2.5,
+  maxDist = 25,
+  ymax = 200,
+  xplots = 4,
+  height = 8,
+  width = 8,
+  FoG = 20,
+  RAD = "all",
+  needML = TRUE,
+  popUp = TRUE,
+  nameVector = TRUE,
+  overwrite = TRUE,
+  plotParam = TRUE,
+  plotFoG = TRUE,
+  savePDF = TRUE,
+  plotSub = NA,
+  plotCompon = FALSE,
+  typical = TRUE
+)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
 
-\item{standType}{either `one` to specify that a single photoraph will be used for standardization purposes or `indiv` to use each phograph independently. Defaults to `one`.}
+\item{standType}{either `one` to specify that a single photograph will be used for standardization purposes or `indiv` to use each photograph independently. Defaults to `one`.}
 
 \item{clearHalo}{numeric value that indicates which picture should be used to represent a clear halo (i.e., the clear space beside the disk).}
 
@@ -22,13 +40,13 @@ maxLik(projectName, standType = "one", clearHalo, diskDiam = 6,
 
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
 
-\item{ymax}{a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting}
+\item{ymax}{a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting.}
 
-\item{xplots}{a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting}
+\item{xplots}{a numeric value indicating how many plots to plot in each row, does not influence maximum likelihood fitting.}
 
-\item{height}{a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting}
+\item{height}{a numeric value indicating the height of the pdf file generated, does not influence maximum likelihood fitting.}
 
-\item{width}{a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting}
+\item{width}{a numeric value indicating the width of the pdf file generated, does not influence maximum likelihood fitting.}
 
 \item{FoG}{a numeric value indicating the the critical level of the area under the curve to plot, does not influence maximum likelihood fitting. Current only \code{FoG} = "80" (80\% reduction in growth), \code{FoG} = "50" (50\% reduction in growth), and \code{FoG} = "20" (20\% reduction in growth) are supported. Note, the critical level for FoG can be different than that chosen for RAD.}
 
@@ -42,37 +60,45 @@ maxLik(projectName, standType = "one", clearHalo, diskDiam = 6,
 
 \item{overwrite}{a logical value indicating whether to overwrite existing figures created on the same day for the same project name.defaults to TRUE.}
 
-\item{plotParam}{a logical value indicating whether to save plots containing, at minimum, the fitted logistic equatoin and specified RAD levels to plot, but may also include the FoG \code{plotFoG} = "TRUE" or the components of the logistic equation \code{plotCompon} = "TRUE". Defaults to TRUE.}
+\item{plotParam}{a logical value indicating whether to save plots containing, at minimum, the fitted logistic equation and specified RAD levels to plot, but may also include the FoG \code{plotFoG} = "TRUE" or the components of the logistic equation \code{plotCompon} = "TRUE". Defaults to TRUE.}
 
-\item{plotFoG}{a logical value indicating whether to plot the FoG or not. Defaults to TRUE}
+\item{plotFoG}{a logical value indicating whether to plot the FoG or not. Defaults to TRUE.}
 
 \item{savePDF}{a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.}
 
 \item{plotSub}{allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.}
 
-\item{plotCompon}{plots the two terms of the double logistic equation. Defaults to FALSE}
+\item{plotCompon}{plots the two terms of the double logistic equation. Defaults to FALSE.}
 
-\item{needMap}{Is there a coordinates map to use to assign drug names. Defaults to "FALSE".}
-
-\item{testInhib}{Optional argument to rerun the maximum likelihood anlysis with a constrained asymptote. This is useful for compounds that both inhibit growth yet are also utilized. In comparison to "typical" drug profiles, the growth profile for these compounds don't reach an asymptote, but rather are characterized by inhibition, followed by a point of maximum growth and then a growth reduction. When \code{testIhib} = "TRUE" a second set of maximum likelihood analyses are run on a constrained data set that only examines the portion of the line up to the maximum intensity point. This results in asymptote estimates that are closer to this maximum point and hence more accurate fitting for these types of growth profiles.}
+\item{typical}{if TRUE, a logistic curve will be calculated for each photo. If FALSE, the function will determine whether logistic, paradoxical, or confounding is the best fit and then calculate the curve.}
 }
 \value{
-Two lists, ML and ML2 are saved to the global environment. A pdf file with one plot for each photograph is saved to visualize the results of curve fitting, zone of inhibition (resistance) and the area under the curve (tolerance).
+When typical = TRUE: two lists, ML and ML2 are saved to the global environment.
+When typical = FALSE: one list, ML2 is saved to the global environment.
+In both cases, a pdf file with one plot for each photograph is saved to visualize the results of curve fitting and parameters of interest.
 }
 \description{
-\code{maxLik}  uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the imageJ output data to then fit parameters that describe reistance, tolerance and sensitivity.
+\code{maxLik}  uses maximum likelihood to find the  equations that best describe the shape of the imageJ output data to then fit parameters that describe resistance, tolerance and sensitivity.
 }
 \details{
-\code{\link{maxLik}} searches for the maximum likelihood (ML) parameter for a single logistic and double logistic equation using the pixel intensity information previously determined from \code{\link{IJMacro}}. The equations fit are
-single logistic ('ML'):
-y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+N(0, sigma)
- double logistic ('ML2'):
+\code{\link{maxLik}} searches for the maximum likelihood parameter using the pixel intensity information previously determined from \code{\link{IJMacro}}. Three types of inhibition growth were identified and each uses a specific equation:
+For standard growth:
 y = asymA*exp(scalA(x-od50A))\(1+exp(scalA(x-od50A)))+asymB*exp(scalB(x-od50B)))\(1+exp(scalB(x-od50B)))+N(0, sigma)
-where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively. Specifically, \code{\link{maxLik}} uses the\code{\link[subplex]{subplex}} method of \code{\link{optim}}, as implemented in \code{\link[diversitree]{find.mle}}.  The single logistic is the essentially the same as the double, yet fits only a single asymptote, midpoint and slope. The results from the double logistic fit are used in \code{\link{createDataframe}} to find the resistance points as well as to fit the area under the curve and thus tolerance, the single logistic is used to determine the midpoint of the curve which is later used to find sensitivity, i.e., the slope at this midpoint.
+where asymA and asymB are the two asymptotes, od50A and odB are the midpoints (of the two curves), scalA and scalB are the slopes at odA and odB divided by asymA/4 and asymB/4, respectively.
+For paradoxical growth (pixel intensity increases around the drug disk, drops, then rises again):
+a <- exp(slope * (x - shift))
+b <- 1 - 4 * exp(slope * (x - shift)) 
+c <- exp(2 * slope * (x - shift))
+d <- (1 + exp(slope * (x - shift))) ^ 4
+y=drop * a * (b + c) / d + height
+Where Slope adjusts slope of the middle curve,height: adjusts the height of the sides, shift is the movement(left/right), drop adjusts the variation in height between the sides and the bottom of the middle curve.
+For confounding growth (pixel intensity increases around drug disk and then goes down):
+y = asym*exp(-1*scal(x-od50))\(1+exp(-1*scal(x-od50)))+N(0, sigma)
+where asym is the asymptote, od50 is the midpoint, scal is the slopes at od50 divided by asym/4.
 }
 \section{Important}{
 
-The photograph specified with \code{clearHalo} is extremely important to determine tolerance, as the intensity beside the disk for the chosen photograph is subtracted for all photographs. Choosing the photograph to be used for this purpose is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that plate background will be as similar as possible among different plates. Photographs are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. In many experiments a suitable strain will already be included, however a good practice is to always take a photograph of a blank plate with just the disk in the center to use for this purpose (and save it with a name like "a" so that it is always the first photograph in the list (i.e., `clearHalo = 1`). The (non)results from this photograph can be later removed in the function `createDataframe()`.
+If you choose to use standType = "one", the photograph specified with \code{clearHalo} is extremely important to determine tolerance, as the intensity beside the disk for the chosen photograph is subtracted for all photographs. Choosing the photograph to be used for this purpose is the only subjective aspect of this pipeline; lighting and camera settings will determine the degre to which the hue of the plate backbground changes among different photographs. Care should be taken to ensure that plate background will be as similar as possible among different plates. Photographs are numbered alphabetically by name, and can also be found using \code{\link{plotRaw}}, showNum = TRUE. In many experiments a suitable strain will already be included, however a good practice is to always take a photograph of a blank plate with just the disk in the center to use for this purpose (and save it with a name like "a" so that it is always the first photograph in the list (i.e., `clearHalo = 1`). The (non)results from this photograph can be later removed in the function `createDataframe()`. Note that only standType = "one" is supported when typical = FALSE.
 }
 
 \section{Warning}{

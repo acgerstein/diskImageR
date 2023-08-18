@@ -4,8 +4,13 @@
 \alias{aggregateData}
 \title{Averages photographs of the same type}
 \usage{
-aggregateData(projectName, varFunc = "se", replicate = c("line",
-  "type"), overwrite = TRUE, save = TRUE)
+aggregateData(
+  projectName,
+  varFunc = "se",
+  replicate = c("line", "type"),
+  overwrite = TRUE,
+  save = TRUE
+)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}

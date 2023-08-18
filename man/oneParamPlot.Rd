@@ -4,10 +4,23 @@
 \alias{oneParamPlot}
 \title{Used to plot a single parameter}
 \usage{
-oneParamPlot(projectName, type, param = "RAD20", ymin = 0,
-  ymax = 100, width = 6, height = 4, xlabels = "line",
-  xlabAngle = NA, order = NA, orderFactor = "line",
-  overwrite = TRUE, savePDF = TRUE, popUp = TRUE, barplot = TRUE)
+oneParamPlot(
+  projectName,
+  type,
+  param = "RAD20",
+  ymin = 0,
+  ymax = 100,
+  width = 6,
+  height = 4,
+  xlabels = "line",
+  xlabAngle = NA,
+  order = NA,
+  orderFactor = "line",
+  overwrite = TRUE,
+  savePDF = TRUE,
+  popUp = TRUE,
+  barplot = TRUE
+)
 }
 \arguments{
 \item{projectName}{the short name to be used for the project}

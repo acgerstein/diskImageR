@@ -4,11 +4,21 @@
 \alias{createDataframe}
 \title{Dataframe creation}
 \usage{
-createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
-  RADcrit = "20", standardLoc = 2.5, removeClear = FALSE,
-  nameVector = TRUE, typeVector = TRUE, typePlace = 2,
-  typeName = "type", needMap = FALSE, standType = "one",
-  addZOI = TRUE, addSIR = FALSE, needFoG = FALSE, slopeCutoff = 5)
+createDataframe(
+  projectName,
+  clearHalo,
+  diskDiam = 6,
+  maxDist = 25,
+  standardLoc = 2.5,
+  removeClear = FALSE,
+  nameVector = TRUE,
+  typeVector = TRUE,
+  typePlace = 2,
+  typeName = "type",
+  standType = "one",
+  needFoG = FALSE,
+  typical = TRUE
+)
 }
 \arguments{
 \item{projectName}{the short name in use for the project.}
@@ -19,11 +29,9 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
 
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
 
-\item{RADcrit}{What is the critical inhibition point to use to calculate the ZOI? Defaults to 20 (RAD80, i.e., 20 percent reduction), other acceptable values are 50 (RAD50) or 80 (RAD20).}
-
 \item{removeClear}{a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.}
 
-\item{nameVector}{either a logial value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign th photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.}
+\item{nameVector}{either a logical value or a character vector. Supported values are \code{nameVector} = "TRUE" to assign the photograph name to the 'name' column, \code{nameVector} = "FALSE" to assign the photograph number to the 'name' column, or \code{nameVector} = a vector the same length as the number of photographs indicating the desired names.}
 
 \item{typeVector}{a logical value. \code{typeVector} = "TRUE" will add a 'type' vector to the dataframe using values found in the \code{typePlace} position of the photograph names (see \code{\link{IJMacro}} for more details) while \code{typeVector} = "FALSE" will not add a type column.}
 
@@ -31,32 +39,29 @@ createDataframe(projectName, clearHalo, diskDiam = 6, maxDist = 25,
 
 \item{typeName}{a character string that indicates what to name the typeVector. Defaults to "type".}
 
-\item{needMap}{Is there a coordinates map to use to assign drug names. This is used when the plates have 16 disks and \code{\link{IJMacro16}} was used rather than \code{\link{IJMacro}}. Defaults to "FALSE".}
+\item{standType}{either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo.}
 
-\item{standType}{either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo. Note that "indiv" standardizations are not compatible with measuring FoG.}
-
-\item{addZOI}{Automatically calculate the ZOI from RAD values (RAD*2). Defaults to "TRUE".}
-
-\item{addSIR}{Will determine whether the ZOI values match CLSI 'susceptible', 'intermediate', or 'resistant' values.  Currently only implemented for plates with 16 disks (i.e., when \code{\link{IJMacro16}} was run).}
-
-\item{needZOI}{For standType "indiv", indicates whether to calculate. Defaults to "FALSE". For standType "one" FoG is automatically calculated.}
+\item{typical}{if TRUE, a logistic curve will be calculated for each photo. If FALSE, the function will determine whether logistic, confounding, or paradoxical is the best fit and then calculate the curve.}
 }
 \value{
-A dataframe "projectName.df" is saved to the global environment and a .csv file "projectName_df.csv" is exported to the "parameter_files" directory.
+If typical = TRUE, a dataframe "projectName.df" is saved to the global environment and a .csv file "projectName_df.csv" is exported to the "parameter_files" directory.
+If typical = FALSE, up to three dataframes are saved to the global environment and up to three .csv files are exported to the "parameter_files" directory.
 }
 \description{
-\code{createDataframe} saves the calculated resistance, perseverence and sensitivity estimates
+\code{createDataframe} saves the calculated resistance, perseverance and sensitivity estimates
 }
 \details{
-A dataframe with 11 columns:
-\itemize{
-		\item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
+If typical = TRUE, creates a dataframe with 9 columns:
+   \item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
  	\item\bold{line:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
-		\item\bold{type:} the location within the \code{name} of the phograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
-		\item\bold{RAD80, RAD50, RAD20:} resistance parameters, coresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
-		\item\bold{FoG80, FoG50, FoG20:} perseverence parameters, coresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
-		\item\bold{slope:} sensitivity parameter, indicating the slope at the midpoint, i.e., how rapidly the population changes from low growth to full growth
-}
+		\item\bold{type:} the location within the \code{name} of the photograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
+		\item\bold{RAD20, RAD50, RAD80:} resistance parameters, corresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
+		\item\bold{FoG80, FoG50, FoG20:} perseverance parameters, corresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
+		
+If typical = FALSE, then up to three dataframes will be created, depending on the categorizations of the pictures in maxLik. The pictures will be split into standard, confounding, and paradoxical growth and each category that has photos will create a dataframe. All the dataframes will have the same first three columns as typical = TRUE, as well as a column indicating the photo index so that photos can be identified. The parameters of interest vary between the drug responses.
+The standard dataframes will have the same parameters of interest as typical = TRUE. 
+The confounding dataframes will have DRAD80, DRAD50, and DRAD20, corresponding to the distance in mm of 80\%, 50\%, and 20\% disinhibition.
+The paradoxical dataframes will have two points of maximum inhibition. One is the calculated maxInhib (based on the minimum point from the fit curve) and the other is the observed maxInhib (based on the minimum observed data point)
 }
 \examples{
 \dontrun{

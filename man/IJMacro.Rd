@@ -4,8 +4,13 @@
 \alias{IJMacro}
 \title{Run an imageJ analysis macro on the folder that contains the photograph to be analyzed}
 \usage{
-IJMacro(projectName, projectDir = NA, photoDir = NA, imageJLoc = NA,
-  diskDiam = 6)
+IJMacro(
+  projectName,
+  projectDir = NA,
+  photoDir = NA,
+  imageJLoc = NA,
+  diskDiam = 6
+)
 }
 \arguments{
 \item{projectName}{the short name you want use for the project}

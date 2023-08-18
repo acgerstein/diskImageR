@@ -1,4 +1,4 @@
-#' Dataframe creation
+ #' Dataframe creation
 
 #' @description \code{createDataframe} saves the calculated resistance, perseverance and sensitivity estimates
 
