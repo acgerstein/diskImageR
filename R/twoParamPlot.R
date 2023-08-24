@@ -28,7 +28,6 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 		cont <- readline(paste("Please select whether dataframe is from 'createDataframe' (df) or `aggregateData (ag) ", sep=""))
 		type <- cont
 	}
-
 	dir.create(paste("figures/", projectName,  sep=""), showWarnings = FALSE)
 	t <- file.path("figures", projectName,  paste(projectName, "_RAD-FoG-", type, ".pdf", sep=""))
 	if (!overwrite){
@@ -43,7 +42,6 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 				}
 			}
 		}
-	
 	if(type == "ag"){
 		if(!is.na(order[1])){
 		data <- eval(parse(text=paste(projectName, ".ag", sep="")))	
@@ -92,14 +90,11 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 			}
 		}
 	}	
-		
-			
 	tols <- ordData[, FoG]
 	mp <- barplot(t(tols), beside=TRUE, plot=FALSE)	
 	if(savePDF){
 		 pdf(t, width=width, height=height)
 		}	
-
 	par(mfrow=c(2, 1), oma=c(4, 4, 1, 1), mar=c(1, 1, 1, 1))
 	if(type=="ag"){
 		if(barplot == TRUE){		
@@ -114,16 +109,13 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 		}
 		
 	}
-	
 	if(type=="df"){
 		plot(as.numeric(as.factor(ordData[, orderFactor])), ordData[, RAD], ylim=c(RADmin, 0), yaxt="n", xaxt="n", yaxs="i", xaxs="i", pch=19, xlab="", ylab="", col=grey(0.3), cex=1, xlim=c(0.5, length(unique(as.numeric(as.factor(ordData[, orderFactor]))))+0.5))
 	axis(1, at=as.numeric(as.factor(unique(ordData[, orderFactor]))), labels=FALSE)
 	}
-	
 	axis(2, las=2, cex.axis=0.8)
 	mtext("Distance\n from disk (mm)", side=2, line=2.5, cex=0.8)
 	mtext(expression(paste(bold(A), " Resistance", sep="")), side=3, adj=0.01)
-	
 	if(type=="ag"){
 		if(barplot == TRUE){	
 			mp <- barplot(t(tols*100), ann=FALSE, beside=TRUE, yaxs="i", xaxs="i", ylim=c(0, tolMax), xaxt="n", yaxt="n", xlab="", ylab="", xlim=c(0, max(mp)+1))
@@ -167,6 +159,5 @@ twoParamPlot <- function(projectName, type, RAD = "RAD20", FoG = "FoG20",  RADmi
 			system(tt)
 		}
 	}
-
 }
 

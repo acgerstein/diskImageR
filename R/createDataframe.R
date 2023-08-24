@@ -269,7 +269,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
     }
   }
 }
-
+}
 .findFoG <- function(i, data, ML, ML2, stand, clearHaloStand, dotedge = 3.4, maxDist = 35, standardLoc = 2.5, standType = standType){
   
   # this helper function is mostly taken from the CRAN legacy version
