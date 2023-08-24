@@ -196,7 +196,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       paramNegLog <- data.frame(photo.index = negLogIndices, DRAD80 = x80, DRAD50 = x50, DRAD20 = x20)
       paramNegLog <- addNames(data[negLogIndices], paramNegLog, nameVector, typeVector, typePlace, typeName)
       
-      dfName <- paste(projectName, ".dfNegLog", sep="")
+      dfName <- paste(projectName, "_confound.df", sep="")
       assign(dfName, paramNegLog, inherits=TRUE)
       cat(paste("\n", dfName, " has been written to the global environment", sep=""))
       
@@ -204,8 +204,8 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       write.csv(paramNegLog, file = filenameNegLog, row.names = FALSE)
       
       cat(paste("\nSaving file: ", filenameNegLog,  sep=""))
-      cat(paste("\n", projectName, "_df_negLog.csv can be opened in MS Excel.\n",  sep=""))
-    }
+      cat(paste("\n", projectName, "_confound_df.csv can be opened in MS Excel.\n",  sep=""))
+
     
     if (length(logIndices) != 0) {
       
@@ -236,7 +236,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       paramLog$FoG50[paramLog$RAD50 == 1] <- NA
       paramLog$FoG20[paramLog$RAD20 == 1] <- NA
       
-      dfName <- paste(projectName, ".dfLog", sep="")
+      dfName <- paste(projectName, ".df", sep="")
       assign(dfName, paramLog, inherits=TRUE)
       cat(paste("\n", dfName, " has been written to the global environment", sep=""))
       
@@ -244,7 +244,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       write.csv(paramLog, file=filenameLog, row.names=FALSE)
       
       cat(paste("\nSaving file: ", filenameLog,  sep=""))
-      cat(paste("\n", projectName, "_df_log.csv can be opened in MS Excel.\n",  sep=""))
+      cat(paste("\n", projectName, "_df.csv can be opened in MS Excel.\n",  sep=""))
     }
     
     if (length(paraIndices) != 0) {
@@ -257,7 +257,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       paramPara <- data.frame(photo.index = paraIndices, curve.maxInhib = xmin, observed.maxInhib = xmin2)
       paramPara <- addNames(data[paraIndices], paramPara, nameVector, typeVector, typePlace, typeName)
       
-      dfName <- paste(projectName, ".dfPara", sep="")
+      dfName <- paste(projectName, "_para.df", sep="")
       assign(dfName, paramPara, inherits=TRUE)
       cat(paste("\n", dfName, " has been written to the global environment", sep=""))
       
@@ -265,7 +265,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
       write.csv(paramPara, file=filenamePara, row.names=FALSE)
       
       cat(paste("\nSaving file: ", filenamePara,  sep=""))
-      cat(paste("\n", projectName, "_df_para.csv can be opened in MS Excel.\n",  sep=""))
+      cat(paste("\n", projectName, "_para_df.csv can be opened in MS Excel.\n",  sep=""))
     }
   }
 }
