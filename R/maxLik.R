@@ -1,6 +1,6 @@
 #' Maximum Likelihood Inference
 
-#' @description \code{maxLik}  uses maximum likelihood to find the  equations that best describe the shape of the imageJ output data to then fit parameters that describe resistance, tolerance and sensitivity.
+#' @description \code{maxLik}  uses maximum likelihood to find the  equations that best describe the shape of the imageJ output data to then fit parameters that describe resistance and tolerance.
 
 #' @param projectName the short name in use for the project.
 #' @param standType either `one` to specify that a single photograph will be used for standardization purposes or `indiv` to use each photograph independently. Defaults to `one`.

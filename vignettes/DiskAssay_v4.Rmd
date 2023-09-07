@@ -1,5 +1,5 @@
 ---
-title: diskImageR Vignette, v3 
+title: diskImageR Vignette, v4 
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Quantitative Disk Assay}
@@ -217,7 +217,7 @@ twoParamPlot("manyReps", type= "df", popUp = TRUE, savePDF =FALSE, xlabAngle = -
 twoParamPlot("manyReps", type= "ag", popUp = TRUE, savePDF =FALSE, xlabAngle = -45, order = c(1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7, 14), xlabels =paste(rep(manyReps.ag$line[1:7], each=2), rep(c("A", "B"), 7), sep="-"))
 ```
 
-### August 2023 Update to <i>diskImageR</i>: quantification of atypical drug responses
+## August 2023 Update to <i>diskImageR</i>: quantification of atypical drug responses
 
 New parameters are available for quantification of observed photographs that follow either a confounding or paradoxical pattern of drug response (see images at the top of the vignette). To use this analysis, everything remains the same as described above until after `IJMacro()` has been run. 
 
@@ -244,7 +244,6 @@ $$
 
 
 $$
-\being{align*}
 y = \frac{drop*exp(slope*(x - shift))*(1 - 4*exp(slope*(x - shift)) + exp(2 * slope*(x - shift)))}{(1 + exp(slope*(x -shift)))^4} + \\  height + \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
 $$
 
@@ -280,16 +279,14 @@ createDataframe("newAtypicalProject", typical = FALSE, clearHalo = 1)
 # typical growth
  head(newAtypicalProject.df) 
 # confounding growth
-head(newAtypicalProject_counfound.df) 
+head(newAtypicalProject_confound.df) 
 # paradoxical growth
 head(newAtypicalProject_para.df) 
 ```
 
 <b>Important!</b> These are the only functions that have been extended to include this new functionality. If you use `typical = FALSE` in `maxLik()`, trying to run functions downstream of these will likely produce errors. 
-<span style = "color:red;"> This isn't really clear - I think you need to specify exactly which functions are considered downstream. Also, Nazli, you could try and work on updating aggregateData() in the next few days! That shouldn't be too hard :-)</span>
 
-### Walkthrough of typical diskImageR use
-
+## Walkthrough of diskImageR use
 
 ```{r, eval=FALSE, tidy=TRUE}
 #For all functions type ?functionName to bring up a help file and to see current argument default values.
@@ -308,19 +305,23 @@ plotRaw("newProject")
 
 #Use maximum likelihood to fit single and double logistic models to the data from each photograph. "clearHalo" is used to specify a picture that has a clear zone beside the disk; the intensity at this point is subtracted from all photographs and will be most accurate when photographs are taken with equal lighting without shadows. This can be a blank plate with just a disk on it (removed in the next step). RAD and FoG arguments specify values for plotting only, and do not influence analysis.
 maxLik("newProject", clearHalo=1, RAD="all", FoG ="50")
+#if you have atypical images use
+maxLik("newProject", clearHalo=1, RAD="all", FoG ="50", typical = FALSE)
 
 #Use the logistic models from maxLik() to calculate resistance (20%, 50% and 80% reduction in growth = RAD20, RAD50, RAD80), tolerance (fraction of growth achvied above RAD relative to potential growth = FoG20, FoG50, FoG80), and sensitivity (slope at RAD50), which are saved in a CSV file. If you used a blank plate for clearHalo, remove with argument removeClear = TRUE.
 createDataframe("newProject", clearHalo = 1)
+#if you have atypical images use
+createDataframe("newProject", clearHalo = 1, typical = FALSE)
 
-#[OPTIONAL] Calculate the mean and variance for parameter estimates across replicate photographs
+#[OPTIONAL] Calculate the mean and variance for parameter estimates across replicate photographs. This is only available when typical = TRUE.
 aggregateData("newProject")
 
-#[OPTIONAL[ Calculate MIC from RAD values using built-in data for a limited number of spcies/drug combinations or user-supplied data.
+#[OPTIONAL] Calculate MIC from RAD values using built-in data for a limited number of spcies/drug combinations or user-supplied data. This is only available when typical = TRUE.
 calcMIC("newProject")
-
 ```
 
 ### Acknowledgements
+* Sonja Friesen and Nazli Tahmasebi wrote all of the functions that extend analysis to atypical pictures.
 * Richard Fitzjohn: contributed the maximum likelihood function `find.mle()` (from the `diversitree` package	)
 * Inbal Hecht: coded portions of `calcMIC()` and contributed a patch to make `IJMacro()` more compatible with Windows
 * Sincere thanks also to Adi Ulman for the original motivation, Noa Blutraich, Gal Benron, and Alexander Rosenberg for testing many versions of the code presented here, Yoav Ram for going through the code from the entire package, and Darren Abbey and particularly Judith Berman for philosophical discussions about how best to computationally capture the biological variation observed in disk assay experiments.

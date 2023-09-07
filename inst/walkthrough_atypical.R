@@ -23,3 +23,5 @@ createDataframe("newProject", clearHalo = 1, typical = FALSE)
 
 #[OPTIONAL] Calculate corresponding MIC values from RAD values using either built-in data for specific species/drug combinations or supply your own RAD/MIC data to use for a standard curve
 calcMIC("newProject")
+
+
