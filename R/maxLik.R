@@ -22,6 +22,7 @@
 #' @param savePDF a logical value indicating whether to save a PDF file or open a new quartz. Defaults to TRUE.
 #' @param plotSub allows you to plot only a subset of photographs - indicate with a vector the corresponding numeric indices of the data you wish to plot. Photographs are numbered alphabetically by name, and the photograph numbers can also be found by using the showNum option in \code{\link{plotRaw}}. Defaults to NA, which will plot data from all photographs. Note this does not affect the analysis component, all data is always analyzed.
 #' @param plotCompon plots the two terms of the double logistic equation. Defaults to FALSE.
+#' @param standardLoc is a numberic value that indicates the location (on the disk) to use to standardize white intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The default value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line when `plotStandardLoc = TRUE`). To suppress this standardization use `standardLoc = FALSE`
 #' @param typical if TRUE, a logistic curve will be calculated for each photo. If FALSE, the function will determine whether logistic, paradoxical, or confounding is the best fit and then calculate the curve.
 
 #' @details \code{\link{maxLik}} searches for the maximum likelihood parameter using the pixel intensity information previously determined from \code{\link{IJMacro}}. Three types of inhibition growth were identified and each uses a specific equation:
@@ -44,8 +45,6 @@
 
 #' @section Warning:
 #' Depending on the number of photographs to be analyzed, `maxLik()` can take a fair amount of time, upwards of an hour or more. This is due to the maximum likelihood fitting procedures, which determine the best fit parameters from multiple different starting values. The status is indicated by a series of dots (".") in the R console, with one dot per photograph. If for some reason the procedure gets halted in the middle of \code{maxLik()} (e.g., computer is shut down) as long as R remains open it should resume where it left off when the computer is reactivated.
-
-#' @seealso \code{\link{saveMLParam}} to save the parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
 
 #' @return When typical = TRUE: two lists, ML and ML2 are saved to the global environment.
 #' When typical = FALSE: one list, ML2 is saved to the global environment.

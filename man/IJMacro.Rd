@@ -19,7 +19,7 @@ IJMacro(
 
 \item{photoDir}{the path to the directory where the photographs are to be analyzed. If left as NA (the default) you will be able to specify the locaion through a pop-up box. (default=NA)}
 
-\item{imageJLoc}{the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path. 18/12/13 New MacOS users (I think Sierra and beyond): the new Mac OS breaks the former path configuration. Please set \code{imageJLoc="newMac"} in the IJMacro function call. If you are still having issues, please contact me.}
+\item{imageJLoc}{the absolute path to ImageJ (\href{http://rsb.info.nih.gov/ij/download.html}{ImageJ}) on your computer. Leave as NA (the default) if you have downloaded ImageJ to a standard location (Mac: /Applications/ImageJ.app or /Applications/ImageJ/ImageJ.app/; Windows: Program Files/ImageJ). If you wish to run imageJ from an alternative path use \code{imageJLoc} to specify the absolute path.}
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 }
@@ -33,7 +33,7 @@ A .csv file is saved to the directory "imageJ_out" in the directory specified by
 Each photograph in the directory specified by \code{photoDir} is input into ImageJ, where the built-in 'find particles' macro is used to find the center of a drug diffusion disk of the size specified by \code{diskDiam}. Lines are drawn every 5 degrees out from the center of the disk, and the pixel intensity, which corresponds to cell density, is measured using the 'plot-profile' macro along each line. The results from all lines are saved into the "imageJ-out" directory in the specified \code{projectDir}. The average pixel intensity is then determined across all 72 lines for each photograph and saved to \code{projectName}. \cr Note that the photograph names can be fairly important downstream and should follow a fairly strict convention to be able to take advantage of some of the built-in functions. Photographs should be named "line_factor1_factor2_factor3_...".
 }
 \section{Important}{
-
+ 
 There can not be any spaces or special characters in any of the folder names that are in the path that lead to either the main project directory or the photograph directory. If there are an error box titled "Macro Error" will pop up and the script will not run.
 The project name should ideally be fairly short (easy to type without typos!) and specific to the project. It must start with a letter, not a number or special character, but can otherwise be anything. The project name must always be specified with quotation marks around it (a surprisingly common error).
 }

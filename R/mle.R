@@ -1,14 +1,10 @@
-## These functions are from the package diversitree
-## As of April 3, 2015, I have been unable to load diversitree from CRAN or github
-## So, attemping to load just this set of functions, which are required.
-## Currently, I have added interfaces to several different optimisers:
-##   'optim' (L-BFGS-B, Nelder-Mead, BFGS, CG, SANN)
-##   'subplex'
-##   'nlminb'
-##   'nlm'
-## These now have a similar interface, though not identical.
+#' Helper fuctions from diversitree package
 
-#' @export
+#' @description \code{mle}  These functions are from the package diversitree which is no longer able to be loaded from CRAN or github. They are used by maxLik
+#' @param func interal useage
+#' @param x.init interal useage
+#' @param method interal useage
+#' @param ... interal useage
 
 find.mle <- function(func, x.init, method, ...) {
   UseMethod("find.mle")

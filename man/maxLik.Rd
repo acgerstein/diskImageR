@@ -38,6 +38,8 @@ maxLik(
 
 \item{diskDiam}{the diameter of the diffusion disk in mm, defaults to 6.}
 
+\item{standardLoc}{is a numberic value that indicates the location (on the disk) to use to standardize white intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The default value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line when `plotStandardLoc = TRUE`). To suppress this standardization use `standardLoc = FALSE`}
+
 \item{maxDist}{a numeric value indicating the maximum distance away from the disk to be considered. Defaults to 25mm.}
 
 \item{ymax}{a numeric value indicating the maximum y value plotted in each graph, does not influence maximum likelihood fitting.}
@@ -78,7 +80,7 @@ When typical = FALSE: one list, ML2 is saved to the global environment.
 In both cases, a pdf file with one plot for each photograph is saved to visualize the results of curve fitting and parameters of interest.
 }
 \description{
-\code{maxLik}  uses maximum likelihood to find the  equations that best describe the shape of the imageJ output data to then fit parameters that describe resistance, tolerance and sensitivity.
+\code{maxLik}  uses maximum likelihood to find the  equations that best describe the shape of the imageJ output data to then fit parameters that describe resistance and tolerance.
 }
 \details{
 \code{\link{maxLik}} searches for the maximum likelihood parameter using the pixel intensity information previously determined from \code{\link{IJMacro}}. Three types of inhibition growth were identified and each uses a specific equation:
@@ -116,7 +118,4 @@ Richard G. Fitzjohn (2012) Diversitree: comparative phylogenetic analyses of div
 maxLik("myProject", clearHalo=1)
 maxLik("myProject", clearHalo=1, xplots = 2, height = 4, width = 6, needML = FALSE)
 }
-}
-\seealso{
-\code{\link{saveMLParam}} to save the parameter estimates for asym, od50, scal and sigma, as well as the log likelihood of the single and double logistic models.
 }

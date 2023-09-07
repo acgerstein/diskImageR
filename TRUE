@@ -1,1 +1,0 @@
-sh: /Applications/ImageJ.app/jre/bin/java -Xmx2048m -jar /Applications/ImageJ.app/Contents/Java/ij.jar -ijpath /Applications/ImageJ.app -batch /users/erikwhite/Dev/diskImageR/inst/IJ_diskImageR.ijm /users/erikwhite/Downloads/test*/users/erikwhite/Downloads/imageJ_out*2: No such file or directory

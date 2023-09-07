@@ -9,14 +9,10 @@
 #' @param typeName a character string that indicates what to name the typeVector. Defaults to "type".
 #' @param removeClear a logical value that indicates whether to remove the clear halo picture from the dataset (i.e., is this picture an experimental picture, or one solely included to use as a clear halo). Defaults to FALSE.
 #' @param standType either "one" or "indiv" to determine whether to use one standard for all photos or individually standardize each photo.
+#' @param standardLoc is a numberic value that indicates the location (on the disk) to use to standardize white intensity across photographs. The position of standardLoc is a position that should theoretically have the same intensity in all photographs, i.e., the white of the disk. The default value (2.5mm) was chosen after testing of 6mm disks that contain some writing. If smaller disks are used standardLoc should be scaled appropriately. You can see where standardLoc falls in each photograph in \code{plotRaw} (the red dashed line when `plotStandardLoc = TRUE`). To suppress this standardization use `standardLoc = FALSE`
 #' @param typical if TRUE, a logistic curve will be calculated for each photo. If FALSE, the function will determine whether logistic, confounding, or paradoxical is the best fit and then calculate the curve.
 
-#' @details If typical = TRUE, creates a dataframe with 9 columns:
-#'    \item\bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names
-#'	 	\item\bold{line:} the first components of the \code{namesVector}; everything that comes before the first "_" in the photograph name
-#' 		\item\bold{type:} the location within the \code{name} of the photograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired.
-#' 		\item\bold{RAD20, RAD50, RAD80:} resistance parameters, corresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth
-#' 		\item\bold{FoG80, FoG50, FoG20:} perseverance parameters, corresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
+#' @details If typical = TRUE, creates a dataframe with 9 columns: \bold{name:} determined by \code{nameVector}, either photograph names, photograph numbers, or a user-supplied list of names; \bold{line:} the first components of the \code{namesVector}, everything that comes before the first "_" in the photograph name; \bold{type:} the location within the \code{name} of the photograph type is supplied by \code{typePlace}. Use \code{\link{addType}} if more than one type column are desired; \bold{RAD20, RAD50, RAD80:} resistance parameters, corresponding to the distance in mm of 80\%, 50\% and 20\% reduction in growth; \bold{FoG80, FoG50, FoG20:} perseverance parameters, corresponding to the fraction of growth achieved above the 80\%, 50\% and 20\% reduction in growth points
 #' 		
 #' If typical = FALSE, then up to three dataframes will be created, depending on the categorizations of the pictures in maxLik. The pictures will be split into standard, confounding, and paradoxical growth and each category that has photos will create a dataframe. All the dataframes will have the same first three columns as typical = TRUE, as well as a column indicating the photo index so that photos can be identified. The parameters of interest vary between the drug responses.
 #' The standard dataframes will have the same parameters of interest as typical = TRUE. 
@@ -34,7 +30,7 @@
 
 #' @export
 
-createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", standType = "one",  needFoG=FALSE, typical = TRUE){
+createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, standardLoc = 2.5, removeClear = FALSE, nameVector=TRUE, typeVector=TRUE, typePlace=2, typeName = "type", standType = "one", typical = TRUE){
   
   if(standType=="one"){
     if(!(hasArg(clearHalo))){

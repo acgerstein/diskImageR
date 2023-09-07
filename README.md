@@ -1,4 +1,4 @@
-This package provides a quantitative, unbiased method to analyze photographs of disk diffusion assays for any microbial species/microbial drug combination. The method measures the radius of inhibition ("RAD", i.e., resistance) at three different cutoff values (80%, 50% and 20% growth inhibition) as well as two measures of tolerance, the fraction of growth achieved above RAD ("FoG"), and drug sensitivity ("slope", the rate of change from no growth to full growth).
+This package provides a pipeline to analyze photographs of disk diffusion plates. This removes the need to analyze the plates themselves, and thus analysis can be done separate from the assay. For typical disk assays, <i>diskImageR</i> measures drug resistance as the zone of inhibition, i.e.,the radius at multiple cutoff values where growth reaches 20\%, 50\%, or 80\% of maximal growth, and measures drug tolerance as the fraction of the subpopulation that is able to grow above the resistance point ("FoG"). For counfounding growth (where the observed population growth is highest at high drug concentration and decreases to no growth at low concentrations), <i>diskImageR</i> measures the zone of disinhibition as the point where growth is reduced by 20\%, 50\%, or 80\% below the maximal growth. For paradoxical growth, where high growth is observed at both high and low drug concentrations but decreases at intermediate concentration, <i> diskImageR</i> measures the radius of maximum inhibition, i.e., the point where the least amount of growth is observed. 
 
 ## Installing
 
@@ -16,7 +16,7 @@ devtools::install_github("acgerstein/diskImageR")
 
 ## Vignette
 
-Since `diskImageR` requires third-party software (ImageJ), it was not possible to include the vignette in the package in the usual way. This readme file aims to cover some of the information that is present in the vignette, but the user is encouraged to download a pdf of the full vignette (i.e., help file) [here] (http://acgerstein.weebly.com/uploads/2/3/5/6/23564534/diskimager-helpfile.pdf). 
+Since `diskImageR` requires third-party software (ImageJ), it was not possible to include the vignette in the package in the usual way. This readme file aims to cover some of the information that is present in the vignette, but the user is encouraged to download a pdf of the full vignette (i.e., help file) [here] (https://www.microstatslab.ca/uploads/2/3/5/6/23564534/diskimager_vignette_v4.pdf). 
 
 ## Required software
 
@@ -92,6 +92,9 @@ plotRaw("newProject", showNum = TRUE, popUp = FALSE, savePDF = FALSE)
 Many different arguments can be specified to influence the plots and the PDF that is generated, including the minimum and maximum x and y values (`xmin`, `xmax`, `ymin`, `ymax`), the number of plots in each row (`xplots`), the height and width of the PDF file (`height`, `width`), the point size (`cexPt`), and the size of the x- and y-axis font (`cexX`, `cexY`). As with all functions, you can type `?plotRaw` into the R console for all options and to see default values.
 
 ###Run the maximum likelihood analysis 
+If all of your images to analyze are of typical disk assays, <i>diskImageR</i> should be on the default mode, which is the version that was  available on CRAN from 2015-2023. If your folder contains any atypical images, as of August 2023 <i>diskImageR</i> is able to run in atypical mode, by setting the argument "typical = FALSE" within the functions `maxLik()`,`saveMLParam()`, and `createDataframe()`, as described at the end of this document. 
+
+For typical photographs:
 The next step is the function `maxLik()`, which uses maximum likelihood to find the logistic and double logistic equations that best describe the shape of the ImageJ output data. Our primary goal in curve fitting is to capture an underlying equation that fits the observed data. These data follow a characteristic "S-shape" curve, so the standard logistic equation is used where asym is the asymptote, od50 is the midpoint, and scal is the slope at od50 divided by asym/4. The midpoint from the single logistic is used to determine sensitivity.
 
 We often observed disk assays that deviated from the single logistic, either rising more linearly than expected at low cell density, or with an intermediate asymptote around the midpoint. To fascilitate fitting these curves, we also fit a double logistic, which allows greater flexibility. In practice, as the double logistic has extra parameters, it will always provide a closer fit to the underlying data, thus the results of this model are used to determine the resistance and tolerance parameters. 
@@ -103,7 +106,7 @@ From these functions the plate background intensity is substracted off the inten
 The output of `maxLik()` is a list that is saved to the R environment and a PDF file with one plot per photograph that shows the results of the model fitting (saved to the *figures* directory). Many aspects of this figure can be specified including the maximum y axis (`ymax`) the number of plots on the x axis (`xplots`), the height and width of the PDF file (`height`, `width`), the values of RAD to be plotted (one of `80`, `50`, `20`, or `all`) and FoG cutoff value to plot (one of `80`, `50`, or `20`). Once `maxLik()` has been run once (in a given R session), it does not need to be rerun to made adjustments to the PDF file; to make a new figure use the argument `needML = FALSE`. The default is to save only a single PDF file (i.e., to repeatedly overwrite the same file with different figure iterations), this can be supressed with the argument `overwrite = FALSE`. 
 
 ```{r,  fig.width=5, fig.height=4, tidy=TRUE}
-maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE)
+maxLik("newProject", clearHalo=1, RAD="all", FoG=20, needML=TRUE, overwrite = TRUE, popUp = FALSE, savePDF = FALSE, typical = TRUE )
 ```
 
 <b>[OPTIONAL] Save the maximum likelihood results</b>
@@ -112,21 +115,46 @@ If you are intersted in the nuts and bolts of the maximum likelihood parameters 
 ```
 saveMLParam("newProject")
 ```
+
+For atypical photographs:
+New parameters are available for quantification of observed photographs that follow either a confounding or paradoxical pattern of drug response (see images at the top of the vignette). To use this analysis, everything remains the same as described above until after `IJMacro()` has been run. 
+
+The following steps are then different: 
+
+| 1. `maxLik()`: To use `maxLik()` to analyze atypical photographs, use the argument `typical = FALSE`. When `typical = FALSE`, `maxLik()` considers three types of drug responses, and will automatically choose the one with the best fit for each individual photograph. 
+
+<b>NOTE:</b> The photographs do not have to be manually separated, `maxLik()` can be run on a folder containing photographs of multiple types of drug responses. 
+
+The following curves are fit to the average line from each photograph (determined through `IJMacro()`:
+<b>Typical growth </b> -- to test for typical growth (high growth only at low drug concentration), the double logistic equation is fit, as described above.
+<b>Confounding growth </b> -- to test for confounding growth (high growth only at high drug concentrations), a negative logistic equation is fit, where <i>asym</i> is the asymptote, <i>od50</i> is the midpoint, and <i>scal</i> is the slope at <i>od50</i> divided by <i>asym</i>/4.
+<b>Paradoxical growth </b> -- to test for paradoxical growth (high growth at both high and low drug concentration), a logistic differential equation is fit. The parameters of this equation are the same as in the logistic, as well as <i>drop</i>,the change between min and max values, <i>slope</i>, the slope of the <i>drop</i>, <i>shift</i>, the movement left/right, and <i>height</i>,the movement up/down.
+
+2. `saveMLParam()`: when `maxLik()` is run with `typical = TRUE`, it will create two lists with maximum likelihood parameters, one with single logistic parameters (named ML) and one with double logistic parameters (named ML2). However, when `maxLik()` is run with `typical = FALSE`, it will only create one list, named ML2 which includes parameter estimates for <i>asym</i>, <i>od50</i>, <i>scal</i> and <i>sigma</i>, log likelihood of logistic, negative logistic or differentiated logistic models and also <i>type</i> of each equation. The function `saveMLparam()` is updated to be able to handle this discrepancy and save maximum likelihood parameters in either case without error.
+
+
  
 ###Create and save a dataframe of parameter estimates
-The last required step is to run the function `createDataframe()` to create and save a dataframe with the drug response parameter estimates, using the best fit parameters from the logistic equations:
+The last required step is to run the function `createDataframe()` to create and save a dataframe with the drug response parameter estimates. Note if `maxLik()` is run with `typical = FALSE`, you must also run `createDataframe()` with `typical = FALSE`. `createDataframe()` will categorize the photos based on their type (typical, confounding, or paradoxical). A dataframe with the relevant parameters will be created for each category that has photos. 
 
-* <b>Resistance (<i>RAD</i>)</b>
-	: asymA+asymB are added together to determine the maximum level of intensity achieved on each plate (= cell density). The level of resistance (radius of inhibition, RAD), is calculated by asking what x value (distance in mm) corresponds to the point where 80%, 50% and 20% reduction in growth occured (corresponding to *RAD80*, *RAD50*, and *RAD20*)
-* <b>Tolerance (<i>FoG</i>)</b>
-	: the `rollmean()` function from the `zoo` package is used to calculate the area under the curve from the disk edge to each RAD cutoff value. This achieved growth is then compared to the potential growth, i.e., the area of a rectangle with length and height equal to RAD. The calculated paramaters are thus the fraction of full growth in this region (*FoG80*, *FoG50*, *FoG20*).
-* <b>Sensitivity (<i>slope</i>)</b>
-	: the ten data points on either side of the midpoint from the single logistic equation (od50) are used to find the slope of the best fit linear model using the lm function in R, i.e., the slope at the midpoint.
-	
+For typical growth, the parameters are:
+* <i>RAD80</i>, <i>RAD50</i>, <i>RAD20</i>: calculated by asking what x value (distance in mm) corresponds to the point where 80\%, 50\% and 20\% reduction in growth occurred (i.e., the <u>RAD</u>ius of inhibition).
+* <i>FoG80</i>, <i>FoG50</i>, <i>FoG20</i>: the `rollmean()` function from the `zoo` package is used to calculate the area under the curve from the disk edge to each RAD cutoff value. This achieved growth is then compared to the potential growth, i.e., the area of a rectangle with length and height equal to RAD. The calculated parameters are thus the <u>F</u>raction <u>O</u>f full <u>G</u>rowth in this region (<i>FoG80</i>, <i>FoG50</i>, <i>FoG20</i>). 
+
+For confounding growth, the parameters are:
+* <i>DRAD80</i>, <i>DRAD50</i>, <i>DRAD20</i>: calculated by asking what x value corresponds to the point where 80\%, 50\% and 20\% of maximum growth occurred (<u>D</u>isinhibition <u>RAD</u>ius).
+
+For paradoxical growth, the parameters are:
+* <i>CMI</i>: calculated from the <u>C</u>urve determined in `maxLik()`, the point of <u>MI</u>nimum growth from.
+* <i>OMI</i>: calculated from the <u>O</u>bserved average data, the point of <u>MI,</u>nimum growth.
+    
+A different dataframe will be created individually for each type of growth that is observed in the data set, i.e., up to three dataframe. Each dataframe is written to a CSV file in the *parameter_files* directory, named either '_df.csv', '_confound_df.csv' or `_para_df.csv, as well as saved to the global environment. 
+using the best fit parameters from the logistic equations:
+
 If you have included a blank photograph to use for the background subtraction step in `maxLik()` this can be removed from the dataframe with the argument `removeClear = TRUE`. A CSV file is written to the *parameter_files* directory which can be opened in Microsoft Excel or any program that opens text files. The dataframe is also written and saved to the R console, should you wish to conduct further analyses in R.
 
 ```{r}
-createDataframe("newProject", clearHalo = 1, typeName="Temp")
+createDataframe("newProject", clearHalo = 1, typeName="Temp", typical = TRUE)
 newProject.df
 ```
 If you want to access this dataframe in a later R session you can do so with the function `readExistingDF("betterName")`. Any project name can be used here, not only the previous name. This file can also be loaded in standard ways (e.g., `new.df <- read.csv(file)`) though if you intend to use the functions below, you need to save it with a name that ends with ".df".
@@ -194,10 +222,10 @@ IJMacro("newProject",  "/path/to/projectDir", "/path/to/projectDir/photographs/"
 plotRaw("newProject")
 
 #Use maximum likelihood to fit single and double logistic models to the data from each photograph. "clearHalo" is used to specify a picture that has a clear zone beside the disk; the intensity at this point is subtracted from all photographs and will be most accurate when photographs are taken with equal lighting without shadows. This can be a blank plate with just a disk on it (removed in the next step). RAD and FoG arguments specify values for plotting only, and do not influence analysis.
-maxLik("newProject", clearHalo=1, RAD="all", FoG ="50")
+maxLik("newProject", clearHalo=1, RAD="all", FoG ="50", typical = TRUE)
 
 #Use the logistic models from maxLik() to calculate resistance (20%, 50% and 80% reduction in growth = RAD20, RAD50, RAD80), tolerance (fraction of growth achvied above RAD relative to potential growth = FoG20, FoG50, FoG80), and sensitivity (slope at RAD50), which are saved in a CSV file. If you used a blank plate for clearHalo, remove with argument removeClear = TRUE.
-createDataframe("newProject", clearHalo = 1)
+createDataframe("newProject", clearHalo = 1, typical = TRUE)
 
 #[OPTIONAL] Calculate the mean and variance for parameter estimates across replicate pictures
 aggregateData("newProject")
