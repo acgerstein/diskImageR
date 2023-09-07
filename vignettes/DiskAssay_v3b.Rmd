@@ -244,7 +244,6 @@ $$
 
 
 $$
-\being{align*}
 y = \frac{drop*exp(slope*(x - shift))*(1 - 4*exp(slope*(x - shift)) + exp(2 * slope*(x - shift)))}{(1 + exp(slope*(x -shift)))^4} + \\  height + \frac{asym*exp(scal(x-od50))}{1+exp(scal(x-od50))}+N(0, \sigma)
 $$
 
@@ -280,7 +279,7 @@ createDataframe("newAtypicalProject", typical = FALSE, clearHalo = 1)
 # typical growth
  head(newAtypicalProject.df) 
 # confounding growth
-head(newAtypicalProject_counfound.df) 
+head(newAtypicalProject_confound.df) 
 # paradoxical growth
 head(newAtypicalProject_para.df) 
 ```
