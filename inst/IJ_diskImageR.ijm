@@ -64,6 +64,20 @@ function findDisk(file){
 		run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
 	}
 	if (nResults ==0){
+		print("Trying parameter set 5");
+		close();
+		selectWindow(getTitle);
+		run("Revert");
+		alterImageSize(getTitle);
+		run("8-bit");
+		setThreshold(216, 255);
+		run("Convert to Mask");
+		roiManager("reset");
+		roiManager("Show All with labels");
+		roiManager("Show All");
+		run("Analyze Particles...", "size=2500-4500 circularity=0.50-1.00 show=Outlines display exclude add");
+	}
+	if (nResults ==0){
 		print("Trying with less stringent circularity");
 		close();
 		selectWindow(getTitle);
