@@ -146,7 +146,7 @@ createDataframe <- function(projectName, clearHalo, diskDiam = 6, maxDist = 25, 
   } 
   
   if (!typical) {
-    
+    print("Creating atypical dataframes")
     dotMax <- max(sapply(data, function(x) {x[which(x[,1] > standardLoc)[1], 2]}))
     stand <-c( sapply(data, function(x) {dotMax-x[which(x[,1] > standardLoc)[1], 2]}))
     
